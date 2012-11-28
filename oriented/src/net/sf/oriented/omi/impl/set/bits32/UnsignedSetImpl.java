@@ -1,0 +1,175 @@
+/************************************************************************
+  (c) Copyright 2007, 2010 Jeremy J. Carroll
+  For GPLv3 licensing information, see end of file.
+************************************************************************/
+package net.sf.oriented.omi.impl.set.bits32;
+
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.omi.impl.items.LabelFactory;
+import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
+import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+
+
+
+
+final public class UnsignedSetImpl extends 
+    SetImpl<LabelImpl,UnsignedSetInternal,
+    Label,
+    UnsignedSet,
+     LabelFactory,
+     UnsignedSetFactory,
+     LabelImpl,
+     UnsignedSetInternal> implements UnsignedSetInternal {
+	
+	final int members;
+
+    public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
+		super(f);
+		int m = toInt(a);
+		members = m;
+	}
+    
+    private int toInt(JavaSet<LabelImpl> a) {
+		int v = 0;
+		for ( LabelImpl l : a)
+			v |= (1 << l.ordinal());
+		return v;
+	}
+
+	UnsignedSetImpl(int v, UnsignedSetFactory f) {
+		super(f);
+		members = v;
+	}
+
+	@Override
+	public boolean contains(Label a) {
+		return ( members & member(a) )!=0;
+	}
+
+	@Override
+	public UnsignedSetInternal intersection(UnsignedSet b) {
+		return new UnsignedSetImpl(members&members(b),factory);
+	}
+
+	private int members(UnsignedSet b) {
+		return ((UnsignedSetImpl) remake(b)).members;
+	}
+	
+	private int member(Label a) {
+		return 1<<remake(a).ordinal();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return members ==0;
+	}
+
+	@Override
+	public boolean isSubsetOf(UnsignedSet b) {
+		return (members & ~members(b)) == 0;
+	}
+
+	@Override
+	public boolean isSupersetOf(UnsignedSet b) {
+		return (~members & members(b)) == 0;
+	}
+
+	
+	@Override
+	public int hashCode() {
+		int h = factory.itemFactory().hashCode(members);
+//		if (h!=super.hashCode())
+//			throw new RuntimeException("hashCode wrong");
+		return h;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Iterator<LabelImpl> iterator() {
+		return (Iterator<LabelImpl>) (Iterator<? extends Label>) new Iterator<Label>() {
+
+			int nValue = 0;
+			@Override
+			public boolean hasNext() {
+				while (nValue<32 && ((members>>nValue)&1)==0)
+					nValue++;
+				return nValue<32;
+			}
+
+			@Override
+			public Label next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				return factory.getOptions().getLabel(nValue++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Immutable");
+			}
+			
+		};
+	}
+
+	@Override
+	public UnsignedSetInternal minus(UnsignedSet b) {
+		return new UnsignedSetImpl(members&~members(b),factory);
+	}
+
+	@Override
+	public UnsignedSetInternal minus(Label b) {
+		return new UnsignedSetImpl(members&~member(b),factory);
+	}
+
+	@Override
+	public int size() {
+		return sizex(members);
+	}
+	
+	static public int size8[] = { 0, 1, 1 , 2, 1, 2, 2, 3 };
+
+	static int sizex(int m) {
+		int r = 0;
+		for (int i=0;i<11;i++)
+			r += size8[(m>>>(i*3))&7];
+		return r;
+	}
+
+	@Override
+	public UnsignedSetInternal union(UnsignedSet b) {
+		return new UnsignedSetImpl(members|members(b),factory);
+	}
+
+	@Override
+	public UnsignedSetInternal union(Label b) {
+		return new UnsignedSetImpl(members|member(b),factory);
+	}
+
+
+}
+/************************************************************************
+    This file is part of the Java Oriented Matroid Library.
+
+    The Java Oriented Matroid Library is free software: you can 
+    redistribute it and/or modify it under the terms of the GNU General 
+    Public License as published by the Free Software Foundation, either 
+    version 3 of the License, or (at your option) any later version.
+
+    The Java Oriented Matroid Library is distributed in the hope that it 
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with the Java Oriented Matroid Library.  
+    If not, see <http://www.gnu.org/licenses/>.
+
+**************************************************************************/

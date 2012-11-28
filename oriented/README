@@ -1,0 +1,18 @@
+
+The Java Oriented Matroid Library
+
+Jeremy J Carroll
+jjc1729@gmail.com
+
+This is very preliminary.
+
+Target environment is Java 1.6.0 (I am using update 21 for now).
+
+The key goals concern implementing the oriented matroid realizability
+algorithm in rank 3 which is discussed in my paper:
+http://arxiv.org/PS_cache/arxiv/pdf/0704/0704.3424v2.pdf
+Particularly we assume the correctness of conjectures 16.15 and 16.16 
+and see how far we can go with this assumption.
+
+Much of the work is based on the goal of implementing "the book".
+http://www.cambridge.org/catalogue/catalogue.asp?isbn=052177750X

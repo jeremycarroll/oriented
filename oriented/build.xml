@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="dist" name="oriented">
+
+    <property name="version" value="0.1"/>
+    <property name="src.dir" value="src/"/>
+    <property name="src-test.dir" value="src-test/"/>
+    <property name="lib.dir" value="lib/"/>
+    <property name="doc.dir" value="doc/"/>
+    <property name="dist.root" value="dist/"/>
+    <property name="dist.dir" value="${dist.root}/jom-${version}"/>
+	<target name="clean" >
+        <delete dir="${dist.dir}"/>
+        <delete file="${dist.dir}.zip"/>
+	</target>
+
+	<target name="copy-all">
+    	<copy todir="${dist.dir}" file="COPYING"/>
+    	<copy todir="${dist.dir}" file="README"/>
+    	<copy todir="${dist.dir}/src">
+            <fileset dir="${src.dir}" includes="**"/>
+        </copy>
+    	<copy todir="${dist.dir}/src-test">
+            <fileset dir="${src-test.dir}" includes="**"/>
+        </copy>
+    	<copy todir="${dist.dir}/doc">
+            <fileset dir="${doc.dir}" includes="**"/>
+        </copy>
+    	<copy todir="${dist.dir}/lib">
+            <fileset dir="${lib.dir}" includes="**"/>
+        </copy>
+		<jar destfile="${dist.dir}/jom-${version}.jar" 
+			  basedir="bin"
+		     index="true"/>
+	</target>
+
+    <target name="javadoc">
+        <javadoc   access="public" 
+        	       author="true" 
+        	    classpath="lib/junit-4.8.2.jar" 
+        	      destdir="doc/javadoc" 
+        	     doctitle="Java Oriented Matroids API" 
+        	 nodeprecated="false" 
+         nodeprecatedlist="false" 
+        	      noindex="false" 
+        	     nonavbar="false" 
+        	       notree="false" 
+        	  packagenames="net.sf.oriented.combinatorics,
+        	                net.sf.oriented.graph,
+        	                net.sf.oriented.omi" 
+        	        source="1.6" 
+        	    sourcepath="src" 
+        	    splitindex="false" 
+        	           use="true" 
+        	        version="true"/>
+    	
+    </target>
+
+    <target name="zip"  >
+    	 <zip destfile="${dist.dir}.zip" 
+			  basedir="${dist.dir}"/>
+    </target>
+    <target name="dist"  depends="clean,javadoc,copy-all,zip">
+    </target>
+</project>
