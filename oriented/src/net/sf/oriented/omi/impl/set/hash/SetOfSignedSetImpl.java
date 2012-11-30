@@ -44,6 +44,10 @@ SetOfSignedSetFactory,
 SignedSetInternal,
 SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 
+	@Override
+public SetOfSignedSetFactory factory() {
+	return (SetOfSignedSetFactory) super.factory();
+}
 
 	private UnsignedSetInternal support;
 
@@ -148,7 +152,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	@Override
 	public SetOfUnsignedSetInternal unsignedSets() {
 		indexes = new HashMap<UnsignedSet,SignedSetInternal>();
-	    SetOfUnsignedSetFactory setOfUnsignedSetFactory = factory.setOfUnsignedSetFactory();
+	    SetOfUnsignedSetFactory setOfUnsignedSetFactory = factory().setOfUnsignedSetFactory();
 		JavaSet<UnsignedSetInternal> s = setOfUnsignedSetFactory.itemFactory().emptyCollectionOf();
 	    Iterator<SignedSetInternal> it = iterator();
 	    while (it.hasNext()) {

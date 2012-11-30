@@ -45,7 +45,10 @@ SetOfSignedSetFactory,
 SignedSetInternal,
 SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 
-
+	@Override
+public SetOfSignedSetFactory factory() {
+	return (SetOfSignedSetFactory) super.factory();
+}
 	private UnsignedSetInternal support;
 	final private long members[];
 
@@ -72,22 +75,21 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	 * @param m
 	 * @param ig
 	 */
-	public SetOfSignedSetImpl(long[] m, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> setFactoryInternal) {
+	public SetOfSignedSetImpl(JavaSet<SignedSetInternal> a, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> setFactoryInternal) {
 		super(setFactoryInternal);
-		members = new long[m.size()];
+		members = new long[a.size()];
 		int i = 0;
-		for (SignedSetInternal ss : m) {
+		for (SignedSetInternal ss : a) {
 			SignedSetImpl sss = (SignedSetImpl)ss;
 			members[i++] = toLong(sss.plus, sss.minus);
 		}
 		Arrays.sort(members);
-		
 	}
 
 
 
-	private SetOfSignedSetImpl(long[] m, SetOfSignedSetFactory f) {
-		super(f);
+	private SetOfSignedSetImpl(long[] m, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> factory) {
+		super(factory);
 		members = m;
 	}
 
@@ -204,7 +206,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	private SetOfUnsignedSetInternal make(int k, int[] inter) {
 		int m[] = new int[k];
 		System.arraycopy(inter, 0, m, 0, k);
-		return new SetOfUnsignedSetImpl(m,factory.setOfUnsignedSetFactory());
+		return new SetOfUnsignedSetImpl(m,factory().setOfUnsignedSetFactory());
 	}
 
 
@@ -220,7 +222,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	}
 
 	private int remakex(UnsignedSet a) {
-		return ((UnsignedSetImpl)factory.setOfUnsignedSetFactory().itemFactory().remake(a)).members;
+		return ((UnsignedSetImpl)factory().setOfUnsignedSetFactory().itemFactory().remake(a)).members;
 	}
 
 

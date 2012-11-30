@@ -17,8 +17,14 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 
 public class SignedSetImpl 
-  extends HasFactoryImpl<SignedSetInternal,SignedSet,SignedSetInternal> 
+  extends HasFactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal>
    implements SignedSetInternal{
+	
+
+	@Override
+public SignedSetFactory factory() {
+	return (SignedSetFactory) super.factory();
+}
 	final int plus;
 	final int minus;
 
@@ -76,25 +82,10 @@ private SignedSetImpl make(int p, int m) {
 }
 
 static SignedSetImpl make(int p, int m, SignedSetFactory f) {
-//	return fromCache( 0,//SignedSetFactory.toLong(p, m),
-//			p,m,f);
-//	if (r!=null)
-//		return r;
 	return new SignedSetImpl(p, m, f);
 }
 
 private static SignedSetImpl fromCache(long l, int p, int m, SignedSetFactory f) {
-//	SignedSetImpl r = (SignedSetImpl) f.cached(l);
-//	if (r!=null && r.plus==p && r.minus==m)
-//		return r;
-//		if (SignedSetFactory.toLong(r.plus,r.minus)!=l) {
-//		r = null;
-//		busy++;
-//	}
-//		else
-//		hits++;
-//	if ((misses+busy+hits)%1000000==0)
-//	    System.err.println("Cache: "+hits+"/"+busy+"/"+misses);
 	return new SignedSetImpl(p, m, f);
 }
 
@@ -121,7 +112,7 @@ static SignedSetImpl make(long key, SignedSetFactory f) {
 
 	
 	private UnsignedSetFactory unsignedSetFactory() {
-		return factory.unsignedF;
+		return factory().unsignedF;
 	}
 
 	/* (non-Javadoc)
