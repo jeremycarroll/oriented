@@ -6,7 +6,6 @@ package net.sf.oriented.omi.impl.set;
 
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public interface UnsignedSetInternal extends SetOfInternal

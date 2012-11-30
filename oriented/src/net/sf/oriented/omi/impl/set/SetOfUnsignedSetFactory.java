@@ -22,6 +22,11 @@ SetOfUnsignedSetInternal>
 
 
 {
+	
+	@Override
+	public UnsignedSetFactory itemFactory() {
+		return (UnsignedSetFactory)super.itemFactory();
+	}
 
 	public SetOfUnsignedSetFactory(UnsignedSetFactory f) {
 		super(f);

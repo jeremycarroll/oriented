@@ -34,6 +34,7 @@ public class SignedSetFactory extends
 		empty = createSignedSet(unsignedF.empty(), unsignedF.empty() );
 	}
 
+
 	public SignedSetInternal empty() {
 		return empty;
 	}

@@ -38,7 +38,7 @@ implements SetFactoryInternal<E,S,EX,SX,ER,T>
     final protected FactoryInternal<E,EX,ER> itemFactory;
 
 	@Override
-	final public FactoryInternal<E,EX,ER> itemFactory() {
+	public FactoryInternal<E,EX,ER> itemFactory() {
 		return itemFactory;
 	}
 
@@ -108,9 +108,8 @@ implements SetFactoryInternal<E,S,EX,SX,ER,T>
 	
 
 	@Override
-	@SuppressWarnings("unchecked")
 	final public T fromBackingCollection(JavaSet<ER> c) {
-		return construct(c,(SetFactoryInternal<E,S,EX,SX,ER,T>) this);
+		return construct(c, this);
 	}
 
 

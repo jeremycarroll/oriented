@@ -24,6 +24,11 @@ public class UnsignedSetFactory extends
    Label,UnsignedSet,
      LabelImpl,
      UnsignedSetInternal> {
+
+	@Override
+	public LabelFactory itemFactory() {
+		return (LabelFactory)super.itemFactory();
+	}
 	
 	public UnsignedSetFactory(LabelFactory f) {
 		super(f);

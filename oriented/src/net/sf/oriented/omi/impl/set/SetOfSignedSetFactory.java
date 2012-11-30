@@ -22,6 +22,10 @@ SetOfSignedSetInternal>
 {
 	
 
+	@Override
+	public SignedSetFactory itemFactory() {
+		return (SignedSetFactory)super.itemFactory();
+	}
 	
 	final private SetOfUnsignedSetFactory setOfUnsignedSetFactory;
 	public SetOfUnsignedSetFactory setOfUnsignedSetFactory() {
@@ -30,7 +34,7 @@ SetOfSignedSetInternal>
 
     final boolean isSymmetric;
 	public SetOfSignedSetFactory(UnsignedSetFactory f, boolean symmetric) {
-		super(new SignedSetFactory(f.itemFactory, f));
+		super(new SignedSetFactory(f.itemFactory(), f));
     	isSymmetric = symmetric;
     	setOfUnsignedSetFactory = new SetOfUnsignedSetFactory(f);
 	}

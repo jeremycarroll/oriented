@@ -8,7 +8,6 @@ package net.sf.oriented.omi.impl.set.hash;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;

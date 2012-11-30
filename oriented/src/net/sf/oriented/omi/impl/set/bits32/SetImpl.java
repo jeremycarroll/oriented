@@ -9,7 +9,6 @@ import java.util.Set;
 
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
-import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.set.HasSetFactoryImpl;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;

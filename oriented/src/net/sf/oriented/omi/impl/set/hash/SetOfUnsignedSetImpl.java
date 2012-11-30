@@ -17,7 +17,6 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.Test;
-import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 
