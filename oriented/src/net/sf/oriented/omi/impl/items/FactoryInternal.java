@@ -21,9 +21,8 @@ import net.sf.oriented.omi.Options;
  * @param <F>
  */
 public interface FactoryInternal<
-  E extends HasFactory<E,EX,ER,F>,EX,
-  ER extends EX,
-  F extends FactoryInternal<E,EX,ER,F>> 
+  E extends HasFactory<E,EX,ER>,EX,
+  ER extends EX> 
  extends Factory<EX>
 {
     ER parse(ParseContext pc);

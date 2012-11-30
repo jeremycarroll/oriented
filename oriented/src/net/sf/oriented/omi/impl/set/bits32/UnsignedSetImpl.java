@@ -84,7 +84,7 @@ final public class UnsignedSetImpl extends
 	
 	@Override
 	public int hashCode() {
-		int h = factory.itemFactory().hashCode(members);
+		int h = factory().itemFactory().hashCode(members);
 //		if (h!=super.hashCode())
 //			throw new RuntimeException("hashCode wrong");
 		return h;

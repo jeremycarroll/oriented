@@ -73,7 +73,7 @@ SetOfUnsignedSetInternal>
 
 	
 	private UnsignedSetInternal make(int s) {
-		return new UnsignedSetImpl(s, factory.itemFactory());
+		return new UnsignedSetImpl(s, factory().itemFactory());
 	}
 
 	
@@ -326,7 +326,7 @@ SetOfUnsignedSetInternal>
 	@Override
 	public int hashCode() {
 		if (hashCode==MARKER) {
-			LabelFactory lf = factory.itemFactory().itemFactory();
+			LabelFactory lf = factory().itemFactory().itemFactory();
 			hashCode = 0;
 			for (int i=0;i<members.length;i++) {
 				hashCode += 

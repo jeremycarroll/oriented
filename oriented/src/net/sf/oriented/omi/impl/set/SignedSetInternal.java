@@ -12,7 +12,7 @@ import net.sf.oriented.omi.impl.items.HasFactory;
 public interface SignedSetInternal 
 extends
 HasFactory
-<SignedSetInternal, SignedSet, SignedSetInternal,SignedSetFactory>,SignedSet
+<SignedSetInternal, SignedSet, SignedSetInternal>,SignedSet
 {
 
 	/* (non-Javadoc)

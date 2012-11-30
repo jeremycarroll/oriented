@@ -1,46 +1,38 @@
 /************************************************************************
-  (c) Copyright 2007, 2010 Jeremy J. Carroll
+  (c) Copyright 2012 Jeremy J. Carroll
   For GPLv3 licensing information, see end of file.
 ************************************************************************/
+
 package net.sf.oriented.omi.impl.set;
 
-
-import java.util.Collection;
-import java.util.List;
-
-import net.sf.oriented.omi.JavaSet;
-import net.sf.oriented.omi.SetFactory;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
-import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.omi.impl.items.HasFactoryImpl;
 
-
-public interface SetFactoryInternal<E extends HasFactory<E,EX,ER>, 
-S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,T>,
+public class HasSetFactoryImpl<E extends HasFactory<E,EX,ER>, 
+S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
 EX,
 SX extends SetOf<EX,SX>,
 EF extends FactoryInternal<E,EX,ER>,
-SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>,
+SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
 ER extends EX,
-T extends SX
-> extends FactoryInternal<S,SX,T>, SetFactory<EX,SX>
-{
-	/**
-	 * bases is dedicated to being the backing collection
-	 * of the newly constructed set. It is not copied
-	 * and must not be modified after this call.
-	 * @param bases
-	 * @return
-	 */
-	T fromBackingCollection(JavaSet<ER> bases);
+SS extends SX >  extends HasFactoryImpl<S,SX,SS>{
+
+	protected HasSetFactoryImpl(FactoryInternal<S, SX, SS> f) {
+		super(f);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	T copyBackingCollection(Collection<? extends EX> c);
-	EF itemFactory();
-	@Override
-	T empty();
-	List<ER> orderedParse(ParseContext pc);
+	public SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS> factory() {
+			return (SetFactoryInternal<E, S, EX, SX, EF, SF, ER, SS>) super.factory();
+		}
+	//	private final JavaSet<ER> members;
+
 }
+
+
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.
 

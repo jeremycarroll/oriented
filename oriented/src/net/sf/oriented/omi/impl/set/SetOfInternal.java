@@ -14,15 +14,15 @@ import net.sf.oriented.omi.impl.items.HasFactory;
 
 
 
-public interface SetOfInternal<E extends HasFactory<E,EX,ER,EF>, 
+public interface SetOfInternal<E extends HasFactory<E,EX,ER>, 
        S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,T>,
        EX,
        SX extends SetOf<EX,SX>,
-       EF extends FactoryInternal<E,EX,ER,EF>,
+       EF extends FactoryInternal<E,EX,ER>,
        SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>,
        ER extends EX,
        T extends SX>
-       extends HasFactory<S,SX,T,SF>, SetOf<EX,SX> {
+       extends HasFactory<S,SX,T>, SetOf<EX,SX> {
 	
 
 	@Override

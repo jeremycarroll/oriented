@@ -14,11 +14,11 @@ import net.sf.oriented.omi.Options;
 
 
 public abstract class FactoryImpl<
-E extends HasFactory<E,EX,ER,F>,EX,
+E extends HasFactory<E,EX,ER>,EX,
 ER extends EX,
-F extends FactoryInternal<E,EX,ER,F>> 
+F extends FactoryInternal<E,EX,ER>> 
 extends IOHelper
-implements FactoryInternal<E,EX,ER,F> {
+implements FactoryInternal<E,EX,ER> {
 	
 	final protected Constructor<ER> constructor;
 	@SuppressWarnings("unchecked")
@@ -50,7 +50,7 @@ implements FactoryInternal<E,EX,ER,F> {
 	@SuppressWarnings("unchecked")
 	public E remake(EX t) {
 		if (t instanceof HasFactory) {
-			if ( ((HasFactory<?,?,?,?>)t).factory() == this)
+			if ( ((HasFactory<?,?,?>)t).factory() == this)
 				return (E)t;
 		}
 //		System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());

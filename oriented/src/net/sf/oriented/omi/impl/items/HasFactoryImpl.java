@@ -7,19 +7,18 @@ package net.sf.oriented.omi.impl.items;
 import net.sf.oriented.omi.Factory;
 
 public class HasFactoryImpl<
-E extends HasFactory<E,EX,ER,F>,EX,
-ER extends EX,
-F extends FactoryInternal<E,EX,ER,F>> 
-   implements HasFactory<E,EX, ER, F> {
+E extends HasFactory<E,EX,ER>,EX,
+ER extends EX> 
+   implements HasFactory<E,EX, ER> {
 
-	protected final F factory;
+	protected final FactoryInternal<E,EX,ER> factory;
 	
-	protected HasFactoryImpl(F f) {
+	protected HasFactoryImpl(FactoryInternal<E,EX,ER> f) {
 		factory = f;
 	}
 
 	@Override
-	final public F factory() {
+	public FactoryInternal<E,EX,ER> factory() {
 		return factory;
 	}
 	

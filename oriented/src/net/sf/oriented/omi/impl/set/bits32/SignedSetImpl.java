@@ -17,7 +17,7 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 
 public class SignedSetImpl 
-  extends HasFactoryImpl<SignedSetInternal,SignedSet,SignedSetInternal,SignedSetFactory> 
+  extends HasFactoryImpl<SignedSetInternal,SignedSet,SignedSetInternal> 
    implements SignedSetInternal{
 	final int plus;
 	final int minus;

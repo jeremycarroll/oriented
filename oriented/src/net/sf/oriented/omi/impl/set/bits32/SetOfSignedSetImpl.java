@@ -19,6 +19,7 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelFactory;
+import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
@@ -58,7 +59,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	}
 	
 	private UnsignedSetInternal make(int s) {
-		return new UnsignedSetImpl(s, factory.itemFactory().unsignedF);
+		return new UnsignedSetImpl(s, factory().itemFactory().unsignedF);
 	}
 
 	static int minus(long l) {
@@ -68,14 +69,14 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 
 
 	/**
-	 * @param a
+	 * @param m
 	 * @param ig
 	 */
-	public SetOfSignedSetImpl(JavaSet<SignedSetInternal> a, SetOfSignedSetFactory f) {
-		super(f);
-		members = new long[a.size()];
+	public SetOfSignedSetImpl(long[] m, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> setFactoryInternal) {
+		super(setFactoryInternal);
+		members = new long[m.size()];
 		int i = 0;
-		for (SignedSetInternal ss : a) {
+		for (SignedSetInternal ss : m) {
 			SignedSetImpl sss = (SignedSetImpl)ss;
 			members[i++] = toLong(sss.plus, sss.minus);
 		}
@@ -197,7 +198,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	private SetOfSignedSetInternal make(int k, long[] inter) {
 		long m[] = new long[k];
 		System.arraycopy(inter, 0, m, 0, k);
-		return new SetOfSignedSetImpl(m,factory);
+		return new SetOfSignedSetImpl(m,factory());
 	}
 
 	private SetOfUnsignedSetInternal make(int k, int[] inter) {
@@ -273,7 +274,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 			@Override
 			public SignedSetInternal next() {
 				long l = members[i++];
-				return SignedSetImpl.make(l,factory.itemFactory());
+				return SignedSetImpl.make(l,factory().itemFactory());
 			}
 			@Override
 			public void remove() {
@@ -322,7 +323,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 		long m[] = new long[members.length-1];
 		System.arraycopy(members, 0, m, 0, pos);
 		System.arraycopy(members, pos+1, m, pos, members.length-pos-1);
-		return new SetOfSignedSetImpl(m,factory);
+		return new SetOfSignedSetImpl(m,factory());
 	}
 
 
@@ -391,7 +392,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 	@Override
 	public int hashCode() {
 		if (hashCode==MARKER) {
-			LabelFactory lf = factory.itemFactory().unsignedF.itemFactory();
+			LabelFactory lf = factory().itemFactory().unsignedF.itemFactory();
 			hashCode = 0;
 			for (int i=0;i<members.length;i++) {
 				hashCode += 

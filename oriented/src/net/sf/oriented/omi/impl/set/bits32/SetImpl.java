@@ -11,7 +11,7 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
-import net.sf.oriented.omi.impl.items.HasFactoryImpl;
+import net.sf.oriented.omi.impl.set.HasSetFactoryImpl;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
@@ -19,15 +19,15 @@ import net.sf.oriented.omi.impl.set.Test;
 
 
 
-abstract public class SetImpl<E extends HasFactory<E,EX,ER,EF>, 
+abstract public class SetImpl<E extends HasFactory<E,EX,ER>, 
 S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
 EX,
 SX extends SetOf<EX,SX>,
-EF extends FactoryInternal<E,EX,ER,EF>,
+EF extends FactoryInternal<E,EX,ER>,
 SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
 ER extends EX,
 SS extends SX >
-    extends HasFactoryImpl<S,SX,SS,SF>
+    extends HasSetFactoryImpl<E,S,EX,SX,EF,SF,ER,SS>
     implements SetOfInternal<E,S,EX,SX,EF,SF,ER,SS> {
 	private final class PowerJavaSet extends AbstractCollection<SS> implements JavaSet<SS> {
 		
@@ -79,10 +79,10 @@ SS extends SX >
 	}
 	
 	E remake(EX x) {
-		return factory.itemFactory().remake(x);
+		return factory().itemFactory().remake(x);
 	}
 
-//	private final JavaSet<ER> members;
+	
 
 	
 //	@SuppressWarnings("unchecked")
@@ -103,7 +103,7 @@ SS extends SX >
 
 	@Override
 	public JavaSet<ER> asCollection() {
-		JavaSet<ER> r = factory.itemFactory().emptyCollectionOf();
+		JavaSet<ER> r = factory().itemFactory().emptyCollectionOf();
 		Iterator<ER> it = iterator();
 		while (it.hasNext()) {
 			r.add(it.next());
@@ -179,7 +179,7 @@ SS extends SX >
 	}
 
 	protected JavaSet<ER> emptyCollectionOf() {
-		return factory.itemFactory().emptyCollectionOf();
+		return factory().itemFactory().emptyCollectionOf();
 	}
 
 

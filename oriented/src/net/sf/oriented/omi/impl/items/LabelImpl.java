@@ -7,7 +7,7 @@ package net.sf.oriented.omi.impl.items;
 import net.sf.oriented.omi.Label;
 
 
-public class LabelImpl extends HasFactoryImpl<LabelImpl,Label,LabelImpl,LabelFactory>
+public class LabelImpl extends HasFactoryImpl<LabelImpl,Label,LabelImpl>
     implements Label, Comparable<Label> {
     final String label;
     final private int ordinal;

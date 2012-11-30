@@ -21,11 +21,11 @@ import net.sf.oriented.omi.impl.items.ParseContext;
 
 
 
-abstract public class SetFactoryImpl<E extends HasFactory<E,EX,ER,EF>, 
+abstract public class SetFactoryImpl<E extends HasFactory<E,EX,ER>, 
 S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,T>,
 EX,
 SX extends SetOf<EX,SX>,
-EF extends FactoryInternal<E,EX,ER,EF>,
+EF extends FactoryInternal<E,EX,ER>,
 SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>,
 ER extends EX,
 T extends SX>
