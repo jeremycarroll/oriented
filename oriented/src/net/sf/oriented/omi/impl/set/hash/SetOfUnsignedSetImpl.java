@@ -32,8 +32,6 @@ public class SetOfUnsignedSetImpl extends SetImpl
      SetOfUnsignedSetInternal, 
      UnsignedSet,
      SetOfUnsignedSet, 
-     UnsignedSetFactory,
-     SetOfUnsignedSetFactory,
      UnsignedSetInternal,
      SetOfUnsignedSetInternal>  
    implements SetOfUnsignedSetInternal {

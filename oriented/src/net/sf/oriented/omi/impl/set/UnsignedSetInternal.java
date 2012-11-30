@@ -12,8 +12,6 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 public interface UnsignedSetInternal extends SetOfInternal
 <LabelImpl,UnsignedSetInternal,
 Label,UnsignedSet,
-  LabelFactory,
-  UnsignedSetFactory,
   LabelImpl,
   UnsignedSetInternal>, UnsignedSet
 {

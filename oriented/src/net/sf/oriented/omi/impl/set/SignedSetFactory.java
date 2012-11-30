@@ -20,7 +20,7 @@ import net.sf.oriented.omi.impl.items.ParseContext;
 
 
 public class SignedSetFactory extends
-		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal,SignedSetFactory> {
+		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> {
 
 	public static final long MASK = (1l << 32) - 1;
 

@@ -16,7 +16,7 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
 
 
-public class LabelFactory extends FactoryImpl<LabelImpl,Label,LabelImpl,LabelFactory>{
+public class LabelFactory extends FactoryImpl<LabelImpl,Label,LabelImpl>{
 
 	
 	public LabelFactory(Options o){ 

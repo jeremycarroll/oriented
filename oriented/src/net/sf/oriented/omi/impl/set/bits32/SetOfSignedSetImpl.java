@@ -40,8 +40,6 @@ final public class SetOfSignedSetImpl extends SetImpl
 SetOfSignedSetInternal,
 SignedSet,
 SetOfSignedSet,
-SignedSetFactory,
-SetOfSignedSetFactory,
 SignedSetInternal,
 SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 
@@ -75,7 +73,7 @@ public SetOfSignedSetFactory factory() {
 	 * @param m
 	 * @param ig
 	 */
-	public SetOfSignedSetImpl(JavaSet<SignedSetInternal> a, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> setFactoryInternal) {
+	public SetOfSignedSetImpl(JavaSet<SignedSetInternal> a, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet,  SignedSetInternal, SetOfSignedSetInternal> setFactoryInternal) {
 		super(setFactoryInternal);
 		members = new long[a.size()];
 		int i = 0;
@@ -88,7 +86,7 @@ public SetOfSignedSetFactory factory() {
 
 
 
-	private SetOfSignedSetImpl(long[] m, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> factory) {
+	private SetOfSignedSetImpl(long[] m, SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal> factory) {
 		super(factory);
 		members = m;
 	}

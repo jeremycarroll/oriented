@@ -16,8 +16,6 @@ extends SetFactoryImpl
 SetOfUnsignedSetInternal, 
 UnsignedSet,
 SetOfUnsignedSet, 
-UnsignedSetFactory,
-SetOfUnsignedSetFactory,
 UnsignedSetInternal,
 SetOfUnsignedSetInternal>   
 

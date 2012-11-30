@@ -13,8 +13,6 @@ extends SetOfInternal
 SetOfUnsignedSetInternal, 
 UnsignedSet,
 SetOfUnsignedSet, 
-UnsignedSetFactory,
-SetOfUnsignedSetFactory,
 UnsignedSetInternal,
 SetOfUnsignedSetInternal>,SetOfUnsignedSet  {
 

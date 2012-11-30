@@ -17,8 +17,6 @@ public class SetOfSignedSetFactory extends SetFactoryImpl
 SetOfSignedSetInternal,
 SignedSet,
 SetOfSignedSet,
-SignedSetFactory,
-SetOfSignedSetFactory,
 SignedSetInternal,
 SetOfSignedSetInternal> 
 {

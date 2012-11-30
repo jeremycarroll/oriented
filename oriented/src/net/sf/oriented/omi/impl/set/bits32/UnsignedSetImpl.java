@@ -24,8 +24,6 @@ final public class UnsignedSetImpl extends
     SetImpl<LabelImpl,UnsignedSetInternal,
     Label,
     UnsignedSet,
-     LabelFactory,
-     UnsignedSetFactory,
      LabelImpl,
      UnsignedSetInternal> implements UnsignedSetInternal {
 	
@@ -34,7 +32,7 @@ final public class UnsignedSetImpl extends
 	public UnsignedSetFactory factory() {
 			return (UnsignedSetFactory) super.factory();
 	}
-    public UnsignedSetImpl(JavaSet<LabelImpl> a, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelFactory, UnsignedSetFactory, LabelImpl, UnsignedSetInternal> factory) {
+    public UnsignedSetImpl(JavaSet<LabelImpl> a, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal> factory) {
 		super(factory);
 		int m = toInt(a);
 		members = m;
@@ -47,7 +45,7 @@ final public class UnsignedSetImpl extends
 		return v;
 	}
 
-	UnsignedSetImpl(int v, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelFactory, UnsignedSetFactory, LabelImpl, UnsignedSetInternal> factory) {
+	UnsignedSetImpl(int v, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal> factory) {
 		super(factory);
 		members = v;
 	}

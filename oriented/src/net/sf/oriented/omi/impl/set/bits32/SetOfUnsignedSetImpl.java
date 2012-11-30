@@ -36,8 +36,6 @@ public class SetOfUnsignedSetImpl extends SetImpl
 SetOfUnsignedSetInternal, 
 UnsignedSet,
 SetOfUnsignedSet, 
-UnsignedSetFactory,
-SetOfUnsignedSetFactory,
 UnsignedSetInternal,
 SetOfUnsignedSetInternal>   
 
@@ -52,7 +50,7 @@ SetOfUnsignedSetInternal>
 	
 	final private int members[];
 
-	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
+	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
 		super(factory);
 		members = new int[a.size()];
 		int i = 0;
@@ -63,7 +61,7 @@ SetOfUnsignedSetInternal>
 		Arrays.sort(members);
 	}
 	
-	SetOfUnsignedSetImpl(int[] m, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
+	SetOfUnsignedSetImpl(int[] m, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet,  UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
 		super(factory);
 		members = m;
 	}

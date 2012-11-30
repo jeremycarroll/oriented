@@ -19,8 +19,6 @@ public class UnsignedSetImpl extends
     SetImpl<LabelImpl,UnsignedSetInternal,
     Label,
     UnsignedSet,
-     LabelFactory,
-     UnsignedSetFactory,
      LabelImpl,
      UnsignedSetInternal> implements UnsignedSetInternal {
 	

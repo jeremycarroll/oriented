@@ -25,15 +25,13 @@ import net.sf.oriented.omi.impl.set.Test;
 
 abstract public class SetImpl<
             E extends HasFactory<E,EX,ER>, 
-            S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
+            S extends SetOfInternal<E,S,EX,SX,ER,SS>,
             EX,
             SX extends SetOf<EX,SX>,
-            EF extends FactoryInternal<E,EX,ER>,
-            SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
             ER extends EX,
             SS extends SX >
-    extends HasSetFactoryImpl<E,S,EX,SX,EF,SF,ER,SS>
-    implements SetOfInternal<E,S,EX,SX,EF,SF,ER,SS> {
+    extends HasSetFactoryImpl<E,S,EX,SX,ER,SS>
+    implements SetOfInternal<E,S,EX,SX,ER,SS> {
 	private final class PowerJavaSet extends AbstractCollection<SS> implements JavaSet<SS> {
 		
 		final int size;
@@ -82,7 +80,7 @@ abstract public class SetImpl<
 
 	private final JavaSet<ER> members;
 	
-	public SetImpl(JavaSet<ER> a, SF f){
+	public SetImpl(JavaSet<ER> a, SetFactoryInternal<E,S,EX,SX,ER,SS> f){
 		super(f);
 		members = a;
 	}

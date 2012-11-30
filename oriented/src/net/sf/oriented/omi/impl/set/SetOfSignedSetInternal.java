@@ -15,8 +15,6 @@ public interface SetOfSignedSetInternal extends SetOfInternal
    SetOfSignedSetInternal,
    SignedSet,
    SetOfSignedSet,
-   SignedSetFactory,
-   SetOfSignedSetFactory,
    SignedSetInternal,
    SetOfSignedSetInternal>, SetOfSignedSet {
 

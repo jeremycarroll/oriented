@@ -22,8 +22,6 @@ import net.sf.oriented.omi.impl.items.ParseContext;
 public class UnsignedSetFactory extends 
    SetFactoryImpl<LabelImpl,UnsignedSetInternal,
    Label,UnsignedSet,
-     LabelFactory,
-     UnsignedSetFactory,
      LabelImpl,
      UnsignedSetInternal> {
 	

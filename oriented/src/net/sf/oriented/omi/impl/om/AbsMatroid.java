@@ -138,7 +138,7 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements MatroidInter
 		return set.useCollection(bases);
 	}
 
-	public SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory() {
+	public SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal> factory() {
 		return set.factory();
 	}
 

@@ -39,8 +39,6 @@ public class SetOfSignedSetImpl extends SetImpl
 SetOfSignedSetInternal,
 SignedSet,
 SetOfSignedSet,
-SignedSetFactory,
-SetOfSignedSetFactory,
 SignedSetInternal,
 SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 

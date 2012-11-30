@@ -22,25 +22,23 @@ import net.sf.oriented.omi.impl.items.ParseContext;
 
 
 abstract public class SetFactoryImpl<E extends HasFactory<E,EX,ER>, 
-S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,T>,
+S extends SetOfInternal<E,S,EX,SX,ER,T>,
 EX,
 SX extends SetOf<EX,SX>,
-EF extends FactoryInternal<E,EX,ER>,
-SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>,
 ER extends EX,
 T extends SX>
-extends FactoryImpl<S,SX,T,SF>
-implements SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>
+extends FactoryImpl<S,SX,T>
+implements SetFactoryInternal<E,S,EX,SX,ER,T>
 {
-	protected SetFactoryImpl(EF f) {
+	protected SetFactoryImpl(FactoryInternal<E,EX,ER> f) {
 		super(f.getOptions());
 		itemFactory = f;
 		e = fromBackingCollection(itemFactory.emptyCollectionOf());
 	}
-    final protected EF itemFactory;
+    final protected FactoryInternal<E,EX,ER> itemFactory;
 
 	@Override
-	final public EF itemFactory() {
+	final public FactoryInternal<E,EX,ER> itemFactory() {
 		return itemFactory;
 	}
 
@@ -112,7 +110,7 @@ implements SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>
 	@Override
 	@SuppressWarnings("unchecked")
 	final public T fromBackingCollection(JavaSet<ER> c) {
-		return construct(c,(SF) this);
+		return construct(c,(SetFactoryInternal<E,S,EX,SX,ER,T>) this);
 	}
 
 
@@ -123,7 +121,7 @@ implements SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T>
 		return (S) copyBackingCollection(t.asCollection());
 	}
 
-	protected T construct(JavaSet<ER> c, SF f) {
+	protected T construct(JavaSet<ER> c, SetFactoryInternal<E,S,EX,SX,ER,T> f) {
 	try {
 			return constructor.newInstance(new Object[]{c,f});
 		} catch (IllegalArgumentException e) {

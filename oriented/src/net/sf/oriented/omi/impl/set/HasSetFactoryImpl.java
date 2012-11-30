@@ -11,11 +11,9 @@ import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.HasFactoryImpl;
 
 public class HasSetFactoryImpl<E extends HasFactory<E,EX,ER>, 
-S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
+S extends SetOfInternal<E,S,EX,SX,ER,SS>,
 EX,
 SX extends SetOf<EX,SX>,
-EF extends FactoryInternal<E,EX,ER>,
-SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
 ER extends EX,
 SS extends SX >  extends HasFactoryImpl<S,SX,SS>{
 
@@ -25,8 +23,8 @@ SS extends SX >  extends HasFactoryImpl<S,SX,SS>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS> factory() {
-			return (SetFactoryInternal<E, S, EX, SX, EF, SF, ER, SS>) super.factory();
+	public SetFactoryInternal<E,S,EX,SX,ER,SS> factory() {
+			return (SetFactoryInternal<E, S, EX, SX, ER, SS>) super.factory();
 		}
 	//	private final JavaSet<ER> members;
 

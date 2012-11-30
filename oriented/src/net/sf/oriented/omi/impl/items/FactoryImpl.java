@@ -15,8 +15,7 @@ import net.sf.oriented.omi.Options;
 
 public abstract class FactoryImpl<
 E extends HasFactory<E,EX,ER>,EX,
-ER extends EX,
-F extends FactoryInternal<E,EX,ER>> 
+ER extends EX> 
 extends IOHelper
 implements FactoryInternal<E,EX,ER> {
 	
