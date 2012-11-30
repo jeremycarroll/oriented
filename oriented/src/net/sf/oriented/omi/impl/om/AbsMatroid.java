@@ -15,8 +15,10 @@ import net.sf.oriented.omi.MatroidS;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
+import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 
@@ -136,7 +138,7 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements MatroidInter
 		return set.useCollection(bases);
 	}
 
-	public SetOfUnsignedSetFactory factory() {
+	public SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory() {
 		return set.factory();
 	}
 

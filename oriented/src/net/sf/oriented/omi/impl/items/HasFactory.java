@@ -12,7 +12,7 @@ public interface HasFactory<
      ER extends EX,
      F extends FactoryInternal<E,EX, ER, F>>
      {
-   F factory();
+	FactoryInternal<E,EX, ER, F> factory();
    String toString(Factory<EX> f);
 }
 /************************************************************************

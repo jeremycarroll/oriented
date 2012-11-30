@@ -23,6 +23,10 @@ public interface SetOfInternal<E extends HasFactory<E,EX,ER,EF>,
        ER extends EX,
        T extends SX>
        extends HasFactory<S,SX,T,SF>, SetOf<EX,SX> {
+	
+
+	@Override
+	SetFactoryInternal<E,S,EX,SX,EF,SF,ER,T> factory();
 
 	ER theMember();
 	
