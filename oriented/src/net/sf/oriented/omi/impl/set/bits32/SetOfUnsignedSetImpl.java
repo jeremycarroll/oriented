@@ -16,6 +16,7 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelFactory;
+import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.Test;
@@ -47,8 +48,8 @@ SetOfUnsignedSetInternal>
 
 	final private int members[];
 
-	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetOfUnsignedSetFactory f) {
-		super(f);
+	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
+		super(factory);
 		members = new int[a.size()];
 		int i = 0;
 		for (UnsignedSetInternal ss : a) {
@@ -58,10 +59,11 @@ SetOfUnsignedSetInternal>
 		Arrays.sort(members);
 	}
 	
-	SetOfUnsignedSetImpl(int[] m, SetOfUnsignedSetFactory f) {
-		super(f);
+	SetOfUnsignedSetImpl(int[] m, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {
+		super(factory);
 		members = m;
 	}
+
 
 	private UnsignedSetInternal computeSupport() {
 		int s=0;
@@ -153,7 +155,7 @@ SetOfUnsignedSetInternal>
 	private SetOfUnsignedSetInternal make(int k, int[] inter) {
 		int m[] = new int[k];
 		System.arraycopy(inter,0,m,0,k);
-		return new SetOfUnsignedSetImpl(m,factory);
+		return new SetOfUnsignedSetImpl(m,factory());
 	}
 
 	private SetOfUnsignedSetImpl remakex(SetOfUnsignedSet b) {
@@ -261,7 +263,7 @@ SetOfUnsignedSetInternal>
 		int m[] = new int[members.length-1];
 		System.arraycopy(members, 0, m, 0, pos);
 		System.arraycopy(members, pos+1, m, pos, members.length-pos-1);
-		return new SetOfUnsignedSetImpl(m,factory);
+		return new SetOfUnsignedSetImpl(m,factory());
 	}
 
 
@@ -302,7 +304,7 @@ SetOfUnsignedSetInternal>
 		System.arraycopy(members, 0, m, 0, -pos-1);
 		m[-pos-1] = bb;
 		System.arraycopy(members, -pos-1, m, -pos, members.length+pos+1);
-		return new SetOfUnsignedSetImpl(m,factory);
+		return new SetOfUnsignedSetImpl(m,factory());
 	}
 
 

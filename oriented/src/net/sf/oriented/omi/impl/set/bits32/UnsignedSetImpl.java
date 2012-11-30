@@ -13,6 +13,7 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
@@ -30,8 +31,8 @@ final public class UnsignedSetImpl extends
 	
 	final int members;
 
-    public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
-		super(f);
+    public UnsignedSetImpl(JavaSet<LabelImpl> a, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelFactory, UnsignedSetFactory, LabelImpl, UnsignedSetInternal> factory) {
+		super(factory);
 		int m = toInt(a);
 		members = m;
 	}
@@ -43,8 +44,8 @@ final public class UnsignedSetImpl extends
 		return v;
 	}
 
-	UnsignedSetImpl(int v, UnsignedSetFactory f) {
-		super(f);
+	UnsignedSetImpl(int v, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelFactory, UnsignedSetFactory, LabelImpl, UnsignedSetInternal> factory) {
+		super(factory);
 		members = v;
 	}
 
@@ -55,7 +56,7 @@ final public class UnsignedSetImpl extends
 
 	@Override
 	public UnsignedSetInternal intersection(UnsignedSet b) {
-		return new UnsignedSetImpl(members&members(b),factory);
+		return new UnsignedSetImpl(members&members(b),factory());
 	}
 
 	private int members(UnsignedSet b) {
@@ -121,12 +122,12 @@ final public class UnsignedSetImpl extends
 
 	@Override
 	public UnsignedSetInternal minus(UnsignedSet b) {
-		return new UnsignedSetImpl(members&~members(b),factory);
+		return new UnsignedSetImpl(members&~members(b),factory());
 	}
 
 	@Override
 	public UnsignedSetInternal minus(Label b) {
-		return new UnsignedSetImpl(members&~member(b),factory);
+		return new UnsignedSetImpl(members&~member(b),factory());
 	}
 
 	@Override
@@ -145,12 +146,12 @@ final public class UnsignedSetImpl extends
 
 	@Override
 	public UnsignedSetInternal union(UnsignedSet b) {
-		return new UnsignedSetImpl(members|members(b),factory);
+		return new UnsignedSetImpl(members|members(b),factory());
 	}
 
 	@Override
 	public UnsignedSetInternal union(Label b) {
-		return new UnsignedSetImpl(members|member(b),factory);
+		return new UnsignedSetImpl(members|member(b),factory());
 	}
 
 

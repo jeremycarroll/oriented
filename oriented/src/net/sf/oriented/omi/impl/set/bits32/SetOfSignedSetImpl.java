@@ -364,7 +364,7 @@ SetOfSignedSetInternal>  implements SetOfSignedSetInternal {
 		System.arraycopy(members, 0, m, 0, -pos-1);
 		m[-pos-1] = bb;
 		System.arraycopy(members, -pos-1, m, -pos, members.length+pos+1);
-		return new SetOfSignedSetImpl(m,factory);
+		return new SetOfSignedSetImpl(m,factory());
 	}
 
 

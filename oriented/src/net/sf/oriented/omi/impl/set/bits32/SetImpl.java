@@ -97,7 +97,7 @@ SS extends SX >
 //		members = new HashSet<E>(a);
 //	}
 	
-	public SetImpl(SF f){
+	public SetImpl(SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS> f){
 		super(f);
 	}
 
