@@ -23,14 +23,15 @@ import net.sf.oriented.omi.impl.set.Test;
 
 
 
-abstract public class SetImpl<E extends HasFactory<E,EX,ER,EF>, 
-S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
-EX,
-SX extends SetOf<EX,SX>,
-EF extends FactoryInternal<E,EX,ER,EF>,
-SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
-ER extends EX,
-SS extends SX >
+abstract public class SetImpl<
+            E extends HasFactory<E,EX,ER,EF>, 
+            S extends SetOfInternal<E,S,EX,SX,EF,SF,ER,SS>,
+            EX,
+            SX extends SetOf<EX,SX>,
+            EF extends FactoryInternal<E,EX,ER,EF>,
+            SF extends SetFactoryInternal<E,S,EX,SX,EF,SF,ER,SS>,
+            ER extends EX,
+            SS extends SX >
     extends HasFactoryImpl<S,SX,SS,SF>
     implements SetOfInternal<E,S,EX,SX,EF,SF,ER,SS> {
 	private final class PowerJavaSet extends AbstractCollection<SS> implements JavaSet<SS> {
@@ -80,19 +81,6 @@ SS extends SX >
 
 
 	private final JavaSet<ER> members;
-
-	
-//	@SuppressWarnings("unchecked")
-//	SetImpl(E a, SF f) {
-//		super(f);
-//		members = (List<E>)Arrays.asList(new Object[]{a});
-//	}
-
-	
-//	public SetImpl(Collection<E> a, SF f) {
-//		super(f);
-//		members = new HashSet<E>(a);
-//	}
 	
 	public SetImpl(JavaSet<ER> a, SF f){
 		super(f);
@@ -104,9 +92,6 @@ SS extends SX >
 		return members;
 	}
 
-	/* (non-Javadoc)
-	 * @see om.SetI#union(om.SetOf)
-	 */
 	@Override
 	public SS union(SX b) {
 		JavaSet<ER> mm = emptyCollectionOf();
@@ -115,10 +100,6 @@ SS extends SX >
 		return useCollection(mm);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see om.SetI#intersection(om.SetOf)
-	 */
 	@Override
 	public SS intersection(SX b) {
 		JavaSet<ER> mm = emptyCollectionOf();
@@ -128,9 +109,6 @@ SS extends SX >
 	}
 
 
-	/* (non-Javadoc)
-	 * @see om.SetI#minus(om.SetOf)
-	 */
 	@Override
 	public SS minus(SX b) {
 		JavaSet<ER> mm = emptyCollectionOf();
@@ -140,18 +118,12 @@ SS extends SX >
 	}
 
 
-	/* (non-Javadoc)
-	 * @see om.SetI#contains(E)
-	 */
 	@Override
 	public boolean contains(EX a) {
 		return members.contains(a);
 	}
 
 
-	/* (non-Javadoc)
-	 * @see om.SetI#iterator()
-	 */
 	@Override
 	public Iterator<ER> iterator() {
 		return new Iterator<ER>() {
@@ -200,26 +172,17 @@ SS extends SX >
 		return isSubsetOf(a) && isSupersetOf(a);
 	}
 	
-	/* (non-Javadoc)
-	 * @see om.SetI#size()
-	 */
 	@Override
 	public int size() {
 		return members.size();
 	}
 
 
-	/* (non-Javadoc)
-	 * @see om.SetI#isSubsetOf(om.SetOf)
-	 */
 	@Override
 	public boolean isSubsetOf(SX b) {
 		return b.asCollection().containsAll(members);
 	}
 
-	/* (non-Javadoc)
-	 * @see om.SetI#isSupersetOf(om.SetOf)
-	 */
 	@Override
 	public boolean isSupersetOf(SX b) {
 		return members.containsAll(b.asCollection());

@@ -28,18 +28,14 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
  * 
  */
 public class SetOfUnsignedSetImpl extends SetImpl
-
-<UnsignedSetInternal,
-SetOfUnsignedSetInternal, 
-UnsignedSet,
-SetOfUnsignedSet, 
-UnsignedSetFactory,
-SetOfUnsignedSetFactory,
-UnsignedSetInternal,
-SetOfUnsignedSetInternal>   
-
-
-
+    <UnsignedSetInternal,
+     SetOfUnsignedSetInternal, 
+     UnsignedSet,
+     SetOfUnsignedSet, 
+     UnsignedSetFactory,
+     SetOfUnsignedSetFactory,
+     UnsignedSetInternal,
+     SetOfUnsignedSetInternal>  
    implements SetOfUnsignedSetInternal {
 
 	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetOfUnsignedSetFactory f) {
@@ -100,68 +96,6 @@ SetOfUnsignedSetInternal>
 
 }
 
-///**
-//* @param a
-//*/
-//public SetOfUnsignedSet(Collection<UnsignedSet> a) {
-//	super(a);
-//	support = computeSupport();
-//}
-//
-///**
-//* @param a
-//* @param ig
-//*/
-//public SetOfUnsignedSet(Collection<UnsignedSet> a, boolean ig) {
-//	super(a, ig);
-//	support = computeSupport();
-//}
-
-//public String toString(UnsignedSet e, boolean usePlusMinus,
-//		boolean symmetric) {
-//	StringBuffer rslt = new StringBuffer();
-//	String sep = "";
-//	rslt.append("{");
-//	Iterator<UnsignedSet> it = iterator();
-//	while (it.hasNext()) {
-//		String v;
-//		if (usePlusMinus) {
-//			v = it.next().toPlus(e);
-//			if (symmetric) {
-//				int p = v.indexOf('+');
-//				int m = v.indexOf('-');
-//				if (m < p && m >= 0)
-//				   continue;
-//			}
-//		} else {
-//			v = it.next().toShortString();
-//			if (symmetric && v.length() > 1 && v.charAt(1) == '\'')
-//				continue;
-//		}
-//		rslt.append(sep);
-//		rslt.append(v);
-//		sep = ",";
-//	}
-//	rslt.append("}");
-//	return rslt.toString();
-//}
-//
-//public String toString(UnsignedSet e) {
-//	return toString(e,false,false);
-//}
-//public String toPlusMinus(UnsignedSet e) {
-//	return toString(e,true,false);
-//}
-
-
-
-/**
- * @param a
- */
-//public SetOfUnsignedSet(UnsignedSet a) {
-//	super(a);
-//	support = computeSupport();
-//}
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.

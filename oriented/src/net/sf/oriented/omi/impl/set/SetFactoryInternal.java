@@ -26,6 +26,13 @@ ER extends EX,
 T extends SX
 > extends FactoryInternal<S,SX,T,SF>, SetFactory<EX,SX>
 {
+	/**
+	 * bases is dedicated to being the backing collection
+	 * of the newly constructed set. It is not copied
+	 * and must not be modified after this call.
+	 * @param bases
+	 * @return
+	 */
 	T fromBackingCollection(JavaSet<ER> bases);
 	@Override
 	T copyBackingCollection(Collection<? extends EX> c);
