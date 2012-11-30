@@ -36,7 +36,7 @@ T extends SX
 	T fromBackingCollection(JavaSet<ER> bases);
 	@Override
 	T copyBackingCollection(Collection<? extends EX> c);
-	EF itemFactory();
+	FactoryInternal<E,EX,ER> itemFactory();
 	@Override
 	T empty();
 	List<ER> orderedParse(ParseContext pc);

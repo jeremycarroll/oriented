@@ -45,7 +45,11 @@ SetOfUnsignedSetInternal>
 
    implements SetOfUnsignedSetInternal {
 	
-
+	@Override
+	public SetOfUnsignedSetFactory factory() {
+			return (SetOfUnsignedSetFactory) super.factory();
+	}
+	
 	final private int members[];
 
 	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a, SetFactoryInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetFactory, SetOfUnsignedSetFactory, UnsignedSetInternal, SetOfUnsignedSetInternal> factory) {

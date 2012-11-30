@@ -30,7 +30,10 @@ final public class UnsignedSetImpl extends
      UnsignedSetInternal> implements UnsignedSetInternal {
 	
 	final int members;
-
+	@Override
+	public UnsignedSetFactory factory() {
+			return (UnsignedSetFactory) super.factory();
+	}
     public UnsignedSetImpl(JavaSet<LabelImpl> a, SetFactoryInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelFactory, UnsignedSetFactory, LabelImpl, UnsignedSetInternal> factory) {
 		super(factory);
 		int m = toInt(a);

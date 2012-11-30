@@ -11,11 +11,9 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
-import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
@@ -169,8 +167,8 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	}
 
 	@Override
-	public SetFactoryInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetFactory, SetOfSignedSetFactory, SignedSetInternal, SetOfSignedSetInternal> factory() {
-		return vectors.factory();
+	public SetOfSignedSetFactory factory() {
+		return (SetOfSignedSetFactory) vectors.factory();
 	}
 	@Override
 	public SetOfSignedSetInternal conformingWith(SignedSetInternal x) {

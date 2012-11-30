@@ -28,12 +28,6 @@ public SignedSetFactory factory() {
 	final int plus;
 	final int minus;
 
-//	final static private SignedSet EMPTY = new SignedSet(UnsignedSet.EMPTY);
-//	
-//	static public SignedSet empty(UnsignedSet support) {
-//		return EMPTY;
-//	}
-
 
 	public SignedSetImpl(UnsignedSetInternal p, UnsignedSetInternal m, SignedSetFactory f) {
 		super(f);
@@ -42,36 +36,20 @@ public SignedSetFactory factory() {
 		if ((plus&minus)!= 0)
 			throw new IllegalArgumentException(
 					"plus and minus must be disjoint.");
-//		f.addToCache(plus, minus, this);
 	}
 	
 	static int cnt = 0;
-//	private static int misses;
-//	private static int hits;
-//	private static int busy;
 	
 	SignedSetImpl(int p, int m, SignedSetFactory f) {
 		super(f);
 		plus = p;
 		minus = m;
-//		if (++cnt % 10000 == 0)
-//			System.err.println(cnt+ " signed sets");
 	}
 
 private UnsignedSetImpl remake(UnsignedSetInternal p) {
 	return (UnsignedSetImpl) unsignedSetFactory().remake(p);
 }
 
-//	public SignedSet(UnsignedSet p) {
-//		this(p, UnsignedSet.EMPTY);
-//	}
-
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#opposite()
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#opposite()
-	 */
 	@Override
 	public SignedSetImpl opposite() {
 		return make(minus,plus);
@@ -91,16 +69,8 @@ private static SignedSetImpl fromCache(long l, int p, int m, SignedSetFactory f)
 
 static SignedSetImpl make(long key, SignedSetFactory f) {
 	return fromCache(key,SignedSetFactory.plus(key), SignedSetFactory.minus(key),f);
-//	if (r!=null)
-//		return r;
-//	return new SignedSetImpl(SignedSetFactory.plus(key), SignedSetFactory.minus(key), f);
 }
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#plus()
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#plus()
-	 */
+	
 	@Override
 	public UnsignedSetInternal plus() {
 		return make(plus);
@@ -115,20 +85,12 @@ static SignedSetImpl make(long key, SignedSetFactory f) {
 		return factory().unsignedF;
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#minus()
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#minus()
-	 */
+	
 	@Override
 	public UnsignedSetInternal minus() {
 		return make(minus);
 	}
 
-//	public SignedSet empty() {
-//		return EMPTY;
-//	}
 	
 	@Override
 	public int hashCode() {
@@ -154,12 +116,7 @@ private LabelFactory labelFactory() {
 		return plus==ss.plus && minus==ss.minus;
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#equalsIgnoreSign(omi.SignedSetI)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#equalsIgnoreSign(omi.SignedSet)
-	 */
+
 	@Override
 	public boolean equalsIgnoreSign(SignedSet s) {
 		SignedSetImpl ss = remake(s);
@@ -167,24 +124,14 @@ private LabelFactory labelFactory() {
 		||(minus==ss.plus && plus==ss.minus);
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#equalsOpposite(omi.SignedSetI)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#equalsOpposite(omi.SignedSet)
-	 */
+	
 	@Override
 	public boolean equalsOpposite(SignedSet s) {
 		SignedSetImpl ss = remake(s);
 		return minus==ss.plus && plus==ss.minus;
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#separation(omi.SignedSet)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#separation(omi.SignedSet)
-	 */
+	
 	@Override
 	public UnsignedSet separation(SignedSet b) {
 		SignedSetImpl bb = remake(b);
@@ -195,12 +142,7 @@ private LabelFactory labelFactory() {
 		return (SignedSetImpl) factory.remake(b);
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#compose(omi.SignedSet)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#compose(omi.SignedSet)
-	 */
+	
 	@Override
 	public SignedSetImpl compose(SignedSet b) {
 		SignedSetImpl bb = remake(b);
@@ -209,23 +151,13 @@ private LabelFactory labelFactory() {
 				 minus | ( bb.minus & ~ plus));
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#size()
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#size()
-	 */
+	
 	@Override
 	public int size() {
 		return sizex(plus) + sizex(minus);
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#conformsWith(omi.SignedSet)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#conformsWith(omi.SignedSet)
-	 */
+	
 	@Override
 	public boolean conformsWith(SignedSet a) {
 		SignedSetImpl aa = remake(a);
@@ -236,29 +168,13 @@ private LabelFactory labelFactory() {
 
 
     
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#support()
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#support()
-	 */
+	
 	@Override
 	public UnsignedSetInternal support() {
 		return make(plus|minus);
 	}
 
-//	public String toString() {
-//		return "(" + plus.toString() + "," + minus.toString() + ")";
-//	}
 
-
-
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#sign(omi.Label)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#sign(omi.Label)
-	 */
 	@Override
 	public int sign(Label e) {
 		if (plus().contains(e))
@@ -268,24 +184,12 @@ private LabelFactory labelFactory() {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#isRestrictionOf(omi.SignedSetI)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#isRestrictionOf(omi.SignedSet)
-	 */
 	@Override
 	public boolean isRestrictionOf(SignedSet x) {
 		return plus().isSubsetOf(x.plus())
 		      && minus().isSubsetOf(x.minus());
 	}
 
-	/* (non-Javadoc)
-	 * @see omi.SignedSetI#restriction(omi.UnsignedSetI)
-	 */
-	/* (non-Javadoc)
-	 * @see omi.impl.set.hash.SignedSetInternalx#restriction(omi.UnsignedSet)
-	 */
 	@Override
 	public SignedSetImpl restriction(UnsignedSet x) {
 		return new SignedSetImpl(plus().intersection(x),
