@@ -5,8 +5,7 @@
 package net.sf.oriented.omi;
 
 
-public interface UnsignedSet extends 
-SetOf<Label,UnsignedSet> {
+public interface UnsignedSet extends SetOf<Label,UnsignedSet> {
 
 }/************************************************************************
     This file is part of the Java Oriented Matroid Library.

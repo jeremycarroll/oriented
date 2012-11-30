@@ -72,7 +72,7 @@ public class UnsignedSetFactory extends
 				rslt.add((LabelImpl)u.get(i));
 				break;
 			default:
-				throw new IllegalArgumentException("not a seuqence of 1, 0:"
+				throw new IllegalArgumentException("not a sequence of 1, 0:"
 						+ a);
 			}
 		}

@@ -8,8 +8,7 @@ package net.sf.oriented.omi;
 import java.util.Iterator;
 
 
-public interface SetOf<E, 
-       S extends SetOf<E,S>>
+public interface SetOf<E, S extends SetOf<E,S>>
         {
 	public abstract S union(S b);
 	
