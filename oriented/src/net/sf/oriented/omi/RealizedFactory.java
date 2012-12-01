@@ -1,37 +1,19 @@
 /************************************************************************
-  (c) Copyright 2007, 2010 Jeremy J. Carroll
+  (c) Copyright 2012 Jeremy J. Carroll
   For GPLv3 licensing information, see end of file.
 ************************************************************************/
-package net.sf.oriented.omi.impl.om;
 
-// TODO: maybe refactor some functionality into this enum
-public enum Cryptomorphisms {
- CIRCUITS ,
- VECTORS  ,
- MAXVECTORS ,
- CHIROTOPE ,
- REALIZED ,
- // MUST be half way, those below are duals of those above. Must be even number.
- COCIRCUITS(CIRCUITS) ,
- COVECTORS(VECTORS) ,
- TOPES(MAXVECTORS),
- DUALCHIROTOPE(CHIROTOPE),
- DUALREALIZED(REALIZED) ;
- 
- private Cryptomorphisms dual;
- Cryptomorphisms() {
-     
- }
- Cryptomorphisms(Cryptomorphisms dual) {
-     this.dual = dual;
-     dual.dual = this;
- }
- 
- public Cryptomorphisms getDual() {
-     return dual;
- }
- 
+package net.sf.oriented.omi;
+
+public class RealizedFactory {
+
+    public RealizedFactory(FactoryFactory factoryFactory) {
+	// TODO Auto-generated constructor stub
+    }
+
 }
+
+
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.
 

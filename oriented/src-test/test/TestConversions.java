@@ -71,8 +71,13 @@ public class TestConversions {
 	    		int ff = 0;
 	    		for (FactoryFactory f : factories ) {
 	    			for ( Cryptomorphisms  from : Cryptomorphisms.values() )
-	    				for (Cryptomorphisms  to : Cryptomorphisms.values())
-	    					r.add(new Object[]{name(source, ff, from, to),source,f,from,to,n++});
+	    				for (Cryptomorphisms  to : Cryptomorphisms.values()) {
+	    				    if ( Cryptomorphisms.REALIZED.equals(to) ||
+	    					Cryptomorphisms.DUALREALIZED.equals(to) ) {
+	    					continue;
+	    				    }
+	    			            r.add(new Object[]{name(source, ff, from, to),source,f,from,to,n++});
+	    				}
 	    			ff++;
 	    		}
 	    	}

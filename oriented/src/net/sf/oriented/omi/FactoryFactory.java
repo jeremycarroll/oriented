@@ -38,6 +38,9 @@ final public class FactoryFactory {
 	private ChirotopeFactory chirotope;
 	private Factory<MatroidS> bases;
 	private Factory<MatroidS> unsignedCircuits;
+	private RealizedFactory realized;
+
+	private final Options options;
 	
 	private void init() {
 		if (setsOfUnsignedSet != null) return;
@@ -56,6 +59,7 @@ final public class FactoryFactory {
 		
 		bases = MatroidFactory.bases(this);
 		unsignedCircuits = MatroidFactory.circuits(this);
+		realized = new RealizedFactory(this);
 	}
 	/**
 	 * A new {@link FactoryFactory} with default options.
@@ -64,7 +68,6 @@ final public class FactoryFactory {
 	public FactoryFactory() {
 		this(new Options());
 	}
-	final Options options;
 	/**
 	 * A new {@link FactoryFactory} with given {@link Options}.
 	 * These control the String representations used.
@@ -90,6 +93,7 @@ final public class FactoryFactory {
 	public Factory<MatroidS> bases() {
 		return bases;
 	}
+	
 	
 	/**
 	 * A factory for matroids from circuits.
@@ -126,6 +130,15 @@ final public class FactoryFactory {
 	 */
 	public OMSFactory maxVectors() {
 		return maxVectors;
+	}
+	
+	/**
+	 * A factory for oriented matroids which uses
+	 * a realization of the OM as the representation.
+	 * @return
+	 */
+	public RealizedFactory realized() {
+	    return realized;
 	}
 	/**
 	 * A factory for signed sets.
