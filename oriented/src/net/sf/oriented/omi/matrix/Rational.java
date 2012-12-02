@@ -15,6 +15,8 @@ import com.perisic.ring.RingElt;
 
 public class Rational implements FieldElement<Rational> {
     
+    static final RationalField RATIONAL_FIELD = new RationalField();
+
     private static final class RationalField implements Field<Rational> {
 	@Override
 	public Rational getZero() {
@@ -39,6 +41,10 @@ public class Rational implements FieldElement<Rational> {
     private Rational(RingElt d) {
 	delegate = d;
 	assert( d.getRing() == Q );
+    }
+    
+    Rational(int n) {
+	this(Q.construct(BigInteger.valueOf(n), BigInteger.ONE));
     }
 
     @Override
@@ -79,7 +85,7 @@ public class Rational implements FieldElement<Rational> {
 
     @Override
     public Field<Rational> getField() {
-	return new RationalField();
+	return RATIONAL_FIELD;
     }
     
     @Override

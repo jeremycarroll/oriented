@@ -5,16 +5,26 @@
 
 package net.sf.oriented.omi.impl.om;
 
-import java.util.Iterator;
+import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
 public class RealizedImpl extends AbsOM  implements OMRealized {
 
+    private final RationalMatrix matrix;
     public RealizedImpl(OMAll all, RationalMatrix mat) {
 	super(all);
+	matrix = mat;
     }
 
     @Override
@@ -23,11 +33,7 @@ public class RealizedImpl extends AbsOM  implements OMRealized {
 	return false;
     }
 
-    @Override
-    public boolean equals(Object o) {
-	// TODO Auto-generated method stub
-	return false;
-    }
+   
 
     @Override
     public Iterator<? extends SignedSet> iterator() {
@@ -37,9 +43,30 @@ public class RealizedImpl extends AbsOM  implements OMRealized {
 
     @Override
     public RationalMatrix getMatrix() {
-	// TODO Auto-generated method stub
-	return null;
+	return matrix;
     }
+
+   @Override
+   public String toString() {
+		return toString(ffactory());
+   }
+
+	public String toString(FactoryFactory factory) {
+		List<? extends Label> g = Arrays.asList(ground());
+		UnsignedSetFactory sets = all.unsignedSets(factory);
+		return "(" + sets.toString(g, sets.copyBackingCollection(g)) + ", "
+				 + toMatrixString(factory.realized()) + " )";
+	}
+
+	public String toMatrixString(RealizedFactory realizedFactory) {
+		return realizedFactory.toString(this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+	    // TODO Auto-generated method stub
+	    return false;
+	}
 
 
 }

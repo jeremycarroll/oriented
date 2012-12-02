@@ -5,15 +5,36 @@
 
 package net.sf.oriented.omi.matrix;
 
+import org.apache.commons.math3.linear.BlockFieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;
+import org.apache.commons.math3.linear.FieldMatrixChangingVisitor;
 import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
 
 public class RationalMatrix {
     
     private FieldMatrix<Rational> delegate;
 
-    public RationalMatrix(int[][] chap1) {
-	// TODO Auto-generated constructor stub
+    public RationalMatrix(final int[][] data) {
+	delegate = new BlockFieldMatrix<Rational>(
+		Rational.RATIONAL_FIELD,
+		data.length,
+		data[0].length);
+	delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<Rational>(){
+
+	    @Override
+	    public void start(int rows, int columns, int startRow, int endRow,
+		    int startColumn, int endColumn) {
+	    }
+
+	    @Override
+	    public Rational visit(int row, int column, Rational value) {
+		return new Rational(data[row][column]);
+	    }
+
+	    @Override
+	    public Rational end() {
+		return null;
+	    }});
     }
 
 
@@ -34,22 +55,23 @@ public class RationalMatrix {
 	    @Override
 	    public void start(int rows, int columns, int startRow, int endRow,
 		    int startColumn, int endColumn) {
-		rslt.append("{ ");
+		rslt.append("[ ");
+		lastRow = endRow;
 	    }
 
 	    @Override
 	    public void visit(int row, int column, Rational value) {
 		if ( row == 0 ) {
 		    if ( column != 0 ) {
-			rslt.append(", ");
+			rslt.append(" ");
 		    }
-		    rslt.append("{ ");
+		    rslt.append("[ ");
 		} else {
-		    rslt.append( ", ");
+		    rslt.append( " ");
 		}
 		rslt.append(value.toString());
 		if ( row == lastRow ) {
-		    rslt.append( " }");
+		    rslt.append( " ]");
 		} else {
 		    rslt.append(" ");
 		}
@@ -57,7 +79,7 @@ public class RationalMatrix {
 
 	    @Override
 	    public Rational end() {
-		rslt.append(" }");
+		rslt.append(" ]");
 		return null;
 	    }});
 	return rslt.toString();
