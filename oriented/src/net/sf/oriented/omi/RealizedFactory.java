@@ -7,6 +7,8 @@ package net.sf.oriented.omi;
 
 import java.util.Collection;
 
+import net.sf.oriented.omi.matrix.RationalMatrix;
+
 public interface RealizedFactory extends Factory<OMRealized> {
     OMRealized construct(RationalMatrix mat);
     OMRealized construct(Collection<? extends Label> e,RationalMatrix mat);

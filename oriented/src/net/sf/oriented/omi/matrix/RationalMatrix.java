@@ -3,9 +3,13 @@
   For GPLv3 licensing information, see end of file.
 ************************************************************************/
 
-package net.sf.oriented.omi;
+package net.sf.oriented.omi.matrix;
+
+import org.apache.commons.math3.linear.FieldMatrix;
 
 public class RationalMatrix {
+    
+    private FieldMatrix<Rational> delegate;
 
     public int width() {
 	// TODO Auto-generated method stub

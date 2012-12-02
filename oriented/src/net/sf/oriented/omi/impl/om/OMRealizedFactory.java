@@ -10,10 +10,10 @@ import java.util.Collection;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMRealized;
-import net.sf.oriented.omi.RationalMatrix;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.omi.matrix.RationalMatrix;
 
 public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix> 
     implements RealizedFactory  {

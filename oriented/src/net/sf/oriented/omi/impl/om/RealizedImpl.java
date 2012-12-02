@@ -8,8 +8,8 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Iterator;
 
 import net.sf.oriented.omi.OMRealized;
-import net.sf.oriented.omi.RationalMatrix;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.matrix.RationalMatrix;
 
 public class RealizedImpl extends AbsOM  implements OMRealized {
 
