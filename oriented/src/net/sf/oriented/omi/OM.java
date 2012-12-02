@@ -15,6 +15,8 @@ public interface OM extends Verify {
 	
 	OMS getMaxVectors();
 	
+	OMRealized getRealized();
+	
 	public OM dual();
 	
 	public Label[]  ground();

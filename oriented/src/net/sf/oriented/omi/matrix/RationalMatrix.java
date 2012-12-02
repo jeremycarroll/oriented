@@ -17,11 +17,13 @@ public class RationalMatrix {
     }
 
 
-    public int width() {
-	// TODO Auto-generated method stub
-	return 0;
+    public int height() {
+	return delegate.getRowDimension();
     }
-    
+
+    public int width() {
+	return delegate.getColumnDimension();
+    }
     
     @Override
     public String toString() {
@@ -59,6 +61,12 @@ public class RationalMatrix {
 		return null;
 	    }});
 	return rslt.toString();
+    }
+
+
+    public Rational determinant(int[] indices) {
+	// TODO Auto-generated method stub
+	return null;
     }
 
 }

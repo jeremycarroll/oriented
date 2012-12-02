@@ -4,14 +4,7 @@
 ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CHIROTOPE;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CIRCUITS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.COCIRCUITS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.COVECTORS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.DUALCHIROTOPE;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.MAXVECTORS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.TOPES;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.VECTORS;
+import static net.sf.oriented.omi.impl.om.Cryptomorphisms.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,6 +14,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
@@ -135,6 +129,8 @@ public class OMAll implements OMInternal {
 				return new ChirotopeImpl(dual().getChirotope());
 			if (has(MAXVECTORS))
 	   			   return new ChirotopeImpl(getCircuits());
+			if (has(REALIZED)) 
+			    return new ChirotopeImpl(this, getRealized().getMatrix());
 			return new ChirotopeImpl(dual().getChirotope());
 				
 		}
@@ -332,6 +328,11 @@ public class OMAll implements OMInternal {
 		if (!sameGroundAs(o))
 			return false;
 		return getCircuits().respectingEquals().equals(o.getCircuits().respectingEquals());
+	}
+
+	@Override
+	public OMRealized getRealized() {
+	   return (OMRealized)get(REALIZED);
 	}
 
 

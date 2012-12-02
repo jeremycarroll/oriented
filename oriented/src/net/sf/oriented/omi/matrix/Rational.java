@@ -16,9 +16,6 @@ import com.perisic.ring.RingElt;
 public class Rational implements FieldElement<Rational> {
     
     private static final class RationalField implements Field<Rational> {
-	private static final Rational ZERO = new Rational(Q.zero());
-	private static final Rational ONE = new Rational(Q.one());
-
 	@Override
 	public Rational getZero() {
 	   return ZERO;
@@ -36,6 +33,8 @@ public class Rational implements FieldElement<Rational> {
     }
 
     private final RingElt delegate;
+    public static final Rational ONE = new Rational(Q.one());
+    public static final Rational ZERO = new Rational(Q.zero());
     
     private Rational(RingElt d) {
 	delegate = d;
@@ -86,6 +85,10 @@ public class Rational implements FieldElement<Rational> {
     @Override
     public String toString() {
 	return delegate.toString();
+    }
+
+    public int sign() {
+	return com.perisic.ring.RationalField.numeratorToBigInteger( delegate ).compareTo(BigInteger.ZERO);
     }
 
 }

@@ -30,6 +30,8 @@ import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+import net.sf.oriented.omi.matrix.Rational;
+import net.sf.oriented.omi.matrix.RationalMatrix;
 
 
 
@@ -123,6 +125,26 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		alt = new Alternating(new Chi());
 		initFromChi(chi);
 		all.set(CHIROTOPE, this);
+	}
+
+	public ChirotopeImpl(OMAll all, final RationalMatrix matrix) {
+	    this(all, new Chirotope(){
+		
+
+		@Override
+		public int chi(int... indices) {
+		    return matrix.determinant(indices).sign();
+		}
+
+		@Override
+		public int rank() {
+		    return matrix.height();
+		}
+
+		@Override
+		public int n() {
+		    return matrix.width();
+		}});
 	}
 
 	private void initFromChi(Chirotope chi) {

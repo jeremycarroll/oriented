@@ -6,6 +6,7 @@ package net.sf.oriented.omi.impl.om;
 
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
@@ -34,6 +35,11 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
 		return all.getCircuits();
 	}
 
+
+	@Override
+	public OMRealized getRealized() {
+		return all.getRealized();
+	}
 	@Override
 	public MaxVectors getMaxVectors() {
 		return all.getMaxVectors();
