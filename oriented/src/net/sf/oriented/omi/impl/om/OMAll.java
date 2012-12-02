@@ -305,6 +305,9 @@ public class OMAll implements OMInternal {
 	public boolean equals(Object o) {
 		if (o == null || (!(o instanceof OM)))
 			return false;
+		if ( o == this ) {
+		    return true;
+		}
 		if (!(o instanceof OMInternal)) {
 			return equalsByCircuits((OM)o);
 		}

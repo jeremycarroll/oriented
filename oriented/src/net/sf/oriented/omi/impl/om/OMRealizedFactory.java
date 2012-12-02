@@ -24,8 +24,7 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
 
     @Override
     public String toString(OMRealized t) {
-	// TODO Auto-generated method stub
-	return null;
+	return t.getMatrix().toString();
     }
 
     @Override

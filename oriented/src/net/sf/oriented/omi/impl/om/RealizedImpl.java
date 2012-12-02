@@ -35,6 +35,12 @@ public class RealizedImpl extends AbsOM  implements OMRealized {
 	return null;
     }
 
+    @Override
+    public RationalMatrix getMatrix() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
 
 }
 

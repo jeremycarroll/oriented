@@ -82,6 +82,11 @@ public class Rational implements FieldElement<Rational> {
     public Field<Rational> getField() {
 	return new RationalField();
     }
+    
+    @Override
+    public String toString() {
+	return delegate.toString();
+    }
 
 }
 
