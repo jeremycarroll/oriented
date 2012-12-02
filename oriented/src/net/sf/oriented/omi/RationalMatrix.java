@@ -7,6 +7,11 @@ package net.sf.oriented.omi;
 
 public class RationalMatrix {
 
+    public int width() {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
 }
 
 

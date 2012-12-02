@@ -8,22 +8,18 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Collection;
 
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RationalMatrix;
 import net.sf.oriented.omi.RealizedFactory;
+import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.omi.impl.items.ParseContext;
 
-public class OMRealizedFactory implements RealizedFactory  {
+public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix> 
+    implements RealizedFactory  {
 
-    public OMRealizedFactory(FactoryFactory factoryFactory) {
-	// TODO Auto-generated constructor stub
-    }
-
-    @Override
-    public OMRealized parse(String s) {
-	// TODO Auto-generated method stub
-	return null;
+    public OMRealizedFactory(FactoryFactory factory) {
+	super(factory);
     }
 
     @Override
@@ -33,23 +29,29 @@ public class OMRealizedFactory implements RealizedFactory  {
     }
 
     @Override
-    public JavaSet<? extends OMRealized> emptyCollectionOf() {
-	// TODO Auto-generated method stub
-	return null;
+    public OMRealized construct(RationalMatrix mat) {
+	final int n = mat.width();
+	return construct(new SimpleLabels(n), mat);
     }
 
     @Override
-    public OMRealized fromChirotope(RationalMatrix mat) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public OMRealized fromChirotope(Collection<? extends Label> e,
+    public OMRealized construct(Collection<? extends Label> e,
 	    RationalMatrix mat) {
+	LabelImpl[] g = e.toArray(new LabelImpl[0]);
+	OMAll all = new OMAll(g, factory);
+	return new RealizedImpl(all, mat);
+    }
+
+   
+
+
+    @Override
+    RationalMatrix parseMatroid(ParseContext pc) {
 	// TODO Auto-generated method stub
 	return null;
     }
+
+
 }
 
 

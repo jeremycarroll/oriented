@@ -1,16 +1,44 @@
 /************************************************************************
-  (c) Copyright 2007, 2010 Jeremy J. Carroll
+  (c) Copyright 2012 Jeremy J. Carroll
   For GPLv3 licensing information, see end of file.
 ************************************************************************/
-/**
- * Copyright 2007, Jeremy J. Carroll
- */
+
 package net.sf.oriented.omi.impl.om;
 
-class Pair {
-	String s;
-	int    r;
+import java.util.Iterator;
+
+import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.RationalMatrix;
+import net.sf.oriented.omi.SignedSet;
+
+public class RealizedImpl extends AbsOM  implements OMRealized {
+
+    public RealizedImpl(OMAll all, RationalMatrix mat) {
+	super(all);
+    }
+
+    @Override
+    public boolean verify() {
+	// TODO Auto-generated method stub
+	return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+	// TODO Auto-generated method stub
+	return false;
+    }
+
+    @Override
+    public Iterator<? extends SignedSet> iterator() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+
 }
+
+
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.
 

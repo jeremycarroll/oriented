@@ -32,19 +32,7 @@ public abstract class AbsFactory<M,S,F extends SetFactoryInternal > extends
 		return "( " + unsignedSets().toString(g,unsignedSets().copyBackingCollection(g)) + ", " + sets.toString(g,matroidS) + " )";
 	}
 
-	@Override
-	M parse(ParseContext pc) {
-		if (0 == pc.string.length())
-			throw new IllegalArgumentException("Syntax error - empty input");
-		switch (pc.string.charAt(0)) {
-		case '{':
-			return construct(parseMatroid(pc));
-		case '(':
-			return parsePair(pc);
-		default:
-				throw new IllegalArgumentException("Syntax error - expected '{' or '('");
-		}
-	}
+
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -52,7 +40,6 @@ public abstract class AbsFactory<M,S,F extends SetFactoryInternal > extends
 		return (S)sets.parse(pc);
 	}
 
-	abstract M construct(S signedSets);
 
 	public M empty() {
 		throw new UnsupportedOperationException("No 'empty' oriented matroid");

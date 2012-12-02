@@ -8,8 +8,8 @@ package net.sf.oriented.omi;
 import java.util.Collection;
 
 public interface RealizedFactory extends Factory<OMRealized> {
-    OMRealized fromChirotope(RationalMatrix mat);
-    OMRealized fromChirotope(Collection<? extends Label> e,RationalMatrix mat);
+    OMRealized construct(RationalMatrix mat);
+    OMRealized construct(Collection<? extends Label> e,RationalMatrix mat);
 }
 
 

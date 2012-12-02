@@ -157,7 +157,7 @@ public class TestConversions {
 			case DUALCHIROTOPE:
 				ChirotopeFactory chi = factory.chirotope();
 				if (factory == special) {
-				return chi.fromChirotope((Chirotope)first);
+				return chi.construct((Chirotope)first);
 				}
 				return chi.parse(chi.toString((OMChirotope)first));
 				
