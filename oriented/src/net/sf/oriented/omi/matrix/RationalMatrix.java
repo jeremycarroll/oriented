@@ -12,6 +12,11 @@ public class RationalMatrix {
     
     private FieldMatrix<Rational> delegate;
 
+    public RationalMatrix(int[][] chap1) {
+	// TODO Auto-generated constructor stub
+    }
+
+
     public int width() {
 	// TODO Auto-generated method stub
 	return 0;
