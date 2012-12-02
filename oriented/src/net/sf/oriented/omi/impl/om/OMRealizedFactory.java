@@ -3,14 +3,55 @@
   For GPLv3 licensing information, see end of file.
 ************************************************************************/
 
-package net.sf.oriented.omi;
+package net.sf.oriented.omi.impl.om;
 
 import java.util.Collection;
 
-public interface RealizedFactory extends Factory<OMRealized> {
-    OMRealized fromChirotope(RationalMatrix mat);
-    OMRealized fromChirotope(Collection<? extends Label> e,RationalMatrix mat);
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.RationalMatrix;
+import net.sf.oriented.omi.RealizedFactory;
+
+public class OMRealizedFactory implements RealizedFactory  {
+
+    public OMRealizedFactory(FactoryFactory factoryFactory) {
+	// TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public OMRealized parse(String s) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public String toString(OMRealized t) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public JavaSet<? extends OMRealized> emptyCollectionOf() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public OMRealized fromChirotope(RationalMatrix mat) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public OMRealized fromChirotope(Collection<? extends Label> e,
+	    RationalMatrix mat) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 }
+
 
 
 /************************************************************************

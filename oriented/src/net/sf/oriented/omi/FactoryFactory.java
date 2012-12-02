@@ -8,6 +8,7 @@ import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.om.MatroidFactory;
 import net.sf.oriented.omi.impl.om.OMChirotopeFactory;
 import net.sf.oriented.omi.impl.om.OMFactory;
+import net.sf.oriented.omi.impl.om.OMRealizedFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetFactory;
@@ -59,7 +60,7 @@ final public class FactoryFactory {
 		
 		bases = MatroidFactory.bases(this);
 		unsignedCircuits = MatroidFactory.circuits(this);
-		realized = new RealizedFactory(this);
+		realized = new OMRealizedFactory(this);
 	}
 	/**
 	 * A new {@link FactoryFactory} with default options.

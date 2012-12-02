@@ -5,11 +5,8 @@
 
 package net.sf.oriented.omi;
 
-import java.util.Collection;
+public interface OMRealized  extends OM {
 
-public interface RealizedFactory extends Factory<OMRealized> {
-    OMRealized fromChirotope(RationalMatrix mat);
-    OMRealized fromChirotope(Collection<? extends Label> e,RationalMatrix mat);
 }
 
 
