@@ -5,8 +5,6 @@
 
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CHIROTOPE;
 import static net.sf.oriented.omi.impl.om.Cryptomorphisms.REALIZED;
 
 import java.util.Arrays;

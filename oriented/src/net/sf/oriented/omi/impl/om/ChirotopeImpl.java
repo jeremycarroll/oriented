@@ -30,7 +30,6 @@ import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
-import net.sf.oriented.omi.matrix.Rational;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
 
