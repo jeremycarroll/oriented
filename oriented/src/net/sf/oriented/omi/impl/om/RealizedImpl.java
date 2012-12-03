@@ -6,6 +6,8 @@
 package net.sf.oriented.omi.impl.om;
 
 import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
+import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CHIROTOPE;
+import static net.sf.oriented.omi.impl.om.Cryptomorphisms.REALIZED;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,6 +27,7 @@ public class RealizedImpl extends AbsOM  implements OMRealized {
     public RealizedImpl(OMAll all, RationalMatrix mat) {
 	super(all);
 	matrix = mat;
+	all.set(REALIZED, this);
     }
 
     @Override

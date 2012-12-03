@@ -35,6 +35,10 @@ public class TestRealization {
     public void testToString() {
 	System.err.println(testDatum().toString());
     }
+    @Test
+    public void testToChirotope() {
+	System.err.println(testDatum().getChirotope().toString());
+    }
 
 }
 
