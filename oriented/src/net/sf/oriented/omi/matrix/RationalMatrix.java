@@ -87,8 +87,7 @@ public class RationalMatrix {
 
 
     public PerisicFieldElement determinant(int[] indices) {
-	// TODO Auto-generated method stub
-	return null;
+	return DeterminantCalculator.get(height()).compute(delegate,indices);
     }
 
 }

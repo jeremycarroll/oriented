@@ -98,6 +98,10 @@ public final class PerisicFieldElement implements FieldElement<PerisicFieldEleme
 	return delegate.getRing();
     }
 
+    RingElt getDelegate() {
+	return delegate;
+    }
+
 
 }
 

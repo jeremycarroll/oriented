@@ -8,19 +8,22 @@ package net.sf.oriented.omi.matrix;
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
 
+import com.perisic.ring.QuotientField;
 import com.perisic.ring.Ring;
+import com.perisic.ring.RingElt;
 import com.perisic.ring.UniversalPolynomialRing;
 
 public class PerisicField implements Field<PerisicFieldElement> {
     
     
-    private static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
+    static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
 
     final private PerisicFieldElement zero, one;
     final private Ring ring;
     
     public static final PerisicField Q = new PerisicField(Ring.Q);
     public static final PerisicField Polynomials = new PerisicField(U);
+    public static final PerisicField QPolynomials = new PerisicField(new QuotientField(U));
     private PerisicField(Ring r) {
 	zero = new PerisicFieldElement(r.zero());
 	one = new PerisicFieldElement(r.one());
@@ -52,6 +55,15 @@ public class PerisicField implements Field<PerisicFieldElement> {
 
     public PerisicFieldElement create(int i) {
 	return new PerisicFieldElement(ring.map(i));
+    }
+
+
+    public PerisicFieldElement map(String str) {
+	return new PerisicFieldElement(ring.map(str));
+    }
+    
+    PerisicFieldElement create(RingElt det) {
+	return new PerisicFieldElement(det);
     }
 
 
