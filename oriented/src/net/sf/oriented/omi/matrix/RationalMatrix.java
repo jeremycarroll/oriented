@@ -12,14 +12,14 @@ import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
 
 public class RationalMatrix {
     
-    private FieldMatrix<Rational> delegate;
+    private FieldMatrix<PerisicFieldElement> delegate;
 
     public RationalMatrix(final int[][] data) {
-	delegate = new BlockFieldMatrix<Rational>(
-		Rational.RATIONAL_FIELD,
+	delegate = new BlockFieldMatrix<PerisicFieldElement>(
+		PerisicField.Q,
 		data.length,
 		data[0].length);
-	delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<Rational>(){
+	delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<PerisicFieldElement>(){
 
 	    @Override
 	    public void start(int rows, int columns, int startRow, int endRow,
@@ -27,12 +27,12 @@ public class RationalMatrix {
 	    }
 
 	    @Override
-	    public Rational visit(int row, int column, Rational value) {
-		return new Rational(data[row][column]);
+	    public PerisicFieldElement visit(int row, int column, PerisicFieldElement value) {
+		return PerisicField.Q.create(data[row][column]);
 	    }
 
 	    @Override
-	    public Rational end() {
+	    public PerisicFieldElement end() {
 		return null;
 	    }});
     }
@@ -49,7 +49,7 @@ public class RationalMatrix {
     @Override
     public String toString() {
 	final StringBuffer rslt = new StringBuffer();
-	delegate.walkInColumnOrder(new FieldMatrixPreservingVisitor<Rational>(){
+	delegate.walkInColumnOrder(new FieldMatrixPreservingVisitor<PerisicFieldElement>(){
 
 	    int lastRow;
 	    @Override
@@ -60,7 +60,7 @@ public class RationalMatrix {
 	    }
 
 	    @Override
-	    public void visit(int row, int column, Rational value) {
+	    public void visit(int row, int column, PerisicFieldElement value) {
 		if ( row == 0 ) {
 		    if ( column != 0 ) {
 			rslt.append(" ");
@@ -78,7 +78,7 @@ public class RationalMatrix {
 	    }
 
 	    @Override
-	    public Rational end() {
+	    public PerisicFieldElement end() {
 		rslt.append(" ]");
 		return null;
 	    }});
@@ -86,7 +86,7 @@ public class RationalMatrix {
     }
 
 
-    public Rational determinant(int[] indices) {
+    public PerisicFieldElement determinant(int[] indices) {
 	// TODO Auto-generated method stub
 	return null;
     }

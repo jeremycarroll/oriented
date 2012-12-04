@@ -17,12 +17,14 @@ public class PerisicField implements Field<PerisicFieldElement> {
     private static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
 
     final private PerisicFieldElement zero, one;
+    final private Ring ring;
     
     public static final PerisicField Q = new PerisicField(Ring.Q);
     public static final PerisicField Polynomials = new PerisicField(U);
     private PerisicField(Ring r) {
 	zero = new PerisicFieldElement(r.zero());
 	one = new PerisicFieldElement(r.one());
+	ring = r;
     }
 
     
@@ -46,6 +48,13 @@ public class PerisicField implements Field<PerisicFieldElement> {
 	if (ring == U ) return Polynomials;
 	throw new IllegalArgumentException();
     }
+
+
+    public PerisicFieldElement create(int i) {
+	return new PerisicFieldElement(ring.map(i));
+    }
+
+
 
 }
 
