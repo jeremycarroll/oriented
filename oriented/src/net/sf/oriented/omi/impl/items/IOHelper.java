@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class IOHelper {
 
-	static Pattern p = Pattern.compile("([})])|([ \t\n\r,]+)");
+	static Pattern p = Pattern.compile("([})]|\\]|\\[)|([ \t\n\r,]+)");
 
 	protected String uptoSeparator(ParseContext pc) {
 	//		int i = pc.string.

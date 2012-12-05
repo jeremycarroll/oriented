@@ -5,6 +5,8 @@
 
 package net.sf.oriented.omi.matrix;
 
+import java.util.List;
+
 import org.apache.commons.math3.linear.BlockFieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrixChangingVisitor;
@@ -29,6 +31,30 @@ public class RationalMatrix {
 	    @Override
 	    public PerisicFieldElement visit(int row, int column, PerisicFieldElement value) {
 		return PerisicField.Q.create(data[row][column]);
+	    }
+
+	    @Override
+	    public PerisicFieldElement end() {
+		return null;
+	    }});
+    }
+
+
+    public RationalMatrix(final List<List<PerisicFieldElement>> data) {
+	delegate = new BlockFieldMatrix<PerisicFieldElement>(
+		PerisicField.Q,
+		data.get(0).size(),
+		data.size());
+	delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<PerisicFieldElement>(){
+
+	    @Override
+	    public void start(int rows, int columns, int startRow, int endRow,
+		    int startColumn, int endColumn) {
+	    }
+
+	    @Override
+	    public PerisicFieldElement visit(int row, int column, PerisicFieldElement value) {
+		return data.get(column).get(row);
 	    }
 
 	    @Override

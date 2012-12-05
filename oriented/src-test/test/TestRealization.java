@@ -26,7 +26,7 @@ public class TestRealization {
 	{ 0, 0, 1, 0, 1, 1 }
     };
     
-    private OM testDatum() {
+    static OM testDatum() {
 	RationalMatrix matrix = new RationalMatrix(chap1);
 	return f.realized().construct(matrix);
     }

@@ -19,13 +19,16 @@ import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMChirotope;
+import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.Options;
+import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.impl.om.Cryptomorphisms;
 import net.sf.oriented.omi.impl.om.OMAll;
 import net.sf.oriented.omi.impl.om.OMInternal;
+import net.sf.oriented.omi.matrix.RationalMatrix;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,7 +133,7 @@ public class TestConversions {
 
 	    @Test
 	    public void convert() {
-            OMAll om = create();
+            OMAll om = create(from);
             assertTrue(om.verify());
             OMInternal first = om.get(from);
             assertTrue(first.verify());
@@ -148,7 +151,7 @@ public class TestConversions {
 	    }
 
 		private void checkEquals(Cryptomorphisms f, OM x, OM y) {
-			if (f.ordinal()<4)
+			if (f.ordinal()<Cryptomorphisms.values().length/2)
 				assertEquals(x,y);
 			else
 				assertEquals(x.dual(),y);
@@ -163,6 +166,13 @@ public class TestConversions {
 				return chi.construct((Chirotope)first);
 				}
 				return chi.parse(chi.toString((OMChirotope)first));
+			case REALIZED:
+			case DUALREALIZED:
+				RealizedFactory rf = factory.realized();
+				if (factory == special) {
+				    return rf.construct((RationalMatrix)first);
+				}
+				return rf.parse(rf.toString((OMRealized) first));
 				
 			default:
 				OMSFactory f = omsFactory();
@@ -188,12 +198,23 @@ public class TestConversions {
 			return null;
 		}
 
-		private OMAll create() {
+		private OMAll create(Cryptomorphisms f) {
 			Options options = new Options();
 			options.setShortLabels();
-			OM circuits = new FactoryFactory(options).circuits().parse(
+			switch (f) {
+			case REALIZED:
+			case DUALREALIZED:
+			    return asAll(TestRealization.testDatum());
+			default:
+				OM circuits = new FactoryFactory(options).circuits().parse(
 					"( 123456" + (source==1?"7":"")+", {12'4,13'5,23'6,45'6,12'56',13'46,23'4'5} )");
-			return ((OMInternal)circuits).asAll();
+			        return asAll(circuits);
+			}
+			
+		}
+
+		private OMAll asAll(OM circuits) {
+		    return ((OMInternal)circuits).asAll();
 		}
 
 

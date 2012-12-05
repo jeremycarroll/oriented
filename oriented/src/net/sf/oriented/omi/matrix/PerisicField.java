@@ -67,6 +67,11 @@ public class PerisicField implements Field<PerisicFieldElement> {
     }
 
 
+    public static PerisicFieldElement rational(String rational) {
+	return Q.map(rational);
+    }
+
+
 
 }
 
