@@ -9,15 +9,17 @@
  * This file has been modified extensively with the following intents:
  * 1) Support FieldMatrix<T extends FieldElement<T>> rather than RealMatrix
  * 2) Do not support functionality that is not required in net.sf.oriented
+ *    In particular, the Solver is not included.
+ * 3) The package and class name are changed.
  *
- *************************************************************************
+ **/
+
+ /*************************************************************************
   Modifications are:
   (c) Copyright 2012 Jeremy J. Carroll
   For GPLv3 licensing information, see end of file.
-  ************************************************************************/
- * 
- * 
- *********************************************************************/
+ ************************************************************************/
+ 
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -38,11 +40,14 @@
 
 package net.sf.oriented.omi.matrix;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.FieldMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.util.FastMath;
 
 
@@ -71,38 +76,27 @@ import org.apache.commons.math3.util.FastMath;
  * @version $Id: QRDecomposition.java 1244107 2012-02-14 16:17:55Z erans $
  * @since 1.2 (changed to concrete class in 3.0)
  */
-public class QRDecomposition {
+public class FieldQRDecomposition<T extends FieldElement<T> > {
     /**
      * A packed TRANSPOSED representation of the QR decomposition.
      * <p>The elements BELOW the diagonal are the elements of the UPPER triangular
      * matrix R, and the rows ABOVE the diagonal are the Householder reflector vectors
      * from which an explicit form of Q can be recomputed if desired.</p>
      */
-    private double[][] qrt;
+    private T[][] qrt;
     /** The diagonal elements of R. */
-    private double[] rDiag;
+    private T[] rDiag;
     /** Cached value of Q. */
-    private RealMatrix cachedQ;
+    private FieldMatrix<T> cachedQ;
     /** Cached value of QT. */
-    private RealMatrix cachedQT;
+    private FieldMatrix<T> cachedQT;
     /** Cached value of R. */
-    private RealMatrix cachedR;
+    private FieldMatrix<T> cachedR;
     /** Cached value of H. */
-    private RealMatrix cachedH;
-    /** Singularity threshold. */
-    private final double threshold;
+    private FieldMatrix<T> cachedH;
+    private final Field<T> field;
 
-    /**
-     * Calculates the QR-decomposition of the given matrix.
-     * The singularity threshold defaults to zero.
-     *
-     * @param matrix The matrix to decompose.
-     *
-     * @see #QRDecomposition(RealMatrix,double)
-     */
-    public QRDecomposition(RealMatrix matrix) {
-        this(matrix, 0d);
-    }
+  
 
     /**
      * Calculates the QR-decomposition of the given matrix.
@@ -110,14 +104,13 @@ public class QRDecomposition {
      * @param matrix The matrix to decompose.
      * @param threshold Singularity threshold.
      */
-    public QRDecomposition(RealMatrix matrix,
-                           double threshold) {
-        this.threshold = threshold;
+    public FieldQRDecomposition(FieldMatrix<T> matrix) {
+        field = matrix.getField();
 
         final int m = matrix.getRowDimension();
         final int n = matrix.getColumnDimension();
         qrt = matrix.transpose().getData();
-        rDiag = new double[FastMath.min(m, n)];
+        rDiag = buildArray(FastMath.min(m, n));
         cachedQ  = null;
         cachedQT = null;
         cachedR  = null;
@@ -130,7 +123,7 @@ public class QRDecomposition {
          */
         for (int minor = 0; minor < FastMath.min(m, n); minor++) {
 
-            final double[] qrtMinor = qrt[minor];
+            final T[] qrtMinor = qrt[minor];
 
             /*
              * Let x be the first column of the minor, and a^2 = |x|^2.
@@ -139,15 +132,19 @@ public class QRDecomposition {
              * The sign of a is chosen to be opposite to the sign of the first
              * component of x. Let's find a:
              */
-            double xNormSqr = 0;
+            T xNormSqr = field.getZero();
             for (int row = minor; row < m; row++) {
-                final double c = qrtMinor[row];
-                xNormSqr += c * c;
+                final T c = qrtMinor[row];
+                xNormSqr = xNormSqr.add(c.multiply(c));
             }
-            final double a = (qrtMinor[minor] > 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);
+            final T a = field.getOne();
+        	    // (qrtMinor[minor] > 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);
             rDiag[minor] = a;
 
-            if (a != 0.0) {
+            if (xNormSqr.equals(field.getZero())) {
+                rDiag[minor] = xNormSqr;
+            } else {
+                rDiag[minor] = a;
 
                 /*
                  * Calculate the normalized reflection vector v and transform
@@ -157,7 +154,7 @@ public class QRDecomposition {
                  * Here <x, e> is now qr[minor][minor].
                  * v = x-ae is stored in the column at qr:
                  */
-                qrtMinor[minor] -= a; // now |v|^2 = -2a*(qr[minor][minor])
+                qrtMinor[minor] = qrtMinor[minor].subtract(a); // now |v|^2 = -2a*(qr[minor][minor])
 
                 /*
                  * Transform the rest of the columns of the minor:
@@ -172,20 +169,29 @@ public class QRDecomposition {
                  * alpha = -<x,v>/(a*qr[minor][minor])
                  */
                 for (int col = minor+1; col < n; col++) {
-                    final double[] qrtCol = qrt[col];
-                    double alpha = 0;
+                    final T[] qrtCol = qrt[col];
+                    T alpha = field.getZero();
                     for (int row = minor; row < m; row++) {
-                        alpha -= qrtCol[row] * qrtMinor[row];
+                        alpha = alpha.subtract( qrtCol[row].multiply(qrtMinor[row]) );
                     }
-                    alpha /= a * qrtMinor[minor];
+                    alpha = alpha.divide( a.multiply(qrtMinor[minor]) );
 
                     // Subtract the column vector alpha*v from x.
                     for (int row = minor; row < m; row++) {
-                        qrtCol[row] -= alpha * qrtMinor[row];
+                        qrtCol[row] = qrtCol[row].subtract( alpha.multiply(qrtMinor[row]) );
                     }
                 }
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private T[] buildArray(int length) {
+	return (T[]) Array.newInstance(field.getRuntimeClass(), length);
+    }
+    @SuppressWarnings("unchecked")
+    private T[][] buildArray(int w, int h) {
+	return (T[][]) Array.newInstance(field.getRuntimeClass(), w, h);
     }
 
     /**
@@ -193,14 +199,14 @@ public class QRDecomposition {
      * <p>R is an upper-triangular matrix</p>
      * @return the R matrix
      */
-    public RealMatrix getR() {
+    public FieldMatrix<T> getR() {
 
         if (cachedR == null) {
 
             // R is supposed to be m x n
             final int n = qrt.length;
             final int m = qrt[0].length;
-            double[][] ra = new double[m][n];
+            T[][] ra = buildArray(m,n);
             // copy the diagonal from rDiag and the upper triangle of qr
             for (int row = FastMath.min(m, n) - 1; row >= 0; row--) {
                 ra[row][row] = rDiag[row];
@@ -208,7 +214,7 @@ public class QRDecomposition {
                     ra[row][col] = qrt[col][row];
                 }
             }
-            cachedR = MatrixUtils.createRealMatrix(ra);
+            cachedR = MatrixUtils.createFieldMatrix(ra);
         }
 
         // return the cached matrix
@@ -220,7 +226,7 @@ public class QRDecomposition {
      * <p>Q is an orthogonal matrix</p>
      * @return the Q matrix
      */
-    public RealMatrix getQ() {
+    public FieldMatrix<T> getQ() {
         if (cachedQ == null) {
             cachedQ = getQT().transpose();
         }
@@ -232,13 +238,13 @@ public class QRDecomposition {
      * <p>Q is an orthogonal matrix</p>
      * @return the Q matrix
      */
-    public RealMatrix getQT() {
+    public FieldMatrix<T> getQT() {
         if (cachedQT == null) {
 
             // QT is supposed to be m x m
             final int n = qrt.length;
             final int m = qrt[0].length;
-            double[][] qta = new double[m][m];
+            T[][] qta = buildArray(m,m);
 
             /*
              * Q = Q1 Q2 ... Q_m, so Q is formed by first constructing Q_m and then
@@ -246,27 +252,27 @@ public class QRDecomposition {
              * succession to the result
              */
             for (int minor = m - 1; minor >= FastMath.min(m, n); minor--) {
-                qta[minor][minor] = 1.0d;
+                qta[minor][minor] = field.getOne();
             }
 
             for (int minor = FastMath.min(m, n)-1; minor >= 0; minor--){
-                final double[] qrtMinor = qrt[minor];
-                qta[minor][minor] = 1.0d;
-                if (qrtMinor[minor] != 0.0) {
+                final T[] qrtMinor = qrt[minor];
+                qta[minor][minor] = field.getOne();
+                if (!qrtMinor[minor].equals(field.getOne())) {
                     for (int col = minor; col < m; col++) {
-                        double alpha = 0;
+                        T alpha = field.getZero();
                         for (int row = minor; row < m; row++) {
-                            alpha -= qta[col][row] * qrtMinor[row];
+                            alpha = alpha.subtract( qta[col][row].multiply(qrtMinor[row]) );
                         }
-                        alpha /= rDiag[minor] * qrtMinor[minor];
+                        alpha = alpha.divide( rDiag[minor].multiply(qrtMinor[minor]) );
 
                         for (int row = minor; row < m; row++) {
-                            qta[col][row] += -alpha * qrtMinor[row];
+                            qta[col][row] =  qta[col][row].subtract(alpha.multiply(qrtMinor[row] ) );
                         }
                     }
                 }
             }
-            cachedQT = MatrixUtils.createRealMatrix(qta);
+            cachedQT = MatrixUtils.createFieldMatrix(qta);
         }
 
         // return the cached matrix
@@ -280,198 +286,26 @@ public class QRDecomposition {
      * to compute Q.</p>
      * @return a matrix containing the Householder reflector vectors
      */
-    public RealMatrix getH() {
+    public FieldMatrix<T> getH() {
         if (cachedH == null) {
 
             final int n = qrt.length;
             final int m = qrt[0].length;
-            double[][] ha = new double[m][n];
+            T[][] ha = buildArray(m,n);
             for (int i = 0; i < m; ++i) {
                 for (int j = 0; j < FastMath.min(i + 1, n); ++j) {
-                    ha[i][j] = qrt[j][i] / -rDiag[j];
+                    ha[i][j] = qrt[j][i].divide(rDiag[j].negate());
                 }
             }
-            cachedH = MatrixUtils.createRealMatrix(ha);
+            cachedH = MatrixUtils.createFieldMatrix(ha);
         }
 
         // return the cached matrix
         return cachedH;
     }
 
-    /**
-     * Get a solver for finding the A &times; X = B solution in least square sense.
-     * @return a solver
-     */
-    public DecompositionSolver getSolver() {
-        return new Solver(qrt, rDiag, threshold);
-    }
+    
 
-    /** Specialized solver. */
-    private static class Solver implements DecompositionSolver {
-        /**
-         * A packed TRANSPOSED representation of the QR decomposition.
-         * <p>The elements BELOW the diagonal are the elements of the UPPER triangular
-         * matrix R, and the rows ABOVE the diagonal are the Householder reflector vectors
-         * from which an explicit form of Q can be recomputed if desired.</p>
-         */
-        private final double[][] qrt;
-        /** The diagonal elements of R. */
-        private final double[] rDiag;
-        /** Singularity threshold. */
-        private final double threshold;
-
-        /**
-         * Build a solver from decomposed matrix.
-         *
-         * @param qrt Packed TRANSPOSED representation of the QR decomposition.
-         * @param rDiag Diagonal elements of R.
-         * @param threshold Singularity threshold.
-         */
-        private Solver(final double[][] qrt,
-                       final double[] rDiag,
-                       final double threshold) {
-            this.qrt   = qrt;
-            this.rDiag = rDiag;
-            this.threshold = threshold;
-        }
-
-        /** {@inheritDoc} */
-        public boolean isNonSingular() {
-            for (double diag : rDiag) {
-                if (FastMath.abs(diag) <= threshold) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /** {@inheritDoc} */
-        public RealVector solve(RealVector b) {
-            final int n = qrt.length;
-            final int m = qrt[0].length;
-            if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
-            }
-            if (!isNonSingular()) {
-                throw new SingularMatrixException();
-            }
-
-            final double[] x = new double[n];
-            final double[] y = b.toArray();
-
-            // apply Householder transforms to solve Q.y = b
-            for (int minor = 0; minor < FastMath.min(m, n); minor++) {
-
-                final double[] qrtMinor = qrt[minor];
-                double dotProduct = 0;
-                for (int row = minor; row < m; row++) {
-                    dotProduct += y[row] * qrtMinor[row];
-                }
-                dotProduct /= rDiag[minor] * qrtMinor[minor];
-
-                for (int row = minor; row < m; row++) {
-                    y[row] += dotProduct * qrtMinor[row];
-                }
-            }
-
-            // solve triangular system R.x = y
-            for (int row = rDiag.length - 1; row >= 0; --row) {
-                y[row] /= rDiag[row];
-                final double yRow = y[row];
-                final double[] qrtRow = qrt[row];
-                x[row] = yRow;
-                for (int i = 0; i < row; i++) {
-                    y[i] -= yRow * qrtRow[i];
-                }
-            }
-
-            return new ArrayRealVector(x, false);
-        }
-
-        /** {@inheritDoc} */
-        public RealMatrix solve(RealMatrix b) {
-            final int n = qrt.length;
-            final int m = qrt[0].length;
-            if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
-            }
-            if (!isNonSingular()) {
-                throw new SingularMatrixException();
-            }
-
-            final int columns        = b.getColumnDimension();
-            final int blockSize      = BlockRealMatrix.BLOCK_SIZE;
-            final int cBlocks        = (columns + blockSize - 1) / blockSize;
-            final double[][] xBlocks = BlockRealMatrix.createBlocksLayout(n, columns);
-            final double[][] y       = new double[b.getRowDimension()][blockSize];
-            final double[]   alpha   = new double[blockSize];
-
-            for (int kBlock = 0; kBlock < cBlocks; ++kBlock) {
-                final int kStart = kBlock * blockSize;
-                final int kEnd   = FastMath.min(kStart + blockSize, columns);
-                final int kWidth = kEnd - kStart;
-
-                // get the right hand side vector
-                b.copySubMatrix(0, m - 1, kStart, kEnd - 1, y);
-
-                // apply Householder transforms to solve Q.y = b
-                for (int minor = 0; minor < FastMath.min(m, n); minor++) {
-                    final double[] qrtMinor = qrt[minor];
-                    final double factor     = 1.0 / (rDiag[minor] * qrtMinor[minor]);
-
-                    Arrays.fill(alpha, 0, kWidth, 0.0);
-                    for (int row = minor; row < m; ++row) {
-                        final double   d    = qrtMinor[row];
-                        final double[] yRow = y[row];
-                        for (int k = 0; k < kWidth; ++k) {
-                            alpha[k] += d * yRow[k];
-                        }
-                    }
-                    for (int k = 0; k < kWidth; ++k) {
-                        alpha[k] *= factor;
-                    }
-
-                    for (int row = minor; row < m; ++row) {
-                        final double   d    = qrtMinor[row];
-                        final double[] yRow = y[row];
-                        for (int k = 0; k < kWidth; ++k) {
-                            yRow[k] += alpha[k] * d;
-                        }
-                    }
-                }
-
-                // solve triangular system R.x = y
-                for (int j = rDiag.length - 1; j >= 0; --j) {
-                    final int      jBlock = j / blockSize;
-                    final int      jStart = jBlock * blockSize;
-                    final double   factor = 1.0 / rDiag[j];
-                    final double[] yJ     = y[j];
-                    final double[] xBlock = xBlocks[jBlock * cBlocks + kBlock];
-                    int index = (j - jStart) * kWidth;
-                    for (int k = 0; k < kWidth; ++k) {
-                        yJ[k]          *= factor;
-                        xBlock[index++] = yJ[k];
-                    }
-
-                    final double[] qrtJ = qrt[j];
-                    for (int i = 0; i < j; ++i) {
-                        final double rIJ  = qrtJ[i];
-                        final double[] yI = y[i];
-                        for (int k = 0; k < kWidth; ++k) {
-                            yI[k] -= yJ[k] * rIJ;
-                        }
-                    }
-                }
-            }
-
-            return new BlockRealMatrix(n, columns, xBlocks, false);
-        }
-
-        /** {@inheritDoc} */
-        public RealMatrix getInverse() {
-            return solve(MatrixUtils.createRealIdentityMatrix(rDiag.length));
-        }
-    }
 }
 /************************************************************************
 This file is part of the Java Oriented Matroid Library.
