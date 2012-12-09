@@ -16,7 +16,7 @@ import org.junit.Test;
 import Jama.LUDecomposition;
 import Jama.Matrix;
 
-import net.sf.oriented.omi.matrix.FieldLUDecompositionX;
+import net.sf.oriented.omi.matrix.FieldLUDecomposition;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
@@ -53,7 +53,7 @@ public class TestQRDecomposition {
     public void testLU() {
 	RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
 		.getDelegate().transpose());
-	FieldLUDecompositionX<PerisicFieldElement> a = new FieldLUDecompositionX<PerisicFieldElement>(
+	FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
 		matrix.getDelegate());
 
 	System.err.println("L: " + new RationalMatrix(a.getL()).toString());

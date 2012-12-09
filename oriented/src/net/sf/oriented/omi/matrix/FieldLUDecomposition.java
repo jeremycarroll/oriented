@@ -82,7 +82,7 @@ import org.apache.commons.math3.linear.SingularMatrixException;
  * @version $Id: FieldLUDecomposition.java 1296611 2012-03-03 11:48:57Z sebb $
  * @since 2.0 (changed to concrete class in 3.0)
  */
-public class FieldLUDecompositionX<T extends FieldElement<T>> {
+public class FieldLUDecomposition<T extends FieldElement<T>> {
 
     /** Field to which the elements belong. */
     private final Field<T> field;
@@ -122,7 +122,7 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @throws NonSquareMatrixException
      *             if matrix is not square
      */
-    public FieldLUDecompositionX(FieldMatrix<T> matrix) {
+    public FieldLUDecomposition(FieldMatrix<T> matrix) {
 
 	// final int m = matrix.getColumnDimension();
 	field = matrix.getField();
