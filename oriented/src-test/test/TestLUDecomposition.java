@@ -20,7 +20,7 @@ import net.sf.oriented.omi.matrix.FieldLUDecomposition;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
-public class TestQRDecomposition {
+public class TestLUDecomposition {
     static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
 	    { 0, 0, 1, 0, 1, 1 } };
     static double chap1D[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
