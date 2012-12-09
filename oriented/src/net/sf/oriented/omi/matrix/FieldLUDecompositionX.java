@@ -1,3 +1,20 @@
+
+/**********************************************************************
+ * PROMINENT NOTICE:
+ * 
+ * This file is a derivative work from the source file:
+ * commons-math3-3.0-sources.jar/org/apache/commons/math3/linear/FieldLUDecomposition.java
+ * 
+ * The original work was licensed under the Apache License, Version 2.0.
+ * 
+ * This file has been modified with the following intents:
+ * 1) Allow m by n matrices with m > n
+ * 
+ * The changes were made by comparing with the Jama file from which
+ * the original was apparently derived.
+ *
+ **/
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
