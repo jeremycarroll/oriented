@@ -1,6 +1,6 @@
 /************************************************************************
   (c) Copyright 2007, 2010 Jeremy J. Carroll
-  For GPLv3 licensing information, see end of file.
+  
 ************************************************************************/
 package net.sf.oriented.omi;
 
@@ -24,10 +24,10 @@ public interface Matroid  extends Verify {
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.
 
-    The Java Oriented Matroid Library is free software: you can 
-    redistribute it and/or modify it under the terms of the GNU General 
-    Public License as published by the Free Software Foundation, either 
-    version 3 of the License, or (at your option) any later version.
+     
+     
+     
+    
 
     The Java Oriented Matroid Library is distributed in the hope that it 
     will be useful, but WITHOUT ANY WARRANTY; without even the implied 

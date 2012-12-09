@@ -17,7 +17,7 @@
  /*************************************************************************
   Modifications are:
   (c) Copyright 2012 Jeremy J. Carroll
-  For GPLv3 licensing information, see end of file.
+  
  ************************************************************************/
  
 
@@ -309,10 +309,10 @@ public class FieldQRDecomposition<T extends FieldElement<T> > {
 /************************************************************************
 This file is part of the Java Oriented Matroid Library.
 
-The Java Oriented Matroid Library is free software: you can 
-redistribute it and/or modify it under the terms of the GNU General 
-Public License as published by the Free Software Foundation, either 
-version 3 of the License, or (at your option) any later version.
+ 
+ 
+ 
+
 
 The Java Oriented Matroid Library is distributed in the hope that it 
 will be useful, but WITHOUT ANY WARRANTY; without even the implied 
