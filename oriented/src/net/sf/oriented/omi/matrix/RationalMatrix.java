@@ -14,7 +14,7 @@ import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
 
 public class RationalMatrix {
     
-    private FieldMatrix<PerisicFieldElement> delegate;
+    private final FieldMatrix<PerisicFieldElement> delegate;
 
     public RationalMatrix(final int[][] data) {
 	delegate = new BlockFieldMatrix<PerisicFieldElement>(
@@ -37,6 +37,9 @@ public class RationalMatrix {
 	    public PerisicFieldElement end() {
 		return null;
 	    }});
+    }
+    public RationalMatrix(FieldMatrix<PerisicFieldElement> d) {
+       delegate = d;
     }
 
 
@@ -114,6 +117,11 @@ public class RationalMatrix {
 
     public PerisicFieldElement determinant(int[] indices) {
 	return DeterminantCalculator.get(height()).compute(delegate,indices);
+    }
+
+
+    public FieldMatrix<PerisicFieldElement> getDelegate() {
+	return delegate;
     }
 
 }

@@ -139,12 +139,11 @@ public class FieldQRDecomposition<T extends FieldElement<T> > {
             }
             final T a = field.getOne();
         	    // (qrtMinor[minor] > 0) ? -FastMath.sqrt(xNormSqr) : FastMath.sqrt(xNormSqr);
-            rDiag[minor] = a;
-
+            
             if (xNormSqr.equals(field.getZero())) {
                 rDiag[minor] = xNormSqr;
             } else {
-                rDiag[minor] = a;
+                rDiag[minor] = xNormSqr;
 
                 /*
                  * Calculate the normalized reflection vector v and transform
