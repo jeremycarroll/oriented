@@ -1,9 +1,8 @@
 /************************************************************************
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
-************************************************************************/
+ ************************************************************************/
 package net.sf.oriented.omi.impl.set.hash;
-
 
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -12,55 +11,48 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
+public class UnsignedSetImpl
+	extends
+	SetImpl<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>
+	implements UnsignedSetInternal {
 
+    // public UnsignedSet(String a, UnsignedSetFactory f,boolean copy) {
+    // super(f.itemFactory().parse(a),f,copy);
+    // }
 
-public class UnsignedSetImpl extends 
-    SetImpl<LabelImpl,UnsignedSetInternal,
-    Label,
-    UnsignedSet,
-     LabelImpl,
-     UnsignedSetInternal> implements UnsignedSetInternal {
-	
+    public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
+	super(a, f);
+    }
 
-//	public UnsignedSet(String a, UnsignedSetFactory f,boolean copy) {
-//		super(f.itemFactory().parse(a),f,copy);
-//	}
+    // public UnsignedSet(Collection<String> a, UnsignedSetFactory f) {
+    // super(f.itemFactory().get(a),f);
+    // }
 
-     public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
-		super(a,f);
-	}
+    // public UnsignedSet(Collection<String> a, UnsignedSetFactory f, boolean
+    // copy){
+    // super(f.itemFactory().get(a),f,copy);
+    // }
 
-
-//	public UnsignedSet(Collection<String> a, UnsignedSetFactory f) {
-//		super(f.itemFactory().get(a),f);
-//	}
-	
-//	public UnsignedSet(Collection<String> a, UnsignedSetFactory f, boolean copy){
-//		super(f.itemFactory().get(a),f,copy);
-//	}
-
-
-//	public String toPlus(UnsignedSet e) {
-//		// TO DO toPlus
-//		return "";
-//	}
+    // public String toPlus(UnsignedSet e) {
+    // // TO DO toPlus
+    // return "";
+    // }
 
 }
 /************************************************************************
-    This file is part of the Java Oriented Matroid Library.
-
-     
-     
-     
-    
-
-    The Java Oriented Matroid Library is distributed in the hope that it 
-    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-    See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with the Java Oriented Matroid Library.  
-    If not, see <http://www.gnu.org/licenses/>.
-
-**************************************************************************/
+ * This file is part of the Java Oriented Matroid Library.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * The Java Oriented Matroid Library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * the Java Oriented Matroid Library. If not, see
+ * <http://www.gnu.org/licenses/>.
+ **************************************************************************/

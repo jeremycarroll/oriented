@@ -85,8 +85,7 @@ public class OMChirotopeFactory extends MoreAbsFactory<OMChirotope, Pair>
     }
 
     @Override
-    public OMChirotope construct(Collection<? extends Label> e,
-	    Chirotope chi) {
+    public OMChirotope construct(Collection<? extends Label> e, Chirotope chi) {
 	// TODO: this is an unsafe cast:
 	LabelImpl[] g = e.toArray(new LabelImpl[0]);
 	OMAll all = new OMAll(g, factory);
@@ -95,17 +94,16 @@ public class OMChirotopeFactory extends MoreAbsFactory<OMChirotope, Pair>
 
     @Override
     OMChirotope construct(Pair p) {
-	return construct(new SimpleLabels(p.r),p);
+	return construct(new SimpleLabels(p.r), p);
     }
 
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 
- *  redistribute it
- * and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
+ * redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
  * The Java Oriented Matroid Library is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

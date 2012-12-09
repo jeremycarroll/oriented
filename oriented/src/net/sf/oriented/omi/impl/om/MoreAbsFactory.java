@@ -80,21 +80,21 @@ public abstract class MoreAbsFactory<M, S> extends IOHelper {
 	return construct(ground, signedSets);
     }
 
-	M parse(ParseContext pc) {
-		if (0 == pc.string.length())
-			throw new IllegalArgumentException("Syntax error - empty input");
-		switch (pc.string.charAt(0)) {
-		case '{':
-			return construct(parseMatroid(pc));
-		case '(':
-			return parsePair(pc);
-		default:
-			throw new IllegalArgumentException("Syntax error - expected '{' or '('");
-		}
+    M parse(ParseContext pc) {
+	if (0 == pc.string.length())
+	    throw new IllegalArgumentException("Syntax error - empty input");
+	switch (pc.string.charAt(0)) {
+	case '{':
+	    return construct(parseMatroid(pc));
+	case '(':
+	    return parsePair(pc);
+	default:
+	    throw new IllegalArgumentException(
+		    "Syntax error - expected '{' or '('");
 	}
+    }
 
     abstract S parseMatroid(ParseContext pc);
-    
 
     abstract M construct(S sets);
 
@@ -108,10 +108,9 @@ public abstract class MoreAbsFactory<M, S> extends IOHelper {
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 
- *  redistribute it
- * and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
+ * redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
  * The Java Oriented Matroid Library is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

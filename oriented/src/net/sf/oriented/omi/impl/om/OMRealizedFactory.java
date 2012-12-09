@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2012 Jeremy J. Carroll
   
-************************************************************************/
+ ************************************************************************/
 
 package net.sf.oriented.omi.impl.om;
 
@@ -22,20 +22,23 @@ import net.sf.oriented.omi.matrix.PerisicField;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
-public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix> 
-    implements RealizedFactory  {
+public class OMRealizedFactory extends
+	MoreAbsFactory<OMRealized, RationalMatrix> implements RealizedFactory {
 
     private static final class ParseResult {
 	final ParseContext pc;
 	List<PerisicFieldElement> nextColumn = new ArrayList<PerisicFieldElement>();
 	final List<List<PerisicFieldElement>> data = new ArrayList<List<PerisicFieldElement>>();
+
 	ParseResult(ParseContext pc) {
 	    this.pc = pc;
 	}
+
 	public void endColumn() {
 	    data.add(nextColumn);
-	    if (nextColumn.size()!=data.get(0).size()) {
-		throw new IllegalArgumentException("Array sizing problem in: "+pc.string + " at position "+pc.index);
+	    if (nextColumn.size() != data.get(0).size()) {
+		throw new IllegalArgumentException("Array sizing problem in: "
+			+ pc.string + " at position " + pc.index);
 	    }
 	    nextColumn = new ArrayList<PerisicFieldElement>();
 	}
@@ -57,8 +60,12 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
     @Override
     public String toString(OMRealized t) {
 	List<Label> g = Arrays.asList(t.ground());
-	// TODO: this copyBackingCollection is probably spurious and should be done without copying
-	return "( " + unsignedSets().toString(g,unsignedSets().copyBackingCollection(g)) + ", " + t.getMatrix().toString()+" )";
+	// TODO: this copyBackingCollection is probably spurious and should be
+	// done without copying
+	return "( "
+		+ unsignedSets().toString(g,
+			unsignedSets().copyBackingCollection(g)) + ", "
+		+ t.getMatrix().toString() + " )";
     }
 
     @Override
@@ -75,10 +82,8 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
 	return new RealizedImpl(all, mat);
     }
 
-   
-
-
-   static Pattern entry = Pattern.compile("(\\[)|(\\])|([ \t\n\r,]+)|([0-9]+(/[0-9]+)?)");
+    static Pattern entry = Pattern
+	    .compile("(\\[)|(\\])|([ \t\n\r,]+)|([0-9]+(/[0-9]+)?)");
 
     @Override
     RationalMatrix parseMatroid(ParseContext pc) {
@@ -87,15 +92,21 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
 	ParseResult result = new ParseResult(pc);
 	int depth = 0;
 	while (m.find()) {
-	    if (pc.index != m.start() ) {
-		throw new IllegalArgumentException("Syntax error in: "+pc.string + "Expected  one of: \"0-9,[]\" or whitespace at position "+pc.index);
+	    if (pc.index != m.start()) {
+		throw new IllegalArgumentException(
+			"Syntax error in: "
+				+ pc.string
+				+ "Expected  one of: \"0-9,[]\" or whitespace at position "
+				+ pc.index);
 	    }
 	    pc.index = m.end();
-	    switch ( pc.string.charAt(m.start())) {
+	    switch (pc.string.charAt(m.start())) {
 	    case '[':
-		depth ++;
+		depth++;
 		if (depth > 2) {
-		    throw new IllegalArgumentException("Syntax error in: "+pc.string + " too many '['s, at position " + pc.index );
+		    throw new IllegalArgumentException("Syntax error in: "
+			    + pc.string + " too many '['s, at position "
+			    + pc.index);
 		}
 		break;
 	    case ']':
@@ -108,7 +119,9 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
 		    this.skip(pc);
 		    return result.matrix();
 		default:
-		    throw new IllegalArgumentException("Syntax error in: "+pc.string + " not expecting ']' at position " + pc.index );
+		    throw new IllegalArgumentException("Syntax error in: "
+			    + pc.string + " not expecting ']' at position "
+			    + pc.index);
 		}
 		break;
 	    case '0':
@@ -129,33 +142,33 @@ public class OMRealizedFactory extends MoreAbsFactory<OMRealized, RationalMatrix
 	    case '\r':
 		break;
 	    default:
-		    throw new IllegalArgumentException("Unexpected switch argument: " + pc.string.charAt(m.start()));
-			
+		throw new IllegalArgumentException(
+			"Unexpected switch argument: "
+				+ pc.string.charAt(m.start()));
+
 	    }
 	}
-	throw new IllegalArgumentException("Syntax error in: "+pc.string + "Expected  one of: \"0-9,[]\" or whitespace at position "+pc.index);
+	throw new IllegalArgumentException("Syntax error in: " + pc.string
+		+ "Expected  one of: \"0-9,[]\" or whitespace at position "
+		+ pc.index);
     }
-
 
 }
 
-
-
 /************************************************************************
-    This file is part of the Java Oriented Matroid Library.
-
-     
-     
-     
-    
-
-    The Java Oriented Matroid Library is distributed in the hope that it 
-    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-    See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with the Java Oriented Matroid Library.  
-    If not, see <http://www.gnu.org/licenses/>.
-
-**************************************************************************/
+ * This file is part of the Java Oriented Matroid Library.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * The Java Oriented Matroid Library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * the Java Oriented Matroid Library. If not, see
+ * <http://www.gnu.org/licenses/>.
+ **************************************************************************/

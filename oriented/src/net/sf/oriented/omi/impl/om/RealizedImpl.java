@@ -61,25 +61,22 @@ public class RealizedImpl extends AbsOM implements OMRealized {
 	return realizedFactory.toString(this);
     }
 
-   
-	@Override
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		if ( o == this ) {
-		    return true;
-		}
-		return getChirotope().equals(o);
+    @Override
+    public boolean equals(Object o) {
+	if (o == null) return false;
+	if (o == this) {
+	    return true;
 	}
+	return getChirotope().equals(o);
+    }
 }
 
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 
- *  redistribute it
- * and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
+ * redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
  * The Java Oriented Matroid Library is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

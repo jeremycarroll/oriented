@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2012 Jeremy J. Carroll
   
-************************************************************************/
+ ************************************************************************/
 
 package net.sf.oriented.omi.matrix;
 
@@ -14,23 +14,23 @@ import com.perisic.ring.RingElt;
 import com.perisic.ring.UniversalPolynomialRing;
 
 public class PerisicField implements Field<PerisicFieldElement> {
-    
-    
+
     static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
 
     final private PerisicFieldElement zero, one;
     final private Ring ring;
-    
+
     public static final PerisicField Q = new PerisicField(Ring.Q);
     public static final PerisicField Polynomials = new PerisicField(U);
-    public static final PerisicField QPolynomials = new PerisicField(new QuotientField(U));
+    public static final PerisicField QPolynomials = new PerisicField(
+	    new QuotientField(U));
+
     private PerisicField(Ring r) {
 	zero = new PerisicFieldElement(r.zero());
 	one = new PerisicFieldElement(r.one());
 	ring = r;
     }
 
-    
     @Override
     public PerisicFieldElement getZero() {
 	return zero;
@@ -48,49 +48,42 @@ public class PerisicField implements Field<PerisicFieldElement> {
 
     static PerisicField getField(Ring ring) {
 	if (ring == Ring.Q) return Q;
-	if (ring == U ) return Polynomials;
+	if (ring == U) return Polynomials;
 	throw new IllegalArgumentException();
     }
-
 
     public PerisicFieldElement create(int i) {
 	return new PerisicFieldElement(ring.map(i));
     }
 
-
     public PerisicFieldElement map(String str) {
 	return new PerisicFieldElement(ring.map(str));
     }
-    
+
     PerisicFieldElement create(RingElt det) {
 	return new PerisicFieldElement(det);
     }
-
 
     public static PerisicFieldElement rational(String rational) {
 	return Q.map(rational);
     }
 
-
-
 }
 
-
 /************************************************************************
-    This file is part of the Java Oriented Matroid Library.
-
-     
-     
-     
-    
-
-    The Java Oriented Matroid Library is distributed in the hope that it 
-    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-    See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with the Java Oriented Matroid Library.  
-    If not, see <http://www.gnu.org/licenses/>.
-
-**************************************************************************/
+ * This file is part of the Java Oriented Matroid Library.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * The Java Oriented Matroid Library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * the Java Oriented Matroid Library. If not, see
+ * <http://www.gnu.org/licenses/>.
+ **************************************************************************/

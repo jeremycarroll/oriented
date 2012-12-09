@@ -111,16 +111,14 @@ abstract public class SetImpl<E extends HasFactory<E, EX, ER>, S extends SetOfIn
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-	if (o == null || (!(o instanceof SetOf)))
-	    return false;
+	if (o == null || (!(o instanceof SetOf))) return false;
 	SX sx = (SX) o;
 	return sx.equalsIsSameSetAs() && sameSetAs(sx);
     }
 
     @Override
     public boolean sameSetAs(SX a) {
-	if (size() != a.size())
-	    return false;
+	if (size() != a.size()) return false;
 	return isSubsetOf(a) && isSupersetOf(a);
     }
 
@@ -129,8 +127,7 @@ abstract public class SetImpl<E extends HasFactory<E, EX, ER>, S extends SetOfIn
 	Iterator<ER> i = iterator();
 	while (i.hasNext()) {
 	    ER n = i.next();
-	    if (t.test(n))
-		r.add(n);
+	    if (t.test(n)) r.add(n);
 	}
 	return useCollection(r);
     }
@@ -152,8 +149,7 @@ abstract public class SetImpl<E extends HasFactory<E, EX, ER>, S extends SetOfIn
 	Iterator<ER> i = iterator();
 	while (i.hasNext()) {
 	    ER n = i.next();
-	    if (!t.test(n))
-		r.add(n);
+	    if (!t.test(n)) r.add(n);
 	}
 	return useCollection(r);
     }
