@@ -30,8 +30,6 @@ import org.apache.commons.math3.linear.FieldVector;
 import org.apache.commons.math3.linear.NonSquareMatrixException;
 import org.apache.commons.math3.linear.SingularMatrixException;
 
-import Jama.Matrix;
-
 /**
  * Calculates the LUP-decomposition of a square matrix.
  * <p>
@@ -90,9 +88,6 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
     /** Parity of the permutation associated with the LU decomposition. */
     private boolean even;
 
-    /** Singularity indicator. */
-    private boolean singular;
-
     /** Cached value of L. */
     private FieldMatrix<T> cachedL;
 
@@ -130,7 +125,6 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
 	    pivot[row] = row;
 	}
 	even = true;
-	singular = false;
 
 	// Loop over columns
 	for (int col = 0; col < n; col++) {
@@ -204,7 +198,7 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @return the L matrix (or null if decomposed matrix is singular)
      */
     public FieldMatrix<T> getL() {
-	if ((cachedL == null) && !singular) {
+	if ((cachedL == null) && !isSingular()) {
 	    cachedL = new Array2DRowFieldMatrix<T>(field, m, n);
 	    for (int i = 0; i < m; ++i) {
 		final T[] luI = lu[i];
@@ -229,26 +223,14 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @return the U matrix (or null if decomposed matrix is singular)
      */
     public FieldMatrix<T> getU() {
-	if ((cachedU == null) && !singular) {
+	if ((cachedU == null) && !isSingular()) {
 	    cachedU = new Array2DRowFieldMatrix<T>(field, n, n);
 	    for (int i = 0; i < n; ++i) {
-		final T[] luI = i < m ? lu[i] : null;
+		final T[] luI = lu[i];
 		for (int j = i; j < n; ++j) {
 		    cachedU.setEntry(i, j, luI[j]);
 		}
 	    }
-
-	    // Matrix X = new Matrix(n,n);
-	    // double[][] U = X.getArray();
-	    // for (int i = 0; i < n; i++) {
-	    // for (int j = 0; j < n; j++) {
-	    // if (i <= j) {
-	    // U[i][j] = LU[i][j];
-	    // } else {
-	    // U[i][j] = 0.0;
-	    // }
-	    // }
-	    // }
 	}
 	return cachedU;
     }
@@ -269,7 +251,7 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @see #getPivot()
      */
     public FieldMatrix<T> getP() {
-	if ((cachedP == null) && !singular) {
+	if ((cachedP == null) && !isSingular()) {
 	    final int m = pivot.length;
 	    cachedP = new Array2DRowFieldMatrix<T>(field, m, m);
 	    for (int i = 0; i < m; ++i) {
@@ -295,7 +277,7 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @return determinant of the matrix
      */
     public T getDeterminant() {
-	if (singular) {
+	if (isSingular()) {
 	    return field.getZero();
 	} else {
 	    final int m = pivot.length;
@@ -315,8 +297,17 @@ public class FieldLUDecompositionX<T extends FieldElement<T>> {
      * @return a solver
      */
     public FieldDecompositionSolver<T> getSolver() {
-	return new Solver<T>(field, lu, pivot, singular);
+	return new Solver<T>(field, lu, pivot, isSingular());
     }
+
+    private boolean isSingular() {
+	for (int j = 0; j < n; j++) {
+	    if (lu[j][j].equals(field.getZero()))
+		return true;
+	}
+	return false;
+    }
+
 
     /** Specialized solver. */
     private static class Solver<T extends FieldElement<T>> implements

@@ -5,10 +5,10 @@
 
 package test;
 
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.FieldLUDecomposition;
-import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
-import org.apache.commons.math3.linear.QRDecomposition;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealMatrixPreservingVisitor;
 import org.junit.Test;
@@ -16,9 +16,7 @@ import org.junit.Test;
 import Jama.LUDecomposition;
 import Jama.Matrix;
 
-import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.matrix.FieldLUDecompositionX;
-import net.sf.oriented.omi.matrix.FieldQRDecomposition;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
@@ -28,28 +26,28 @@ public class TestQRDecomposition {
     static double chap1D[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
 	    { 0, 0, 1, 0, 1, 1 } };
 
-    @Test
-    public void testDatum() {
-	RationalMatrix matrix = new RationalMatrix(chap1);
-	FieldQRDecomposition<PerisicFieldElement> a = new FieldQRDecomposition<PerisicFieldElement>(
-		matrix.getDelegate().transpose());
+//    @Test
+//    public void testDatum() {
+//	RationalMatrix matrix = new RationalMatrix(chap1);
+//	FieldQRDecomposition<PerisicFieldElement> a = new FieldQRDecomposition<PerisicFieldElement>(
+//		matrix.getDelegate().transpose());
+//
+//	System.err.println("Q: " + new RationalMatrix(a.getQ()).toString());
+//	System.err.println("QT: " + new RationalMatrix(a.getQT()).toString());
+//	System.err.println("H: " + new RationalMatrix(a.getH()).toString());
+//	System.err.println("R: " + new RationalMatrix(a.getR()).toString());
+//    }
 
-	System.err.println("Q: " + new RationalMatrix(a.getQ()).toString());
-	System.err.println("QT: " + new RationalMatrix(a.getQT()).toString());
-	System.err.println("H: " + new RationalMatrix(a.getH()).toString());
-	System.err.println("R: " + new RationalMatrix(a.getR()).toString());
-    }
-
-    @Test
-    public void testQR() {
-	RealMatrix matrix = new Array2DRowRealMatrix(chap1D).transpose();
-	QRDecomposition a = new QRDecomposition(matrix);
-
-	System.err.println("Q: " + toString(a.getQ()));
-	System.err.println("QT: " + toString(a.getQT()));
-	System.err.println("H: " + toString(a.getH()));
-	System.err.println("R: " + toString(a.getR()));
-    }
+//    @Test
+//    public void testQR() {
+//	RealMatrix matrix = new Array2DRowRealMatrix(chap1D).transpose();
+//	QRDecomposition a = new QRDecomposition(matrix);
+//
+//	System.err.println("Q: " + toString(a.getQ()));
+//	System.err.println("QT: " + toString(a.getQT()));
+//	System.err.println("H: " + toString(a.getH()));
+//	System.err.println("R: " + toString(a.getR()));
+//    }
 
     @Test
     public void testLU() {
@@ -67,12 +65,32 @@ public class TestQRDecomposition {
     public void testLUJama() {
 	Matrix matrix = new Matrix(chap1D);
 	LUDecomposition a = new LUDecomposition(matrix.transpose());
-
-	System.err.println("L: " + a.getL().toString());
-	System.err.println("P: " + a.getPivot());
-	System.err.println("U: " + a.getU().toString());
+	System.err.println("L: " + toString(a.getL()));
+	System.err.println("P: " + toString(a.getPivot()));
+	System.err.println("U: " + toString(a.getU()));
     }
 
+    private String toString(Matrix l) {
+	Writer w = new StringWriter();
+	PrintWriter pw = new PrintWriter(w);
+	l.print(pw,5,2);
+	pw.close();
+	return w.toString();
+    }
+
+    private String toString(int[] pivot) {
+	final StringBuffer rslt = new StringBuffer();
+	rslt.append("[");
+	rslt.append(pivot[0]);
+	for (int i=1;i<pivot.length;i++) {
+	    rslt.append(",");
+	    rslt.append(pivot[i]);
+	}
+	rslt.append("]");
+	return rslt.toString();
+    }
+
+    @SuppressWarnings("unused")
     private String toString(RealMatrix q) {
 	final StringBuffer rslt = new StringBuffer();
 	q.walkInColumnOrder(new RealMatrixPreservingVisitor() {

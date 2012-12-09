@@ -40,11 +40,8 @@
 package net.sf.oriented.omi.matrix;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.util.FastMath;
