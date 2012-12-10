@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import junit.framework.Assert;
 
-import net.sf.oriented.omi.matrix.FieldLUDecomposition;
 import net.sf.oriented.omi.matrix.GramSchmidt;
-import net.sf.oriented.omi.matrix.MatrixUtil;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 

@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ TestAlternating.class, TestChirotope.class, TestCircuits.class,
 	TestConversions.class, TestLexicographic.class, TestMatroid.class,
 	TestMaxVectors.class, TestMSet.class, TestSignedSet.class,
-	TestVectors.class,
+	TestVectors.class, TestLU.class, TestGramSchmidt.class
 
 })
 @RunWith(Suite.class)
