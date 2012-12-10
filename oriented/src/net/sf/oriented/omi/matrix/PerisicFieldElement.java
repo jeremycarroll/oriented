@@ -78,11 +78,17 @@ public final class PerisicFieldElement implements
 
     @Override
     public PerisicFieldElement divide(PerisicFieldElement a) {
+	if (getRing().equalZero(a.delegate)) {
+	    throw new IllegalArgumentException("divide by zero");
+	}
 	return new PerisicFieldElement(getRing().div(delegate, a.delegate));
     }
 
     @Override
     public PerisicFieldElement reciprocal() {
+	if (getRing().equalZero(delegate)) {
+	    throw new IllegalArgumentException("divide by zero");
+	}
 	return new PerisicFieldElement(getRing().inv(delegate));
     }
 
@@ -107,6 +113,20 @@ public final class PerisicFieldElement implements
 
     RingElt getDelegate() {
 	return delegate;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+	if (!(o instanceof PerisicFieldElement)) {
+	    return false;
+	}
+	RingElt od = ((PerisicFieldElement)o).delegate;
+	return delegate.equals(od);
+    }
+    
+    @Override
+    public int hashCode() {
+	return PerisicField.getField(getRing()).hashCode(delegate);
     }
 
 }

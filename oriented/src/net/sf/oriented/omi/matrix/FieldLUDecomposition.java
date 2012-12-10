@@ -54,6 +54,18 @@ import org.apache.commons.math3.linear.SingularMatrixException;
  * that satisfy: PA = LU, L is lower triangular, and U is upper triangular and P
  * is a permutation matrix. All matrices are m&times;m.
  * </p>
+   <p>
+   For an m-by-n matrix A with m >= n, the LU decomposition is an m-by-n
+   unit lower triangular matrix L, an n-by-n upper triangular matrix U,
+   and a permutation vector piv of length m so that A(piv,:) = L*U.
+   If m < n, then L is m-by-m and U is m-by-n.
+   </p>
+   <p>
+   The LU decompostion with pivoting always exists, even if the matrix is
+   singular, so the constructor will never fail.  The primary use of the
+   LU decomposition is in the solution of square systems of simultaneous
+   linear equations.  This will fail if isNonsingular() returns false.
+   </p>
  * <p>
  * Since {@link FieldElement field elements} do not provide an ordering
  * operator, the permutation matrix is computed here only in order to avoid a
@@ -114,6 +126,8 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
     /** Cached value of P. */
     private FieldMatrix<T> cachedP;
 
+    private final int min;
+
     /**
      * Calculates the LU-decomposition of the given matrix.
      * 
@@ -128,9 +142,10 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	field = matrix.getField();
 	m = matrix.getRowDimension();
 	n = matrix.getColumnDimension();
-	if (m < n) {
-	    throw new LUDimensionException("Too few rows");
-	}
+	min = Math.min(n, m);
+//	if (m < n) {
+//	    throw new LUDimensionException("Too few rows");
+//	}
 	lu = matrix.getData();
 	pivot = new int[m];
 	cachedL = null;
@@ -197,9 +212,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	    // Divide the lower elements by the "winning" diagonal elt.
 	    if (col < m) {
 		final T luDiag = lu[col][col];
-		for (int row = col + 1; row < m; row++) {
-		    final T[] luRow = lu[row];
-		    luRow[col] = luRow[col].divide(luDiag);
+		if (!luDiag.equals(field.getZero())) {
+		    for (int row = col + 1; row < m; row++) {
+			final T[] luRow = lu[row];
+			luRow[col] = luRow[col].divide(luDiag);
+		    }
 		}
 	    }
 	}
@@ -211,15 +228,20 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * <p>
      * L is a lower-triangular matrix
      * </p>
+     * <p>
+   For an m-by-n matrix A with m >= n,  an m-by-n
+   unit lower triangular matrix L
+   If m < n, then L is m-by-m 
+   </p>
      * 
      * @return the L matrix (or null if decomposed matrix is singular)
      */
     public FieldMatrix<T> getL() {
 	if ((cachedL == null) && !isSingular()) {
-	    cachedL = new Array2DRowFieldMatrix<T>(field, m, n);
+	    cachedL = new Array2DRowFieldMatrix<T>(field, m, min);
 	    for (int i = 0; i < m; ++i) {
 		final T[] luI = lu[i];
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < min; j++) {
 		    if (j < i) {
 			cachedL.setEntry(i, j, luI[j]);
 		    } else if (j == i) {
@@ -237,12 +259,16 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * U is an upper-triangular matrix
      * </p>
      * 
+   <p>
+   For an m-by-n matrix A with m >= n, an n-by-n upper triangular matrix U,
+   If m < n, then U is m-by-n.
+   </p>
      * @return the U matrix (or null if decomposed matrix is singular)
      */
     public FieldMatrix<T> getU() {
 	if ((cachedU == null) && !isSingular()) {
-	    cachedU = new Array2DRowFieldMatrix<T>(field, n, n);
-	    for (int i = 0; i < n; ++i) {
+	    cachedU = new Array2DRowFieldMatrix<T>(field, min, n);
+	    for (int i = 0; i < min; ++i) {
 		final T[] luI = lu[i];
 		for (int j = i; j < n; ++j) {
 		    cachedU.setEntry(i, j, luI[j]);
@@ -318,7 +344,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
     }
 
     private boolean isSingular() {
-	for (int j = 0; j < n; j++) {
+	for (int j = 0; j < min; j++) {
 	    if (lu[j][j].equals(field.getZero()))
 		return true;
 	}

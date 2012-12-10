@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.apache.commons.math3.linear.BlockFieldMatrix;
+import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealMatrixPreservingVisitor;
 import org.junit.Test;
@@ -50,7 +52,7 @@ public class TestLUDecomposition {
 //    }
 
     @Test
-    public void testLU() {
+    public void testLUt() {
 	RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
 		.getDelegate().transpose());
 	FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
@@ -61,6 +63,52 @@ public class TestLUDecomposition {
 	System.err.println("U: " + new RationalMatrix(a.getU()).toString());
     }
 
+    @Test
+    public void testLU() {
+	RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
+		.getDelegate());
+	FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
+		matrix.getDelegate());
+
+	System.err.println("L: " + new RationalMatrix(a.getL()).toString());
+	System.err.println("P: " + new RationalMatrix(a.getP()).toString());
+	System.err.println("U: " + new RationalMatrix(a.getU()).toString());
+    }
+//    @Test
+//    public void testREFF() {
+//	RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
+//		.getDelegate().transpose());
+//	FieldREFFDecomposition<PerisicFieldElement> a = new FieldREFFDecomposition<PerisicFieldElement>(
+//		matrix.getDelegate());
+//
+//	System.err.println("L: " + new RationalMatrix(a.getL()).toString());
+//	System.err.println("P: " + new RationalMatrix(a.getP()).toString());
+//	System.err.println("U: " + new RationalMatrix(a.getU()).toString());
+//    }
+    @Test
+    public void testDual() {
+	FieldMatrix<PerisicFieldElement> matrix = new RationalMatrix(chap1).getDelegate().transpose();
+	System.err.println("W: " + new RationalMatrix(matrix).toString());
+	FieldMatrix<PerisicFieldElement> bigger = new BlockFieldMatrix<PerisicFieldElement>(
+		        matrix.getField(), matrix.getRowDimension(), matrix.getColumnDimension()+matrix.getRowDimension());
+	PerisicFieldElement m[][] = matrix.getData();
+	bigger.setSubMatrix(m, 0, 0);
+	System.err.println("X: " + new RationalMatrix(bigger).toString());
+	int mm = matrix.getColumnDimension();
+	int n =  matrix.getRowDimension();
+	for (int i=0;i<n;i++) {
+	    bigger.setEntry(i, i+mm, matrix.getField().getOne());
+	}
+	System.err.println("Y: " + new RationalMatrix(bigger).toString());
+	RationalMatrix matrix2 = new RationalMatrix(bigger.transpose());
+FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
+	matrix2.getDelegate());
+
+System.err.println("L: " + new RationalMatrix(a.getL()).toString());
+System.err.println("P: " + new RationalMatrix(a.getP()).toString());
+System.err.println("U: " + new RationalMatrix(a.getU()).toString());
+	
+    }
     @Test
     public void testLUJama() {
 	Matrix matrix = new Matrix(chap1D);
