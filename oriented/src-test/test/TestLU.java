@@ -10,6 +10,7 @@ import java.util.Collection;
 import junit.framework.Assert;
 
 import net.sf.oriented.omi.matrix.FieldLUDecomposition;
+import net.sf.oriented.omi.matrix.MatrixUtil;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
@@ -28,6 +29,7 @@ public class TestLU {
 	return Arrays.asList(new Object[][]{
 		{ "chapter1", new int[][]{ { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
 		    { 0, 0, 1, 0, 1, 1 } } },
+		{ "singular", new int[][]{ { 1,  2 }, { 2, 4 } } },
 		{ "chapter1up", new int[][]{ 
 			{ 0, 0, 1, 0, 1, 1 },
 			{ 0, 1, 1, 1, 1, 0 },
@@ -61,6 +63,22 @@ public class TestLU {
     public void testTranspose() {
 	test("transpose",new RationalMatrix(new RationalMatrix(data).getDelegate().transpose()));
 	
+    }
+    @Test
+    public void testRowExtended() {
+	test("row",new RationalMatrix(MatrixUtil.rowExtended(new RationalMatrix(data).getDelegate())));
+    }
+    @Test
+    public void testColExtended() {
+	test("col",new RationalMatrix(MatrixUtil.columnExtended(new RationalMatrix(data).getDelegate())));
+    }
+    @Test
+    public void testTransRowExtended() {
+	test("trow",new RationalMatrix(MatrixUtil.rowExtended(new RationalMatrix(data).getDelegate().transpose())));
+    }
+    @Test
+    public void testTransColExtended() {
+	test("tcol",new RationalMatrix(MatrixUtil.columnExtended(new RationalMatrix(data).getDelegate().transpose())));
     }
 
     private void test(String nm, RationalMatrix matrix) {
