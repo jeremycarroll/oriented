@@ -7,16 +7,11 @@ package net.sf.oriented.omi.impl.om;
 
 import static net.sf.oriented.omi.impl.om.Cryptomorphisms.REALIZED;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
-
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.matrix.GramSchmidt;
 import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;

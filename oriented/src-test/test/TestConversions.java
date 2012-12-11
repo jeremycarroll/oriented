@@ -28,8 +28,6 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.impl.om.Cryptomorphisms;
 import net.sf.oriented.omi.impl.om.OMAll;
 import net.sf.oriented.omi.impl.om.OMInternal;
-import net.sf.oriented.omi.matrix.RationalMatrix;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;

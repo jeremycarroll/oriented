@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.impl.om.OMAll;
-import net.sf.oriented.omi.impl.om.OMInternal;
 
 public class TestDualRealized {
     private final OMAll all = TestConversions.asAll(TestRealization.testDatum());
