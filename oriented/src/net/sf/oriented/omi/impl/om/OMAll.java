@@ -79,18 +79,28 @@ public class OMAll implements OMInternal {
     public OMInternal get(Cryptomorphisms which) {
 	int ix = which.ordinal();
 	if (ix >= forms.length) {
-	    return dual.get(ix - forms.length, which);
+	    return dual.getNotInDual(ix - forms.length, which.getDual());
 	} else {
-	    return get(ix, which);
+	    return getNotInDual(ix, which);
 	}
     }
 
-    private OMInternal get(int ix, Cryptomorphisms which) {
+    /**
+     * which is the form being sort ...
+     * if it is dual() form, then this is the dual
+     * @param ix
+     * @param which
+     * @return
+     */
+    private OMInternal getNotInDual(int ix, Cryptomorphisms which) {
 	if (forms[ix] != null) return forms[ix];
+	
+	if (which.isDualForm()) {
+	    throw new IllegalArgumentException("Must not be dual form");
+	}
 
 	switch (which) {
 	case CIRCUITS:
-	case COCIRCUITS:
 	    if (has(CHIROTOPE) || has(DUALCHIROTOPE) || has(COCIRCUITS))
 		return new Circuits(getChirotope());
 	    if (has(VECTORS)) {
@@ -112,21 +122,17 @@ public class OMAll implements OMInternal {
 	case TOPES:
 	    return new MaxVectors(getVectors());
 	case CHIROTOPE:
-	case DUALCHIROTOPE:
 	    if (has(CIRCUITS)) return new ChirotopeImpl(getCircuits());
-	    if (has(DUALCHIROTOPE) || has(COCIRCUITS) || has(DUALREALIZED) )
+	    if (has(DUALCHIROTOPE) || has(COCIRCUITS) )
 		return new ChirotopeImpl(dual().getChirotope());
+	    if (has(REALIZED))
+		return new ChirotopeImpl(this, getRealized().getMatrix());
 	    if (has(VECTORS)) return new ChirotopeImpl(getCircuits());
 	    if (has(COVECTORS))
 		return new ChirotopeImpl(dual().getChirotope());
 	    if (has(MAXVECTORS)) return new ChirotopeImpl(getCircuits());
-	    if (has(REALIZED))
-		return new ChirotopeImpl(this, getRealized().getMatrix());
 	    return new ChirotopeImpl(dual().getChirotope());
 	case REALIZED:
-	case DUALREALIZED:
-	    if (has(REALIZED) ) 
-		return new RealizedImpl(this, getRealized().getDualBasis());
 	    if (has(DUALREALIZED) ) 
 		return new RealizedImpl(this, dual().getRealized().getDualBasis());
 		

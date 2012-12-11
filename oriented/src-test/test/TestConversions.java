@@ -219,7 +219,7 @@ public class TestConversions {
 
     }
 
-    private OMAll asAll(OM circuits) {
+    public static OMAll asAll(OM circuits) {
 	return ((OMInternal) circuits).asAll();
     }
 
