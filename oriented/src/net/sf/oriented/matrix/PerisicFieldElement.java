@@ -3,7 +3,7 @@
   
  ************************************************************************/
 
-package net.sf.oriented.omi.matrix;
+package net.sf.oriented.matrix;
 
 import java.math.BigInteger;
 import org.apache.commons.math3.FieldElement;

@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import junit.framework.Assert;
 
-import net.sf.oriented.omi.matrix.FieldLUDecomposition;
-import net.sf.oriented.omi.matrix.MatrixUtil;
-import net.sf.oriented.omi.matrix.PerisicFieldElement;
-import net.sf.oriented.omi.matrix.RationalMatrix;
+import net.sf.oriented.matrix.FieldLUDecomposition;
+import net.sf.oriented.matrix.MatrixUtil;
+import net.sf.oriented.matrix.PerisicFieldElement;
+import net.sf.oriented.matrix.RationalMatrix;
 
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.junit.Test;

@@ -18,9 +18,9 @@ import org.junit.Test;
 import Jama.LUDecomposition;
 import Jama.Matrix;
 
-import net.sf.oriented.omi.matrix.FieldLUDecomposition;
-import net.sf.oriented.omi.matrix.PerisicFieldElement;
-import net.sf.oriented.omi.matrix.RationalMatrix;
+import net.sf.oriented.matrix.FieldLUDecomposition;
+import net.sf.oriented.matrix.PerisicFieldElement;
+import net.sf.oriented.matrix.RationalMatrix;
 
 public class TestLUDecomposition {
     static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },

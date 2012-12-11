@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.FactoryFactory;
@@ -30,7 +31,6 @@ import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
-import net.sf.oriented.omi.matrix.RationalMatrix;
 
 public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
