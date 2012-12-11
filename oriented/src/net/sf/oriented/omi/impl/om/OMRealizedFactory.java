@@ -83,7 +83,7 @@ public class OMRealizedFactory extends
     }
 
     static Pattern entry = Pattern
-	    .compile("(\\[)|(\\])|([ \t\n\r,]+)|([0-9]+(/[0-9]+)?)");
+	    .compile("(\\[)|(\\])|([ \t\n\r,]+)|(-?[0-9]+(/[0-9]+)?)");
 
     @Override
     RationalMatrix parseMatroid(ParseContext pc) {
@@ -97,7 +97,7 @@ public class OMRealizedFactory extends
 			"Syntax error in: "
 				+ pc.string
 				+ "Expected  one of: \"0-9,[]\" or whitespace at position "
-				+ pc.index);
+				+ pc.index+" found \""+ pc.string.substring(pc.index,pc.index+4));
 	    }
 	    pc.index = m.end();
 	    switch (pc.string.charAt(m.start())) {
@@ -124,6 +124,7 @@ public class OMRealizedFactory extends
 			    + pc.index);
 		}
 		break;
+	    case '-':
 	    case '0':
 	    case '1':
 	    case '2':
