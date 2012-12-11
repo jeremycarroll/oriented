@@ -11,6 +11,8 @@ public interface OMRealized extends OM {
 
     RationalMatrix getMatrix();
 
+    RationalMatrix getDualBasis();
+
 }
 
 /************************************************************************

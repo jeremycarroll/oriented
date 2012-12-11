@@ -114,7 +114,7 @@ public class OMAll implements OMInternal {
 	case CHIROTOPE:
 	case DUALCHIROTOPE:
 	    if (has(CIRCUITS)) return new ChirotopeImpl(getCircuits());
-	    if (has(DUALCHIROTOPE) || has(COCIRCUITS))
+	    if (has(DUALCHIROTOPE) || has(COCIRCUITS) || has(DUALREALIZED) )
 		return new ChirotopeImpl(dual().getChirotope());
 	    if (has(VECTORS)) return new ChirotopeImpl(getCircuits());
 	    if (has(COVECTORS))
@@ -123,6 +123,13 @@ public class OMAll implements OMInternal {
 	    if (has(REALIZED))
 		return new ChirotopeImpl(this, getRealized().getMatrix());
 	    return new ChirotopeImpl(dual().getChirotope());
+	case REALIZED:
+	case DUALREALIZED:
+	    if (has(REALIZED) ) 
+		return new RealizedImpl(this, getRealized().getDualBasis());
+	    if (has(DUALREALIZED) ) 
+		return new RealizedImpl(this, dual().getRealized().getDualBasis());
+		
 
 	}
 	return null;

@@ -17,6 +17,8 @@ import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
+import net.sf.oriented.omi.matrix.GramSchmidt;
+import net.sf.oriented.omi.matrix.PerisicFieldElement;
 import net.sf.oriented.omi.matrix.RationalMatrix;
 
 public class RealizedImpl extends AbsOM implements OMRealized {
@@ -68,6 +70,12 @@ public class RealizedImpl extends AbsOM implements OMRealized {
 	    return true;
 	}
 	return getChirotope().equals(o);
+    }
+
+    @Override
+    public RationalMatrix getDualBasis() {
+	GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(matrix.getDelegate());
+	return new RationalMatrix(gs.getDual());
     }
 }
 
