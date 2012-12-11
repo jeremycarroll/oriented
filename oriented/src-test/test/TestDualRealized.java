@@ -9,7 +9,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.impl.om.OMAll;
+import net.sf.oriented.omi.impl.om.OMInternal;
 
 public class TestDualRealized {
     private final OMAll all = TestConversions.asAll(TestRealization.testDatum());
@@ -37,6 +39,13 @@ public class TestDualRealized {
     public void testDualCoCircuits() {
 	Assert.assertNotNull(all.dual().getRealized());
 	Assert.assertNotNull(all.dual().getCircuits());
+    }
+    @Test
+    public void testDualDualCoCircuits() {
+	OM dual = all.ffactory().realized().parse( all.dual().getRealized().toString() );
+	System.err.println(dual.dual().getRealized().toString());
+	System.err.println(dual.dual().getCircuits().toString());
+	Assert.assertEquals(all.getCircuits().toString(), dual.dual().getCircuits().toString() );
     }
 }
 

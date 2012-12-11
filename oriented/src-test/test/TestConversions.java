@@ -174,9 +174,6 @@ public class TestConversions {
 	case REALIZED:
 	case DUALREALIZED:
 	    RealizedFactory rf = factory.realized();
-	    if (factory == special) {
-		return rf.construct((RationalMatrix) first);
-	    }
 	    return rf.parse(rf.toString((OMRealized) first));
 
 	default:

@@ -53,10 +53,7 @@ public class RealizedImpl extends AbsOM implements OMRealized {
     }
 
     public String toString(FactoryFactory factory) {
-	List<? extends Label> g = Arrays.asList(ground());
-	UnsignedSetFactory sets = all.unsignedSets(factory);
-	return "(" + sets.toString(g, sets.copyBackingCollection(g)) + ", "
-		+ toMatrixString(factory.realized()) + " )";
+	return toMatrixString(factory.realized()) ;
     }
 
     public String toMatrixString(RealizedFactory realizedFactory) {
