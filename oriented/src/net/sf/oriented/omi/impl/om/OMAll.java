@@ -118,12 +118,10 @@ public class OMAll implements OMInternal {
 				return new Circuits(getVectors());
 			if (has(COVECTORS))
 				return new Circuits(getChirotope());
-
 			if (has(MAXVECTORS))
 				return new Circuits(getVectors());
 			return new Circuits(getChirotope());
 		case VECTORS:
-		case COVECTORS:
 			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
 					|| has(COCIRCUITS) || has(COVECTORS))
 				return new Vectors(getCircuits());
@@ -131,7 +129,6 @@ public class OMAll implements OMInternal {
 				return new Vectors(getMaxVectors());
 			return new Vectors(getCircuits());
 		case MAXVECTORS:
-		case TOPES:
 			return new MaxVectors(getVectors());
 		case CHIROTOPE:
 			if (has(CIRCUITS))
@@ -152,6 +149,12 @@ public class OMAll implements OMInternal {
 				return new RealizedImpl(this, dual().getRealized()
 						.getDualBasis());
 
+        case COVECTORS:
+        case COCIRCUITS:
+        case DUALCHIROTOPE:
+        case TOPES:
+        case DUALREALIZED:
+            throw new IllegalArgumentException("Unreachable");
 		}
 		return null;
 	}

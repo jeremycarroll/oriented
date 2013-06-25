@@ -9,8 +9,8 @@ public enum Cryptomorphisms {
 	CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED,
 	// MUST be half way, those below are duals of those above. Must be even
 	// number.
-	COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), DUALCHIROTOPE(
-			CHIROTOPE), DUALREALIZED(REALIZED);
+	COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), 
+	DUALCHIROTOPE(CHIROTOPE), DUALREALIZED(REALIZED);
 
 	private Cryptomorphisms dual;
 	private final boolean isDualForm;

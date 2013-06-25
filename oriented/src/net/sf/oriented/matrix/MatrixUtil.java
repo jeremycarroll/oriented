@@ -31,8 +31,7 @@ public class MatrixUtil {
 		return sideBySide(mat, unit);
 	}
 
-	public static <T extends FieldElement<T>> FieldMatrix<T> sideBySide(
-			FieldMatrix<T>... matrices) {
+	public static <T extends FieldElement<T>> FieldMatrix<T> sideBySide(FieldMatrix<T>... matrices) {
 		int n = matrices[0].getColumnDimension();
 		Field<T> f = matrices[0].getField();
 		int m = 0;
@@ -42,8 +41,7 @@ public class MatrixUtil {
 				throw new IllegalArgumentException(
 						"Matrices with different fields");
 			if (mat.getColumnDimension() != n)
-				throw new DimensionMismatchException(mat.getColumnDimension(),
-						n);
+				throw new DimensionMismatchException(mat.getColumnDimension(), n);
 		}
 		BlockFieldMatrix<T> rslt = new BlockFieldMatrix<T>(f, m, n);
 		int r = 0;
@@ -54,8 +52,7 @@ public class MatrixUtil {
 		return rslt;
 	}
 
-	public static <T extends FieldElement<T>> FieldMatrix<T> columnExtended(
-			FieldMatrix<T> mat) {
+	public static <T extends FieldElement<T>> FieldMatrix<T> columnExtended(FieldMatrix<T> mat) {
 		return rowExtended(mat.transpose()).transpose();
 	}
 }
