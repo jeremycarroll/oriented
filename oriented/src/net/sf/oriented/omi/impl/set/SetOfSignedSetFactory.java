@@ -10,44 +10,46 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 
 public class SetOfSignedSetFactory
-	extends
-	SetFactoryImpl<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal> {
+		extends
+		SetFactoryImpl<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal> {
 
-    @Override
-    public SignedSetFactory itemFactory() {
-	return (SignedSetFactory) super.itemFactory();
-    }
+	@Override
+	public SignedSetFactory itemFactory() {
+		return (SignedSetFactory) super.itemFactory();
+	}
 
-    final private SetOfUnsignedSetFactory setOfUnsignedSetFactory;
+	final private SetOfUnsignedSetFactory setOfUnsignedSetFactory;
 
-    public SetOfUnsignedSetFactory setOfUnsignedSetFactory() {
-	return setOfUnsignedSetFactory;
-    }
+	public SetOfUnsignedSetFactory setOfUnsignedSetFactory() {
+		return setOfUnsignedSetFactory;
+	}
 
-    final boolean isSymmetric;
+	final boolean isSymmetric;
 
-    public SetOfSignedSetFactory(UnsignedSetFactory f, boolean symmetric) {
-	super(new SignedSetFactory(f.itemFactory(), f));
-	isSymmetric = symmetric;
-	setOfUnsignedSetFactory = new SetOfUnsignedSetFactory(f);
-    }
+	public SetOfSignedSetFactory(UnsignedSetFactory f, boolean symmetric) {
+		super(new SignedSetFactory(f.itemFactory(), f));
+		isSymmetric = symmetric;
+		setOfUnsignedSetFactory = new SetOfUnsignedSetFactory(f);
+	}
 
-    public SetOfSignedSetFactory(SetOfSignedSetFactory pair, boolean symmetric) {
-	super(pair.itemFactory);
-	isSymmetric = symmetric;
-	setOfUnsignedSetFactory = pair.setOfUnsignedSetFactory;
-    }
+	public SetOfSignedSetFactory(SetOfSignedSetFactory pair, boolean symmetric) {
+		super(pair.itemFactory);
+		isSymmetric = symmetric;
+		setOfUnsignedSetFactory = pair.setOfUnsignedSetFactory;
+	}
 
-    // public SetOfSignedSetInternal
-    // fromBackingCollection(JavaSet<SignedSetInternal> c) {
-    // return construct(c,this);
-    // }
+	// public SetOfSignedSetInternal
+	// fromBackingCollection(JavaSet<SignedSetInternal> c) {
+	// return construct(c,this);
+	// }
 
-    @Override
-    protected void add(Collection<SignedSetInternal> rslt, SignedSet ee) {
-	super.add(rslt, ee);
-	if (isSymmetric) super.add(rslt, ee.opposite());
-    }
+	@Override
+	protected void add(Collection<SignedSetInternal> rslt, SignedSet ee) {
+		super.add(rslt, ee);
+		if (isSymmetric) {
+			super.add(rslt, ee.opposite());
+		}
+	}
 
 }
 /************************************************************************

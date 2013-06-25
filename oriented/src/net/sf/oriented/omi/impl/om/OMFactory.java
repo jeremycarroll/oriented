@@ -21,103 +21,103 @@ import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
 abstract public class OMFactory extends
-	AbsFactory<OMS, SetOfSignedSetInternal, SetOfSignedSetFactory>
-	implements OMSFactory {
-    private static final class CFactory extends OMFactory {
-	private CFactory(FactoryFactory f) {
-	    super(f);
+		AbsFactory<OMS, SetOfSignedSetInternal, SetOfSignedSetFactory>
+		implements OMSFactory {
+	private static final class CFactory extends OMFactory {
+		private CFactory(FactoryFactory f) {
+			super(f);
+		}
+
+		@Override
+		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+			return new Circuits(signedSets, all);
+		}
+
+		@Override
+		public String toString(OMS s) {
+			return formatString(s, s.getCircuits());
+		}
+	}
+
+	private static final class VFactory extends OMFactory {
+		private VFactory(FactoryFactory f) {
+			super(f);
+		}
+
+		@Override
+		public String toString(OMS s) {
+			return formatString(s, s.getVectors());
+		}
+
+		@Override
+		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+			return new Vectors(signedSets, all);
+		}
+	}
+
+	private static final class MVFactory extends OMFactory {
+		private MVFactory(FactoryFactory f) {
+			super(f);
+		}
+
+		@Override
+		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+			return new MaxVectors(signedSets, all);
+		}
+
+		@Override
+		public String toString(OMS s) {
+			return formatString(s, s.getMaxVectors());
+		}
+	}
+
+	OMFactory(FactoryFactory f) {
+		super(f, (SetOfSignedSetFactory) f.symmetricSetsOfSignedSet());
+	}
+
+	static public OMFactory circuits(FactoryFactory f) {
+		return new CFactory(f);
+	}
+
+	static public OMFactory vectors(FactoryFactory f) {
+		return new VFactory(f);
+	}
+
+	static public OMFactory maxVectors(FactoryFactory f) {
+		return new MVFactory(f);
 	}
 
 	@Override
-	OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
-	    return new Circuits(signedSets, all);
+	public OMS copyBackingCollection(Collection<? extends SignedSet> c) {
+		return construct(sets.copyBackingCollection(c));
 	}
 
 	@Override
-	public String toString(OMS s) {
-	    return formatString(s, s.getCircuits());
-	}
-    }
-
-    private static final class VFactory extends OMFactory {
-	private VFactory(FactoryFactory f) {
-	    super(f);
+	OMS construct(SetOfSignedSetInternal signedSets) {
+		Set<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets.support()
+				.asCollection());
+		return construct(ground, signedSets);
 	}
 
 	@Override
-	public String toString(OMS s) {
-	    return formatString(s, s.getVectors());
+	OMS construct(Collection<? extends Label> ground,
+			SetOfSignedSetInternal signedSets) {
+		LabelImpl[] g = ground.toArray(new LabelImpl[0]);
+		OMAll all = new OMAll(g, factory);
+		return construct(signedSets, all);
+	}
+
+	abstract OMS construct(SetOfSignedSetInternal signedSets, OMAll all);
+
+	@Override
+	public OMS fromSignedSets(Label[] ground, SetOfSignedSet sym) {
+		return construct(Arrays.asList(ground), sets.remake(sym));
 	}
 
 	@Override
-	OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
-	    return new Vectors(signedSets, all);
+	public List<Label> ground(OMS s) {
+		return Arrays.asList(s.ground());
 	}
-    }
-
-    private static final class MVFactory extends OMFactory {
-	private MVFactory(FactoryFactory f) {
-	    super(f);
-	}
-
-	@Override
-	OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
-	    return new MaxVectors(signedSets, all);
-	}
-
-	@Override
-	public String toString(OMS s) {
-	    return formatString(s, s.getMaxVectors());
-	}
-    }
-
-    OMFactory(FactoryFactory f) {
-	super(f, (SetOfSignedSetFactory) f.symmetricSetsOfSignedSet());
-    }
-
-    static public OMFactory circuits(FactoryFactory f) {
-	return new CFactory(f);
-    }
-
-    static public OMFactory vectors(FactoryFactory f) {
-	return new VFactory(f);
-    }
-
-    static public OMFactory maxVectors(FactoryFactory f) {
-	return new MVFactory(f);
-    }
-
-    @Override
-    public OMS copyBackingCollection(Collection<? extends SignedSet> c) {
-	return construct(sets.copyBackingCollection(c));
-    }
-
-    @Override
-    OMS construct(SetOfSignedSetInternal signedSets) {
-	Set<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets.support()
-		.asCollection());
-	return construct(ground, signedSets);
-    }
-
-    @Override
-    OMS construct(Collection<? extends Label> ground,
-	    SetOfSignedSetInternal signedSets) {
-	LabelImpl[] g = ground.toArray(new LabelImpl[0]);
-	OMAll all = new OMAll(g, factory);
-	return construct(signedSets, all);
-    }
-
-    abstract OMS construct(SetOfSignedSetInternal signedSets, OMAll all);
-
-    @Override
-    public OMS fromSignedSets(Label[] ground, SetOfSignedSet sym) {
-	return construct(Arrays.asList(ground), sets.remake(sym));
-    }
-
-    @Override
-    public List<Label> ground(OMS s) {
-	return Arrays.asList(s.ground());
-    }
 
 }
 /************************************************************************

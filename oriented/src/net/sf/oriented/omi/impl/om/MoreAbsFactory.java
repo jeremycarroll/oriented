@@ -19,90 +19,90 @@ import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 
 public abstract class MoreAbsFactory<M, S> extends IOHelper {
 
-    final class SimpleLabels extends AbstractCollection<Label> {
-	private final int n;
+	final class SimpleLabels extends AbstractCollection<Label> {
+		private final int n;
 
-	SimpleLabels(int n) {
-	    this.n = n;
-	}
-
-	@Override
-	public Iterator<Label> iterator() {
-	    return new Iterator<Label>() {
-		int i = 0;
-
-		@Override
-		public boolean hasNext() {
-		    return i < n;
+		SimpleLabels(int n) {
+			this.n = n;
 		}
 
 		@Override
-		public Label next() {
-		    return factory.labels().parse("" + ++i);
+		public Iterator<Label> iterator() {
+			return new Iterator<Label>() {
+				int i = 0;
+
+				@Override
+				public boolean hasNext() {
+					return i < n;
+				}
+
+				@Override
+				public Label next() {
+					return factory.labels().parse("" + ++i);
+				}
+
+				@Override
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
 		}
 
 		@Override
-		public void remove() {
-		    throw new UnsupportedOperationException();
+		public int size() {
+			return n;
 		}
-	    };
 	}
 
-	@Override
-	public int size() {
-	    return n;
+	final protected FactoryFactory factory;
+
+	public MoreAbsFactory(FactoryFactory f) {
+		factory = f;
 	}
-    }
 
-    final protected FactoryFactory factory;
-
-    public MoreAbsFactory(FactoryFactory f) {
-	factory = f;
-    }
-
-    protected UnsignedSetFactory unsignedSets() {
-	return (UnsignedSetFactory) factory.unsignedSets();
-    }
-
-    public M parse(String s) {
-	ParseContext pc = new ParseContext(s.trim());
-	M r = parse(pc);
-	if (pc.index != pc.string.length())
-	    throw new IllegalArgumentException("Syntax error");
-	return r;
-    }
-
-    protected M parsePair(ParseContext pc) {
-	expect(pc, '(');
-	List<LabelImpl> ground = unsignedSets().orderedParse(pc);
-	S signedSets = parseMatroid(pc);
-	expect(pc, ')');
-	return construct(ground, signedSets);
-    }
-
-    M parse(ParseContext pc) {
-	if (0 == pc.string.length())
-	    throw new IllegalArgumentException("Syntax error - empty input");
-	switch (pc.string.charAt(0)) {
-	case '{':
-	    return construct(parseMatroid(pc));
-	case '(':
-	    return parsePair(pc);
-	default:
-	    throw new IllegalArgumentException(
-		    "Syntax error - expected '{' or '('");
+	protected UnsignedSetFactory unsignedSets() {
+		return (UnsignedSetFactory) factory.unsignedSets();
 	}
-    }
 
-    abstract S parseMatroid(ParseContext pc);
+	public M parse(String s) {
+		ParseContext pc = new ParseContext(s.trim());
+		M r = parse(pc);
+		if (pc.index != pc.string.length())
+			throw new IllegalArgumentException("Syntax error");
+		return r;
+	}
 
-    abstract M construct(S sets);
+	protected M parsePair(ParseContext pc) {
+		expect(pc, '(');
+		List<LabelImpl> ground = unsignedSets().orderedParse(pc);
+		S signedSets = parseMatroid(pc);
+		expect(pc, ')');
+		return construct(ground, signedSets);
+	}
 
-    abstract M construct(Collection<? extends Label> ground, S sets);
+	M parse(ParseContext pc) {
+		if (0 == pc.string.length())
+			throw new IllegalArgumentException("Syntax error - empty input");
+		switch (pc.string.charAt(0)) {
+		case '{':
+			return construct(parseMatroid(pc));
+		case '(':
+			return parsePair(pc);
+		default:
+			throw new IllegalArgumentException(
+					"Syntax error - expected '{' or '('");
+		}
+	}
 
-    final public JavaSet<? extends M> emptyCollectionOf() {
-	return factory.options().javaSetFor(null);
-    }
+	abstract S parseMatroid(ParseContext pc);
+
+	abstract M construct(S sets);
+
+	abstract M construct(Collection<? extends Label> ground, S sets);
+
+	final public JavaSet<? extends M> emptyCollectionOf() {
+		return factory.options().javaSetFor(null);
+	}
 
 }
 /************************************************************************

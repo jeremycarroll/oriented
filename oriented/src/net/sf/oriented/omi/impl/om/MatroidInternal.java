@@ -10,32 +10,32 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public interface MatroidInternal extends Matroid {
 
-    /**
-     * Not part of API
-     * 
-     * @return
-     */
-    MatroidAll asAll();
+	/**
+	 * Not part of API
+	 * 
+	 * @return
+	 */
+	MatroidAll asAll();
 
-    @Override
-    public MatroidCircuits getCircuits();
+	@Override
+	public MatroidCircuits getCircuits();
 
-    @Override
-    public Bases getBases();
+	@Override
+	public Bases getBases();
 
-    @Override
-    public MatroidInternal dual();
+	@Override
+	public MatroidInternal dual();
 
-    @Override
-    public int rank();
+	@Override
+	public int rank();
 
-    @Override
-    public LabelImpl[] ground();
+	@Override
+	public LabelImpl[] ground();
 
-    @Override
-    OMInternal getOM();
+	@Override
+	OMInternal getOM();
 
-    FactoryFactory ffactory();
+	FactoryFactory ffactory();
 
 }
 /************************************************************************

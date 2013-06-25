@@ -13,109 +13,115 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 public class Bases extends AbsMatroid {
 
-    Bases(SetOfUnsignedSetInternal s, MatroidInternal m) {
-	super(s, m);
-	m.asAll().setBases(this);
-    }
+	Bases(SetOfUnsignedSetInternal s, MatroidInternal m) {
+		super(s, m);
+		m.asAll().setBases(this);
+	}
 
-    Bases(Bases bases, MatroidInternal all) {
-	this(bases.dualBases(), all);
-    }
+	Bases(Bases bases, MatroidInternal all) {
+		this(bases.dualBases(), all);
+	}
 
-    Bases(MatroidCircuits circuits) {
-	this(circuits.computeBases(), circuits);
-    }
+	Bases(MatroidCircuits circuits) {
+		this(circuits.computeBases(), circuits);
+	}
 
-    private SetOfUnsignedSetInternal dualBases() {
-	UnsignedSetInternal s = convert(ground());
-	JavaSet<UnsignedSetInternal> db = emptyCollectionOf();
-	Iterator<UnsignedSetInternal> it = iterator();
-	while (it.hasNext())
-	    db.add(s.minus(it.next()));
-	return useCollection(db);
-    }
+	private SetOfUnsignedSetInternal dualBases() {
+		UnsignedSetInternal s = convert(ground());
+		JavaSet<UnsignedSetInternal> db = emptyCollectionOf();
+		Iterator<UnsignedSetInternal> it = iterator();
+		while (it.hasNext()) {
+			db.add(s.minus(it.next()));
+		}
+		return useCollection(db);
+	}
 
-    @Override
-    public Bases getBases() {
-	return this;
-    }
+	@Override
+	public Bases getBases() {
+		return this;
+	}
 
-    @Override
-    public int rank() {
-	return iterator().next().size();
-    }
+	@Override
+	public int rank() {
+		return iterator().next().size();
+	}
 
-    @Override
-    public boolean verify() {
-	// TODO verify
-	return true;
-    }
+	@Override
+	public boolean verify() {
+		// TODO verify
+		return true;
+	}
 
-    SetOfUnsignedSetInternal computeCircuits() {
-	/*
-	 * 0) compute independent sets 1) For i = 1 to r + 1 a) Compute set of
-	 * size i which - is not independent - does not have smaller depedendent
-	 * set as subset b) Add it
+	SetOfUnsignedSetInternal computeCircuits() {
+		/*
+		 * 0) compute independent sets 1) For i = 1 to r + 1 a) Compute set of
+		 * size i which - is not independent - does not have smaller depedendent
+		 * set as subset b) Add it
+		 */
+		UnsignedSetInternal s = convert(ground());
+		JavaSet<UnsignedSetInternal> independent = independentSets();
+		JavaSet<UnsignedSetInternal> circuits = emptyCollectionOf();
+		JavaSet<UnsignedSetInternal> c0 = emptyCollectionOf();
+		int r = rank();
+		for (int i = 1; i <= r + 1; i++) {
+			Iterator<UnsignedSetInternal> it = s.subsetsOfSize(i).iterator();
+			loopc: while (it.hasNext()) {
+				UnsignedSetInternal c = it.next();
+				if (independent.contains(c)) {
+					continue;
+				}
+				Iterator<UnsignedSetInternal> i2 = circuits.iterator();
+				while (i2.hasNext())
+					if (i2.next().isSubsetOf(c)) {
+						continue loopc;
+					}
+				c0.add(c);
+			}
+			circuits.addAll(c0);
+			c0.clear();
+		}
+		return useCollection(circuits);
+	}
+
+	private JavaSet<UnsignedSetInternal> independentSets() {
+		JavaSet<UnsignedSetInternal> rslt = emptyCollectionOf();
+		Iterator<UnsignedSetInternal> it = iterator();
+		while (it.hasNext()) {
+			rslt.addAll(it.next().powerSet());
+		}
+		return rslt;
+	}
+
+	/**
+	 * Return a basis of the form A\{a} U {b}, with a in A\B and b in B\A.
+	 * 
+	 * @param theBasis
+	 * @param fromBasis
+	 * @return
 	 */
-	UnsignedSetInternal s = convert(ground());
-	JavaSet<UnsignedSetInternal> independent = independentSets();
-	JavaSet<UnsignedSetInternal> circuits = emptyCollectionOf();
-	JavaSet<UnsignedSetInternal> c0 = emptyCollectionOf();
-	int r = rank();
-	for (int i = 1; i <= r + 1; i++) {
-	    Iterator<UnsignedSetInternal> it = s.subsetsOfSize(i).iterator();
-	    loopc: while (it.hasNext()) {
-		UnsignedSetInternal c = it.next();
-		if (independent.contains(c)) continue;
-		Iterator<UnsignedSetInternal> i2 = circuits.iterator();
-		while (i2.hasNext())
-		    if (i2.next().isSubsetOf(c)) continue loopc;
-		c0.add(c);
-	    }
-	    circuits.addAll(c0);
-	    c0.clear();
+	UnsignedSetInternal basisExchange(UnsignedSetInternal A,
+			UnsignedSetInternal B) {
+		// TODO: API for exchange
+		return basisExchange(A, A.minus(B).iterator().next(), B);
 	}
-	return useCollection(circuits);
-    }
 
-    private JavaSet<UnsignedSetInternal> independentSets() {
-	JavaSet<UnsignedSetInternal> rslt = emptyCollectionOf();
-	Iterator<UnsignedSetInternal> it = iterator();
-	while (it.hasNext()) {
-	    rslt.addAll(it.next().powerSet());
+	UnsignedSetInternal basisExchange(UnsignedSetInternal A, LabelImpl a,
+			UnsignedSetInternal B) {
+		UnsignedSetInternal big = A.minus(a);
+		Iterator<LabelImpl> it = B.minus(A).iterator();
+		while (it.hasNext()) {
+			LabelImpl b = it.next();
+			UnsignedSetInternal newBasis = big.union(b);
+			if (contains(newBasis))
+				return newBasis;
+		}
+		throw new IllegalArgumentException("No basis found.");
 	}
-	return rslt;
-    }
 
-    /**
-     * Return a basis of the form A\{a} U {b}, with a in A\B and b in B\A.
-     * 
-     * @param theBasis
-     * @param fromBasis
-     * @return
-     */
-    UnsignedSetInternal basisExchange(UnsignedSetInternal A,
-	    UnsignedSetInternal B) {
-	// TODO: API for exchange
-	return basisExchange(A, A.minus(B).iterator().next(), B);
-    }
-
-    UnsignedSetInternal basisExchange(UnsignedSetInternal A, LabelImpl a,
-	    UnsignedSetInternal B) {
-	UnsignedSetInternal big = A.minus(a);
-	Iterator<LabelImpl> it = B.minus(A).iterator();
-	while (it.hasNext()) {
-	    LabelImpl b = it.next();
-	    UnsignedSetInternal newBasis = big.union(b);
-	    if (contains(newBasis)) return newBasis;
+	@Override
+	public String toString() {
+		return ffactory().bases().toString(this);
 	}
-	throw new IllegalArgumentException("No basis found.");
-    }
-
-    @Override
-    public String toString() {
-	return ffactory().bases().toString(this);
-    }
 
 }
 /************************************************************************

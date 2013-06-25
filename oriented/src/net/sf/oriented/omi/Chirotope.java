@@ -5,29 +5,29 @@
 package net.sf.oriented.omi;
 
 public interface Chirotope {
-    /**
-     * This is only called when it has {@link rank()} arguments, and they are
-     * strictly monotonic increasing. Implementations may return correct values
-     * for arguments which are not strictly monotonic increasing but are not
-     * required to.
-     * 
-     * @param i
-     * @return -1, 0 or 1
-     * @throws IllegalArgumentException
-     *             If arguments are not strictly monotonic increasing, or the
-     *             wrong number, or out of range.
-     */
-    int chi(int... i);
+	/**
+	 * This is only called when it has {@link rank()} arguments, and they are
+	 * strictly monotonic increasing. Implementations may return correct values
+	 * for arguments which are not strictly monotonic increasing but are not
+	 * required to.
+	 * 
+	 * @param i
+	 * @return -1, 0 or 1
+	 * @throws IllegalArgumentException
+	 *             If arguments are not strictly monotonic increasing, or the
+	 *             wrong number, or out of range.
+	 */
+	int chi(int... i);
 
-    /**
-     * Must be a positive integer, which is constant for each object
-     * implementing this interface.
-     * 
-     * @return The rank associated with this chirotope.
-     */
-    int rank();
+	/**
+	 * Must be a positive integer, which is constant for each object
+	 * implementing this interface.
+	 * 
+	 * @return The rank associated with this chirotope.
+	 */
+	int rank();
 
-    int n();
+	int n();
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

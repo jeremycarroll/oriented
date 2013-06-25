@@ -5,12 +5,12 @@
 package net.sf.oriented.omi;
 
 public interface Verify {
-    /**
-     * Check invariants of the object.
-     * 
-     * @return true if the object is not known to have violated its invariants.
-     */
-    boolean verify();
+	/**
+	 * Check invariants of the object.
+	 * 
+	 * @return true if the object is not known to have violated its invariants.
+	 */
+	boolean verify();
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

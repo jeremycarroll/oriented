@@ -19,235 +19,236 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
 public class SignedSetFactory extends
-	FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> {
+		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> {
 
-    public static final long MASK = (1l << 32) - 1;
+	public static final long MASK = (1l << 32) - 1;
 
-    public final UnsignedSetFactory unsignedF;
+	public final UnsignedSetFactory unsignedF;
 
-    private final SignedSetInternal empty;
+	private final SignedSetInternal empty;
 
-    SignedSetFactory(LabelFactory f, UnsignedSetFactory uf) {
-	super(f.getOptions());
-	unsignedF = uf;
-	empty = createSignedSet(unsignedF.empty(), unsignedF.empty());
-    }
-
-    public SignedSetInternal empty() {
-	return empty;
-    }
-
-    @Override
-    public SignedSetInternal parse(ParseContext pc) {
-	Options opt = getOptions();
-	if (opt.getPlusMinus()) {
-	    return parsePlusMinus(pc);
+	SignedSetFactory(LabelFactory f, UnsignedSetFactory uf) {
+		super(f.getOptions());
+		unsignedF = uf;
+		empty = createSignedSet(unsignedF.empty(), unsignedF.empty());
 	}
-	if (opt.getSingleChar()) {
-	    return parseSingleChar(pc);
+
+	public SignedSetInternal empty() {
+		return empty;
 	}
-	return parseNormal(pc);
-    }
 
-    private SignedSetInternal parseNormal(ParseContext pc) {
-	expect(pc, '(');
-	UnsignedSetInternal p = unsignedF.parse(pc);
-	UnsignedSetInternal m = unsignedF.parse(pc);
-	expect(pc, ')');
-	return createSignedSet(p, m);
-    }
-
-    private SignedSetInternal createSignedSet(UnsignedSetInternal p,
-	    UnsignedSetInternal m) {
-	try {
-	    return constructor.newInstance(new Object[] { p, m, this });
+	@Override
+	public SignedSetInternal parse(ParseContext pc) {
+		Options opt = getOptions();
+		if (opt.getPlusMinus())
+			return parsePlusMinus(pc);
+		if (opt.getSingleChar())
+			return parseSingleChar(pc);
+		return parseNormal(pc);
 	}
-	catch (IllegalArgumentException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	private SignedSetInternal parseNormal(ParseContext pc) {
+		expect(pc, '(');
+		UnsignedSetInternal p = unsignedF.parse(pc);
+		UnsignedSetInternal m = unsignedF.parse(pc);
+		expect(pc, ')');
+		return createSignedSet(p, m);
 	}
-	catch (InstantiationException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	private SignedSetInternal createSignedSet(UnsignedSetInternal p,
+			UnsignedSetInternal m) {
+		try {
+			return constructor.newInstance(new Object[] { p, m, this });
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("internal problem", e);
+		} catch (InstantiationException e) {
+			throw new RuntimeException("internal problem", e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("internal problem", e);
+		} catch (InvocationTargetException e) {
+			Throwable rte = e.getCause();
+			if (rte instanceof RuntimeException)
+				throw (RuntimeException) rte;
+			throw new RuntimeException("internal problem", e);
+		}
 	}
-	catch (IllegalAccessException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	private SignedSetInternal parsePlusMinus(ParseContext pc) {
+
+		String a = uptoSeparator(pc);
+		JavaSet<LabelImpl> p = unsignedF.itemFactory.emptyCollectionOf();
+		JavaSet<LabelImpl> m = unsignedF.itemFactory.emptyCollectionOf();
+		List<Label> u = getOptions().getUniverse();
+		for (int i = 0; i < a.length(); i++) {
+			switch (a.charAt(i)) {
+			case '0':
+				break;
+			case '+':
+				// TODO: unsafe cast!!!
+				p.add((LabelImpl) u.get(i));
+				break;
+			case '-':
+				m.add((LabelImpl) u.get(i));
+				break;
+			default:
+				throw new IllegalArgumentException("not a seuqence of +, 0, -:"
+						+ a);
+			}
+		}
+		return createSignedSet(unsignedF.fromBackingCollection(p),
+				unsignedF.fromBackingCollection(m));
 	}
-	catch (InvocationTargetException e) {
-	    Throwable rte = e.getCause();
-	    if (rte instanceof RuntimeException) throw (RuntimeException) rte;
-	    throw new RuntimeException("internal problem", e);
+
+	private SignedSetInternal parseSingleChar(ParseContext pc) {
+		boolean plus = true;
+		LabelFactory lf = unsignedF.itemFactory();
+		JavaSet<LabelImpl> p = unsignedF.itemFactory.emptyCollectionOf();
+		JavaSet<LabelImpl> m = unsignedF.itemFactory.emptyCollectionOf();
+		String a = uptoSeparator(pc);
+		if ("*".equals(a))
+			return empty;
+		for (int i = a.length() - 1; i >= 0; i--) {
+			char ch = a.charAt(i);
+			if (ch == '\'') {
+				if (!plus)
+					throw new IllegalArgumentException(
+							"Syntax error: two primes");
+				if (i == 0)
+					throw new IllegalArgumentException(
+							"Syntax error: initial prime");
+				plus = false;
+			} else {
+				if (plus) {
+					p.add(lf.parse(new String(new char[] { ch })));
+				} else {
+					m.add(lf.parse(new String(new char[] { ch })));
+				}
+
+				plus = true;
+			}
+		}
+		return createSignedSet(unsignedF.fromBackingCollection(p),
+				unsignedF.fromBackingCollection(m));
 	}
-    }
 
-    private SignedSetInternal parsePlusMinus(ParseContext pc) {
-
-	String a = uptoSeparator(pc);
-	JavaSet<LabelImpl> p = unsignedF.itemFactory.emptyCollectionOf();
-	JavaSet<LabelImpl> m = unsignedF.itemFactory.emptyCollectionOf();
-	List<Label> u = getOptions().getUniverse();
-	for (int i = 0; i < a.length(); i++) {
-	    switch (a.charAt(i)) {
-	    case '0':
-		break;
-	    case '+':
-		// TODO: unsafe cast!!!
-		p.add((LabelImpl) u.get(i));
-		break;
-	    case '-':
-		m.add((LabelImpl) u.get(i));
-		break;
-	    default:
-		throw new IllegalArgumentException("not a seuqence of +, 0, -:"
-			+ a);
-	    }
+	@Override
+	public String toString(SignedSet s) {
+		return toString(getOptions().getUniverse(), s);
 	}
-	return createSignedSet(unsignedF.fromBackingCollection(p),
-		unsignedF.fromBackingCollection(m));
-    }
 
-    private SignedSetInternal parseSingleChar(ParseContext pc) {
-	boolean plus = true;
-	LabelFactory lf = unsignedF.itemFactory();
-	JavaSet<LabelImpl> p = unsignedF.itemFactory.emptyCollectionOf();
-	JavaSet<LabelImpl> m = unsignedF.itemFactory.emptyCollectionOf();
-	String a = this.uptoSeparator(pc);
-	if ("*".equals(a)) return empty;
-	for (int i = a.length() - 1; i >= 0; i--) {
-	    char ch = a.charAt(i);
-	    if (ch == '\'') {
-		if (!plus)
-		    throw new IllegalArgumentException(
-			    "Syntax error: two primes");
-		if (i == 0)
-		    throw new IllegalArgumentException(
-			    "Syntax error: initial prime");
-		plus = false;
-	    } else {
-		if (plus)
-		    p.add(lf.parse(new String(new char[] { ch })));
-		else m.add(lf.parse(new String(new char[] { ch })));
+	@Override
+	public String toString(List<? extends Label> u, SignedSet s) {
+		Options opt = getOptions();
 
-		plus = true;
-	    }
+		if (opt.getPlusMinus())
+			return toPlusMinus(u, s);
+		if (opt.getSingleChar())
+			return toShortString(u, s);
+		else
+			return "(" + unsignedF.toString(u, s.plus()) + ","
+					+ unsignedF.toString(u, s.minus()) + ")";
 	}
-	return createSignedSet(unsignedF.fromBackingCollection(p),
-		unsignedF.fromBackingCollection(m));
-    }
 
-    @Override
-    public String toString(SignedSet s) {
-	return toString(getOptions().getUniverse(), s);
-    }
+	/**
+	 * @param s
+	 * @return
+	 */
+	private String toPlusMinus(List<? extends Label> u, SignedSet s) {
 
-    @Override
-    public String toString(List<? extends Label> u, SignedSet s) {
-	Options opt = getOptions();
+		UnsignedSet plus = unsignedF.remake(s.plus());
+		UnsignedSet minus = unsignedF.remake(s.minus());
+		// opt.extendUniverse(plus.asCollection());
+		// opt.extendUniverse(minus.asCollection());
 
-	if (opt.getPlusMinus()) {
-	    return toPlusMinus(u, s);
+		Iterator<? extends Label> it = u.iterator();
+		char rslt[] = new char[u.size()];
+		for (int i = 0; it.hasNext(); i++) {
+			Label m = it.next();
+			if (plus.contains(m)) {
+				rslt[i] = '+';
+			} else if (minus.contains(m)) {
+				rslt[i] = '-';
+			} else {
+				rslt[i] = '0';
+			}
+		}
+		return new String(rslt);
 	}
-	if (opt.getSingleChar()) {
-	    return toShortString(u, s);
-	} else {
-	    return "(" + unsignedF.toString(u, s.plus()) + ","
-		    + unsignedF.toString(u, s.minus()) + ")";
+
+	private String toShortString(List<? extends Label> u, SignedSet s) {
+		// Options opt = getOptions();
+		UnsignedSet plus = s.plus();
+		UnsignedSet minus = s.minus();
+
+		plus = unsignedF.remake(plus);
+		minus = unsignedF.remake(minus);
+
+		// opt.extendUniverse(plus.asCollection());
+		// opt.extendUniverse(minus.asCollection());
+
+		char rslt[] = new char[plus.size() + 2 * minus.size()];
+		if (rslt.length == 0)
+			return "*";
+		Iterator<? extends Label> it = u.iterator();
+		for (int i = 0; it.hasNext();) {
+			Label m = it.next();
+			String l = m.toString();
+			if (plus.contains(m)) {
+				rslt[i++] = l.charAt(0);
+			} else if (minus.contains(m)) {
+				rslt[i++] = l.charAt(0);
+				rslt[i++] = '\'';
+			}
+		}
+		return new String(rslt);
 	}
-    }
 
-    /**
-     * @param s
-     * @return
-     */
-    private String toPlusMinus(List<? extends Label> u, SignedSet s) {
-
-	UnsignedSet plus = unsignedF.remake(s.plus());
-	UnsignedSet minus = unsignedF.remake(s.minus());
-	// opt.extendUniverse(plus.asCollection());
-	// opt.extendUniverse(minus.asCollection());
-
-	Iterator<? extends Label> it = u.iterator();
-	char rslt[] = new char[u.size()];
-	for (int i = 0; it.hasNext(); i++) {
-	    Label m = it.next();
-	    if (plus.contains(m))
-		rslt[i] = '+';
-	    else if (minus.contains(m))
-		rslt[i] = '-';
-	    else rslt[i] = '0';
+	public SignedSetInternal create(UnsignedSetInternal plus,
+			UnsignedSetInternal minus) {
+		return createSignedSet(plus, minus);
 	}
-	return new String(rslt);
-    }
 
-    private String toShortString(List<? extends Label> u, SignedSet s) {
-	// Options opt = getOptions();
-	UnsignedSet plus = s.plus();
-	UnsignedSet minus = s.minus();
+	// private WeakReference<SignedSetInternal> cache[];
+	private SignedSetInternal cache[];
 
-	plus = unsignedF.remake(plus);
-	minus = unsignedF.remake(minus);
-
-	// opt.extendUniverse(plus.asCollection());
-	// opt.extendUniverse(minus.asCollection());
-
-	char rslt[] = new char[plus.size() + 2 * minus.size()];
-	if (rslt.length == 0) return "*";
-	Iterator<? extends Label> it = u.iterator();
-	for (int i = 0; it.hasNext();) {
-	    Label m = it.next();
-	    String l = m.toString();
-	    if (plus.contains(m))
-		rslt[i++] = l.charAt(0);
-	    else if (minus.contains(m)) {
-		rslt[i++] = l.charAt(0);
-		rslt[i++] = '\'';
-	    }
+	public void addToCache(int plus, int minus, SignedSetInternal s) {
+		initCache();
+		long value = toLong(plus, minus);
+		int key = key(value);
+		cache[key] = s;
+		// new WeakReference<SignedSetInternal>(s);
 	}
-	return new String(rslt);
-    }
 
-    public SignedSetInternal create(UnsignedSetInternal plus,
-	    UnsignedSetInternal minus) {
-	return createSignedSet(plus, minus);
-    }
+	private int key(long value) {
+		return (int) (value % 18371);
+	}
 
-    // private WeakReference<SignedSetInternal> cache[];
-    private SignedSetInternal cache[];
+	private void initCache() {
+		if (cache == null) {
+			cache = new SignedSetInternal[18371];
+			// new WeakReference[257];
+		}
+	}
 
-    public void addToCache(int plus, int minus, SignedSetInternal s) {
-	initCache();
-	long value = toLong(plus, minus);
-	int key = key(value);
-	cache[key] = s;
-	// new WeakReference<SignedSetInternal>(s);
-    }
+	public SignedSetInternal cached(long l) {
+		return cache[key(l)];
+		// WeakReference<SignedSetInternal> w = cache[ key(l) ];
+		// if (w==null)
+		// return null;
+		// return w.get();
+	}
 
-    private int key(long value) {
-	return (int) (value % 18371);
-    }
+	static public long toLong(int p, int m) {
+		return (((long) p) << 32) | (m & MASK);
+	}
 
-    private void initCache() {
-	if (cache == null) cache = new SignedSetInternal[18371];
-	// new WeakReference[257];
-    }
+	static public int minus(long l) {
+		return (int) (l & MASK);
+	}
 
-    public SignedSetInternal cached(long l) {
-	return cache[key(l)];
-	// WeakReference<SignedSetInternal> w = cache[ key(l) ];
-	// if (w==null)
-	// return null;
-	// return w.get();
-    }
-
-    static public long toLong(int p, int m) {
-	return (((long) p) << 32) | (m & MASK);
-    }
-
-    static public int minus(long l) {
-	return (int) (l & MASK);
-    }
-
-    static public int plus(long l) {
-	return (int) (l >> 32);
-    }
+	static public int plus(long l) {
+		return (int) (l >> 32);
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

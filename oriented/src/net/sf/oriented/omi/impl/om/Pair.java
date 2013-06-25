@@ -8,8 +8,8 @@
 package net.sf.oriented.omi.impl.om;
 
 class Pair {
-    String s;
-    int r;
+	String s;
+	int r;
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

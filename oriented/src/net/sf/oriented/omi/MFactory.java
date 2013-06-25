@@ -5,24 +5,24 @@
 package net.sf.oriented.omi;
 
 public interface MFactory extends SetFactory<UnsignedSet, MatroidS> {
-    /**
-     * This does not, and will not, work. This is inherited from the
-     * {@link SetFactory} interface, and is not appropriate for Matroids.
-     * 
-     * @return Never.
-     * @throws UnsupportedOperationException
-     *             Always.
-     */
-    @Override
-    MatroidS empty();
+	/**
+	 * This does not, and will not, work. This is inherited from the
+	 * {@link SetFactory} interface, and is not appropriate for Matroids.
+	 * 
+	 * @return Never.
+	 * @throws UnsupportedOperationException
+	 *             Always.
+	 */
+	@Override
+	MatroidS empty();
 
-    /**
-     * 
-     * @param sym
-     *            A set of sets, satisfying all the relevant axioms.
-     * @return A new Matroid, based on the sets.
-     */
-    MatroidS fromSets(SetOfUnsignedSet sym);
+	/**
+	 * 
+	 * @param sym
+	 *            A set of sets, satisfying all the relevant axioms.
+	 * @return A new Matroid, based on the sets.
+	 */
+	MatroidS fromSets(SetOfUnsignedSet sym);
 
 }
 /************************************************************************

@@ -7,29 +7,29 @@ package net.sf.oriented.omi.impl.items;
 import net.sf.oriented.omi.Factory;
 
 public class HasFactoryImpl<E extends HasFactory<E, EX, ER>, EX, ER extends EX>
-	implements HasFactory<E, EX, ER> {
+		implements HasFactory<E, EX, ER> {
 
-    protected final FactoryInternal<E, EX, ER> factory;
+	protected final FactoryInternal<E, EX, ER> factory;
 
-    protected HasFactoryImpl(FactoryInternal<E, EX, ER> f) {
-	factory = f;
-    }
+	protected HasFactoryImpl(FactoryInternal<E, EX, ER> f) {
+		factory = f;
+	}
 
-    @Override
-    public FactoryInternal<E, EX, ER> factory() {
-	return factory;
-    }
+	@Override
+	public FactoryInternal<E, EX, ER> factory() {
+		return factory;
+	}
 
-    @Override
-    final public String toString() {
-	return toString(factory);
-    }
+	@Override
+	final public String toString() {
+		return toString(factory);
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    final public String toString(Factory<EX> f) {
-	return f.toString((EX) this);
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	final public String toString(Factory<EX> f) {
+		return f.toString((EX) this);
+	}
 
 }
 /************************************************************************

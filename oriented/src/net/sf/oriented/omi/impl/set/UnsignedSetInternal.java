@@ -9,9 +9,9 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public interface UnsignedSetInternal
-	extends
-	SetOfInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>,
-	UnsignedSet {
+		extends
+		SetOfInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>,
+		UnsignedSet {
 
 }
 /************************************************************************

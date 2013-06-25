@@ -7,48 +7,48 @@ package net.sf.oriented.omi.impl.items;
 import net.sf.oriented.omi.Label;
 
 public class LabelImpl extends HasFactoryImpl<LabelImpl, Label, LabelImpl>
-	implements Label, Comparable<Label> {
-    final String label;
-    final private int ordinal;
+		implements Label, Comparable<Label> {
+	final String label;
+	final private int ordinal;
 
-    public LabelImpl(String a, LabelFactory f, int ord) {
-	super(f);
-	label = a;
-	ordinal = ord;
-    }
+	public LabelImpl(String a, LabelFactory f, int ord) {
+		super(f);
+		label = a;
+		ordinal = ord;
+	}
 
-    @Override
-    public int hashCode() {
-	return label.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return label.hashCode();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-	LabelImpl l = (LabelImpl) o;
-	return l == this
-		|| (l != null && factory() != l.factory() && label
-			.equals(l.label));
+	@Override
+	public boolean equals(Object o) {
+		LabelImpl l = (LabelImpl) o;
+		return l == this
+				|| (l != null && factory() != l.factory() && label
+						.equals(l.label));
 
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see omi.LabelX#label()
-     */
-    @Override
-    public String label() {
-	return label;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see omi.LabelX#label()
+	 */
+	@Override
+	public String label() {
+		return label;
+	}
 
-    @Override
-    public int compareTo(Label arg0) {
-	return label.compareTo(arg0.label());
-    }
+	@Override
+	public int compareTo(Label arg0) {
+		return label.compareTo(arg0.label());
+	}
 
-    public int ordinal() {
-	return ordinal;
-    }
+	public int ordinal() {
+		return ordinal;
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -13,37 +13,37 @@ import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbsFactory<M, S, F extends SetFactoryInternal> extends
-	MoreAbsFactory<M, S> {
+		MoreAbsFactory<M, S> {
 
-    final protected F sets;
+	final protected F sets;
 
-    AbsFactory(FactoryFactory f, F sf) {
-	super(f);
-	sets = sf;
-    }
+	AbsFactory(FactoryFactory f, F sf) {
+		super(f);
+		sets = sf;
+	}
 
-    abstract public List<Label> ground(M s);
+	abstract public List<Label> ground(M s);
 
-    @SuppressWarnings("unchecked")
-    protected String formatString(M s, M matroidS) {
-	List<Label> g = ground(s);
-	// TODO: this copyBackingCollection is probably spurious and should be
-	// done without copying
-	return "( "
-		+ unsignedSets().toString(g,
-			unsignedSets().copyBackingCollection(g)) + ", "
-		+ sets.toString(g, matroidS) + " )";
-    }
+	@SuppressWarnings("unchecked")
+	protected String formatString(M s, M matroidS) {
+		List<Label> g = ground(s);
+		// TODO: this copyBackingCollection is probably spurious and should be
+		// done without copying
+		return "( "
+				+ unsignedSets().toString(g,
+						unsignedSets().copyBackingCollection(g)) + ", "
+				+ sets.toString(g, matroidS) + " )";
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    S parseMatroid(ParseContext pc) {
-	return (S) sets.parse(pc);
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	S parseMatroid(ParseContext pc) {
+		return (S) sets.parse(pc);
+	}
 
-    public M empty() {
-	throw new UnsupportedOperationException("No 'empty' oriented matroid");
-    }
+	public M empty() {
+		throw new UnsupportedOperationException("No 'empty' oriented matroid");
+	}
 
 }
 /************************************************************************

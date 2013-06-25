@@ -5,28 +5,28 @@
 package net.sf.oriented.omi;
 
 public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-    /**
-     * This does not, and will not, work. This is inherited from the
-     * {@link SetFactory} interface, and is not appropriate for Oriented
-     * Matroids.
-     * 
-     * @return Never.
-     * @throws UnsupportedOperationException
-     *             Always.
-     */
-    @Override
-    OMS empty();
+	/**
+	 * This does not, and will not, work. This is inherited from the
+	 * {@link SetFactory} interface, and is not appropriate for Oriented
+	 * Matroids.
+	 * 
+	 * @return Never.
+	 * @throws UnsupportedOperationException
+	 *             Always.
+	 */
+	@Override
+	OMS empty();
 
-    /**
-     * 
-     * @param ground
-     *            TODO document parameter
-     * @param sym
-     *            A symmetric set of signed sets, satisfying all the relevant
-     *            axioms.
-     * @return A new Oriented Matroid, based on the signed sets.
-     */
-    OMS fromSignedSets(Label[] ground, SetOfSignedSet sym);
+	/**
+	 * 
+	 * @param ground
+	 *            TODO document parameter
+	 * @param sym
+	 *            A symmetric set of signed sets, satisfying all the relevant
+	 *            axioms.
+	 * @return A new Oriented Matroid, based on the signed sets.
+	 */
+	OMS fromSignedSets(Label[] ground, SetOfSignedSet sym);
 
 }
 /************************************************************************

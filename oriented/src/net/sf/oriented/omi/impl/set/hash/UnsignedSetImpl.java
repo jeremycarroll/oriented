@@ -12,31 +12,31 @@ import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 public class UnsignedSetImpl
-	extends
-	SetImpl<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>
-	implements UnsignedSetInternal {
+		extends
+		SetImpl<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>
+		implements UnsignedSetInternal {
 
-    // public UnsignedSet(String a, UnsignedSetFactory f,boolean copy) {
-    // super(f.itemFactory().parse(a),f,copy);
-    // }
+	// public UnsignedSet(String a, UnsignedSetFactory f,boolean copy) {
+	// super(f.itemFactory().parse(a),f,copy);
+	// }
 
-    public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
-	super(a, f);
-    }
+	public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
+		super(a, f);
+	}
 
-    // public UnsignedSet(Collection<String> a, UnsignedSetFactory f) {
-    // super(f.itemFactory().get(a),f);
-    // }
+	// public UnsignedSet(Collection<String> a, UnsignedSetFactory f) {
+	// super(f.itemFactory().get(a),f);
+	// }
 
-    // public UnsignedSet(Collection<String> a, UnsignedSetFactory f, boolean
-    // copy){
-    // super(f.itemFactory().get(a),f,copy);
-    // }
+	// public UnsignedSet(Collection<String> a, UnsignedSetFactory f, boolean
+	// copy){
+	// super(f.itemFactory().get(a),f,copy);
+	// }
 
-    // public String toPlus(UnsignedSet e) {
-    // // TO DO toPlus
-    // return "";
-    // }
+	// public String toPlus(UnsignedSet e) {
+	// // TO DO toPlus
+	// return "";
+	// }
 
 }
 /************************************************************************

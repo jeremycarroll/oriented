@@ -11,65 +11,65 @@ import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.HasFactory;
 
 public interface SetOfInternal<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, T>, EX, SX extends SetOf<EX, SX>, ER extends EX, T extends SX>
-	extends HasFactory<S, SX, T>, SetOf<EX, SX> {
+		extends HasFactory<S, SX, T>, SetOf<EX, SX> {
 
-    @Override
-    SetFactoryInternal<E, S, EX, SX, ER, T> factory();
+	@Override
+	SetFactoryInternal<E, S, EX, SX, ER, T> factory();
 
-    ER theMember();
+	ER theMember();
 
-    @Override
-    boolean sameSetAs(SX other);
+	@Override
+	boolean sameSetAs(SX other);
 
-    @Override
-    boolean equalsIsSameSetAs();
+	@Override
+	boolean equalsIsSameSetAs();
 
-    @Override
-    T respectingEquals();
+	@Override
+	T respectingEquals();
 
-    @Override
-    public abstract T union(SX b);
+	@Override
+	public abstract T union(SX b);
 
-    @Override
-    public abstract T union(EX b);
+	@Override
+	public abstract T union(EX b);
 
-    @Override
-    public abstract T intersection(SX b);
+	@Override
+	public abstract T intersection(SX b);
 
-    @Override
-    public abstract T minus(SX b);
+	@Override
+	public abstract T minus(SX b);
 
-    @Override
-    public abstract T minus(EX b);
+	@Override
+	public abstract T minus(EX b);
 
-    @Override
-    public abstract boolean contains(EX a);
+	@Override
+	public abstract boolean contains(EX a);
 
-    @Override
-    public abstract Iterator<ER> iterator();
+	@Override
+	public abstract Iterator<ER> iterator();
 
-    @Override
-    public abstract int size();
+	@Override
+	public abstract int size();
 
-    @Override
-    public abstract boolean isSubsetOf(SX b);
+	@Override
+	public abstract boolean isSubsetOf(SX b);
 
-    @Override
-    public abstract boolean isSupersetOf(SX b);
+	@Override
+	public abstract boolean isSupersetOf(SX b);
 
-    @Override
-    public abstract JavaSet<ER> asCollection();
+	@Override
+	public abstract JavaSet<ER> asCollection();
 
-    @Override
-    public boolean isEmpty();
+	@Override
+	public boolean isEmpty();
 
-    @Override
-    public abstract JavaSet<T> powerSet();
+	@Override
+	public abstract JavaSet<T> powerSet();
 
-    @Override
-    public abstract JavaSet<T> subsetsOfSize(int i);
+	@Override
+	public abstract JavaSet<T> subsetsOfSize(int i);
 
-    T useCollection(JavaSet<ER> a);
+	T useCollection(JavaSet<ER> a);
 
 }
 /************************************************************************

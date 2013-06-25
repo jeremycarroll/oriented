@@ -8,20 +8,20 @@ import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
 public interface SetOfUnsignedSetInternal
-	extends
-	SetOfInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>,
-	SetOfUnsignedSet {
+		extends
+		SetOfInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>,
+		SetOfUnsignedSet {
 
-    // SetOfUnsignedSetInternal deletion(final Label s);
-    //
-    // SetOfUnsignedSetInternal contraction(Label l);
+	// SetOfUnsignedSetInternal deletion(final Label s);
+	//
+	// SetOfUnsignedSetInternal contraction(Label l);
 
-    /**
-     * The union of all the members of this set.
-     * 
-     * @return the union.
-     */
-    UnsignedSetInternal union();
+	/**
+	 * The union of all the members of this set.
+	 * 
+	 * @return the union.
+	 */
+	UnsignedSetInternal union();
 
 }
 /************************************************************************

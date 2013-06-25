@@ -19,291 +19,295 @@ import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
 
 abstract public class SetImpl<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, SS>, EX, SX extends SetOf<EX, SX>, ER extends EX, SS extends SX>
-	extends HasSetFactoryImpl<E, S, EX, SX, ER, SS> implements
-	SetOfInternal<E, S, EX, SX, ER, SS> {
-    private final class PowerJavaSet extends AbstractCollection<SS> implements
-	    JavaSet<SS> {
+		extends HasSetFactoryImpl<E, S, EX, SX, ER, SS> implements
+		SetOfInternal<E, S, EX, SX, ER, SS> {
+	private final class PowerJavaSet extends AbstractCollection<SS> implements
+			JavaSet<SS> {
 
-	final int size;
+		final int size;
 
-	private PowerJavaSet(int sz) {
-	    size = 1 << sz;
+		private PowerJavaSet(int sz) {
+			size = 1 << sz;
+		}
+
+		@Override
+		public Iterator<SS> iterator() {
+			return new Iterator<SS>() {
+				int i = 0;
+
+				@Override
+				public boolean hasNext() {
+					return i < size;
+				}
+
+				@Override
+				public SS next() {
+					JavaSet<ER> m = emptyCollectionOf();
+					Iterator<ER> it = members.iterator();
+					int j = 0;
+					while (it.hasNext()) {
+						ER n = it.next();
+						if (((1 << j) & i) != 0) {
+							m.add(n);
+						}
+						j++;
+					}
+					i++;
+					return useCollection(m);
+				}
+
+				@Override
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
+		}
+
+		@Override
+		public int size() {
+			return size;
+		}
+	}
+
+	private final JavaSet<ER> members;
+
+	public SetImpl(JavaSet<ER> a, SetFactoryInternal<E, S, EX, SX, ER, SS> f) {
+		super(f);
+		members = a;
 	}
 
 	@Override
-	public Iterator<SS> iterator() {
-	    return new Iterator<SS>() {
-		int i = 0;
+	public JavaSet<ER> asCollection() {
+		return members;
+	}
 
-		@Override
-		public boolean hasNext() {
-		    return i < size;
-		}
+	@Override
+	public SS union(SX b) {
+		JavaSet<ER> mm = emptyCollectionOf();
+		mm.addAll(members);
+		mm.addAll(factory().remake(b).asCollection());
+		return useCollection(mm);
+	}
 
-		@Override
-		public SS next() {
-		    JavaSet<ER> m = emptyCollectionOf();
-		    Iterator<ER> it = members.iterator();
-		    int j = 0;
-		    while (it.hasNext()) {
-			ER n = it.next();
-			if (((1 << j) & i) != 0) {
-			    m.add(n);
+	@Override
+	public SS intersection(SX b) {
+		JavaSet<ER> mm = emptyCollectionOf();
+		mm.addAll(members);
+		mm.retainAll(b.asCollection());
+		return useCollection(mm);
+	}
+
+	@Override
+	public SS minus(SX b) {
+		JavaSet<ER> mm = emptyCollectionOf();
+		mm.addAll(members);
+		mm.removeAll(b.asCollection());
+		return useCollection(mm);
+	}
+
+	@Override
+	public boolean contains(EX a) {
+		return members.contains(a);
+	}
+
+	@Override
+	public Iterator<ER> iterator() {
+		return new Iterator<ER>() {
+			Iterator<ER> underlying = members.iterator();
+
+			@Override
+			public boolean hasNext() {
+				return underlying.hasNext();
 			}
-			j++;
-		    }
-		    i++;
-		    return useCollection(m);
-		}
 
-		@Override
-		public void remove() {
-		    throw new UnsupportedOperationException();
+			@Override
+			public ER next() {
+				return underlying.next();
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("S is immutable");
+			}
+		};
+	}
+
+	@Override
+	public int hashCode() {
+		int rslt = 0;
+		Iterator<ER> it = iterator();
+		while (it.hasNext()) {
+			rslt ^= it.next().hashCode();
 		}
-	    };
+		return rslt;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean equals(Object o) {
+		if (o == null || (!(o instanceof SetOf)))
+			return false;
+		SX sx = (SX) o;
+		return sx.equalsIsSameSetAs() && sameSetAs(sx);
+	}
+
+	@Override
+	public boolean sameSetAs(SX a) {
+		if (size() != a.size())
+			return false;
+		return isSubsetOf(a) && isSupersetOf(a);
 	}
 
 	@Override
 	public int size() {
-	    return size;
+		return members.size();
 	}
-    }
 
-    private final JavaSet<ER> members;
-
-    public SetImpl(JavaSet<ER> a, SetFactoryInternal<E, S, EX, SX, ER, SS> f) {
-	super(f);
-	members = a;
-    }
-
-    @Override
-    public JavaSet<ER> asCollection() {
-	return members;
-    }
-
-    @Override
-    public SS union(SX b) {
-	JavaSet<ER> mm = emptyCollectionOf();
-	mm.addAll(members);
-	mm.addAll(factory().remake(b).asCollection());
-	return useCollection(mm);
-    }
-
-    @Override
-    public SS intersection(SX b) {
-	JavaSet<ER> mm = emptyCollectionOf();
-	mm.addAll(members);
-	mm.retainAll(b.asCollection());
-	return useCollection(mm);
-    }
-
-    @Override
-    public SS minus(SX b) {
-	JavaSet<ER> mm = emptyCollectionOf();
-	mm.addAll(members);
-	mm.removeAll(b.asCollection());
-	return useCollection(mm);
-    }
-
-    @Override
-    public boolean contains(EX a) {
-	return members.contains(a);
-    }
-
-    @Override
-    public Iterator<ER> iterator() {
-	return new Iterator<ER>() {
-	    Iterator<ER> underlying = members.iterator();
-
-	    @Override
-	    public boolean hasNext() {
-		return underlying.hasNext();
-	    }
-
-	    @Override
-	    public ER next() {
-		return underlying.next();
-	    }
-
-	    @Override
-	    public void remove() {
-		throw new UnsupportedOperationException("S is immutable");
-	    }
-	};
-    }
-
-    @Override
-    public int hashCode() {
-	int rslt = 0;
-	Iterator<ER> it = iterator();
-	while (it.hasNext()) {
-	    rslt ^= it.next().hashCode();
+	@Override
+	public boolean isSubsetOf(SX b) {
+		return b.asCollection().containsAll(members);
 	}
-	return rslt;
-    }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean equals(Object o) {
-	if (o == null || (!(o instanceof SetOf))) return false;
-	SX sx = (SX) o;
-	return sx.equalsIsSameSetAs() && sameSetAs(sx);
-    }
-
-    @Override
-    public boolean sameSetAs(SX a) {
-	if (size() != a.size()) return false;
-	return isSubsetOf(a) && isSupersetOf(a);
-    }
-
-    @Override
-    public int size() {
-	return members.size();
-    }
-
-    @Override
-    public boolean isSubsetOf(SX b) {
-	return b.asCollection().containsAll(members);
-    }
-
-    @Override
-    public boolean isSupersetOf(SX b) {
-	return members.containsAll(b.asCollection());
-    }
-
-    @Override
-    public boolean isEmpty() {
-	return members.isEmpty();
-    }
-
-    public SS only(Test<EX> t) {
-	JavaSet<ER> r = emptyCollectionOf();
-	Iterator<ER> i = iterator();
-	while (i.hasNext()) {
-	    ER n = i.next();
-	    if (t.test(n)) r.add(n);
+	@Override
+	public boolean isSupersetOf(SX b) {
+		return members.containsAll(b.asCollection());
 	}
-	return useCollection(r);
-    }
 
-    /**
-     * r is dedicated to being the backing collection for this set. It is *not*
-     * copied, and must not be modified after this call.
-     * 
-     * @param bases
-     * @return
-     */
-    @Override
-    public SS useCollection(JavaSet<ER> bases) {
-	return factory().fromBackingCollection(bases);
-    }
-
-    public SS excluding(Test<EX> t) {
-	JavaSet<ER> r = emptyCollectionOf();
-	Iterator<ER> i = iterator();
-	while (i.hasNext()) {
-	    ER n = i.next();
-	    if (!t.test(n)) r.add(n);
+	@Override
+	public boolean isEmpty() {
+		return members.isEmpty();
 	}
-	return useCollection(r);
-    }
 
-    protected JavaSet<ER> emptyCollectionOf() {
-	return factory().itemFactory().emptyCollectionOf();
-    }
-
-    @Override
-    public SS minus(EX b) {
-	JavaSet<ER> r = emptyCollectionOf();
-	r.addAll(members);
-	r.remove(b);
-	return useCollection(r);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public SS union(EX b) {
-	JavaSet<ER> r = emptyCollectionOf();
-	r.addAll(members);
-	r.add((ER) factory().itemFactory().remake(b));
-	return useCollection(r);
-    }
-
-    @Override
-    public JavaSet<SS> powerSet() {
-	final int sz = members.size();
-	if (sz > 20) {
-	    throw new IllegalArgumentException("unimplemented powerset sz > 20");
+	public SS only(Test<EX> t) {
+		JavaSet<ER> r = emptyCollectionOf();
+		Iterator<ER> i = iterator();
+		while (i.hasNext()) {
+			ER n = i.next();
+			if (t.test(n)) {
+				r.add(n);
+			}
+		}
+		return useCollection(r);
 	}
-	return new PowerJavaSet(sz);
-    }
 
-    @Override
-    public JavaSet<SS> subsetsOfSize(int i) {
-	return convert(subsetsOfSize(0, i));
-    }
-
-    private JavaSet<SS> convert(Collection<JavaSet<ER>> c) {
-	JavaSet<SS> r = factory.emptyCollectionOf();
-	Iterator<JavaSet<ER>> it = c.iterator();
-	while (it.hasNext()) {
-	    SS useCollection = useCollection(it.next());
-	    r.add(useCollection);
+	/**
+	 * r is dedicated to being the backing collection for this set. It is *not*
+	 * copied, and must not be modified after this call.
+	 * 
+	 * @param bases
+	 * @return
+	 */
+	@Override
+	public SS useCollection(JavaSet<ER> bases) {
+		return factory().fromBackingCollection(bases);
 	}
-	return r;
-    }
 
-    private Set<JavaSet<ER>> subsetsOfSize(int x, int sz) {
-
-	// System.err.println(x + "/"+ sz + "/" + size());
-
-	if (sz == 0) {
-	    Set<JavaSet<ER>> r = new HashSet<JavaSet<ER>>();
-	    r.add(emptyCollectionOf());
-	    return r;
+	public SS excluding(Test<EX> t) {
+		JavaSet<ER> r = emptyCollectionOf();
+		Iterator<ER> i = iterator();
+		while (i.hasNext()) {
+			ER n = i.next();
+			if (!t.test(n)) {
+				r.add(n);
+			}
+		}
+		return useCollection(r);
 	}
-	if (x == size()) {
-	    return new HashSet<JavaSet<ER>>();
+
+	protected JavaSet<ER> emptyCollectionOf() {
+		return factory().itemFactory().emptyCollectionOf();
 	}
-	ER xth = ith(x);
-	Set<JavaSet<ER>> rslt = subsetsOfSize(x + 1, sz);
-	Iterator<JavaSet<ER>> it = subsetsOfSize(x + 1, sz - 1).iterator();
-	while (it.hasNext()) {
-	    JavaSet<ER> n = it.next();
-	    n.add(xth);
-	    rslt.add(n);
+
+	@Override
+	public SS minus(EX b) {
+		JavaSet<ER> r = emptyCollectionOf();
+		r.addAll(members);
+		r.remove(b);
+		return useCollection(r);
 	}
-	return rslt;
-    }
 
-    private ER ith(int x) {
-	Iterator<ER> it = iterator();
-	while (x > 0) {
-	    x--;
-	    it.next();
+	@Override
+	@SuppressWarnings("unchecked")
+	public SS union(EX b) {
+		JavaSet<ER> r = emptyCollectionOf();
+		r.addAll(members);
+		r.add((ER) factory().itemFactory().remake(b));
+		return useCollection(r);
 	}
-	return it.next();
-    }
 
-    @Override
-    public ER theMember() {
-	Iterator<ER> it = iterator();
-	ER r = it.next();
-	if (it.hasNext())
-	    throw new IllegalStateException("More than one member.");
-	return r;
-    }
+	@Override
+	public JavaSet<SS> powerSet() {
+		final int sz = members.size();
+		if (sz > 20)
+			throw new IllegalArgumentException("unimplemented powerset sz > 20");
+		return new PowerJavaSet(sz);
+	}
 
-    @Override
-    public boolean equalsIsSameSetAs() {
-	return true;
-    }
+	@Override
+	public JavaSet<SS> subsetsOfSize(int i) {
+		return convert(subsetsOfSize(0, i));
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public SS respectingEquals() {
-	return (SS) this;
-    }
+	private JavaSet<SS> convert(Collection<JavaSet<ER>> c) {
+		JavaSet<SS> r = factory.emptyCollectionOf();
+		Iterator<JavaSet<ER>> it = c.iterator();
+		while (it.hasNext()) {
+			SS useCollection = useCollection(it.next());
+			r.add(useCollection);
+		}
+		return r;
+	}
+
+	private Set<JavaSet<ER>> subsetsOfSize(int x, int sz) {
+
+		// System.err.println(x + "/"+ sz + "/" + size());
+
+		if (sz == 0) {
+			Set<JavaSet<ER>> r = new HashSet<JavaSet<ER>>();
+			r.add(emptyCollectionOf());
+			return r;
+		}
+		if (x == size())
+			return new HashSet<JavaSet<ER>>();
+		ER xth = ith(x);
+		Set<JavaSet<ER>> rslt = subsetsOfSize(x + 1, sz);
+		Iterator<JavaSet<ER>> it = subsetsOfSize(x + 1, sz - 1).iterator();
+		while (it.hasNext()) {
+			JavaSet<ER> n = it.next();
+			n.add(xth);
+			rslt.add(n);
+		}
+		return rslt;
+	}
+
+	private ER ith(int x) {
+		Iterator<ER> it = iterator();
+		while (x > 0) {
+			x--;
+			it.next();
+		}
+		return it.next();
+	}
+
+	@Override
+	public ER theMember() {
+		Iterator<ER> it = iterator();
+		ER r = it.next();
+		if (it.hasNext())
+			throw new IllegalStateException("More than one member.");
+		return r;
+	}
+
+	@Override
+	public boolean equalsIsSameSetAs() {
+		return true;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public SS respectingEquals() {
+		return (SS) this;
+	}
 
 }
 /************************************************************************

@@ -15,31 +15,32 @@ import net.sf.oriented.combinatorics.CombinatoricUtils;
  */
 public class Alternating implements FullChirotope {
 
-    final private Chirotope base;
+	final private Chirotope base;
 
-    public Alternating(Chirotope base) {
-	this.base = base;
-    }
+	public Alternating(Chirotope base) {
+		this.base = base;
+	}
 
-    @Override
-    public int chi(int... x) {
-	if (base instanceof FullChirotope) return base.chi(x);
+	@Override
+	public int chi(int... x) {
+		if (base instanceof FullChirotope)
+			return base.chi(x);
 
-	int y[] = x.clone();
-	Arrays.sort(y);
-	int sign = CombinatoricUtils.sign(x, y);
-	return sign == 0 ? 0 : sign * base.chi(y);
-    }
+		int y[] = x.clone();
+		Arrays.sort(y);
+		int sign = CombinatoricUtils.sign(x, y);
+		return sign == 0 ? 0 : sign * base.chi(y);
+	}
 
-    @Override
-    public int rank() {
-	return base.rank();
-    }
+	@Override
+	public int rank() {
+		return base.rank();
+	}
 
-    @Override
-    public int n() {
-	return base.n();
-    }
+	@Override
+	public int n() {
+		return base.n();
+	}
 
 }
 /************************************************************************

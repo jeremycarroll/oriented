@@ -5,16 +5,16 @@
 package net.sf.oriented.omi;
 
 public interface FullChirotope extends Chirotope {
-    /**
-     * This is only called when it has {@link rank()} arguments.
-     * 
-     * @param i
-     * @return -1, 0 or 1
-     * @throws IllegalArgumentException
-     *             With the wrong number of arguments or if any is out of range.
-     */
-    @Override
-    int chi(int... i);
+	/**
+	 * This is only called when it has {@link rank()} arguments.
+	 * 
+	 * @param i
+	 * @return -1, 0 or 1
+	 * @throws IllegalArgumentException
+	 *             With the wrong number of arguments or if any is out of range.
+	 */
+	@Override
+	int chi(int... i);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

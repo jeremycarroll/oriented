@@ -7,9 +7,9 @@ package net.sf.oriented.omi.impl.items;
 import net.sf.oriented.omi.Factory;
 
 public interface HasFactory<E extends HasFactory<E, EX, ER>, EX, ER extends EX> {
-    FactoryInternal<E, EX, ER> factory();
+	FactoryInternal<E, EX, ER> factory();
 
-    String toString(Factory<EX> f);
+	String toString(Factory<EX> f);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -10,10 +10,10 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @SuiteClasses({ TestAlternating.class, TestChirotope.class, TestCircuits.class,
-	TestConversions.class, TestLexicographic.class, TestMatroid.class,
-	TestMaxVectors.class, TestMSet.class, TestSignedSet.class,
-	TestVectors.class, TestLU.class, TestGramSchmidt.class,
-	TestDualRealized.class
+		TestConversions.class, TestLexicographic.class, TestMatroid.class,
+		TestMaxVectors.class, TestMSet.class, TestSignedSet.class,
+		TestVectors.class, TestLU.class, TestGramSchmidt.class,
+		TestDualRealized.class
 
 })
 @RunWith(Suite.class)

@@ -6,19 +6,19 @@ package net.sf.oriented.omi;
 
 public interface Matroid extends Verify {
 
-    public MatroidS getCircuits();
+	public MatroidS getCircuits();
 
-    public MatroidS getBases();
+	public MatroidS getBases();
 
-    public Matroid dual();
+	public Matroid dual();
 
-    public int rank();
+	public int rank();
 
-    public Label[] ground();
+	public Label[] ground();
 
-    OM getOM();
+	OM getOM();
 
-    // TODO API for unsigned to signed
+	// TODO API for unsigned to signed
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

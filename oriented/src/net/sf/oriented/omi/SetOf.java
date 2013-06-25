@@ -7,41 +7,41 @@ package net.sf.oriented.omi;
 import java.util.Iterator;
 
 public interface SetOf<E, S extends SetOf<E, S>> {
-    public abstract S union(S b);
+	public abstract S union(S b);
 
-    boolean sameSetAs(S other);
+	boolean sameSetAs(S other);
 
-    boolean equalsIsSameSetAs();
+	boolean equalsIsSameSetAs();
 
-    S respectingEquals();
+	S respectingEquals();
 
-    public abstract S union(E b);
+	public abstract S union(E b);
 
-    public abstract S intersection(S b);
+	public abstract S intersection(S b);
 
-    public abstract S minus(S b);
+	public abstract S minus(S b);
 
-    public abstract S minus(E b);
+	public abstract S minus(E b);
 
-    public abstract boolean contains(E a);
+	public abstract boolean contains(E a);
 
-    public abstract int size();
+	public abstract int size();
 
-    public abstract boolean isSubsetOf(S b);
+	public abstract boolean isSubsetOf(S b);
 
-    public abstract boolean isSupersetOf(S b);
+	public abstract boolean isSupersetOf(S b);
 
-    public boolean isEmpty();
+	public boolean isEmpty();
 
-    public abstract Iterator<? extends E> iterator();
+	public abstract Iterator<? extends E> iterator();
 
-    public abstract JavaSet<? extends E> asCollection();
+	public abstract JavaSet<? extends E> asCollection();
 
-    public abstract JavaSet<? extends S> powerSet();
+	public abstract JavaSet<? extends S> powerSet();
 
-    public abstract JavaSet<? extends S> subsetsOfSize(int i);
+	public abstract JavaSet<? extends S> subsetsOfSize(int i);
 
-    // S useCollection(Collection<? extends E> a);
+	// S useCollection(Collection<? extends E> a);
 
 }
 /************************************************************************

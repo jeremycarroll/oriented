@@ -9,10 +9,10 @@ import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
 abstract class AbsVectorsOM extends AbsVectors implements OMS {
 
-    AbsVectorsOM(SetOfSignedSetInternal c, Cryptomorphisms cry, OMInternal a) {
-	super(c, a);
-	all.set(cry, this);
-    }
+	AbsVectorsOM(SetOfSignedSetInternal c, Cryptomorphisms cry, OMInternal a) {
+		super(c, a);
+		all.set(cry, this);
+	}
 
 }
 /************************************************************************

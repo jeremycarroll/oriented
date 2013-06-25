@@ -15,108 +15,113 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 public class MatroidCircuits extends AbsMatroid {
 
-    MatroidCircuits(SetOfUnsignedSetInternal c, MatroidInternal a) {
-	super(c, a);
-	a.asAll().setCircuits(this);
-    }
-
-    MatroidCircuits(Bases bases) {
-	this(bases.computeCircuits(), bases);
-    }
-
-    MatroidCircuits(Circuits circuits, MatroidAll matroid) {
-	this(circuits.unsigned(), matroid);
-    }
-
-    MatroidCircuits(Vectors vectors, MatroidAll matroid) {
-	this(vectors.circuits(), matroid);
-    }
-
-    @Override
-    public MatroidCircuits getCircuits() {
-	return this;
-    }
-
-    @Override
-    public boolean verify() {
-	return (!isEmpty()) && verifyIncomparability()
-		&& verifyWeakElimination();
-
-    }
-
-    private boolean verifyWeakElimination() {
-	return new ForAllForAllExists<Label>() {
-
-	    private UnsignedSet union;
-
-	    @Override
-	    public boolean check(Label e, UnsignedSet x, UnsignedSet y,
-		    UnsignedSet z) {
-		return (!z.contains(e)) && z.isSubsetOf(union);
-	    }
-
-	    @Override
-	    public Iterator<? extends Label> check(UnsignedSet a, UnsignedSet b) {
-		if (a == b) return null;
-		union = a.union(b);
-		return a.intersection(b).iterator();
-	    }
-
-	}.verify();
-    }
-
-    private boolean verifyIncomparability() {
-
-	return new ForAllForAll() {
-	    @Override
-	    public boolean check(UnsignedSet a, UnsignedSet b) {
-		return (!a.isSubsetOf(b)) || a == b;
-	    }
-	}.verify();
-    }
-
-    SetOfUnsignedSetInternal computeBases() {
-	Iterator<UnsignedSetInternal> it = iterator();
-	int max = 0;
-	while (it.hasNext()) {
-	    int sz = it.next().size();
-	    if (sz > max) max = sz;
+	MatroidCircuits(SetOfUnsignedSetInternal c, MatroidInternal a) {
+		super(c, a);
+		a.asAll().setCircuits(this);
 	}
-	UnsignedSetInternal support = union();
-	max += ground().length - support.size();
 
-	JavaSet<UnsignedSetInternal> bases = convert(ground()).subsetsOfSize(
-		max - 1);
-	// System.out.println(support().size() + " " + bases.size());
-	it = iterator();
-	while (it.hasNext()) {
-	    UnsignedSet n = it.next();
-	    if (n.size() == max - 1) {
-		bases.remove(n);
-	    } else if (n.size() < max - 1) {
-		Iterator<? extends UnsignedSet> i2 = bases.iterator();
-		while (i2.hasNext()) {
-		    UnsignedSet b = i2.next();
-		    if (n.isSubsetOf(b)) i2.remove();
+	MatroidCircuits(Bases bases) {
+		this(bases.computeCircuits(), bases);
+	}
+
+	MatroidCircuits(Circuits circuits, MatroidAll matroid) {
+		this(circuits.unsigned(), matroid);
+	}
+
+	MatroidCircuits(Vectors vectors, MatroidAll matroid) {
+		this(vectors.circuits(), matroid);
+	}
+
+	@Override
+	public MatroidCircuits getCircuits() {
+		return this;
+	}
+
+	@Override
+	public boolean verify() {
+		return (!isEmpty()) && verifyIncomparability()
+				&& verifyWeakElimination();
+
+	}
+
+	private boolean verifyWeakElimination() {
+		return new ForAllForAllExists<Label>() {
+
+			private UnsignedSet union;
+
+			@Override
+			public boolean check(Label e, UnsignedSet x, UnsignedSet y,
+					UnsignedSet z) {
+				return (!z.contains(e)) && z.isSubsetOf(union);
+			}
+
+			@Override
+			public Iterator<? extends Label> check(UnsignedSet a, UnsignedSet b) {
+				if (a == b)
+					return null;
+				union = a.union(b);
+				return a.intersection(b).iterator();
+			}
+
+		}.verify();
+	}
+
+	private boolean verifyIncomparability() {
+
+		return new ForAllForAll() {
+			@Override
+			public boolean check(UnsignedSet a, UnsignedSet b) {
+				return (!a.isSubsetOf(b)) || a == b;
+			}
+		}.verify();
+	}
+
+	SetOfUnsignedSetInternal computeBases() {
+		Iterator<UnsignedSetInternal> it = iterator();
+		int max = 0;
+		while (it.hasNext()) {
+			int sz = it.next().size();
+			if (sz > max) {
+				max = sz;
+			}
 		}
-	    }
+		UnsignedSetInternal support = union();
+		max += ground().length - support.size();
+
+		JavaSet<UnsignedSetInternal> bases = convert(ground()).subsetsOfSize(
+				max - 1);
+		// System.out.println(support().size() + " " + bases.size());
+		it = iterator();
+		while (it.hasNext()) {
+			UnsignedSet n = it.next();
+			if (n.size() == max - 1) {
+				bases.remove(n);
+			} else if (n.size() < max - 1) {
+				Iterator<? extends UnsignedSet> i2 = bases.iterator();
+				while (i2.hasNext()) {
+					UnsignedSet b = i2.next();
+					if (n.isSubsetOf(b)) {
+						i2.remove();
+					}
+				}
+			}
+		}
+		return useCollection(bases);
 	}
-	return useCollection(bases);
-    }
 
-    public SignedSetInternal signed(UnsignedSetInternal circuit) {
-	OMInternal om = getOM();
-	if (om == null)
-	    throw new IllegalStateException("No associated Oriented Matroid");
-	Circuits c = om.getCircuits();
-	return c.withSupport(circuit).asCollection().iterator().next();
+	public SignedSetInternal signed(UnsignedSetInternal circuit) {
+		OMInternal om = getOM();
+		if (om == null)
+			throw new IllegalStateException("No associated Oriented Matroid");
+		Circuits c = om.getCircuits();
+		return c.withSupport(circuit).asCollection().iterator().next();
 
-    }
+	}
 
-    @Override
-    public String toString() {
-	return ffactory().unsignedCircuits().toString(this);
-    }
+	@Override
+	public String toString() {
+		return ffactory().unsignedCircuits().toString(this);
+	}
 
 }
 /************************************************************************

@@ -16,84 +16,91 @@ import com.perisic.ring.UniversalPolynomialRing;
 
 public abstract class PerisicField implements Field<PerisicFieldElement> {
 
-    static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
+	static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
 
-    private static final QuotientField QU = new QuotientField(U);
+	private static final QuotientField QU = new QuotientField(U);
 
-    final private PerisicFieldElement zero, one;
-    final private Ring ring;
+	final private PerisicFieldElement zero, one;
+	final private Ring ring;
 
-    public static final PerisicField Q = new PerisicField(Ring.Q){
-	@Override
-	int hashCode(RingElt delegate) {
-	    return rationalHashCode(delegate);
-	}
-};
-    public static final PerisicField Polynomials = new PerisicField(U){
-
-	@Override
-	int hashCode(RingElt delegate) {
-	    return polyHashCode(delegate);
-	}};
-    public static final PerisicField QPolynomials = new PerisicField(QU){
+	public static final PerisicField Q = new PerisicField(Ring.Q) {
+		@Override
+		int hashCode(RingElt delegate) {
+			return rationalHashCode(delegate);
+		}
+	};
+	public static final PerisicField Polynomials = new PerisicField(U) {
 
 		@Override
 		int hashCode(RingElt delegate) {
-		    return (polyHashCode(QU.numerator(delegate)) * 7 ) ^ (polyHashCode(QU.denominator(delegate)) * 11 );
-		}};
+			return polyHashCode(delegate);
+		}
+	};
+	public static final PerisicField QPolynomials = new PerisicField(QU) {
 
-    private PerisicField(Ring r) {
-	zero = new PerisicFieldElement(r.zero());
-	one = new PerisicFieldElement(r.one());
-	ring = r;
-    }
+		@Override
+		int hashCode(RingElt delegate) {
+			return (polyHashCode(QU.numerator(delegate)) * 7)
+					^ (polyHashCode(QU.denominator(delegate)) * 11);
+		}
+	};
 
-    protected static int polyHashCode(RingElt delegate) {
-	throw new UnsupportedOperationException("hashCode rather difficult to implement for polynomials");
-    }
+	private PerisicField(Ring r) {
+		zero = new PerisicFieldElement(r.zero());
+		one = new PerisicFieldElement(r.one());
+		ring = r;
+	}
 
-    private static int rationalHashCode(RingElt delegate) {
-	    return ( RationalField.numeratorToBigInteger(delegate).hashCode() * 5 ) ^ ( RationalField.denominatorToBigInteger(delegate).hashCode() * 13 );
-    }
-    
-    @Override
-    public PerisicFieldElement getZero() {
-	return zero;
-    }
+	protected static int polyHashCode(RingElt delegate) {
+		throw new UnsupportedOperationException(
+				"hashCode rather difficult to implement for polynomials");
+	}
 
-    @Override
-    public PerisicFieldElement getOne() {
-	return one;
-    }
+	private static int rationalHashCode(RingElt delegate) {
+		return (RationalField.numeratorToBigInteger(delegate).hashCode() * 5)
+				^ (RationalField.denominatorToBigInteger(delegate).hashCode() * 13);
+	}
 
-    @Override
-    public Class<? extends FieldElement<PerisicFieldElement>> getRuntimeClass() {
-	return PerisicFieldElement.class;
-    }
+	@Override
+	public PerisicFieldElement getZero() {
+		return zero;
+	}
 
-    static PerisicField getField(Ring ring) {
-	if (ring == Ring.Q) return Q;
-	if (ring == U) return Polynomials;
-	throw new IllegalArgumentException();
-    }
+	@Override
+	public PerisicFieldElement getOne() {
+		return one;
+	}
 
-    public PerisicFieldElement create(int i) {
-	return new PerisicFieldElement(ring.map(i));
-    }
+	@Override
+	public Class<? extends FieldElement<PerisicFieldElement>> getRuntimeClass() {
+		return PerisicFieldElement.class;
+	}
 
-    public PerisicFieldElement map(String str) {
-	return new PerisicFieldElement(ring.map(str));
-    }
+	static PerisicField getField(Ring ring) {
+		if (ring == Ring.Q)
+			return Q;
+		if (ring == U)
+			return Polynomials;
+		throw new IllegalArgumentException();
+	}
 
-    PerisicFieldElement create(RingElt det) {
-	return new PerisicFieldElement(det);
-    }
+	public PerisicFieldElement create(int i) {
+		return new PerisicFieldElement(ring.map(i));
+	}
 
-    public static PerisicFieldElement rational(String rational) {
-	return Q.map(rational);
-    }
+	public PerisicFieldElement map(String str) {
+		return new PerisicFieldElement(ring.map(str));
+	}
 
-    abstract int hashCode(RingElt delegate);
+	PerisicFieldElement create(RingElt det) {
+		return new PerisicFieldElement(det);
+	}
+
+	public static PerisicFieldElement rational(String rational) {
+		return Q.map(rational);
+	}
+
+	abstract int hashCode(RingElt delegate);
 
 }
 

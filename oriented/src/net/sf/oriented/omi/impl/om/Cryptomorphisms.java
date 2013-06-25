@@ -6,30 +6,32 @@ package net.sf.oriented.omi.impl.om;
 
 // TODO: maybe refactor some functionality into this enum
 public enum Cryptomorphisms {
-    CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED,
-    // MUST be half way, those below are duals of those above. Must be even
-    // number.
-    COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), DUALCHIROTOPE(CHIROTOPE), DUALREALIZED(REALIZED);
+	CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED,
+	// MUST be half way, those below are duals of those above. Must be even
+	// number.
+	COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), DUALCHIROTOPE(
+			CHIROTOPE), DUALREALIZED(REALIZED);
 
-    private Cryptomorphisms dual;
-    private final boolean isDualForm;
+	private Cryptomorphisms dual;
+	private final boolean isDualForm;
 
-    Cryptomorphisms() {
-         isDualForm = false;
-    }
+	Cryptomorphisms() {
+		isDualForm = false;
+	}
 
-    Cryptomorphisms(Cryptomorphisms dual) {
-	this.dual = dual;
-	dual.dual = this;
-	isDualForm = true;
-    }
+	Cryptomorphisms(Cryptomorphisms dual) {
+		this.dual = dual;
+		dual.dual = this;
+		isDualForm = true;
+	}
 
-    public Cryptomorphisms getDual() {
-	return dual;
-    }
-    public boolean isDualForm() {
-	return isDualForm;
-    }
+	public Cryptomorphisms getDual() {
+		return dual;
+	}
+
+	public boolean isDualForm() {
+		return isDualForm;
+	}
 
 }
 /************************************************************************

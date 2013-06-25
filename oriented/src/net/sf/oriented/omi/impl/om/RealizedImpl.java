@@ -19,57 +19,58 @@ import net.sf.oriented.omi.SignedSet;
 
 public class RealizedImpl extends AbsOM implements OMRealized {
 
-    private final RationalMatrix matrix;
+	private final RationalMatrix matrix;
 
-    public RealizedImpl(OMAll all, RationalMatrix mat) {
-	super(all);
-	matrix = mat;
-	all.set(REALIZED, this);
-    }
-
-    @Override
-    public boolean verify() {
-	// TODO Auto-generated method stub
-	return true;
-    }
-
-    @Override
-    public Iterator<? extends SignedSet> iterator() {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public RationalMatrix getMatrix() {
-	return matrix;
-    }
-
-    @Override
-    public String toString() {
-	return toString(ffactory());
-    }
-
-    public String toString(FactoryFactory factory) {
-	return toMatrixString(factory.realized()) ;
-    }
-
-    public String toMatrixString(RealizedFactory realizedFactory) {
-	return realizedFactory.toString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-	if (o == null) return false;
-	if (o == this) {
-	    return true;
+	public RealizedImpl(OMAll all, RationalMatrix mat) {
+		super(all);
+		matrix = mat;
+		all.set(REALIZED, this);
 	}
-	return getChirotope().equals(o);
-    }
 
-    @Override
-    public RationalMatrix getDualBasis() {
-	GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(matrix.getDelegate());
-	return new RationalMatrix(gs.getDual());
-    }
+	@Override
+	public boolean verify() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public Iterator<? extends SignedSet> iterator() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public RationalMatrix getMatrix() {
+		return matrix;
+	}
+
+	@Override
+	public String toString() {
+		return toString(ffactory());
+	}
+
+	public String toString(FactoryFactory factory) {
+		return toMatrixString(factory.realized());
+	}
+
+	public String toMatrixString(RealizedFactory realizedFactory) {
+		return realizedFactory.toString(this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		return getChirotope().equals(o);
+	}
+
+	@Override
+	public RationalMatrix getDualBasis() {
+		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
+				matrix.getDelegate());
+		return new RationalMatrix(gs.getDual());
+	}
 }
 
 /************************************************************************

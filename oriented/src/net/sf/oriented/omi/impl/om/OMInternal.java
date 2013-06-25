@@ -10,30 +10,30 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public interface OMInternal extends OM {
 
-    OMAll asAll();
+	OMAll asAll();
 
-    @Override
-    Circuits getCircuits();
+	@Override
+	Circuits getCircuits();
 
-    @Override
-    Vectors getVectors();
+	@Override
+	Vectors getVectors();
 
-    @Override
-    MaxVectors getMaxVectors();
+	@Override
+	MaxVectors getMaxVectors();
 
-    @Override
-    public OMInternal dual();
+	@Override
+	public OMInternal dual();
 
-    @Override
-    public LabelImpl[] ground();
+	@Override
+	public LabelImpl[] ground();
 
-    @Override
-    public MatroidInternal getMatroid();
+	@Override
+	public MatroidInternal getMatroid();
 
-    @Override
-    ChirotopeImpl getChirotope();
+	@Override
+	ChirotopeImpl getChirotope();
 
-    FactoryFactory ffactory();
+	FactoryFactory ffactory();
 
 }
 /************************************************************************

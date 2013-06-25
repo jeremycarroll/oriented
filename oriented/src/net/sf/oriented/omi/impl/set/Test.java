@@ -5,7 +5,7 @@
 package net.sf.oriented.omi.impl.set;
 
 public interface Test<S> {
-    boolean test(S e);
+	boolean test(S e);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

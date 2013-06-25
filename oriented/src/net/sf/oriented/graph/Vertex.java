@@ -5,23 +5,25 @@
 package net.sf.oriented.graph;
 
 public class Vertex {
-    final public String label;
+	final public String label;
 
-    public Vertex(String s) {
-	label = s;
-    }
+	public Vertex(String s) {
+		label = s;
+	}
 
-    @Override
-    public int hashCode() {
-	return label.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return label.hashCode();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-	if (o == null) return false;
-	if (!(o instanceof Vertex)) return false;
-	return ((Vertex) o).label.equals(label);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof Vertex))
+			return false;
+		return ((Vertex) o).label.equals(label);
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

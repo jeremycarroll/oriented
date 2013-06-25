@@ -13,30 +13,30 @@ package net.sf.oriented.omi;
  *            The things to create.
  */
 public interface Factory<T> {
-    /**
-     * Create a new T.
-     * 
-     * @param s
-     *            A Sring representing T.
-     * @return The new T
-     */
-    T parse(String s);
+	/**
+	 * Create a new T.
+	 * 
+	 * @param s
+	 *            A Sring representing T.
+	 * @return The new T
+	 */
+	T parse(String s);
 
-    /**
-     * Convert a T into a String
-     * 
-     * @param t
-     *            The item to convert.
-     * @return A String representing t.
-     */
-    String toString(T t);
+	/**
+	 * Convert a T into a String
+	 * 
+	 * @param t
+	 *            The item to convert.
+	 * @return A String representing t.
+	 */
+	String toString(T t);
 
-    /**
-     * A suggested Java Collection for gathering up some such items.
-     * 
-     * @return A Java Collection
-     */
-    JavaSet<? extends T> emptyCollectionOf();
+	/**
+	 * A suggested Java Collection for gathering up some such items.
+	 * 
+	 * @return A Java Collection
+	 */
+	JavaSet<? extends T> emptyCollectionOf();
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -16,162 +16,167 @@ import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 public class SignedSetImpl extends
-	HasFactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal>
-	implements SignedSetInternal {
+		HasFactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal>
+		implements SignedSetInternal {
 
-    @Override
-    public SignedSetFactory factory() {
-	return (SignedSetFactory) super.factory();
-    }
+	@Override
+	public SignedSetFactory factory() {
+		return (SignedSetFactory) super.factory();
+	}
 
-    final int plus;
-    final int minus;
+	final int plus;
+	final int minus;
 
-    public SignedSetImpl(UnsignedSetInternal p, UnsignedSetInternal m,
-	    SignedSetFactory f) {
-	super(f);
-	plus = remake(p).members;
-	minus = remake(m).members;
-	if ((plus & minus) != 0)
-	    throw new IllegalArgumentException(
-		    "plus and minus must be disjoint.");
-    }
+	public SignedSetImpl(UnsignedSetInternal p, UnsignedSetInternal m,
+			SignedSetFactory f) {
+		super(f);
+		plus = remake(p).members;
+		minus = remake(m).members;
+		if ((plus & minus) != 0)
+			throw new IllegalArgumentException(
+					"plus and minus must be disjoint.");
+	}
 
-    static int cnt = 0;
+	static int cnt = 0;
 
-    SignedSetImpl(int p, int m, SignedSetFactory f) {
-	super(f);
-	plus = p;
-	minus = m;
-    }
+	SignedSetImpl(int p, int m, SignedSetFactory f) {
+		super(f);
+		plus = p;
+		minus = m;
+	}
 
-    private UnsignedSetImpl remake(UnsignedSetInternal p) {
-	return (UnsignedSetImpl) unsignedSetFactory().remake(p);
-    }
+	private UnsignedSetImpl remake(UnsignedSetInternal p) {
+		return (UnsignedSetImpl) unsignedSetFactory().remake(p);
+	}
 
-    @Override
-    public SignedSetImpl opposite() {
-	return make(minus, plus);
-    }
+	@Override
+	public SignedSetImpl opposite() {
+		return make(minus, plus);
+	}
 
-    private SignedSetImpl make(int p, int m) {
-	return make(p, m, factory());
-    }
+	private SignedSetImpl make(int p, int m) {
+		return make(p, m, factory());
+	}
 
-    static SignedSetImpl make(int p, int m, SignedSetFactory f) {
-	return new SignedSetImpl(p, m, f);
-    }
+	static SignedSetImpl make(int p, int m, SignedSetFactory f) {
+		return new SignedSetImpl(p, m, f);
+	}
 
-    private static SignedSetImpl fromCache(long l, int p, int m,
-	    SignedSetFactory f) {
-	return new SignedSetImpl(p, m, f);
-    }
+	private static SignedSetImpl fromCache(long l, int p, int m,
+			SignedSetFactory f) {
+		return new SignedSetImpl(p, m, f);
+	}
 
-    static SignedSetImpl make(long key, SignedSetFactory f) {
-	return fromCache(key, SignedSetFactory.plus(key),
-		SignedSetFactory.minus(key), f);
-    }
+	static SignedSetImpl make(long key, SignedSetFactory f) {
+		return fromCache(key, SignedSetFactory.plus(key),
+				SignedSetFactory.minus(key), f);
+	}
 
-    @Override
-    public UnsignedSetInternal plus() {
-	return make(plus);
-    }
+	@Override
+	public UnsignedSetInternal plus() {
+		return make(plus);
+	}
 
-    private UnsignedSetImpl make(int v) {
-	return new UnsignedSetImpl(v, unsignedSetFactory());
-    }
+	private UnsignedSetImpl make(int v) {
+		return new UnsignedSetImpl(v, unsignedSetFactory());
+	}
 
-    private UnsignedSetFactory unsignedSetFactory() {
-	return factory().unsignedF;
-    }
+	private UnsignedSetFactory unsignedSetFactory() {
+		return factory().unsignedF;
+	}
 
-    @Override
-    public UnsignedSetInternal minus() {
-	return make(minus);
-    }
+	@Override
+	public UnsignedSetInternal minus() {
+		return make(minus);
+	}
 
-    @Override
-    public int hashCode() {
-	return labelFactory().hashCode(plus) + 35
-		* labelFactory().hashCode(minus);
-    }
+	@Override
+	public int hashCode() {
+		return labelFactory().hashCode(plus) + 35
+				* labelFactory().hashCode(minus);
+	}
 
-    private LabelFactory labelFactory() {
-	return unsignedSetFactory().itemFactory();
-    }
+	private LabelFactory labelFactory() {
+		return unsignedSetFactory().itemFactory();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-	if (o == null) return false;
-	if (this == o) return true;
-	if (!(o instanceof SignedSet)) return false;
-	SignedSet s = (SignedSet) o;
-	SignedSetImpl ss = remake(s);
-	return plus == ss.plus && minus == ss.minus;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof SignedSet))
+			return false;
+		SignedSet s = (SignedSet) o;
+		SignedSetImpl ss = remake(s);
+		return plus == ss.plus && minus == ss.minus;
+	}
 
-    @Override
-    public boolean equalsIgnoreSign(SignedSet s) {
-	SignedSetImpl ss = remake(s);
-	return (plus == ss.plus && minus == ss.minus)
-		|| (minus == ss.plus && plus == ss.minus);
-    }
+	@Override
+	public boolean equalsIgnoreSign(SignedSet s) {
+		SignedSetImpl ss = remake(s);
+		return (plus == ss.plus && minus == ss.minus)
+				|| (minus == ss.plus && plus == ss.minus);
+	}
 
-    @Override
-    public boolean equalsOpposite(SignedSet s) {
-	SignedSetImpl ss = remake(s);
-	return minus == ss.plus && plus == ss.minus;
-    }
+	@Override
+	public boolean equalsOpposite(SignedSet s) {
+		SignedSetImpl ss = remake(s);
+		return minus == ss.plus && plus == ss.minus;
+	}
 
-    @Override
-    public UnsignedSet separation(SignedSet b) {
-	SignedSetImpl bb = remake(b);
-	return make((plus & bb.minus) | (minus & bb.plus));
-    }
+	@Override
+	public UnsignedSet separation(SignedSet b) {
+		SignedSetImpl bb = remake(b);
+		return make((plus & bb.minus) | (minus & bb.plus));
+	}
 
-    private SignedSetImpl remake(SignedSet b) {
-	return (SignedSetImpl) factory.remake(b);
-    }
+	private SignedSetImpl remake(SignedSet b) {
+		return (SignedSetImpl) factory.remake(b);
+	}
 
-    @Override
-    public SignedSetImpl compose(SignedSet b) {
-	SignedSetImpl bb = remake(b);
-	return make(plus | (bb.plus & ~minus), minus | (bb.minus & ~plus));
-    }
+	@Override
+	public SignedSetImpl compose(SignedSet b) {
+		SignedSetImpl bb = remake(b);
+		return make(plus | (bb.plus & ~minus), minus | (bb.minus & ~plus));
+	}
 
-    @Override
-    public int size() {
-	return sizex(plus) + sizex(minus);
-    }
+	@Override
+	public int size() {
+		return sizex(plus) + sizex(minus);
+	}
 
-    @Override
-    public boolean conformsWith(SignedSet a) {
-	SignedSetImpl aa = remake(a);
-	return (plus & aa.minus) == 0 && (minus & aa.plus) == 0;
-    }
+	@Override
+	public boolean conformsWith(SignedSet a) {
+		SignedSetImpl aa = remake(a);
+		return (plus & aa.minus) == 0 && (minus & aa.plus) == 0;
+	}
 
-    @Override
-    public UnsignedSetInternal support() {
-	return make(plus | minus);
-    }
+	@Override
+	public UnsignedSetInternal support() {
+		return make(plus | minus);
+	}
 
-    @Override
-    public int sign(Label e) {
-	if (plus().contains(e)) return 1;
-	if (minus().contains(e)) return -1;
-	return 0;
-    }
+	@Override
+	public int sign(Label e) {
+		if (plus().contains(e))
+			return 1;
+		if (minus().contains(e))
+			return -1;
+		return 0;
+	}
 
-    @Override
-    public boolean isRestrictionOf(SignedSet x) {
-	return plus().isSubsetOf(x.plus()) && minus().isSubsetOf(x.minus());
-    }
+	@Override
+	public boolean isRestrictionOf(SignedSet x) {
+		return plus().isSubsetOf(x.plus()) && minus().isSubsetOf(x.minus());
+	}
 
-    @Override
-    public SignedSetImpl restriction(UnsignedSet x) {
-	return new SignedSetImpl(plus().intersection(x), minus()
-		.intersection(x), factory());
-    }
+	@Override
+	public SignedSetImpl restriction(UnsignedSet x) {
+		return new SignedSetImpl(plus().intersection(x), minus()
+				.intersection(x), factory());
+	}
 
 }
 /************************************************************************

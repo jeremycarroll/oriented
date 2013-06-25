@@ -20,85 +20,85 @@ import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 
 public abstract class MatroidFactory extends
-	AbsFactory<MatroidS, SetOfUnsignedSetInternal, SetOfUnsignedSetFactory>
-	implements MFactory {
+		AbsFactory<MatroidS, SetOfUnsignedSetInternal, SetOfUnsignedSetFactory>
+		implements MFactory {
 
-    private static final class CFactory extends MatroidFactory {
-	private CFactory(FactoryFactory f) {
-	    super(f);
+	private static final class CFactory extends MatroidFactory {
+		private CFactory(FactoryFactory f) {
+			super(f);
+		}
+
+		@Override
+		MatroidS construct(SetOfUnsignedSetInternal signedSets, MatroidAll all) {
+			return new MatroidCircuits(signedSets, all);
+		}
+
+		@Override
+		public String toString(MatroidS s) {
+			return formatString(s, s.getCircuits());
+		}
+	}
+
+	private static final class BFactory extends MatroidFactory {
+		private BFactory(FactoryFactory f) {
+			super(f);
+		}
+
+		@Override
+		public String toString(MatroidS s) {
+			return formatString(s, s.getBases());
+		}
+
+		@Override
+		MatroidS construct(SetOfUnsignedSetInternal signedSets, MatroidAll all) {
+			return new Bases(signedSets, all);
+		}
+	}
+
+	MatroidFactory(FactoryFactory f) {
+		super(f, (SetOfUnsignedSetFactory) f.setsOfUnsignedSet());
+	}
+
+	static public MatroidFactory circuits(FactoryFactory f) {
+		return new CFactory(f);
+	}
+
+	static public MatroidFactory bases(FactoryFactory f) {
+		return new BFactory(f);
 	}
 
 	@Override
-	MatroidS construct(SetOfUnsignedSetInternal signedSets, MatroidAll all) {
-	    return new MatroidCircuits(signedSets, all);
+	public MatroidS copyBackingCollection(Collection<? extends UnsignedSet> c) {
+		return construct(sets.copyBackingCollection(c));
 	}
 
 	@Override
-	public String toString(MatroidS s) {
-	    return formatString(s, s.getCircuits());
-	}
-    }
-
-    private static final class BFactory extends MatroidFactory {
-	private BFactory(FactoryFactory f) {
-	    super(f);
+	MatroidS construct(SetOfUnsignedSetInternal signedSets) {
+		Collection<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets
+				.union().asCollection());
+		return construct(ground, signedSets);
 	}
 
 	@Override
-	public String toString(MatroidS s) {
-	    return formatString(s, s.getBases());
+	MatroidS construct(Collection<? extends Label> ground,
+			SetOfUnsignedSetInternal signedSets) {
+		LabelImpl[] g = ground.toArray(new LabelImpl[0]);
+		MatroidAll all = new MatroidAll(g, null, factory);
+		return construct(signedSets, all);
+	}
+
+	abstract MatroidS construct(SetOfUnsignedSetInternal signedSets,
+			MatroidAll all);
+
+	@Override
+	public MatroidS fromSets(SetOfUnsignedSet sym) {
+		return construct(sets.remake(sym));
 	}
 
 	@Override
-	MatroidS construct(SetOfUnsignedSetInternal signedSets, MatroidAll all) {
-	    return new Bases(signedSets, all);
+	public List<Label> ground(MatroidS s) {
+		return Arrays.asList(s.ground());
 	}
-    }
-
-    MatroidFactory(FactoryFactory f) {
-	super(f, (SetOfUnsignedSetFactory) f.setsOfUnsignedSet());
-    }
-
-    static public MatroidFactory circuits(FactoryFactory f) {
-	return new CFactory(f);
-    }
-
-    static public MatroidFactory bases(FactoryFactory f) {
-	return new BFactory(f);
-    }
-
-    @Override
-    public MatroidS copyBackingCollection(Collection<? extends UnsignedSet> c) {
-	return construct(sets.copyBackingCollection(c));
-    }
-
-    @Override
-    MatroidS construct(SetOfUnsignedSetInternal signedSets) {
-	Collection<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets
-		.union().asCollection());
-	return construct(ground, signedSets);
-    }
-
-    @Override
-    MatroidS construct(Collection<? extends Label> ground,
-	    SetOfUnsignedSetInternal signedSets) {
-	LabelImpl[] g = ground.toArray(new LabelImpl[0]);
-	MatroidAll all = new MatroidAll(g, null, factory);
-	return construct(signedSets, all);
-    }
-
-    abstract MatroidS construct(SetOfUnsignedSetInternal signedSets,
-	    MatroidAll all);
-
-    @Override
-    public MatroidS fromSets(SetOfUnsignedSet sym) {
-	return construct(sets.remake(sym));
-    }
-
-    @Override
-    public List<Label> ground(MatroidS s) {
-	return Arrays.asList(s.ground());
-    }
 
 }
 /************************************************************************

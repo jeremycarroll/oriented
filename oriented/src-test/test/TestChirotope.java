@@ -12,27 +12,27 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestChirotope {
-    static FactoryFactory f;
-    static {
-	Options options = new Options();
-	options.setShortLabels();
-	f = new FactoryFactory(options);
-    }
-    static OMS chapter1;
+	static FactoryFactory f;
+	static {
+		Options options = new Options();
+		options.setShortLabels();
+		f = new FactoryFactory(options);
+	}
+	static OMS chapter1;
 
-    @BeforeClass
-    public static void setUpBeforeClass() {
-	chapter1 = f.circuits().parse(
-		"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
-    }
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		chapter1 = f.circuits().parse(
+				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+	}
 
-    @Test
-    public void testX() {
-	net.sf.oriented.omi.OMChirotope m = chapter1.getChirotope();
-	System.out.println("Chirotope: " + m.toString());
-	System.out
-		.println("CoChirotope: " + m.dual().getChirotope().toString());
-    }
+	@Test
+	public void testX() {
+		net.sf.oriented.omi.OMChirotope m = chapter1.getChirotope();
+		System.out.println("Chirotope: " + m.toString());
+		System.out
+				.println("CoChirotope: " + m.dual().getChirotope().toString());
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

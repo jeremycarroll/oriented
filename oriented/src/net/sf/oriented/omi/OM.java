@@ -6,54 +6,54 @@ package net.sf.oriented.omi;
 
 public interface OM extends Verify {
 
-    OMChirotope getChirotope();
+	OMChirotope getChirotope();
 
-    OMS getCircuits();
+	OMS getCircuits();
 
-    OMS getVectors();
+	OMS getVectors();
 
-    OMS getMaxVectors();
+	OMS getMaxVectors();
 
-    OMRealized getRealized();
+	OMRealized getRealized();
 
-    public OM dual();
+	public OM dual();
 
-    public Label[] ground();
+	public Label[] ground();
 
-    public Matroid getMatroid();
+	public Matroid getMatroid();
 
-    int rank();
+	int rank();
 
-    /**
-     * The hashCode of an Oriented Matroid is the hashCode of the circuit
-     * representation as a {@link SetOfSignedSet}s.
-     * 
-     * @return the hashCode
-     */
-    @Override
-    int hashCode();
+	/**
+	 * The hashCode of an Oriented Matroid is the hashCode of the circuit
+	 * representation as a {@link SetOfSignedSet}s.
+	 * 
+	 * @return the hashCode
+	 */
+	@Override
+	int hashCode();
 
-    /**
-     * An Oriented Matroid is equal to any other object implementing this
-     * interface, which represents the same underlying oriented matroid,
-     * including the {@link #ground} being equal.
-     * 
-     * @param om
-     * @return true if these both represent the same Oriented Matroid
-     */
-    @Override
-    boolean equals(Object om);
+	/**
+	 * An Oriented Matroid is equal to any other object implementing this
+	 * interface, which represents the same underlying oriented matroid,
+	 * including the {@link #ground} being equal.
+	 * 
+	 * @param om
+	 * @return true if these both represent the same Oriented Matroid
+	 */
+	@Override
+	boolean equals(Object om);
 
-    int asInt(Label l);
+	int asInt(Label l);
 
-    <T extends Label> int[] asInt(T[] l);
+	<T extends Label> int[] asInt(T[] l);
 
-    /**
-     * 
-     * @param u
-     * @return Sorted array of indexes.
-     */
-    int[] asInt(UnsignedSet u);
+	/**
+	 * 
+	 * @param u
+	 * @return Sorted array of indexes.
+	 */
+	int[] asInt(UnsignedSet u);
 
 }
 /************************************************************************

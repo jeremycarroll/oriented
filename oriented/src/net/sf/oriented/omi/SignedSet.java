@@ -6,31 +6,31 @@ package net.sf.oriented.omi;
 
 public interface SignedSet {
 
-    public abstract SignedSet opposite();
+	public abstract SignedSet opposite();
 
-    public abstract UnsignedSet plus();
+	public abstract UnsignedSet plus();
 
-    public abstract UnsignedSet minus();
+	public abstract UnsignedSet minus();
 
-    public abstract boolean equalsIgnoreSign(SignedSet s);
+	public abstract boolean equalsIgnoreSign(SignedSet s);
 
-    public abstract boolean equalsOpposite(SignedSet s);
+	public abstract boolean equalsOpposite(SignedSet s);
 
-    public abstract UnsignedSet separation(SignedSet b);
+	public abstract UnsignedSet separation(SignedSet b);
 
-    public abstract SignedSet compose(SignedSet b);
+	public abstract SignedSet compose(SignedSet b);
 
-    public abstract int size();
+	public abstract int size();
 
-    public abstract boolean conformsWith(SignedSet a);
+	public abstract boolean conformsWith(SignedSet a);
 
-    public abstract UnsignedSet support();
+	public abstract UnsignedSet support();
 
-    public abstract int sign(Label e);
+	public abstract int sign(Label e);
 
-    public abstract boolean isRestrictionOf(SignedSet x);
+	public abstract boolean isRestrictionOf(SignedSet x);
 
-    public abstract SignedSet restriction(UnsignedSet x);
+	public abstract SignedSet restriction(UnsignedSet x);
 
 }
 /************************************************************************

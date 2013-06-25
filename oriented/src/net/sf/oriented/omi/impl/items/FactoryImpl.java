@@ -12,59 +12,60 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
 
 public abstract class FactoryImpl<E extends HasFactory<E, EX, ER>, EX, ER extends EX>
-	extends IOHelper implements FactoryInternal<E, EX, ER> {
+		extends IOHelper implements FactoryInternal<E, EX, ER> {
 
-    final protected Constructor<ER> constructor;
+	final protected Constructor<ER> constructor;
 
-    @SuppressWarnings("unchecked")
-    protected FactoryImpl(Options o) {
-	options = o;
-	// System.err.println(++cnt+": building: "+getClass().getSimpleName());
-	constructor = (Constructor<ER>) o.constructorFor(getClass());
-    }
-
-    final private Options options;
-
-    @Override
-    final public ER parse(String s) {
-	ParseContext pc = new ParseContext(s.trim());
-	ER rslt = parse(pc);
-	if (pc.index != pc.string.length())
-	    throw new IllegalArgumentException("Syntax error");
-	return rslt;
-    }
-
-    @Override
-    public Options getOptions() {
-	return options;
-    }
-
-    static int cnt = 0;
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public E remake(EX t) {
-	if (t instanceof HasFactory) {
-	    if (((HasFactory<?, ?, ?>) t).factory() == this) return (E) t;
+	@SuppressWarnings("unchecked")
+	protected FactoryImpl(Options o) {
+		options = o;
+		// System.err.println(++cnt+": building: "+getClass().getSimpleName());
+		constructor = (Constructor<ER>) o.constructorFor(getClass());
 	}
-	// System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
-	return fallbackRemake(t);
-    }
 
-    @SuppressWarnings("unchecked")
-    protected E fallbackRemake(EX t) {
-	return (E) parse(toString(t));
-    }
+	final private Options options;
 
-    @Override
-    public JavaSet<ER> emptyCollectionOf() {
-	return options.javaSetFor(null);
-    }
+	@Override
+	final public ER parse(String s) {
+		ParseContext pc = new ParseContext(s.trim());
+		ER rslt = parse(pc);
+		if (pc.index != pc.string.length())
+			throw new IllegalArgumentException("Syntax error");
+		return rslt;
+	}
 
-    @Override
-    public String toString(List<? extends Label> u, EX t) {
-	return toString(t);
-    }
+	@Override
+	public Options getOptions() {
+		return options;
+	}
+
+	static int cnt = 0;
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public E remake(EX t) {
+		if (t instanceof HasFactory) {
+			if (((HasFactory<?, ?, ?>) t).factory() == this)
+				return (E) t;
+		}
+		// System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
+		return fallbackRemake(t);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected E fallbackRemake(EX t) {
+		return (E) parse(toString(t));
+	}
+
+	@Override
+	public JavaSet<ER> emptyCollectionOf() {
+		return options.javaSetFor(null);
+	}
+
+	@Override
+	public String toString(List<? extends Label> u, EX t) {
+		return toString(t);
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

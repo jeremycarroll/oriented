@@ -18,100 +18,104 @@ import net.sf.oriented.omi.impl.set.SignedSetInternal;
 
 public class Circuits extends AbsVectorsOM {
 
-    // private static final String CIRCUITS = null;
+	// private static final String CIRCUITS = null;
 
-    Circuits(SetOfSignedSetInternal c, OMInternal a) {
-	super(c, CIRCUITS, a);
-    }
-
-    Circuits(Vectors vectors) {
-	super(vectors.minimal(), CIRCUITS, vectors);
-    }
-
-    Circuits(ChirotopeImpl chi) {
-	super(chi.circuits(), CIRCUITS, chi);
-    }
-
-    @Override
-    public boolean verify() {
-	return super.verify() && verifyIncomparability()
-		&& verifyWeakElimination();
-
-    }
-
-    private boolean verifyWeakElimination() {
-	return new ForAllForAllExists<Label>() {
-	    UnsignedSet plus;
-	    UnsignedSet minus;
-
-	    @Override
-	    public boolean check(Label e, SignedSet x, SignedSet y, SignedSet z) {
-		return z.sign(e) == 0 && z.plus().isSubsetOf(plus)
-			&& z.minus().isSubsetOf(minus);
-	    }
-
-	    @Override
-	    public Iterator<? extends Label> check(SignedSet a, SignedSet b) {
-		if (a.equalsOpposite(b)) return null;
-		UnsignedSet result = a.plus().intersection(b.minus());
-		if (result.isEmpty()) return null;
-		plus = a.plus().union(b.plus());
-		minus = a.minus().union(b.minus());
-		return result.iterator();
-	    }
-
-	}.verify();
-    }
-
-    private boolean verifyIncomparability() {
-
-	return new ForAllForAll() {
-	    @Override
-	    public boolean check(SignedSet a, SignedSet b) {
-		return (!a.support().isSubsetOf(b.support()))
-			|| a.equalsIgnoreSign(b);
-	    }
-	}.verify();
-    }
-
-    SetOfSignedSetInternal allCompositions() {
-	JavaSet<SignedSetInternal> r = emptyCollectionOf();
-
-	r.add(factory().itemFactory().empty());
-
-	JavaSet<SignedSetInternal> x = emptyCollectionOf();
-	Iterator<SignedSetInternal> ic = iterator();
-	while (ic.hasNext()) {
-	    SignedSetInternal c = ic.next();
-	    Iterator<SignedSetInternal> iv = r.iterator();
-	    while (iv.hasNext()) {
-		SignedSetInternal v = iv.next();
-		if (c.conformsWith(v)) x.add(c.compose(v));
-	    }
-	    r.addAll(x);
-	    x.clear();
+	Circuits(SetOfSignedSetInternal c, OMInternal a) {
+		super(c, CIRCUITS, a);
 	}
 
-	return factory().fromBackingCollection(r);
-    }
+	Circuits(Vectors vectors) {
+		super(vectors.minimal(), CIRCUITS, vectors);
+	}
 
-    private JavaSet<SignedSetInternal> emptyCollectionOf() {
-	return vectors.factory().itemFactory().emptyCollectionOf();
-    }
+	Circuits(ChirotopeImpl chi) {
+		super(chi.circuits(), CIRCUITS, chi);
+	}
 
-    SetOfUnsignedSetInternal unsigned() {
-	return unsignedSets();
-    }
+	@Override
+	public boolean verify() {
+		return super.verify() && verifyIncomparability()
+				&& verifyWeakElimination();
 
-    @Override
-    public String toString() {
-	return ffactory().circuits().toString(this);
-    }
+	}
 
-    @Override
-    public int hashCode() {
-	return vectors.hashCode();
-    }
+	private boolean verifyWeakElimination() {
+		return new ForAllForAllExists<Label>() {
+			UnsignedSet plus;
+			UnsignedSet minus;
+
+			@Override
+			public boolean check(Label e, SignedSet x, SignedSet y, SignedSet z) {
+				return z.sign(e) == 0 && z.plus().isSubsetOf(plus)
+						&& z.minus().isSubsetOf(minus);
+			}
+
+			@Override
+			public Iterator<? extends Label> check(SignedSet a, SignedSet b) {
+				if (a.equalsOpposite(b))
+					return null;
+				UnsignedSet result = a.plus().intersection(b.minus());
+				if (result.isEmpty())
+					return null;
+				plus = a.plus().union(b.plus());
+				minus = a.minus().union(b.minus());
+				return result.iterator();
+			}
+
+		}.verify();
+	}
+
+	private boolean verifyIncomparability() {
+
+		return new ForAllForAll() {
+			@Override
+			public boolean check(SignedSet a, SignedSet b) {
+				return (!a.support().isSubsetOf(b.support()))
+						|| a.equalsIgnoreSign(b);
+			}
+		}.verify();
+	}
+
+	SetOfSignedSetInternal allCompositions() {
+		JavaSet<SignedSetInternal> r = emptyCollectionOf();
+
+		r.add(factory().itemFactory().empty());
+
+		JavaSet<SignedSetInternal> x = emptyCollectionOf();
+		Iterator<SignedSetInternal> ic = iterator();
+		while (ic.hasNext()) {
+			SignedSetInternal c = ic.next();
+			Iterator<SignedSetInternal> iv = r.iterator();
+			while (iv.hasNext()) {
+				SignedSetInternal v = iv.next();
+				if (c.conformsWith(v)) {
+					x.add(c.compose(v));
+				}
+			}
+			r.addAll(x);
+			x.clear();
+		}
+
+		return factory().fromBackingCollection(r);
+	}
+
+	private JavaSet<SignedSetInternal> emptyCollectionOf() {
+		return vectors.factory().itemFactory().emptyCollectionOf();
+	}
+
+	SetOfUnsignedSetInternal unsigned() {
+		return unsignedSets();
+	}
+
+	@Override
+	public String toString() {
+		return ffactory().circuits().toString(this);
+	}
+
+	@Override
+	public int hashCode() {
+		return vectors.hashCode();
+	}
 
 }
 /************************************************************************

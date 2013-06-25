@@ -7,9 +7,9 @@ package net.sf.oriented.omi;
 import java.util.Collection;
 
 public interface ChirotopeFactory extends Factory<OMChirotope> {
-    OMChirotope construct(Chirotope chi);
+	OMChirotope construct(Chirotope chi);
 
-    OMChirotope construct(Collection<? extends Label> e, Chirotope chi);
+	OMChirotope construct(Collection<? extends Label> e, Chirotope chi);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

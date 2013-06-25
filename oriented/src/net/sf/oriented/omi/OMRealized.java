@@ -9,9 +9,9 @@ import net.sf.oriented.matrix.RationalMatrix;
 
 public interface OMRealized extends OM {
 
-    RationalMatrix getMatrix();
+	RationalMatrix getMatrix();
 
-    RationalMatrix getDualBasis();
+	RationalMatrix getDualBasis();
 
 }
 

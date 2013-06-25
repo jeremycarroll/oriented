@@ -10,7 +10,7 @@ import net.sf.oriented.omi.JavaSet;
 
 public class JavaHashSet<T> extends HashSet<T> implements JavaSet<T> {
 
-    private static final long serialVersionUID = 6821673043776169477L;
+	private static final long serialVersionUID = 6821673043776169477L;
 
 }
 /************************************************************************

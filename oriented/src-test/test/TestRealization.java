@@ -5,38 +5,38 @@
 
 package test;
 
-import org.junit.Test;
-
 import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.Options;
 
+import org.junit.Test;
+
 public class TestRealization {
-    static FactoryFactory f;
-    static {
-	Options options = new Options();
-	options.setShortLabels();
-	f = new FactoryFactory(options);
-    }
+	static FactoryFactory f;
+	static {
+		Options options = new Options();
+		options.setShortLabels();
+		f = new FactoryFactory(options);
+	}
 
-    static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
-	    { 0, 0, 1, 0, 1, 1 } };
+	static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
+			{ 0, 0, 1, 0, 1, 1 } };
 
-    static OM testDatum() {
-	RationalMatrix matrix = new RationalMatrix(chap1);
-	return f.realized().construct(matrix);
-    }
+	static OM testDatum() {
+		RationalMatrix matrix = new RationalMatrix(chap1);
+		return f.realized().construct(matrix);
+	}
 
-    @Test
-    public void testToString() {
-	System.err.println(testDatum().toString());
-    }
+	@Test
+	public void testToString() {
+		System.err.println(testDatum().toString());
+	}
 
-    @Test
-    public void testToChirotope() {
-	System.err.println(testDatum().getChirotope().toString());
-    }
+	@Test
+	public void testToChirotope() {
+		System.err.println(testDatum().getChirotope().toString());
+	}
 
 }
 

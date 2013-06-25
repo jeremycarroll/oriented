@@ -8,9 +8,9 @@ package net.sf.oriented.matrix;
 @SuppressWarnings("serial")
 public class LUDimensionException extends IllegalArgumentException {
 
-    public LUDimensionException(String string) {
-	super(string);
-    }
+	public LUDimensionException(String string) {
+		super(string);
+	}
 
 }
 

@@ -9,13 +9,13 @@ import java.util.Collection;
 public class DGraph // extends SetImpl<Edge,DGraph> {
 {
 
-    public DGraph(Collection<Edge> a) {
-	// / super(a,true);
-    }
+	public DGraph(Collection<Edge> a) {
+		// / super(a,true);
+	}
 
-    public DGraph useCollection(Collection<Edge> r) {
-	return new DGraph(r);
-    }
+	public DGraph useCollection(Collection<Edge> r) {
+		return new DGraph(r);
+	}
 
 }
 /************************************************************************

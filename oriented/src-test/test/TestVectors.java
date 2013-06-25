@@ -15,35 +15,35 @@ import org.junit.Test;
 
 public class TestVectors {
 
-    static FactoryFactory f;
-    static {
-	Options options = new Options();
-	options.setShortLabels();
-	f = new FactoryFactory(options);
-    }
-    static OMS chapter1;
-    static OMS vectors;
+	static FactoryFactory f;
+	static {
+		Options options = new Options();
+		options.setShortLabels();
+		f = new FactoryFactory(options);
+	}
+	static OMS chapter1;
+	static OMS vectors;
 
-    // static UnsignedSet e;
-    @BeforeClass
-    public static void setUpBeforeClass() {
-	chapter1 = f.circuits().parse(
-		"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
-	// e = new UnsignedSet(Arrays.asList(new
-	// String[]{"1","2","3","4","5","6"}),true);
-	vectors = chapter1.getVectors();
-    }
+	// static UnsignedSet e;
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		chapter1 = f.circuits().parse(
+				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+		// e = new UnsignedSet(Arrays.asList(new
+		// String[]{"1","2","3","4","5","6"}),true);
+		vectors = chapter1.getVectors();
+	}
 
-    @Test
-    public void testVerify() {
-	assertTrue("chapter1", vectors.verify());
-    }
+	@Test
+	public void testVerify() {
+		assertTrue("chapter1", vectors.verify());
+	}
 
-    @Test
-    public void testToStringSetOfOfString() {
-	System.out.println("Vectors: " + vectors.toString());
-	assertEquals("chapter1", vectors, f.vectors().parse(vectors.toString()));
-    }
+	@Test
+	public void testToStringSetOfOfString() {
+		System.out.println("Vectors: " + vectors.toString());
+		assertEquals("chapter1", vectors, f.vectors().parse(vectors.toString()));
+	}
 
 }
 /************************************************************************

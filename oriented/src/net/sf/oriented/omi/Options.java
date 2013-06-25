@@ -18,150 +18,148 @@ import net.sf.oriented.omi.impl.items.LabelFactory;
  * 
  */
 public class Options {
-    LabelFactory label;
-    private boolean plusMinus;
-    private boolean singleChar;
+	LabelFactory label;
+	private boolean plusMinus;
+	private boolean singleChar;
 
-    private String implementation = Options.class.getPackage().getName()
-	    + ".impl.set.bits32.";
-    private Class<JavaSet<?>> javaSet;
+	private final String implementation = Options.class.getPackage().getName()
+			+ ".impl.set.bits32.";
+	private Class<JavaSet<?>> javaSet;
 
-    // TODO: how to hide this.
-    @SuppressWarnings("unchecked")
-    public <T> JavaSet<T> javaSetFor(Class<T> cl) {
-	try {
-	    if (javaSet == null) {
-		javaSet = (Class<JavaSet<?>>) Class.forName(implementation
-			+ "JavaHashSet");
-	    }
-	    return (JavaSet<T>) javaSet.newInstance();
+	// TODO: how to hide this.
+	@SuppressWarnings("unchecked")
+	public <T> JavaSet<T> javaSetFor(Class<T> cl) {
+		try {
+			if (javaSet == null) {
+				javaSet = (Class<JavaSet<?>>) Class.forName(implementation
+						+ "JavaHashSet");
+			}
+			return (JavaSet<T>) javaSet.newInstance();
+		} catch (InstantiationException e) {
+			throw new RuntimeException("internal problem", e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("internal problem", e);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("internal problem", e);
+		}
 	}
-	catch (InstantiationException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	@SuppressWarnings("unchecked")
+	public <T> Constructor<?> constructorFor(Class<T> fc) {
+		String name = fc.getSimpleName();
+		if (!name.endsWith("Factory"))
+			throw new IllegalArgumentException("Naming conventions violated");
+		name = name.substring(0, name.length() - "Factory".length());
+		try {
+			Class<T> impl = (Class<T>) Class.forName(implementation + name
+					+ "Impl");
+			Constructor<?> c[] = impl.getConstructors();
+			if (c.length != 1)
+				throw new RuntimeException(
+						"internal problem: more than one constructor found for "
+								+ name + "Impl");
+			return c[0];
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
 	}
-	catch (IllegalAccessException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	// /**
+	// * Provide all the {@link Label}s to be used.
+	// * This allows representations as sequences of {-1, 0, 1},
+	// * for instance.
+	// * @param a The universe of {@link Label}s.
+	// */
+	// public void setUniverse(Label a[]) {
+	// universe = Arrays.asList(a);
+	// }
+	/**
+	 * Provide all the {@link Label}s to be used, as Strings. This allows
+	 * representations as sequences of {-1, 0, 1}, for instance.
+	 * 
+	 * @param a
+	 *            Converted to {@link Label}
+	 */
+	public void setUniverse(String a[]) {
+		getLabelFactory().get(Arrays.asList(a));
 	}
-	catch (ClassNotFoundException e) {
-	    throw new RuntimeException("internal problem", e);
+
+	/**
+	 * Use 0 + - as the representation.
+	 * 
+	 * @param usePM
+	 *            If true uses the +/- form.
+	 * @return old value.
+	 */
+	public boolean setPlusMinus(boolean usePM) {
+		boolean old = plusMinus;
+		plusMinus = usePM;
+		return old;
 	}
-    }
 
-    @SuppressWarnings("unchecked")
-    public <T> Constructor<?> constructorFor(Class<T> fc) {
-	String name = fc.getSimpleName();
-	if (!name.endsWith("Factory"))
-	    throw new IllegalArgumentException("Naming conventions violated");
-	name = name.substring(0, name.length() - "Factory".length());
-	try {
-	    Class<T> impl = (Class<T>) Class.forName(implementation + name
-		    + "Impl");
-	    Constructor<?> c[] = impl.getConstructors();
-	    if (c.length != 1)
-		throw new RuntimeException(
-			"internal problem: more than one constructor found for "
-				+ name + "Impl");
-	    return c[0];
+	public boolean getPlusMinus() {
+		return plusMinus;
 	}
-	catch (ClassNotFoundException e) {
-	    return null;
+
+	/**
+	 * All the {@link Label}'s used consist of a single character (unicode code
+	 * point). Use short forms for everything.
+	 * 
+	 */
+	public void setShortLabels() {
+		singleChar = true;
 	}
-    }
 
-    // /**
-    // * Provide all the {@link Label}s to be used.
-    // * This allows representations as sequences of {-1, 0, 1},
-    // * for instance.
-    // * @param a The universe of {@link Label}s.
-    // */
-    // public void setUniverse(Label a[]) {
-    // universe = Arrays.asList(a);
-    // }
-    /**
-     * Provide all the {@link Label}s to be used, as Strings. This allows
-     * representations as sequences of {-1, 0, 1}, for instance.
-     * 
-     * @param a
-     *            Converted to {@link Label}
-     */
-    public void setUniverse(String a[]) {
-	getLabelFactory().get(Arrays.asList(a));
-    }
+	/**
+	 * Some of the {@link Label}'s used consist of more than one character. Use
+	 * longer forms for everything.
+	 * 
+	 */
+	public void setLongLabels() {
+		singleChar = false;
+	}
 
-    /**
-     * Use 0 + - as the representation.
-     * 
-     * @param usePM
-     *            If true uses the +/- form.
-     * @return old value.
-     */
-    public boolean setPlusMinus(boolean usePM) {
-	boolean old = plusMinus;
-	plusMinus = usePM;
-	return old;
-    }
+	/**
+	 * The only {@link Label}'s used are those passed in a call to
+	 * {@link #setUniverse(Label[])}. Any other {@link Label} will cause an
+	 * IllegalArgumentException.
+	 * 
+	 */
+	public void setClosedUniverse() {
 
-    public boolean getPlusMinus() {
-	return plusMinus;
-    }
+	}
 
-    /**
-     * All the {@link Label}'s used consist of a single character (unicode code
-     * point). Use short forms for everything.
-     * 
-     */
-    public void setShortLabels() {
-	singleChar = true;
-    }
+	public boolean getSingleChar() {
+		return singleChar;
+	}
 
-    /**
-     * Some of the {@link Label}'s used consist of more than one character. Use
-     * longer forms for everything.
-     * 
-     */
-    public void setLongLabels() {
-	singleChar = false;
-    }
+	LabelFactory getLabelFactory() {
+		if (label == null) {
+			label = new LabelFactory(this);
+		}
+		return label;
+	}
 
-    /**
-     * The only {@link Label}'s used are those passed in a call to
-     * {@link #setUniverse(Label[])}. Any other {@link Label} will cause an
-     * IllegalArgumentException.
-     * 
-     */
-    public void setClosedUniverse() {
+	public List<Label> getUniverse() {
+		return getUniverseInternal();
+	}
 
-    }
+	private List<Label> getUniverseInternal() {
+		return label.getUniverse();
+	}
 
-    public boolean getSingleChar() {
-	return singleChar;
-    }
+	// public void extendUniverse(Collection<? extends Label> uu) {
+	// Iterator<? extends Label> it = uu.iterator();
+	// while (it.hasNext()){
+	// Label l = it.next();
+	// if (!universe.contains(l))
+	// universe.add(l);
+	// }
+	// }
 
-    LabelFactory getLabelFactory() {
-	if (label == null) label = new LabelFactory(this);
-	return label;
-    }
-
-    public List<Label> getUniverse() {
-	return getUniverseInternal();
-    }
-
-    private List<Label> getUniverseInternal() {
-	return label.getUniverse();
-    }
-
-    // public void extendUniverse(Collection<? extends Label> uu) {
-    // Iterator<? extends Label> it = uu.iterator();
-    // while (it.hasNext()){
-    // Label l = it.next();
-    // if (!universe.contains(l))
-    // universe.add(l);
-    // }
-    // }
-
-    public Label getLabel(int i) {
-	return getUniverseInternal().get(i);
-    }
+	public Label getLabel(int i) {
+		return getUniverseInternal().get(i);
+	}
 
 }
 /************************************************************************

@@ -24,17 +24,17 @@ import net.sf.oriented.omi.Options;
  * @param <F>
  */
 public interface FactoryInternal<E extends HasFactory<E, EX, ER>, EX, ER extends EX>
-	extends Factory<EX> {
-    ER parse(ParseContext pc);
+		extends Factory<EX> {
+	ER parse(ParseContext pc);
 
-    Options getOptions();
+	Options getOptions();
 
-    E remake(EX t);
+	E remake(EX t);
 
-    @Override
-    JavaSet<ER> emptyCollectionOf();
+	@Override
+	JavaSet<ER> emptyCollectionOf();
 
-    String toString(List<? extends Label> u, EX t);
+	String toString(List<? extends Label> u, EX t);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

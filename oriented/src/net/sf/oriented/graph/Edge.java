@@ -6,27 +6,29 @@ package net.sf.oriented.graph;
 
 public class Edge {
 
-    final public String label;
-    final public Vertex from, to;
+	final public String label;
+	final public Vertex from, to;
 
-    public Edge(String s, Vertex f, Vertex t) {
-	label = s;
-	from = f;
-	to = t;
-    }
+	public Edge(String s, Vertex f, Vertex t) {
+		label = s;
+		from = f;
+		to = t;
+	}
 
-    @Override
-    public int hashCode() {
-	return label.hashCode() + 5 * from.hashCode() + 73 * to.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return label.hashCode() + 5 * from.hashCode() + 73 * to.hashCode();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-	if (o == null) return false;
-	if (!(o instanceof Edge)) return false;
-	Edge e = (Edge) o;
-	return e.label.equals(label) && e.from.equals(from) && e.to.equals(to);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof Edge))
+			return false;
+		Edge e = (Edge) o;
+		return e.label.equals(label) && e.from.equals(from) && e.to.equals(to);
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

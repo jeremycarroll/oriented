@@ -10,9 +10,9 @@ import java.util.Collection;
 import net.sf.oriented.matrix.RationalMatrix;
 
 public interface RealizedFactory extends Factory<OMRealized> {
-    OMRealized construct(RationalMatrix mat);
+	OMRealized construct(RationalMatrix mat);
 
-    OMRealized construct(Collection<? extends Label> e, RationalMatrix mat);
+	OMRealized construct(Collection<? extends Label> e, RationalMatrix mat);
 }
 
 /************************************************************************

@@ -28,183 +28,184 @@ import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
  * 
  */
 final public class FactoryFactory {
-    private LabelFactory label;
-    private SetOfSignedSetFactory setsOfSignedSet;
-    private SetOfSignedSetFactory symmetricSetsOfSignedSet;
-    private SetOfUnsignedSetFactory setsOfUnsignedSet;
-    private UnsignedSetFactory unsignedSets;
-    private SignedSetFactory signedSets;
-    private OMSFactory circuits, vectors, maxVectors;
-    private ChirotopeFactory chirotope;
-    private Factory<MatroidS> bases;
-    private Factory<MatroidS> unsignedCircuits;
-    private RealizedFactory realized;
+	private final LabelFactory label;
+	private SetOfSignedSetFactory setsOfSignedSet;
+	private SetOfSignedSetFactory symmetricSetsOfSignedSet;
+	private SetOfUnsignedSetFactory setsOfUnsignedSet;
+	private UnsignedSetFactory unsignedSets;
+	private SignedSetFactory signedSets;
+	private OMSFactory circuits, vectors, maxVectors;
+	private ChirotopeFactory chirotope;
+	private Factory<MatroidS> bases;
+	private Factory<MatroidS> unsignedCircuits;
+	private RealizedFactory realized;
 
-    private final Options options;
+	private final Options options;
 
-    private void init() {
-	if (setsOfUnsignedSet != null) return;
+	private void init() {
+		if (setsOfUnsignedSet != null)
+			return;
 
-	unsignedSets = new UnsignedSetFactory(label);
-	setsOfSignedSet = new SetOfSignedSetFactory(unsignedSets, false);
-	symmetricSetsOfSignedSet = new SetOfSignedSetFactory(setsOfSignedSet,
-		true);
-	setsOfUnsignedSet = symmetricSetsOfSignedSet.setOfUnsignedSetFactory();
+		unsignedSets = new UnsignedSetFactory(label);
+		setsOfSignedSet = new SetOfSignedSetFactory(unsignedSets, false);
+		symmetricSetsOfSignedSet = new SetOfSignedSetFactory(setsOfSignedSet,
+				true);
+		setsOfUnsignedSet = symmetricSetsOfSignedSet.setOfUnsignedSetFactory();
 
-	signedSets = symmetricSetsOfSignedSet.itemFactory();
+		signedSets = symmetricSetsOfSignedSet.itemFactory();
 
-	circuits = OMFactory.circuits(this);
-	vectors = OMFactory.vectors(this);
-	maxVectors = OMFactory.maxVectors(this);
-	chirotope = new OMChirotopeFactory(this);
+		circuits = OMFactory.circuits(this);
+		vectors = OMFactory.vectors(this);
+		maxVectors = OMFactory.maxVectors(this);
+		chirotope = new OMChirotopeFactory(this);
 
-	bases = MatroidFactory.bases(this);
-	unsignedCircuits = MatroidFactory.circuits(this);
-	realized = new OMRealizedFactory(this);
-    }
+		bases = MatroidFactory.bases(this);
+		unsignedCircuits = MatroidFactory.circuits(this);
+		realized = new OMRealizedFactory(this);
+	}
 
-    /**
-     * A new {@link FactoryFactory} with default options.
-     * 
-     */
-    public FactoryFactory() {
-	this(new Options());
-    }
+	/**
+	 * A new {@link FactoryFactory} with default options.
+	 * 
+	 */
+	public FactoryFactory() {
+		this(new Options());
+	}
 
-    /**
-     * A new {@link FactoryFactory} with given {@link Options}. These control
-     * the String representations used.
-     * 
-     */
-    public FactoryFactory(Options opt) {
-	label = opt.getLabelFactory();
-	init();
-	options = opt;
-    }
+	/**
+	 * A new {@link FactoryFactory} with given {@link Options}. These control
+	 * the String representations used.
+	 * 
+	 */
+	public FactoryFactory(Options opt) {
+		label = opt.getLabelFactory();
+		init();
+		options = opt;
+	}
 
-    /**
-     * A factory for labels.
-     * 
-     * @return A factory for labels.
-     */
-    public Factory<Label> labels() {
-	return label;
-    }
+	/**
+	 * A factory for labels.
+	 * 
+	 * @return A factory for labels.
+	 */
+	public Factory<Label> labels() {
+		return label;
+	}
 
-    /**
-     * A factory for matroids from bases.
-     * 
-     * @return A factory for matroids.
-     */
-    public Factory<MatroidS> bases() {
-	return bases;
-    }
+	/**
+	 * A factory for matroids from bases.
+	 * 
+	 * @return A factory for matroids.
+	 */
+	public Factory<MatroidS> bases() {
+		return bases;
+	}
 
-    /**
-     * A factory for matroids from circuits.
-     * 
-     * @return A factory for matroids.
-     */
-    public Factory<MatroidS> unsignedCircuits() {
-	return unsignedCircuits;
-    }
+	/**
+	 * A factory for matroids from circuits.
+	 * 
+	 * @return A factory for matroids.
+	 */
+	public Factory<MatroidS> unsignedCircuits() {
+		return unsignedCircuits;
+	}
 
-    /**
-     * A factory for oriented matroids which uses the circuit representation.
-     * 
-     * @return A factory for oriented matroids using circuits.
-     */
-    public OMSFactory circuits() {
-	return circuits;
-    }
+	/**
+	 * A factory for oriented matroids which uses the circuit representation.
+	 * 
+	 * @return A factory for oriented matroids using circuits.
+	 */
+	public OMSFactory circuits() {
+		return circuits;
+	}
 
-    /**
-     * A factory for oriented matroids which uses the chirotope representation.
-     * 
-     * @return A factory for oriented matroids using chirotopes.
-     */
-    public ChirotopeFactory chirotope() {
-	return chirotope;
-    }
+	/**
+	 * A factory for oriented matroids which uses the chirotope representation.
+	 * 
+	 * @return A factory for oriented matroids using chirotopes.
+	 */
+	public ChirotopeFactory chirotope() {
+		return chirotope;
+	}
 
-    /**
-     * A factory for oriented matroids which uses the vector representation.
-     * 
-     * @return A factory for oriented matroids using vectors.
-     */
-    public OMSFactory vectors() {
-	return vectors;
-    }
+	/**
+	 * A factory for oriented matroids which uses the vector representation.
+	 * 
+	 * @return A factory for oriented matroids using vectors.
+	 */
+	public OMSFactory vectors() {
+		return vectors;
+	}
 
-    /**
-     * A factory for oriented matroids which uses the maximum vector (co-tope)
-     * representation.
-     * 
-     * @return A factory for oriented matroids using maximum vectors.
-     */
-    public OMSFactory maxVectors() {
-	return maxVectors;
-    }
+	/**
+	 * A factory for oriented matroids which uses the maximum vector (co-tope)
+	 * representation.
+	 * 
+	 * @return A factory for oriented matroids using maximum vectors.
+	 */
+	public OMSFactory maxVectors() {
+		return maxVectors;
+	}
 
-    /**
-     * A factory for oriented matroids which uses a realization of the OM as the
-     * representation.
-     * 
-     * @return
-     */
-    public RealizedFactory realized() {
-	return realized;
-    }
+	/**
+	 * A factory for oriented matroids which uses a realization of the OM as the
+	 * representation.
+	 * 
+	 * @return
+	 */
+	public RealizedFactory realized() {
+		return realized;
+	}
 
-    /**
-     * A factory for signed sets.
-     * 
-     * @return A factory for signed sets.
-     */
-    public Factory<SignedSet> signedSets() {
-	return signedSets;
-    }
+	/**
+	 * A factory for signed sets.
+	 * 
+	 * @return A factory for signed sets.
+	 */
+	public Factory<SignedSet> signedSets() {
+		return signedSets;
+	}
 
-    /**
-     * A factory for unsigned sets.
-     * 
-     * @return A factory for unsigned sets.
-     */
-    public SetFactory<Label, UnsignedSet> unsignedSets() {
-	return unsignedSets;
-    }
+	/**
+	 * A factory for unsigned sets.
+	 * 
+	 * @return A factory for unsigned sets.
+	 */
+	public SetFactory<Label, UnsignedSet> unsignedSets() {
+		return unsignedSets;
+	}
 
-    /**
-     * A factory for sets of unsigned sets.
-     * 
-     * @return A factory for sets of unsigned sets.
-     */
-    public SetFactory<UnsignedSet, SetOfUnsignedSet> setsOfUnsignedSet() {
-	return setsOfUnsignedSet;
-    }
+	/**
+	 * A factory for sets of unsigned sets.
+	 * 
+	 * @return A factory for sets of unsigned sets.
+	 */
+	public SetFactory<UnsignedSet, SetOfUnsignedSet> setsOfUnsignedSet() {
+		return setsOfUnsignedSet;
+	}
 
-    /**
-     * A factory for sets of signed sets.
-     * 
-     * @return A factory for sets of signed sets.
-     */
-    public SetFactory<SignedSet, SetOfSignedSet> setsOfSignedSet() {
-	return setsOfSignedSet;
-    }
+	/**
+	 * A factory for sets of signed sets.
+	 * 
+	 * @return A factory for sets of signed sets.
+	 */
+	public SetFactory<SignedSet, SetOfSignedSet> setsOfSignedSet() {
+		return setsOfSignedSet;
+	}
 
-    /**
-     * A factory for symmetric sets of signed sets. The String representation
-     * may omit opposites.
-     * 
-     * @return A factory for symmetric sets of signed sets.
-     */
-    public SetFactory<SignedSet, SetOfSignedSet> symmetricSetsOfSignedSet() {
-	return symmetricSetsOfSignedSet;
-    }
+	/**
+	 * A factory for symmetric sets of signed sets. The String representation
+	 * may omit opposites.
+	 * 
+	 * @return A factory for symmetric sets of signed sets.
+	 */
+	public SetFactory<SignedSet, SetOfSignedSet> symmetricSetsOfSignedSet() {
+		return symmetricSetsOfSignedSet;
+	}
 
-    public Options options() {
-	return options;
-    }
+	public Options options() {
+		return options;
+	}
 
 }
 /************************************************************************

@@ -12,12 +12,12 @@ package net.sf.oriented.omi;
  * 
  */
 public interface Label {
-    /**
-     * The corresponding String.
-     * 
-     * @return The corresponding String.
-     */
-    public abstract String label();
+	/**
+	 * The corresponding String.
+	 * 
+	 * @return The corresponding String.
+	 */
+	public abstract String label();
 
 }
 /************************************************************************

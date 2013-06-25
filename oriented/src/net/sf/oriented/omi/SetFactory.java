@@ -17,32 +17,32 @@ import java.util.Collection;
  *            The items in such sets.
  */
 public interface SetFactory<E, S> extends Factory<S> {
-    /*
-     * Create a new set using a Java collection as the backing collection. The
-     * collection must not be modified after this call.
-     * 
-     * @param c A collection that will be dedicated to backing this set.
-     * 
-     * @return
-     */
-    // S fromBackingCollection(Collection<? extends E> c);
-    /**
-     * Create a new set by copying a Java collection as the backing collection.
-     * The collection may be modified after this call, but such modifications
-     * will have no effect on the set.
-     * 
-     * @param c
-     *            The members of the set.
-     * @return
-     */
-    S copyBackingCollection(Collection<? extends E> c);
+	/*
+	 * Create a new set using a Java collection as the backing collection. The
+	 * collection must not be modified after this call.
+	 * 
+	 * @param c A collection that will be dedicated to backing this set.
+	 * 
+	 * @return
+	 */
+	// S fromBackingCollection(Collection<? extends E> c);
+	/**
+	 * Create a new set by copying a Java collection as the backing collection.
+	 * The collection may be modified after this call, but such modifications
+	 * will have no effect on the set.
+	 * 
+	 * @param c
+	 *            The members of the set.
+	 * @return
+	 */
+	S copyBackingCollection(Collection<? extends E> c);
 
-    /**
-     * The empty set.
-     * 
-     * @return The empty set.
-     */
-    S empty();
+	/**
+	 * The empty set.
+	 * 
+	 * @return The empty set.
+	 */
+	S empty();
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

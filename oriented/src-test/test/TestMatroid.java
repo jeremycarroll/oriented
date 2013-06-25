@@ -14,29 +14,29 @@ import org.junit.Test;
 
 public class TestMatroid {
 
-    static FactoryFactory f;
-    static {
-	Options options = new Options();
-	options.setShortLabels();
-	f = new FactoryFactory(options);
-    }
-    static OMS chapter1;
+	static FactoryFactory f;
+	static {
+		Options options = new Options();
+		options.setShortLabels();
+		f = new FactoryFactory(options);
+	}
+	static OMS chapter1;
 
-    @BeforeClass
-    public static void setUpBeforeClass() {
-	chapter1 = f.circuits().parse(
-		"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
-    }
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		chapter1 = f.circuits().parse(
+				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+	}
 
-    @Test
-    public void testM() {
-	System.out.println("Circuits: " + chapter1.getCircuits().toString());
-	Matroid m = chapter1.getMatroid();
-	System.out.println("CoCircuits: " + m.dual().getCircuits().toString());
+	@Test
+	public void testM() {
+		System.out.println("Circuits: " + chapter1.getCircuits().toString());
+		Matroid m = chapter1.getMatroid();
+		System.out.println("CoCircuits: " + m.dual().getCircuits().toString());
 
-	System.out.println("Bases: " + m.getBases().toString());
-	System.out.println("CoBases: " + m.dual().getBases().toString());
-    }
+		System.out.println("Bases: " + m.getBases().toString());
+		System.out.println("CoBases: " + m.dual().getBases().toString());
+	}
 
 }
 /************************************************************************

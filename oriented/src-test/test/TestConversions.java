@@ -28,6 +28,7 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.impl.om.Cryptomorphisms;
 import net.sf.oriented.omi.impl.om.OMAll;
 import net.sf.oriented.omi.impl.om.OMInternal;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -70,7 +71,7 @@ public class TestConversions {
 		for (int source = 0; source < 2; source++) {
 			int ff = 0;
 			for (FactoryFactory f : factories) {
-				for (Cryptomorphisms from : Cryptomorphisms.values())
+				for (Cryptomorphisms from : Cryptomorphisms.values()) {
 					for (Cryptomorphisms to : Cryptomorphisms.values()) {
 						if ((Cryptomorphisms.REALIZED.equals(to) || Cryptomorphisms.DUALREALIZED
 								.equals(to))
@@ -81,18 +82,22 @@ public class TestConversions {
 						r.add(new Object[] { name(source, ff, from, to),
 								source, f, from, to, n++ });
 					}
+				}
 				ff++;
 			}
 		}
 		return r;
 	}
 
-	public static String name(int source, int ff, Cryptomorphisms from, Cryptomorphisms to) {
-		return "{" + sName(source) + "," + fName(ff) + "," + from + "," + to + "}";
+	public static String name(int source, int ff, Cryptomorphisms from,
+			Cryptomorphisms to) {
+		return "{" + sName(source) + "," + fName(ff) + "," + from + "," + to
+				+ "}";
 	}
 
 	@TestName
-	public static String name(String name, int s, FactoryFactory f, Cryptomorphisms from, Cryptomorphisms to, int n) {
+	public static String name(String name, int s, FactoryFactory f,
+			Cryptomorphisms from, Cryptomorphisms to, int n) {
 		return name;
 	}
 
@@ -115,10 +120,10 @@ public class TestConversions {
 		return names[s];
 	}
 
-	private int source;
-	private FactoryFactory factory;
-	private Cryptomorphisms from;
-	private Cryptomorphisms to;
+	private final int source;
+	private final FactoryFactory factory;
+	private final Cryptomorphisms from;
+	private final Cryptomorphisms to;
 
 	static public int TEST_NUMBER;
 
@@ -151,10 +156,11 @@ public class TestConversions {
 	}
 
 	private void checkEquals(Cryptomorphisms f, OM x, OM y) {
-		if (f.ordinal() < Cryptomorphisms.values().length / 2)
+		if (f.ordinal() < Cryptomorphisms.values().length / 2) {
 			assertEquals(x, y);
-		else
+		} else {
 			assertEquals(x.dual(), y);
+		}
 	}
 
 	private OM inOut(OMInternal first) {
@@ -162,9 +168,8 @@ public class TestConversions {
 		case CHIROTOPE:
 		case DUALCHIROTOPE:
 			ChirotopeFactory chi = factory.chirotope();
-			if (factory == special) {
+			if (factory == special)
 				return chi.construct((Chirotope) first);
-			}
 			return chi.parse(chi.toString((OMChirotope) first));
 		case REALIZED:
 		case DUALREALIZED:
@@ -173,9 +178,8 @@ public class TestConversions {
 
 		default:
 			OMSFactory f = omsFactory();
-			if (factory == special) {
+			if (factory == special)
 				return f.fromSignedSets(first.ground(), (SetOfSignedSet) first);
-			}
 			return f.parse(f.toString((OMS) first));
 		}
 	}

@@ -9,48 +9,48 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
 public interface SetOfSignedSetInternal
-	extends
-	SetOfInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal>,
-	SetOfSignedSet {
+		extends
+		SetOfInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal>,
+		SetOfSignedSet {
 
-    // public String toString(UnsignedSet e);
-    //
-    // public String toPlusMinus(UnsignedSet e);
+	// public String toString(UnsignedSet e);
+	//
+	// public String toPlusMinus(UnsignedSet e);
 
-    // public SetOfSignedSet deletion(final Label s);
-    //
-    // public SetOfSignedSetI contraction(Label l);
+	// public SetOfSignedSet deletion(final Label s);
+	//
+	// public SetOfSignedSetI contraction(Label l);
 
-    @Override
-    public UnsignedSetInternal support();
+	@Override
+	public UnsignedSetInternal support();
 
-    // public SetOfSignedSetI2 useCollection(Collection<SignedSetI> a) ;
+	// public SetOfSignedSetI2 useCollection(Collection<SignedSetI> a) ;
 
-    SetOfUnsignedSetInternal unsignedSets();
+	SetOfUnsignedSetInternal unsignedSets();
 
-    /**
-     * 
-     * @param u
-     * @return those members whose support is u
-     */
-    SetOfSignedSetInternal withSupport(UnsignedSetInternal u);
+	/**
+	 * 
+	 * @param u
+	 * @return those members whose support is u
+	 */
+	SetOfSignedSetInternal withSupport(UnsignedSetInternal u);
 
-    /**
-     * 
-     * @param x
-     * @return those members which conform with x
-     */
-    public SetOfSignedSetInternal conformingWith(SignedSetInternal x);
+	/**
+	 * 
+	 * @param x
+	 * @return those members which conform with x
+	 */
+	public SetOfSignedSetInternal conformingWith(SignedSetInternal x);
 
-    /**
-     * 
-     * @param x0
-     * @return the set formed by restricting each member to x0
-     */
-    public SetOfSignedSetInternal restriction(UnsignedSet x0);
+	/**
+	 * 
+	 * @param x0
+	 * @return the set formed by restricting each member to x0
+	 */
+	public SetOfSignedSetInternal restriction(UnsignedSet x0);
 
-    // public Map<UnsignedSetInternal, SetOfSignedSetInternal>
-    // withSupport(SetOfUnsignedSetInternal vvv);
+	// public Map<UnsignedSetInternal, SetOfSignedSetInternal>
+	// withSupport(SetOfUnsignedSetInternal vvv);
 
 }
 /************************************************************************

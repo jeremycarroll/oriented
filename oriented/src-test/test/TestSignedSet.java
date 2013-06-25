@@ -17,124 +17,123 @@ import org.junit.Test;
 
 public class TestSignedSet {
 
-    static FactoryFactory f;
-    static {
-	Options options = new Options();
-	options.setShortLabels();
-	f = new FactoryFactory(options);
-    }
-
-    private SignedSet parse(String s) {
-	return f.signedSets().parse(s);
-    }
-
-    private UnsignedSet unsigned(String string) {
-	return f.unsignedSets().parse(string);
-    }
-
-    @Test
-    public void testHashCode() {
-	assertEquals(parse("ab'cd'e'f").hashCode(), parse("b'cd'e'fa")
-		.hashCode());
-    }
-
-    @Test
-    public void testParse() {
-	SignedSet ss = parse("ab'cd'e'f");
-	assertEquals(ss.plus(), unsigned("acf"));
-	assertEquals(ss.minus(), unsigned("bde"));
-
-    }
-
-    @Test
-    public void testSignedSetMSetMSet() {
-	try {
-	    parse("abda'ef'");
-	    fail("exception required");
+	static FactoryFactory f;
+	static {
+		Options options = new Options();
+		options.setShortLabels();
+		f = new FactoryFactory(options);
 	}
-	catch (IllegalArgumentException e) {
-	    // OK
+
+	private SignedSet parse(String s) {
+		return f.signedSets().parse(s);
 	}
-    }
 
-    @Test
-    public void testOpposite() {
-	assertEquals(parse("abc'").opposite(), parse("a'b'c"));
-    }
+	private UnsignedSet unsigned(String string) {
+		return f.unsignedSets().parse(string);
+	}
 
-    @Test
-    public void testPlus() {
-	assertEquals(parse("abc'").plus(), unsigned("ab"));
-    }
+	@Test
+	public void testHashCode() {
+		assertEquals(parse("ab'cd'e'f").hashCode(), parse("b'cd'e'fa")
+				.hashCode());
+	}
 
-    @Test
-    public void testMinus() {
-	assertEquals(parse("abc'").minus(), unsigned("c"));
-    }
+	@Test
+	public void testParse() {
+		SignedSet ss = parse("ab'cd'e'f");
+		assertEquals(ss.plus(), unsigned("acf"));
+		assertEquals(ss.minus(), unsigned("bde"));
 
-    @Test
-    public void testEqualsObject() {
-	assertEquals(parse("ab'cd'e'f"), parse("b'cd'e'fa"));
-    }
+	}
 
-    @Test
-    public void testEqualsIgnoreSign() {
-	assertTrue(parse("ab'cd'e'f").equalsIgnoreSign(parse("b'cd'e'fa")));
-	assertTrue(parse("ab'cd'e'f").equalsIgnoreSign(parse("bc'def'a'")));
-    }
+	@Test
+	public void testSignedSetMSetMSet() {
+		try {
+			parse("abda'ef'");
+			fail("exception required");
+		} catch (IllegalArgumentException e) {
+			// OK
+		}
+	}
 
-    @Test
-    public void testSeparation() {
-	assertEquals(parse("ab'de").separation(parse("bcdf'")), unsigned("b"));
-    }
+	@Test
+	public void testOpposite() {
+		assertEquals(parse("abc'").opposite(), parse("a'b'c"));
+	}
 
-    @Test
-    public void testCompose() {
-	assertEquals(parse("ab'de").compose(parse("bcdf'")), parse("ab'decf'"));
+	@Test
+	public void testPlus() {
+		assertEquals(parse("abc'").plus(), unsigned("ab"));
+	}
 
-    }
+	@Test
+	public void testMinus() {
+		assertEquals(parse("abc'").minus(), unsigned("c"));
+	}
 
-    @Test
-    public void testSize() {
-	assertEquals(parse("ab'cd'e'f").size(), 6);
-    }
+	@Test
+	public void testEqualsObject() {
+		assertEquals(parse("ab'cd'e'f"), parse("b'cd'e'fa"));
+	}
 
-    @Test
-    public void testConformsTo() {
-	SignedSet ab_c = parse("abc'");
-	SignedSet _c = parse("c'");
-	SignedSet ac = parse("ac");
-	SignedSet b_c = parse("bc'");
-	assertTrue(b_c.conformsWith(ab_c));
-	assertTrue(ab_c.conformsWith(ab_c));
-	assertTrue(_c.conformsWith(ab_c));
-	assertFalse(ac.conformsWith(ab_c));
-	assertTrue(ab_c.conformsWith(b_c));
-    }
+	@Test
+	public void testEqualsIgnoreSign() {
+		assertTrue(parse("ab'cd'e'f").equalsIgnoreSign(parse("b'cd'e'fa")));
+		assertTrue(parse("ab'cd'e'f").equalsIgnoreSign(parse("bc'def'a'")));
+	}
 
-    @Test
-    public void testSupport() {
-	assertEquals(parse("ab'cd'e'f").support(), unsigned("abcdef"));
-    }
+	@Test
+	public void testSeparation() {
+		assertEquals(parse("ab'de").separation(parse("bcdf'")), unsigned("b"));
+	}
 
-    // @Test
-    // public void testtoString() {
-    // UnsignedSet e = base();
-    // assertEquals(parse("afb'e'").toString(e),
-    // "ab'e'f");
-    // }
-    //
-    // private UnsignedSet base() {
-    // return new UnsignedSet(Arrays.asList(new String[]{
-    // "a","b","c","d","e","f"
-    // }),true);
-    // }
-    // @Test
-    // public void testtoPlusMinus() {
-    // UnsignedSet e = base();
-    // assertEquals(parse("afb'e'").toPlusMinus(e),
-    // "+-00-+");
-    // }
+	@Test
+	public void testCompose() {
+		assertEquals(parse("ab'de").compose(parse("bcdf'")), parse("ab'decf'"));
+
+	}
+
+	@Test
+	public void testSize() {
+		assertEquals(parse("ab'cd'e'f").size(), 6);
+	}
+
+	@Test
+	public void testConformsTo() {
+		SignedSet ab_c = parse("abc'");
+		SignedSet _c = parse("c'");
+		SignedSet ac = parse("ac");
+		SignedSet b_c = parse("bc'");
+		assertTrue(b_c.conformsWith(ab_c));
+		assertTrue(ab_c.conformsWith(ab_c));
+		assertTrue(_c.conformsWith(ab_c));
+		assertFalse(ac.conformsWith(ab_c));
+		assertTrue(ab_c.conformsWith(b_c));
+	}
+
+	@Test
+	public void testSupport() {
+		assertEquals(parse("ab'cd'e'f").support(), unsigned("abcdef"));
+	}
+
+	// @Test
+	// public void testtoString() {
+	// UnsignedSet e = base();
+	// assertEquals(parse("afb'e'").toString(e),
+	// "ab'e'f");
+	// }
+	//
+	// private UnsignedSet base() {
+	// return new UnsignedSet(Arrays.asList(new String[]{
+	// "a","b","c","d","e","f"
+	// }),true);
+	// }
+	// @Test
+	// public void testtoPlusMinus() {
+	// UnsignedSet e = base();
+	// assertEquals(parse("afb'e'").toPlusMinus(e),
+	// "+-00-+");
+	// }
 
 }
 /************************************************************************

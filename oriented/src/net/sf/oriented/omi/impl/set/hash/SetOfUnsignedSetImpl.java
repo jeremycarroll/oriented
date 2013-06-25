@@ -23,69 +23,71 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
  * 
  */
 public class SetOfUnsignedSetImpl
-	extends
-	SetImpl<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>
-	implements SetOfUnsignedSetInternal {
+		extends
+		SetImpl<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>
+		implements SetOfUnsignedSetInternal {
 
-    public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a,
-	    SetOfUnsignedSetFactory f) {
-	super(a, f);
-    }
-
-    private UnsignedSetInternal computeSupport() {
-	Iterator<UnsignedSetInternal> it = iterator();
-	UnsignedSetInternal r = it.next();
-	while (it.hasNext()) {
-	    r = r.union(it.next());
+	public SetOfUnsignedSetImpl(JavaSet<UnsignedSetInternal> a,
+			SetOfUnsignedSetFactory f) {
+		super(a, f);
 	}
-	return r;
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see omi.impl.set.hash.SetOfUnsignedSetInternal#deletion(omi.Label)
-     */
-    public SetOfUnsignedSetInternal deletion(final Label s) {
-	return only(new Test<UnsignedSet>() {
-	    @Override
-	    public boolean test(UnsignedSet e) {
-		return !e.contains(s);
-	    }
-	});
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see omi.impl.set.hash.SetOfUnsignedSetInternal#contraction(omi.Label)
-     */
-    public SetOfUnsignedSetInternal contraction(Label l) {
-	JavaSet<UnsignedSetInternal> r = emptyCollectionOf();
-	Iterator<UnsignedSetInternal> it = iterator();
-	while (it.hasNext()) {
-	    UnsignedSetInternal s = it.next();
-	    if (s.contains(l)) {
-		r.add(s.minus(l));
-
-	    }
+	private UnsignedSetInternal computeSupport() {
+		Iterator<UnsignedSetInternal> it = iterator();
+		UnsignedSetInternal r = it.next();
+		while (it.hasNext()) {
+			r = r.union(it.next());
+		}
+		return r;
 	}
-	return useCollection(r);
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see omi.impl.set.hash.SetOfUnsignedSetInternal#deletion(omi.Label)
+	 */
+	public SetOfUnsignedSetInternal deletion(final Label s) {
+		return only(new Test<UnsignedSet>() {
+			@Override
+			public boolean test(UnsignedSet e) {
+				return !e.contains(s);
+			}
+		});
+	}
 
-    private UnsignedSetInternal support;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see omi.impl.set.hash.SetOfUnsignedSetInternal#contraction(omi.Label)
+	 */
+	public SetOfUnsignedSetInternal contraction(Label l) {
+		JavaSet<UnsignedSetInternal> r = emptyCollectionOf();
+		Iterator<UnsignedSetInternal> it = iterator();
+		while (it.hasNext()) {
+			UnsignedSetInternal s = it.next();
+			if (s.contains(l)) {
+				r.add(s.minus(l));
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see omi.impl.set.hash.SetOfUnsignedSetInternal#union()
-     */
-    @Override
-    public UnsignedSetInternal union() {
-	if (support == null) support = computeSupport();
-	return support;
-    }
+			}
+		}
+		return useCollection(r);
+
+	}
+
+	private UnsignedSetInternal support;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see omi.impl.set.hash.SetOfUnsignedSetInternal#union()
+	 */
+	@Override
+	public UnsignedSetInternal union() {
+		if (support == null) {
+			support = computeSupport();
+		}
+		return support;
+	}
 
 }
 

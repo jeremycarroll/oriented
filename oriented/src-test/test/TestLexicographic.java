@@ -18,48 +18,47 @@ import net.sf.oriented.combinatorics.Lexicographic;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.junit.runners.Parameterized.Parameters;
 
 import test.BetterParameterized.TestName;
 
 @RunWith(value = BetterParameterized.class)
 public class TestLexicographic {
-    @Parameters
-    public static Collection<Object[]> data() {
-	return Arrays.asList(new Object[][] { { "10-4", 10, 4 },
-		{ "3-2", 3, 2 }, { "9-6", 9, 6 } });
+	@Parameters
+	public static Collection<Object[]> data() {
+		return Arrays.asList(new Object[][] { { "10-4", 10, 4 },
+				{ "3-2", 3, 2 }, { "9-6", 9, 6 } });
 
-    }
-
-    final Lexicographic lex;
-    final int n, r;
-
-    public TestLexicographic(String nm, int n, int r) {
-	lex = new Lexicographic(n, r);
-	this.n = n;
-	this.r = r;
-    }
-
-    @TestName
-    static public String name(String nm, int n, int r) {
-	return nm;
-    }
-
-    @Test
-    public void check() {
-	int sz = choose(n, r);
-	Iterator<int[]> it = lex.iterator();
-	for (int i = 0; i < sz; i++) {
-	    assertTrue(it.hasNext());
-	    int[] seq = it.next();
-	    // for (int j=0;j<r;j++)
-	    // System.err.print(seq[j]+",");
-	    // System.err.println();
-	    assertEquals(i, pos(n, r, 0, seq));
 	}
-	assertFalse(it.hasNext());
-    }
+
+	final Lexicographic lex;
+	final int n, r;
+
+	public TestLexicographic(String nm, int n, int r) {
+		lex = new Lexicographic(n, r);
+		this.n = n;
+		this.r = r;
+	}
+
+	@TestName
+	static public String name(String nm, int n, int r) {
+		return nm;
+	}
+
+	@Test
+	public void check() {
+		int sz = choose(n, r);
+		Iterator<int[]> it = lex.iterator();
+		for (int i = 0; i < sz; i++) {
+			assertTrue(it.hasNext());
+			int[] seq = it.next();
+			// for (int j=0;j<r;j++)
+			// System.err.print(seq[j]+",");
+			// System.err.println();
+			assertEquals(i, pos(n, r, 0, seq));
+		}
+		assertFalse(it.hasNext());
+	}
 
 }
 /************************************************************************

@@ -5,12 +5,12 @@
 package net.sf.oriented.omi.impl.items;
 
 public class ParseContext {
-    final public String string;
-    public int index = 0;
+	final public String string;
+	public int index = 0;
 
-    public ParseContext(String s) {
-	string = s;
-    }
+	public ParseContext(String s) {
+		string = s;
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
