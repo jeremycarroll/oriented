@@ -194,8 +194,9 @@ public class TestConversions {
 	case MAXVECTORS:
 	case TOPES:
 	    return factory.maxVectors();
+	    default:
+	    	throw new IllegalArgumentException();
 	}
-	return null;
     }
 
     private OMAll create(Cryptomorphisms f) {
