@@ -1,0 +1,20 @@
+
+
+Overall goal - support realizability and non-realizability proofs for rank 3.
+
+Follow approach of "New Proof of Pappus (2007)", and "Drawing Straight Lines (2000)"
+
+Sketch of algorithm:
+- take chirotope
+- choose an infinity/zero
+- order the other lines
+- prune the chirotope at non-zero lines
+- convert to polar coordinate matrix
+- extract edges of twisted graph
+- find minimal twisted graphs
+- solve each minimal twisted graph
+- make solution simultaneous
+- solve linear program
+
+
+
