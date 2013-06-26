@@ -148,6 +148,7 @@ public class OMAll implements OMInternal {
 			if (has(DUALREALIZED))
 				return new RealizedImpl(this, dual().getRealized()
 						.getDualBasis());
+			throw new UnsupportedOperationException("Realization not implemented");
 
         case COVECTORS:
         case COCIRCUITS:
