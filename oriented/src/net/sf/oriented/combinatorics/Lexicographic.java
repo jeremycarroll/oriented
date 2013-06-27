@@ -64,6 +64,18 @@ public class Lexicographic extends AbstractCollection<int[]> {
 	public int size() {
 		return sz;
 	}
+	
+	public static void main(String args[]) {
+	    Lexicographic lex = new Lexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+	    int i = 0;
+	    for ( int[] vals : lex ) {
+	        System.out.print(i++ +": ");
+	        for (int v : vals) {
+	            System.out.print(v+" ");
+	        }
+	        System.out.println();
+	    }
+	}
 
 }
 /************************************************************************

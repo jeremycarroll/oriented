@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestConversions.class, TestLexicographic.class, TestMatroid.class,
 		TestMaxVectors.class, TestMSet.class, TestSignedSet.class,
 		TestVectors.class, TestLU.class, TestGramSchmidt.class,
-		TestDualRealized.class
+		TestDualRealized.class, TestExamples.class
 
 })
 @RunWith(Suite.class)
