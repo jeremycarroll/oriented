@@ -13,6 +13,9 @@ public class TestExamples {
     @Test
     public void testVerify() {
         Assert.assertTrue("Circular Saw 3",Examples.circularSaw3.verify());
+        Assert.assertTrue("Circular Saw 3",Examples.circularSaw3A.verify());
+        System.err.println( Examples.circularSaw3.getChirotope().toString() );
+        System.err.println( Examples.circularSaw3A.getChirotope().toString() );
     }
 
 }
