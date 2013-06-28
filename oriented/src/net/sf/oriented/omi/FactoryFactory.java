@@ -88,7 +88,7 @@ final public class FactoryFactory {
 	 * 
 	 * @return A factory for labels.
 	 */
-	public Factory<Label> labels() {
+	public LabelFactory labels() {
 		return label;
 	}
 

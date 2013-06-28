@@ -70,7 +70,11 @@ public class OMRealizedFactory extends
 	@Override
 	public OMRealized construct(RationalMatrix mat) {
 		final int n = mat.width();
-		return construct(new SimpleLabels(n), mat);
+		Collection<? extends Label> labels = factory.labels().getUniverse();
+		if (labels.size()!=n) {
+		    labels = new SimpleLabels(n);
+		}
+        return construct(labels, mat);
 	}
 
 	@Override
