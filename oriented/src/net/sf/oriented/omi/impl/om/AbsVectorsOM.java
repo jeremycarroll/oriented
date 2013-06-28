@@ -5,7 +5,9 @@
 package net.sf.oriented.omi.impl.om;
 
 import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
+import net.sf.oriented.omi.impl.set.SignedSetInternal;
 
 abstract class AbsVectorsOM extends AbsVectors implements OMS {
 
@@ -13,6 +15,17 @@ abstract class AbsVectorsOM extends AbsVectors implements OMS {
 		super(c, a);
 		all.set(cry, this);
 	}
+	
+
+    @Override
+    public boolean isAcyclic() {
+        for (SignedSet ss :vectors){
+            if ( ss.minus().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
 /************************************************************************

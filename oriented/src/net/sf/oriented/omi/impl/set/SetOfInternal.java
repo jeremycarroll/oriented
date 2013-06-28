@@ -11,7 +11,7 @@ import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.HasFactory;
 
 public interface SetOfInternal<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, T>, EX, SX extends SetOf<EX, SX>, ER extends EX, T extends SX>
-		extends HasFactory<S, SX, T>, SetOf<EX, SX> {
+		extends HasFactory<S, SX, T>, SetOf<EX, SX>, Iterable<ER> {
 
 	@Override
 	SetFactoryInternal<E, S, EX, SX, ER, T> factory();

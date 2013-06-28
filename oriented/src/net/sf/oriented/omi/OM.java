@@ -55,6 +55,13 @@ public interface OM extends Verify {
 	 */
 	int[] asInt(UnsignedSet u);
 
+	/**
+	 *  This returns true if the oriented matroid contains
+	 *  no positive circuit, or equivalently, every edge is
+	 *  in a positive cocircuit.
+	 */
+    boolean isAcyclic();
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

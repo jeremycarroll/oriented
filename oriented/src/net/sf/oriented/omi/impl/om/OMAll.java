@@ -358,6 +358,11 @@ public class OMAll implements OMInternal {
 		return (OMRealized) get(REALIZED);
 	}
 
+    @Override
+    public boolean isAcyclic() {
+        return get(CIRCUITS).isAcyclic();
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -3,19 +3,53 @@
  ************************************************************************/
 package test;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.OM;
 
+import org.apache.commons.math3.util.Pair;
 import org.junit.Test;
 
 public class TestExamples {
     
     @Test
     public void testVerify() {
-        Assert.assertTrue("Circular Saw 3",Examples.circularSaw3.verify());
-        Assert.assertTrue("Circular Saw 3",Examples.circularSaw3A.verify());
-        System.err.println( Examples.circularSaw3.getChirotope().toString() );
-        System.err.println( Examples.circularSaw3A.getChirotope().toString() );
+        for (Pair<OM,String> om: testOrientedMatroids()) {
+            Assert.assertTrue(om.getValue(),om.getKey().verify());
+            System.err.println(om.getValue()+" "+om.getKey().getChirotope().toString());
+        }
+    }
+    private Iterable<Pair<OM,String>> testOrientedMatroids() {
+        Class<?> ex = Examples.class;
+        List<Pair<OM,String>> rslt = new ArrayList<Pair<OM,String>>();
+        for (Field f:ex.getFields()) {
+            if (Modifier.isStatic(f.getModifiers())
+                  && OM.class.isAssignableFrom( f.getType() )  
+                    ) {
+                try {
+                    rslt.add(new Pair<OM,String>((OM)f.get(null),f.getName()));
+                }
+                catch (IllegalArgumentException e) {
+                    throw new RuntimeException(e);
+                }
+                catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return rslt;
+    }
+    @Test
+    public void testAcyclic() {
+        for (Pair<OM,String> om: testOrientedMatroids()) {
+            Assert.assertTrue(om.getValue(),om.getKey().isAcyclic());
+            
+        }
     }
 
 }

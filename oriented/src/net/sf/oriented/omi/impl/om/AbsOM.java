@@ -97,6 +97,11 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
 		return all.hashCode();
 	}
 
+    @Override
+    public boolean isAcyclic() {
+        return getCircuits().isAcyclic();
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
