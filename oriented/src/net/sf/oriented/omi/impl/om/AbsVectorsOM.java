@@ -7,7 +7,6 @@ package net.sf.oriented.omi.impl.om;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
-import net.sf.oriented.omi.impl.set.SignedSetInternal;
 
 abstract class AbsVectorsOM extends AbsVectors implements OMS {
 
