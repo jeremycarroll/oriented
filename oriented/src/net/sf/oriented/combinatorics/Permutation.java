@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.combinatorics;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -106,6 +107,13 @@ public class Permutation {
         return permutation[i];
     }
 
+    public <T> T[] permute(T ... args) {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) Array.newInstance(args.getClass().getComponentType(), args.length);
+        for (int i=0;i<args.length;i++)
+            result[i] = args[get(i)];
+        return result;
+    }
     @Override
     public int hashCode() {
         return Arrays.hashCode(permutation);
