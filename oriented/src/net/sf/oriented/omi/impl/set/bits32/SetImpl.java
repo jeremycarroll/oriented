@@ -14,8 +14,21 @@ import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
 
-abstract public class SetImpl<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, SS>, EX, SX extends SetOf<EX, SX>, ER extends EX, SS extends SX>
-		extends HasSetFactoryImpl<E, S, EX, SX, ER, SS> implements
+abstract public class SetImpl<
+                  E extends HasFactory<E, EX, ER>, 
+                  S extends SetOfInternal<E, S, EX, SX, ER, SS>, 
+                  EX, 
+                  SX extends SetOf<EX, SX>, 
+                  ER extends EX, 
+                  SS extends SX
+                  >
+		extends HasSetFactoryImpl<
+		      E, 
+		      S, 
+		      EX, 
+		      SX, 
+		      ER, 
+		      SS> implements
 		SetOfInternal<E, S, EX, SX, ER, SS> {
 	private final class PowerJavaSet extends AbstractCollection<SS> implements
 			JavaSet<SS> {
