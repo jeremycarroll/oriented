@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 public class Permutation {
 
-    static Iterable<Permutation> all(final int n) {
+    public static Iterable<Permutation> all(final int n) {
         final int value[] = new int[n];
         for (int i = 0; i < n; i++) {
             value[i] = i;
