@@ -114,6 +114,25 @@ public class Permutation {
             result[i] = args[get(i)];
         return result;
     }
+    public int[] permute(int ... args) {
+        int[] result = new int[args.length];
+        for (int i=0;i<args.length;i++)
+            result[i] = args[get(i)];
+        return result;
+        
+    }
+    public Permutation inverse() {
+        int inverse[] = new int[permutation.length];
+        for (int i=0;i<inverse.length;i++) {
+            inverse[get(i)] = i;
+        }
+        return new Permutation(inverse);
+    }
+    
+    public Permutation and(Permutation then) {
+        return new Permutation(then.permute(permutation));
+        
+    }
     @Override
     public int hashCode() {
         return Arrays.hashCode(permutation);
