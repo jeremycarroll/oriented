@@ -17,4 +17,41 @@ Sketch of algorithm:
 - solve linear program
 
 
+SubGoal June 28, 2013
+- new feature: given OM, give all possible 'positive' chirotopes, through reorderings
+  and reorientations.
+  Positive chirotope is one in which the first load of signs are non-negative
+  Where first depends on the rank, for rank 3 it is triangle(n-2)
+  
+- add support for permutations
+- check factories really do remake correctly: some doubt around the chirotope factory
+   - add tests that exercise Factory.remake() and equality etc
+   
+   
+SubGoal June 28, 2013
+- add some more examples, add tests for their level of symmetry by looking at
+  the number of reorientations
+- include non-pappus
+- include omega14 +,-,0
+- include chap1
+- include general circular saw construct
+- include Ceva
+
+SubGoal June 28, 2013
+- example generating code that is robust against 0 as opposed to +/-
+
+SubGoal June 28
+- sort out Pair in OMChirotopeFactory
+
+SubGoal July 1
+- change generic type declarations to use long words not letters
+
+
+
+
+
+
+
+
+
 
