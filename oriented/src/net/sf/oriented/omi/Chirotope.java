@@ -6,7 +6,7 @@ package net.sf.oriented.omi;
 
 public interface Chirotope {
 	/**
-	 * This is only called when it has {@link rank()} arguments, and they are
+	 * This is only called when it has {@link #rank()} arguments, and they are
 	 * strictly monotonic increasing. Implementations may return correct values
 	 * for arguments which are not strictly monotonic increasing but are not
 	 * required to.

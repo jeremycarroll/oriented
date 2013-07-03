@@ -155,11 +155,15 @@ public class Permutation {
         return rslt.toString();
     }
 
+    public int n() {
+        return permutation.length;
+    }
     static public void main(String argv[]) {
         for (Permutation p : Permutation.all(Integer.parseInt(argv[0]))) {
             System.out.println(p.toString());
         }
     }
+
 }
 
 /************************************************************************

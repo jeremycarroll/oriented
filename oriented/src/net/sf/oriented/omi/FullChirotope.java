@@ -4,9 +4,16 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**This marker interface show that the arguments to {@link #chi(int...)}
+ * do not have to be monotonic increasing.
+ * 
+ * @author jeremycarroll
+ *
+ */
 public interface FullChirotope extends Chirotope {
 	/**
-	 * This is only called when it has {@link rank()} arguments.
+	 * This is only called when it has {@link #rank()} arguments.
+	 * They do not have to be monotonic increasing.
 	 * 
 	 * @param i
 	 * @return -1, 0 or 1
