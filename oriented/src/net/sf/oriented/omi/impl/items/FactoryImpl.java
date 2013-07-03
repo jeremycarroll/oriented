@@ -11,24 +11,29 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
 
-public abstract class FactoryImpl<E extends HasFactory<E, EX, ER>, EX, ER extends EX>
-		extends IOHelper implements FactoryInternal<E, EX, ER> {
+//@formatter:off
+public abstract class FactoryImpl<
+        ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+        ITEM, 
+        ITEM_INTERNAL2 extends ITEM>
+		extends IOHelper implements FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> {
+//@formatter:on
 
-	final protected Constructor<ER> constructor;
+	final protected Constructor<ITEM_INTERNAL2> constructor;
 
 	@SuppressWarnings("unchecked")
 	protected FactoryImpl(Options o) {
 		options = o;
 		// System.err.println(++cnt+": building: "+getClass().getSimpleName());
-		constructor = (Constructor<ER>) o.constructorFor(getClass());
+		constructor = (Constructor<ITEM_INTERNAL2>) o.constructorFor(getClass());
 	}
 
 	final private Options options;
 
 	@Override
-	final public ER parse(String s) {
+	final public ITEM_INTERNAL2 parse(String s) {
 		ParseContext pc = new ParseContext(s.trim());
-		ER rslt = parse(pc);
+		ITEM_INTERNAL2 rslt = parse(pc);
 		if (pc.index != pc.string.length())
 			throw new IllegalArgumentException("Syntax error");
 		return rslt;
@@ -43,27 +48,27 @@ public abstract class FactoryImpl<E extends HasFactory<E, EX, ER>, EX, ER extend
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public E remake(EX t) {
+	public ITEM_INTERNAL remake(ITEM t) {
 		if (t instanceof HasFactory) {
 			if (((HasFactory<?, ?, ?>) t).factory() == this)
-				return (E) t;
+				return (ITEM_INTERNAL) t;
 		}
 		// System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
 		return fallbackRemake(t);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected E fallbackRemake(EX t) {
-		return (E) parse(toString(t));
+	protected ITEM_INTERNAL fallbackRemake(ITEM t) {
+		return (ITEM_INTERNAL) parse(toString(t));
 	}
 
 	@Override
-	public JavaSet<ER> emptyCollectionOf() {
+	public JavaSet<ITEM_INTERNAL2> emptyCollectionOf() {
 		return options.javaSetFor(null);
 	}
 
 	@Override
-	public String toString(List<? extends Label> u, EX t) {
+	public String toString(List<? extends Label> u, ITEM t) {
 		return toString(t);
 	}
 }

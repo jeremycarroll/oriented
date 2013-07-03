@@ -11,12 +11,12 @@ import java.util.Collection;
  * 
  * @author jeremy
  * 
- * @param <S>
+ * @param <SET>
  *            The sets to create.
- * @param <E>
+ * @param <ELEMENT>
  *            The items in such sets.
  */
-public interface SetFactory<E, S> extends Factory<S> {
+public interface SetFactory<ITEM, SET> extends Factory<SET> {
 	/*
 	 * Create a new set using a Java collection as the backing collection. The
 	 * collection must not be modified after this call.
@@ -35,14 +35,14 @@ public interface SetFactory<E, S> extends Factory<S> {
 	 *            The members of the set.
 	 * @return
 	 */
-	S copyBackingCollection(Collection<? extends E> c);
+	SET copyBackingCollection(Collection<? extends ITEM> c);
 
 	/**
 	 * The empty set.
 	 * 
 	 * @return The empty set.
 	 */
-	S empty();
+	SET empty();
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

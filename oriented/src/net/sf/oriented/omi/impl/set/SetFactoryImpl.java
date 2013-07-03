@@ -18,64 +18,72 @@ import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
-abstract public class SetFactoryImpl<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, T>, EX, SX extends SetOf<EX, SX>, ER extends EX, T extends SX>
-		extends FactoryImpl<S, SX, T> implements
-		SetFactoryInternal<E, S, EX, SX, ER, T> {
-	protected SetFactoryImpl(FactoryInternal<E, EX, ER> f) {
+//@formatter:off
+abstract public class SetFactoryImpl<
+       ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+       SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+       ITEM, 
+       SET extends SetOf<ITEM, SET>, 
+       ITEM_INTERNAL2 extends ITEM, 
+       SET_INTERNAL2 extends SET>
+		extends FactoryImpl<SET_INTERNAL, SET, SET_INTERNAL2> implements
+		SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> {
+//@formatter:on
+	protected SetFactoryImpl(FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> f) {
 		super(f.getOptions());
 		itemFactory = f;
 		e = fromBackingCollection(itemFactory.emptyCollectionOf());
 	}
 
-	final protected FactoryInternal<E, EX, ER> itemFactory;
+	final protected FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> itemFactory;
 
 	@Override
-	public FactoryInternal<E, EX, ER> itemFactory() {
+	public FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> itemFactory() {
 		return itemFactory;
 	}
 
 	@Override
-	final public T parse(ParseContext pc) {
-		JavaSet<ER> rslt = itemFactory.emptyCollectionOf();
+	final public SET_INTERNAL2 parse(ParseContext pc) {
+		JavaSet<ITEM_INTERNAL2> rslt = itemFactory.emptyCollectionOf();
 		parseItems(pc, rslt);
 		return fromBackingCollection(rslt);
 	}
 
-	protected void parseItems(ParseContext pc, Collection<ER> rslt) {
+	protected void parseItems(ParseContext pc, Collection<ITEM_INTERNAL2> rslt) {
 		expect(pc, '{');
 		while (pc.index < pc.string.length()
 				&& pc.string.charAt(pc.index) != '}') {
-			ER ee = itemFactory.parse(pc);
+			ITEM_INTERNAL2 ee = itemFactory.parse(pc);
 			add(rslt, ee);
 		}
 		expect(pc, '}');
 	}
 
 	@Override
-	final public List<ER> orderedParse(ParseContext pc) {
-		List<ER> ll = new ArrayList<ER>();
+	final public List<ITEM_INTERNAL2> orderedParse(ParseContext pc) {
+		List<ITEM_INTERNAL2> ll = new ArrayList<ITEM_INTERNAL2>();
 		parseItems(pc, ll);
 		return ll;
 	}
 
-	final private T e;
+	final private SET_INTERNAL2 e;
 
 	@Override
-	public T empty() {
+	public SET_INTERNAL2 empty() {
 		return e;
 	}
 
 	@Override
-	final public String toString(SX s) {
+	final public String toString(SET s) {
 		return toString(getOptions().getUniverse(), s);
 	}
 
 	@Override
-	public String toString(List<? extends Label> u, SX s) {
+	public String toString(List<? extends Label> u, SET s) {
 		StringBuffer rslt = new StringBuffer();
 		String sep = "";
 		rslt.append("{");
-		Iterator<? extends EX> it = s.iterator();
+		Iterator<? extends ITEM> it = s.iterator();
 		while (it.hasNext()) {
 			rslt.append(sep);
 			rslt.append(itemFactory.toString(u, it.next()));
@@ -86,9 +94,9 @@ abstract public class SetFactoryImpl<E extends HasFactory<E, EX, ER>, S extends 
 	}
 
 	@Override
-	public T copyBackingCollection(Collection<? extends EX> c) {
-		JavaSet<ER> r = itemFactory.emptyCollectionOf();
-		Iterator<? extends EX> it = c.iterator();
+	public SET_INTERNAL2 copyBackingCollection(Collection<? extends ITEM> c) {
+		JavaSet<ITEM_INTERNAL2> r = itemFactory.emptyCollectionOf();
+		Iterator<? extends ITEM> it = c.iterator();
 		while (it.hasNext()) {
 			add(r, it.next());
 		}
@@ -96,23 +104,23 @@ abstract public class SetFactoryImpl<E extends HasFactory<E, EX, ER>, S extends 
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void add(Collection<ER> r, EX next) {
-		r.add((ER) itemFactory.remake(next));
+	protected void add(Collection<ITEM_INTERNAL2> r, ITEM next) {
+		r.add((ITEM_INTERNAL2) itemFactory.remake(next));
 	}
 
 	@Override
-	final public T fromBackingCollection(JavaSet<ER> c) {
+	final public SET_INTERNAL2 fromBackingCollection(JavaSet<ITEM_INTERNAL2> c) {
 		return construct(c, this);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected S fallbackRemake(SX t) {
-		return (S) copyBackingCollection(t.asCollection());
+	protected SET_INTERNAL fallbackRemake(SET t) {
+		return (SET_INTERNAL) copyBackingCollection(t.asCollection());
 	}
 
-	protected T construct(JavaSet<ER> c,
-			SetFactoryInternal<E, S, EX, SX, ER, T> f) {
+	protected SET_INTERNAL2 construct(JavaSet<ITEM_INTERNAL2> c,
+			SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> f) {
 		try {
 			return constructor.newInstance(new Object[] { c, f });
 		} catch (IllegalArgumentException e) {

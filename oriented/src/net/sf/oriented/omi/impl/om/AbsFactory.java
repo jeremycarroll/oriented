@@ -11,39 +11,40 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 
+//@formatter:off
 @SuppressWarnings("rawtypes")
-public abstract class AbsFactory<M, S, F extends SetFactoryInternal> extends
-		MoreAbsFactory<M, S> {
+public abstract class AbsFactory<MATROID, STRUCTURE, SETFACTORY extends SetFactoryInternal> 
+       extends MoreAbsFactory<MATROID, STRUCTURE> {
+//@formatter:on
+    final protected SETFACTORY sets;
 
-	final protected F sets;
+    AbsFactory(FactoryFactory f, SETFACTORY sf) {
+        super(f);
+        sets = sf;
+    }
 
-	AbsFactory(FactoryFactory f, F sf) {
-		super(f);
-		sets = sf;
-	}
+    abstract public List<Label> ground(MATROID s);
 
-	abstract public List<Label> ground(M s);
+    @SuppressWarnings("unchecked")
+    protected String formatString(MATROID s, MATROID matroidS) {
+        List<Label> g = ground(s);
+        // TODO: this copyBackingCollection is probably spurious and should be
+        // done without copying
+        return "( "
+                + unsignedSets().toString(g,
+                        unsignedSets().copyBackingCollection(g)) + ", "
+                + sets.toString(g, matroidS) + " )";
+    }
 
-	@SuppressWarnings("unchecked")
-	protected String formatString(M s, M matroidS) {
-		List<Label> g = ground(s);
-		// TODO: this copyBackingCollection is probably spurious and should be
-		// done without copying
-		return "( "
-				+ unsignedSets().toString(g,
-						unsignedSets().copyBackingCollection(g)) + ", "
-				+ sets.toString(g, matroidS) + " )";
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    STRUCTURE parseMatroid(ParseContext pc) {
+        return (STRUCTURE) sets.parse(pc);
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	S parseMatroid(ParseContext pc) {
-		return (S) sets.parse(pc);
-	}
-
-	public M empty() {
-		throw new UnsupportedOperationException("No 'empty' oriented matroid");
-	}
+    public MATROID empty() {
+        throw new UnsupportedOperationException("No 'empty' oriented matroid");
+    }
 
 }
 /************************************************************************

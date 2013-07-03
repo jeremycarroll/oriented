@@ -17,92 +17,93 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 
-public abstract class MoreAbsFactory<M, S> extends IOHelper {
+public abstract class MoreAbsFactory<MATROID, STRUCTURE> extends IOHelper {
 
-	final class SimpleLabels extends AbstractCollection<Label> {
-		private final int n;
+    final class SimpleLabels extends AbstractCollection<Label> {
+        private final int n;
 
-		SimpleLabels(int n) {
-			this.n = n;
-		}
+        SimpleLabels(int n) {
+            this.n = n;
+        }
 
-		@Override
-		public Iterator<Label> iterator() {
-			return new Iterator<Label>() {
-				int i = 0;
+        @Override
+        public Iterator<Label> iterator() {
+            return new Iterator<Label>() {
+                int i = 0;
 
-				@Override
-				public boolean hasNext() {
-					return i < n;
-				}
+                @Override
+                public boolean hasNext() {
+                    return i < n;
+                }
 
-				@Override
-				public Label next() {
-					return factory.labels().parse("" + ++i);
-				}
+                @Override
+                public Label next() {
+                    return factory.labels().parse("" + ++i);
+                }
 
-				@Override
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		}
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
 
-		@Override
-		public int size() {
-			return n;
-		}
-	}
+        @Override
+        public int size() {
+            return n;
+        }
+    }
 
-	final protected FactoryFactory factory;
+    final protected FactoryFactory factory;
 
-	public MoreAbsFactory(FactoryFactory f) {
-		factory = f;
-	}
+    public MoreAbsFactory(FactoryFactory f) {
+        factory = f;
+    }
 
-	protected UnsignedSetFactory unsignedSets() {
-		return (UnsignedSetFactory) factory.unsignedSets();
-	}
+    protected UnsignedSetFactory unsignedSets() {
+        return (UnsignedSetFactory) factory.unsignedSets();
+    }
 
-	public M parse(String s) {
-		ParseContext pc = new ParseContext(s.trim());
-		M r = parse(pc);
-		if (pc.index != pc.string.length())
-			throw new IllegalArgumentException("Syntax error");
-		return r;
-	}
+    public MATROID parse(String s) {
+        ParseContext pc = new ParseContext(s.trim());
+        MATROID r = parse(pc);
+        if (pc.index != pc.string.length())
+            throw new IllegalArgumentException("Syntax error");
+        return r;
+    }
 
-	protected M parsePair(ParseContext pc) {
-		expect(pc, '(');
-		List<LabelImpl> ground = unsignedSets().orderedParse(pc);
-		S signedSets = parseMatroid(pc);
-		expect(pc, ')');
-		return construct(ground, signedSets);
-	}
+    protected MATROID parsePair(ParseContext pc) {
+        expect(pc, '(');
+        List<LabelImpl> ground = unsignedSets().orderedParse(pc);
+        STRUCTURE signedSets = parseMatroid(pc);
+        expect(pc, ')');
+        return construct(ground, signedSets);
+    }
 
-	M parse(ParseContext pc) {
-		if (0 == pc.string.length())
-			throw new IllegalArgumentException("Syntax error - empty input");
-		switch (pc.string.charAt(0)) {
-		case '{':
-			return construct(parseMatroid(pc));
-		case '(':
-			return parsePair(pc);
-		default:
-			throw new IllegalArgumentException(
-					"Syntax error - expected '{' or '('");
-		}
-	}
+    MATROID parse(ParseContext pc) {
+        if (0 == pc.string.length())
+            throw new IllegalArgumentException("Syntax error - empty input");
+        switch (pc.string.charAt(0)) {
+        case '{':
+            return construct(parseMatroid(pc));
+        case '(':
+            return parsePair(pc);
+        default:
+            throw new IllegalArgumentException(
+                    "Syntax error - expected '{' or '('");
+        }
+    }
 
-	abstract S parseMatroid(ParseContext pc);
+    abstract STRUCTURE parseMatroid(ParseContext pc);
 
-	abstract M construct(S sets);
+    abstract MATROID construct(STRUCTURE sets);
 
-	abstract M construct(Collection<? extends Label> ground, S sets);
+    abstract MATROID construct(Collection<? extends Label> ground,
+            STRUCTURE sets);
 
-	final public JavaSet<? extends M> emptyCollectionOf() {
-		return factory.options().javaSetFor(null);
-	}
+    final public JavaSet<? extends MATROID> emptyCollectionOf() {
+        return factory.options().javaSetFor(null);
+    }
 
 }
 /************************************************************************
