@@ -20,7 +20,7 @@ import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 
 public abstract class MatroidFactory extends
-		AbsFactory<MatroidS, SetOfUnsignedSetInternal, SetOfUnsignedSetFactory>
+		AbsMatroidFromSetFactory<MatroidS,  SetOfUnsignedSet, SetOfUnsignedSetInternal,SetOfUnsignedSetFactory>
 		implements MFactory {
 
 	private static final class CFactory extends MatroidFactory {
@@ -73,18 +73,17 @@ public abstract class MatroidFactory extends
 	}
 
 	@Override
-	MatroidS construct(SetOfUnsignedSetInternal signedSets) {
-		Collection<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets
-				.union().asCollection());
+	MatroidS construct(SetOfUnsignedSet signedSets) {
+		Collection<Label> ground = new TreeSet<Label>(signedSets.union().asCollection());
 		return construct(ground, signedSets);
 	}
 
 	@Override
 	MatroidS construct(Collection<? extends Label> ground,
-			SetOfUnsignedSetInternal signedSets) {
+			SetOfUnsignedSet signedSets) {
 		LabelImpl[] g = ground.toArray(new LabelImpl[0]);
 		MatroidAll all = new MatroidAll(g, null, factory);
-		return construct(signedSets, all);
+		return construct((SetOfUnsignedSetInternal)signedSets, all);
 	}
 
 	abstract MatroidS construct(SetOfUnsignedSetInternal signedSets,
@@ -103,9 +102,6 @@ public abstract class MatroidFactory extends
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
- * 
- * 
- * 
  * 
  * 
  * 

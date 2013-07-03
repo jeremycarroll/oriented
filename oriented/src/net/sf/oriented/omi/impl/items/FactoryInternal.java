@@ -15,26 +15,31 @@ import net.sf.oriented.omi.Options;
  * 
  * @author Jeremy J. Carroll
  * 
- * @param <E>
+ * @param <ITEM_INTERNAL>
  *            Is the intrinsic type of thing made by this factory
- * @param <EX>
+ * @param <ITEM>
  *            Is the extrinsic type,
- * @param <ER>
+ * @param <ITEM_INTERNAL2>
  *            Is the type used in return statements in this factory
  * @param <F>
+ * @formatter:off
  */
-public interface FactoryInternal<E extends HasFactory<E, EX, ER>, EX, ER extends EX>
-		extends Factory<EX> {
-	ER parse(ParseContext pc);
+public interface FactoryInternal<
+      ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+      ITEM, 
+      ITEM_INTERNAL2 extends ITEM>
+		extends Factory<ITEM> {
+//@formatter:on
+	ITEM_INTERNAL2 parse(ParseContext pc);
 
 	Options getOptions();
 
-	E remake(EX t);
+	ITEM_INTERNAL remake(ITEM t);
 
 	@Override
-	JavaSet<ER> emptyCollectionOf();
+	JavaSet<ITEM_INTERNAL2> emptyCollectionOf();
 
-	String toString(List<? extends Label> u, EX t);
+	String toString(List<? extends Label> u, ITEM t);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

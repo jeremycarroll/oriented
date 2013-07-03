@@ -14,7 +14,13 @@ import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
-public interface SetFactoryInternal<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, T>, EX, SX extends SetOf<EX, SX>, ER extends EX, T extends SX>
+public interface SetFactoryInternal<
+        E extends HasFactory<E, EX, ER>, 
+        S extends SetOfInternal<E, S, EX, SX, ER, T>, 
+        EX, 
+        SX extends SetOf<EX, SX>, 
+        ER extends EX, 
+        T extends SX>
 		extends FactoryInternal<S, SX, T>, SetFactory<EX, SX> {
 	/**
 	 * bases is dedicated to being the backing collection of the newly

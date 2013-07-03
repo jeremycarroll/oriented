@@ -16,7 +16,7 @@ import net.sf.oriented.omi.OMChirotope;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
-public class OMChirotopeFactory extends MoreAbsFactory<OMChirotope, Pair>
+public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
 		implements ChirotopeFactory {
 
 	public OMChirotopeFactory(FactoryFactory factory) {

@@ -13,19 +13,10 @@ import java.util.Collection;
  * 
  * @param <SET>
  *            The sets to create.
- * @param <ELEMENT>
+ * @param <ITEM>
  *            The items in such sets.
  */
 public interface SetFactory<ITEM, SET> extends Factory<SET> {
-	/*
-	 * Create a new set using a Java collection as the backing collection. The
-	 * collection must not be modified after this call.
-	 * 
-	 * @param c A collection that will be dedicated to backing this set.
-	 * 
-	 * @return
-	 */
-	// S fromBackingCollection(Collection<? extends E> c);
 	/**
 	 * Create a new set by copying a Java collection as the backing collection.
 	 * The collection may be modified after this call, but such modifications

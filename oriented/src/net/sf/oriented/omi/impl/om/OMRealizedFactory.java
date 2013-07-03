@@ -23,7 +23,7 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
 public class OMRealizedFactory extends
-		MoreAbsFactory<OMRealized, RationalMatrix> implements RealizedFactory {
+		AbsMatroidFactory<OMRealized, RationalMatrix> implements RealizedFactory {
 
 	private static final class ParseResult {
 		final ParseContext pc;

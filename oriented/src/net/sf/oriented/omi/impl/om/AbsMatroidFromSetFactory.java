@@ -8,25 +8,38 @@ import java.util.List;
 
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
+import net.sf.oriented.omi.impl.set.SetOfInternal;
 
+/**
+ * Create matroids, possible oriented, from sets of things.
+ * @author jeremycarroll
+ *
+ * @param <MATROID>
+ * @param <SET_STRUCTURE>
+ * @param <SETFACTORY>
+ */
 //@formatter:off
-@SuppressWarnings("rawtypes")
-public abstract class AbsFactory<MATROID, STRUCTURE, SETFACTORY extends SetFactoryInternal> 
-       extends MoreAbsFactory<MATROID, STRUCTURE> {
+public abstract class AbsMatroidFromSetFactory<
+       MATROID, 
+       SET_STRUCTURE2 extends SetOf<?,SET_STRUCTURE2>,
+       SET_STRUCTURE extends SET_STRUCTURE2, 
+       SETFACTORY extends SetFactoryInternal<?,?,?,SET_STRUCTURE2,?,?>
+       > 
+       extends AbsMatroidFactory<MATROID, SET_STRUCTURE2> {
 //@formatter:on
     final protected SETFACTORY sets;
 
-    AbsFactory(FactoryFactory f, SETFACTORY sf) {
+    AbsMatroidFromSetFactory(FactoryFactory f, SETFACTORY sf) {
         super(f);
         sets = sf;
     }
 
     abstract public List<Label> ground(MATROID s);
 
-    @SuppressWarnings("unchecked")
-    protected String formatString(MATROID s, MATROID matroidS) {
+    protected String formatString(MATROID s, SET_STRUCTURE2 matroidS) {
         List<Label> g = ground(s);
         // TODO: this copyBackingCollection is probably spurious and should be
         // done without copying
@@ -37,9 +50,8 @@ public abstract class AbsFactory<MATROID, STRUCTURE, SETFACTORY extends SetFacto
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    STRUCTURE parseMatroid(ParseContext pc) {
-        return (STRUCTURE) sets.parse(pc);
+    SET_STRUCTURE parseMatroid(ParseContext pc) {
+        return  (SET_STRUCTURE)sets.parse(pc);
     }
 
     public MATROID empty() {

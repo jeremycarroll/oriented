@@ -21,7 +21,7 @@ import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
 abstract public class OMFactory extends
-		AbsFactory<OMS, SetOfSignedSetInternal, SetOfSignedSetFactory>
+		AbsMatroidFromSetFactory<OMS,  SetOfSignedSet, SetOfSignedSetInternal,SetOfSignedSetFactory>
 		implements OMSFactory {
 	private static final class CFactory extends OMFactory {
 		private CFactory(FactoryFactory f) {
@@ -93,18 +93,18 @@ abstract public class OMFactory extends
 	}
 
 	@Override
-	OMS construct(SetOfSignedSetInternal signedSets) {
-		Set<LabelImpl> ground = new TreeSet<LabelImpl>(signedSets.support()
+	OMS construct(SetOfSignedSet signedSets) {
+		Set<Label> ground = new TreeSet<Label>(signedSets.support()
 				.asCollection());
 		return construct(ground, signedSets);
 	}
 
 	@Override
 	OMS construct(Collection<? extends Label> ground,
-			SetOfSignedSetInternal signedSets) {
+			SetOfSignedSet signedSets) {
 		LabelImpl[] g = ground.toArray(new LabelImpl[0]);
 		OMAll all = new OMAll(g, factory);
-		return construct(signedSets, all);
+		return construct((SetOfSignedSetInternal)signedSets, all);
 	}
 
 	abstract OMS construct(SetOfSignedSetInternal signedSets, OMAll all);

@@ -4,7 +4,9 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+
 public interface SetOfUnsignedSet extends SetOf<UnsignedSet, SetOfUnsignedSet> {
+    UnsignedSet union();
 
 }
 /************************************************************************

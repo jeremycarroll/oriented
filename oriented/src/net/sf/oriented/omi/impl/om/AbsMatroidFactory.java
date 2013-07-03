@@ -17,7 +17,15 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 
-public abstract class MoreAbsFactory<MATROID, STRUCTURE> extends IOHelper {
+/**
+ * A Factory for Matroid representations, possible oriented,
+ * from some specific structure.
+ * @author jeremycarroll
+ *
+ * @param <MATROID>       The class of matroid
+ * @param <STRUCTURE>     The structured representation
+ */
+public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends IOHelper {
 
     final class SimpleLabels extends AbstractCollection<Label> {
         private final int n;
@@ -56,7 +64,7 @@ public abstract class MoreAbsFactory<MATROID, STRUCTURE> extends IOHelper {
 
     final protected FactoryFactory factory;
 
-    public MoreAbsFactory(FactoryFactory f) {
+    public AbsMatroidFactory(FactoryFactory f) {
         factory = f;
     }
 

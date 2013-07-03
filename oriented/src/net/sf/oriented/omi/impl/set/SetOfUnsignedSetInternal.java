@@ -12,15 +12,12 @@ public interface SetOfUnsignedSetInternal
 		SetOfInternal<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>,
 		SetOfUnsignedSet {
 
-	// SetOfUnsignedSetInternal deletion(final Label s);
-	//
-	// SetOfUnsignedSetInternal contraction(Label l);
-
 	/**
 	 * The union of all the members of this set.
 	 * 
 	 * @return the union.
 	 */
+    @Override
 	UnsignedSetInternal union();
 
 }
