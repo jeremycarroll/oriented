@@ -66,7 +66,8 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 		return all.getCircuits();
 	}
 
-	public UnsignedSetInternal union() {
+	@Override
+    public UnsignedSetInternal union() {
 		return set.union();
 	}
 

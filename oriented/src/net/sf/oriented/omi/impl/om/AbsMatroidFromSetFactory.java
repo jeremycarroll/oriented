@@ -11,7 +11,6 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
-import net.sf.oriented.omi.impl.set.SetOfInternal;
 
 /**
  * Create matroids, possible oriented, from sets of things.
@@ -49,6 +48,7 @@ public abstract class AbsMatroidFromSetFactory<
                 + sets.toString(g, matroidS) + " )";
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     SET_STRUCTURE parseMatroid(ParseContext pc) {
         return  (SET_STRUCTURE)sets.parse(pc);
