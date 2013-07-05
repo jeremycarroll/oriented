@@ -10,17 +10,25 @@ import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.HasFactoryImpl;
 
-public class HasSetFactoryImpl<E extends HasFactory<E, EX, ER>, S extends SetOfInternal<E, S, EX, SX, ER, SS>, EX, SX extends SetOf<EX, SX>, ER extends EX, SS extends SX>
-		extends HasFactoryImpl<S, SX, SS> {
-
-	protected HasSetFactoryImpl(FactoryInternal<S, SX, SS> f) {
+//@formatter:off
+public class HasSetFactoryImpl<
+        ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+        SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+        ITEM, 
+        SET extends SetOf<ITEM, SET>, 
+        ITEM_INTERNAL2 extends ITEM, 
+        SET_INTERNAL2 extends SET>
+		extends HasFactoryImpl<SET_INTERNAL, SET, SET_INTERNAL2> 
+{
+//@formatter:on
+	protected HasSetFactoryImpl(FactoryInternal<SET_INTERNAL, SET, SET_INTERNAL2> f) {
 		super(f);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SetFactoryInternal<E, S, EX, SX, ER, SS> factory() {
-		return (SetFactoryInternal<E, S, EX, SX, ER, SS>) super.factory();
+	public SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> factory() {
+		return (SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>) super.factory();
 	}
 	// private final JavaSet<ER> members;
 

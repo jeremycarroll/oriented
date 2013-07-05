@@ -12,72 +12,74 @@ import net.sf.oriented.omi.impl.items.HasFactory;
 
 //@formatter:off
 public interface SetOfInternal<
-            E extends HasFactory<E, EX, ER>, 
-            S extends SetOfInternal<E, S, EX, SX, ER, T>, 
-            EX, 
-            SX extends SetOf<EX, SX>, 
-            ER extends EX, 
-            T extends SX>
-		extends HasFactory<S, SX, T>, SetOf<EX, SX>, Iterable<ER> {
+            ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+            SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+            ITEM, 
+            SET extends SetOf<ITEM, SET>, 
+            ITEM_INTERNAL2 extends ITEM, 
+            SET_INTERNAL2 extends SET>
+		extends HasFactory<SET_INTERNAL, SET, SET_INTERNAL2>, 
+		        SetOf<ITEM, SET>, 
+		        Iterable<ITEM_INTERNAL2> {
 //@formatter:on
 
 	@Override
-	SetFactoryInternal<E, S, EX, SX, ER, T> factory();
+	SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> factory();
 
-	ER theMember();
+	ITEM_INTERNAL2 theMember();
 
 	@Override
-	boolean sameSetAs(SX other);
+	boolean sameSetAs(SET other);
 
 	@Override
 	boolean equalsIsSameSetAs();
 
 	@Override
-	T respectingEquals();
+	SET_INTERNAL2 respectingEquals();
 
 	@Override
-	public abstract T union(SX b);
+	public abstract SET_INTERNAL2 union(SET b);
 
 	@Override
-	public abstract T union(EX b);
+	public abstract SET_INTERNAL2 union(ITEM b);
 
 	@Override
-	public abstract T intersection(SX b);
+	public abstract SET_INTERNAL2 intersection(SET b);
 
 	@Override
-	public abstract T minus(SX b);
+	public abstract SET_INTERNAL2 minus(SET b);
 
 	@Override
-	public abstract T minus(EX b);
+	public abstract SET_INTERNAL2 minus(ITEM b);
 
 	@Override
-	public abstract boolean contains(EX a);
+	public abstract boolean contains(ITEM a);
 
 	@Override
-	public abstract Iterator<ER> iterator();
+	public abstract Iterator<ITEM_INTERNAL2> iterator();
 
 	@Override
 	public abstract int size();
 
 	@Override
-	public abstract boolean isSubsetOf(SX b);
+	public abstract boolean isSubsetOf(SET b);
 
 	@Override
-	public abstract boolean isSupersetOf(SX b);
+	public abstract boolean isSupersetOf(SET b);
 
 	@Override
-	public abstract JavaSet<ER> asCollection();
+	public abstract JavaSet<ITEM_INTERNAL2> asCollection();
 
 	@Override
 	public boolean isEmpty();
 
 	@Override
-	public abstract JavaSet<T> powerSet();
+	public abstract JavaSet<SET_INTERNAL2> powerSet();
 
 	@Override
-	public abstract JavaSet<T> subsetsOfSize(int i);
+	public abstract JavaSet<SET_INTERNAL2> subsetsOfSize(int i);
 
-	T useCollection(JavaSet<ER> a);
+	SET_INTERNAL2 useCollection(JavaSet<ITEM_INTERNAL2> a);
 
 }
 /************************************************************************

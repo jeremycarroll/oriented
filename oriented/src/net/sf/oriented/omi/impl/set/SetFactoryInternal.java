@@ -14,14 +14,16 @@ import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
+//@formatter:off
 public interface SetFactoryInternal<
-        E extends HasFactory<E, EX, ER>, 
-        S extends SetOfInternal<E, S, EX, SX, ER, T>, 
-        EX, 
-        SX extends SetOf<EX, SX>, 
-        ER extends EX, 
-        T extends SX>
-		extends FactoryInternal<S, SX, T>, SetFactory<EX, SX> {
+        ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+        SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+        ITEM, 
+        SET extends SetOf<ITEM, SET>, 
+        ITEM_INTERNAL2 extends ITEM, 
+        SET_INTERNAL2 extends SET>
+		extends FactoryInternal<SET_INTERNAL, SET, SET_INTERNAL2>, SetFactory<ITEM, SET> {
+//@formatter:on
 	/**
 	 * bases is dedicated to being the backing collection of the newly
 	 * constructed set. It is not copied and must not be modified after this
@@ -30,17 +32,17 @@ public interface SetFactoryInternal<
 	 * @param bases
 	 * @return
 	 */
-	T fromBackingCollection(JavaSet<ER> bases);
+	SET_INTERNAL2 fromBackingCollection(JavaSet<ITEM_INTERNAL2> bases);
 
 	@Override
-	T copyBackingCollection(Collection<? extends EX> c);
+	SET_INTERNAL2 copyBackingCollection(Collection<? extends ITEM> c);
 
-	FactoryInternal<E, EX, ER> itemFactory();
+	FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> itemFactory();
 
 	@Override
-	T empty();
+	SET_INTERNAL2 empty();
 
-	List<ER> orderedParse(ParseContext pc);
+	List<ITEM_INTERNAL2> orderedParse(ParseContext pc);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
