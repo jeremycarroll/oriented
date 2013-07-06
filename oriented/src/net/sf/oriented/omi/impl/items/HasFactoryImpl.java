@@ -5,6 +5,7 @@
 package net.sf.oriented.omi.impl.items;
 
 import net.sf.oriented.omi.Factory;
+import net.sf.oriented.util.TypeChecker;
 
 
 // @formatter:off
@@ -19,6 +20,7 @@ public class HasFactoryImpl<
 
 	protected HasFactoryImpl(FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> f) {
 		factory = f;
+        TypeChecker.check(this);
 	}
 
 	@Override

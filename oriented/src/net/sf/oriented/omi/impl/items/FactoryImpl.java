@@ -10,6 +10,7 @@ import java.util.List;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
+import net.sf.oriented.util.TypeChecker;
 
 //@formatter:off
 public abstract class FactoryImpl<
@@ -23,6 +24,7 @@ public abstract class FactoryImpl<
 
 	@SuppressWarnings("unchecked")
 	protected FactoryImpl(Options o) {
+        TypeChecker.check(this);
 		options = o;
 		// System.err.println(++cnt+": building: "+getClass().getSimpleName());
 		constructor = (Constructor<ITEM_INTERNAL2>) o.constructorFor(getClass());
