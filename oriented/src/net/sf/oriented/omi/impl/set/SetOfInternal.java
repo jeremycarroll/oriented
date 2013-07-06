@@ -9,7 +9,22 @@ import java.util.Iterator;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.HasFactory;
-
+/**
+ * Sets of things, with both an internal API for efficient implementation
+ * and an external API for allowing switching implementations.
+ * To tell whether two sets have the same implementation or not
+ * one needs to check that their two factories are equal.
+ * 
+ * @author jeremycarroll
+ *
+ *
+ * @param <ITEM_INTERNAL> The internal API or implementation for members.
+ * @param <SET_INTERNAL> The internal API or implementation for sets.
+ * @param <ITEM> The external API for members.
+ * @param <SET> The external API for sets.
+ * @param <ITEM_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ * @param <SET_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ */
 //@formatter:off
 public interface SetOfInternal<
             ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
