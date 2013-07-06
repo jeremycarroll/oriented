@@ -42,40 +42,7 @@ public class TestCircuits {
 		assertFalse("tooLittle", tooLittle.verify());
 		assertFalse("tooMuch", tooMuch.verify());
 		System.out.println("Circuits: " + chapter1.toString());
-		// System.err.println(chapter1.toString());
 	}
-	//
-	// @Test
-	// public void testVerifyWeakElimination() {
-	// assertFalse("tooLittle",tooLittle.verifyWeakElimination());
-	// assertTrue("tooMuch",tooMuch.verifyWeakElimination());
-	// assertTrue("chapter1",chapter1.verifyWeakElimination());
-	// }
-	//
-	// @Test
-	// public void testVerifyIncomparability() {
-	// assertTrue(chapter1.verifyIncomparability());
-	// assertTrue(tooLittle.verifyIncomparability());
-	// assertFalse(tooMuch.verifyIncomparability());
-	// }
-
-	// @Test
-	// public void testToStringSetOfOfString() {
-	// System.out.println("Chapter1: " + chapter1.toString(e));
-	// System.out.println("Toomuch: " + tooMuch.toString(e));
-	// System.out.println("Too Little: " + tooLittle.toString(e));
-	// assertEquals("chapter1",chapter1,Circuits.parse(chapter1.toString(e)));
-	// assertEquals("too much",tooMuch,Circuits.parse(tooMuch.toString(e)));
-	// assertEquals("too little",tooLittle,Circuits.parse(tooLittle.toString(e)));
-	// }
-	//
-	// @Test
-	// public void testToPlusMinus() {
-	// System.out.println("Chapter1: " + chapter1.toPlusMinus(e));
-	// System.out.println("Toomuch: " + tooMuch.toPlusMinus(e));
-	// System.out.println("Too Little: " + tooLittle.toPlusMinus(e));
-	//
-	// }
 
 }
 /************************************************************************
