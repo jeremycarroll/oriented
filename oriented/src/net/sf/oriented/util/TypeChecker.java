@@ -9,8 +9,23 @@ import java.lang.reflect.TypeVariable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The code uses the convention that two type parameters
+ * one of whom is NAME and the other of which is NAME2
+ * represent the same class, and hence can be cast one to the other
+ * without issue.
+ * This checks the implementation of that convention at runtime.
+ * @author jeremycarroll
+ *
+ */
 public class TypeChecker {
     
+    /**
+     * Call this method in constructors of
+     * top-level superclasses of class hierarchies
+     * using the type parameter naming convention.
+     * @param o
+     */
     public static void check(Object o) {
         checkClass(o.getClass());
     }

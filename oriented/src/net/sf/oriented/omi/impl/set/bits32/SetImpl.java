@@ -14,9 +14,23 @@ import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
 
+/**
+ * Sets built around 32 bit representations of up to 32 different items.
+ * @author jeremycarroll
+ *
+ * @param <ITEM_INTERNAL> The internal API or implementation for members.
+ * @param <SET_INTERNAL> The internal API or implementation for sets.
+ * @param <ITEM> The external API for members.
+ * @param <SET> The external API for sets.
+ * @param <ITEM_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ * @param <SET_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ */
+//@formatter:off
 abstract public class SetImpl<
                   ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
-                  SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+                  SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, 
+                                                     ITEM, SET, 
+                                                     ITEM_INTERNAL2, SET_INTERNAL2>, 
                   ITEM, 
                   SET extends SetOf<ITEM, SET>, 
                   ITEM_INTERNAL2 extends ITEM, 
@@ -30,6 +44,7 @@ abstract public class SetImpl<
 		      ITEM_INTERNAL2, 
 		      SET_INTERNAL2> implements
 		SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> {
+//@formatter:on
 	private final class PowerJavaSet extends AbstractCollection<SET_INTERNAL2> implements
 			JavaSet<SET_INTERNAL2> {
 
