@@ -15,23 +15,23 @@ import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
 
 abstract public class SetImpl<
-                  E extends HasFactory<E, EX, ER>, 
-                  S extends SetOfInternal<E, S, EX, SX, ER, SS>, 
-                  EX, 
-                  SX extends SetOf<EX, SX>, 
-                  ER extends EX, 
-                  SS extends SX
+                  ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+                  SET_INTERNAL extends SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>, 
+                  ITEM, 
+                  SET extends SetOf<ITEM, SET>, 
+                  ITEM_INTERNAL2 extends ITEM, 
+                  SET_INTERNAL2 extends SET
                   >
 		extends HasSetFactoryImpl<
-		      E, 
-		      S, 
-		      EX, 
-		      SX, 
-		      ER, 
-		      SS> implements
-		SetOfInternal<E, S, EX, SX, ER, SS> {
-	private final class PowerJavaSet extends AbstractCollection<SS> implements
-			JavaSet<SS> {
+		      ITEM_INTERNAL, 
+		      SET_INTERNAL, 
+		      ITEM, 
+		      SET, 
+		      ITEM_INTERNAL2, 
+		      SET_INTERNAL2> implements
+		SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> {
+	private final class PowerJavaSet extends AbstractCollection<SET_INTERNAL2> implements
+			JavaSet<SET_INTERNAL2> {
 
 		final int size;
 
@@ -40,8 +40,8 @@ abstract public class SetImpl<
 		}
 
 		@Override
-		public Iterator<SS> iterator() {
-			return new Iterator<SS>() {
+		public Iterator<SET_INTERNAL2> iterator() {
+			return new Iterator<SET_INTERNAL2>() {
 				int i = 0;
 
 				@Override
@@ -50,12 +50,12 @@ abstract public class SetImpl<
 				}
 
 				@Override
-				public SS next() {
-					JavaSet<ER> m = emptyCollectionOf();
-					Iterator<ER> it = SetImpl.this.iterator();
+				public SET_INTERNAL2 next() {
+					JavaSet<ITEM_INTERNAL2> m = emptyCollectionOf();
+					Iterator<ITEM_INTERNAL2> it = SetImpl.this.iterator();
 					int j = 0;
 					while (it.hasNext()) {
-						ER n = it.next();
+						ITEM_INTERNAL2 n = it.next();
 						if (((1 << j) & i) != 0) {
 							m.add(n);
 						}
@@ -78,11 +78,11 @@ abstract public class SetImpl<
 		}
 	}
 
-	S remake(SX x) {
+	SET_INTERNAL remake(SET x) {
 		return factory.remake(x);
 	}
 
-	E remake(EX x) {
+	ITEM_INTERNAL remake(ITEM x) {
 		return factory().itemFactory().remake(x);
 	}
 
@@ -97,14 +97,14 @@ abstract public class SetImpl<
 	// members = new HashSet<E>(a);
 	// }
 
-	public SetImpl(SetFactoryInternal<E, S, EX, SX, ER, SS> f) {
+	public SetImpl(SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> f) {
 		super(f);
 	}
 
 	@Override
-	public JavaSet<ER> asCollection() {
-		JavaSet<ER> r = factory().itemFactory().emptyCollectionOf();
-		Iterator<ER> it = iterator();
+	public JavaSet<ITEM_INTERNAL2> asCollection() {
+		JavaSet<ITEM_INTERNAL2> r = factory().itemFactory().emptyCollectionOf();
+		Iterator<ITEM_INTERNAL2> it = iterator();
 		while (it.hasNext()) {
 			r.add(it.next());
 		}
@@ -114,7 +114,7 @@ abstract public class SetImpl<
 	@Override
 	public int hashCode() {
 		int rslt = 0;
-		Iterator<ER> it = iterator();
+		Iterator<ITEM_INTERNAL2> it = iterator();
 		while (it.hasNext()) {
 			rslt += it.next().hashCode();
 		}
@@ -126,22 +126,22 @@ abstract public class SetImpl<
 	public boolean equals(Object o) {
 		if (o == null || (!(o instanceof SetOf)))
 			return false;
-		SX sx = (SX) o;
+		SET sx = (SET) o;
 		return sx.equalsIsSameSetAs() && sameSetAs(sx);
 	}
 
 	@Override
-	public boolean sameSetAs(SX a) {
+	public boolean sameSetAs(SET a) {
 		if (size() != a.size())
 			return false;
 		return isSubsetOf(a) && isSupersetOf(a);
 	}
 
-	public SS only(Test<EX> t) {
-		JavaSet<ER> r = emptyCollectionOf();
-		Iterator<ER> i = iterator();
+	public SET_INTERNAL2 only(Test<ITEM> t) {
+		JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
+		Iterator<ITEM_INTERNAL2> i = iterator();
 		while (i.hasNext()) {
-			ER n = i.next();
+			ITEM_INTERNAL2 n = i.next();
 			if (t.test(n)) {
 				r.add(n);
 			}
@@ -157,15 +157,15 @@ abstract public class SetImpl<
 	 * @return
 	 */
 	@Override
-	public SS useCollection(JavaSet<ER> bases) {
+	public SET_INTERNAL2 useCollection(JavaSet<ITEM_INTERNAL2> bases) {
 		return factory().fromBackingCollection(bases);
 	}
 
-	public SS excluding(Test<EX> t) {
-		JavaSet<ER> r = emptyCollectionOf();
-		Iterator<ER> i = iterator();
+	public SET_INTERNAL2 excluding(Test<ITEM> t) {
+		JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
+		Iterator<ITEM_INTERNAL2> i = iterator();
 		while (i.hasNext()) {
-			ER n = i.next();
+			ITEM_INTERNAL2 n = i.next();
 			if (!t.test(n)) {
 				r.add(n);
 			}
@@ -173,12 +173,12 @@ abstract public class SetImpl<
 		return useCollection(r);
 	}
 
-	protected JavaSet<ER> emptyCollectionOf() {
+	protected JavaSet<ITEM_INTERNAL2> emptyCollectionOf() {
 		return factory().itemFactory().emptyCollectionOf();
 	}
 
 	@Override
-	public JavaSet<SS> powerSet() {
+	public JavaSet<SET_INTERNAL2> powerSet() {
 		final int sz = size();
 		if (sz > 30)
 			throw new IllegalArgumentException("unimplemented powerset sz > 30");
@@ -186,44 +186,44 @@ abstract public class SetImpl<
 	}
 
 	@Override
-	public JavaSet<SS> subsetsOfSize(int i) {
+	public JavaSet<SET_INTERNAL2> subsetsOfSize(int i) {
 		return convert(subsetsOfSize(0, i));
 	}
 
-	private JavaSet<SS> convert(Collection<JavaSet<ER>> c) {
-		JavaSet<SS> r = factory.emptyCollectionOf();
-		Iterator<JavaSet<ER>> it = c.iterator();
+	private JavaSet<SET_INTERNAL2> convert(Collection<JavaSet<ITEM_INTERNAL2>> c) {
+		JavaSet<SET_INTERNAL2> r = factory.emptyCollectionOf();
+		Iterator<JavaSet<ITEM_INTERNAL2>> it = c.iterator();
 		while (it.hasNext()) {
-			SS useCollection = useCollection(it.next());
+			SET_INTERNAL2 useCollection = useCollection(it.next());
 			r.add(useCollection);
 		}
 		return r;
 	}
 
-	private Set<JavaSet<ER>> subsetsOfSize(int x, int sz) {
+	private Set<JavaSet<ITEM_INTERNAL2>> subsetsOfSize(int x, int sz) {
 
 		// System.err.println(x + "/"+ sz + "/" + size());
 
 		if (sz == 0) {
-			Set<JavaSet<ER>> r = new HashSet<JavaSet<ER>>();
+			Set<JavaSet<ITEM_INTERNAL2>> r = new HashSet<JavaSet<ITEM_INTERNAL2>>();
 			r.add(emptyCollectionOf());
 			return r;
 		}
 		if (x == size())
-			return new HashSet<JavaSet<ER>>();
-		ER xth = ith(x);
-		Set<JavaSet<ER>> rslt = subsetsOfSize(x + 1, sz);
-		Iterator<JavaSet<ER>> it = subsetsOfSize(x + 1, sz - 1).iterator();
+			return new HashSet<JavaSet<ITEM_INTERNAL2>>();
+		ITEM_INTERNAL2 xth = ith(x);
+		Set<JavaSet<ITEM_INTERNAL2>> rslt = subsetsOfSize(x + 1, sz);
+		Iterator<JavaSet<ITEM_INTERNAL2>> it = subsetsOfSize(x + 1, sz - 1).iterator();
 		while (it.hasNext()) {
-			JavaSet<ER> n = it.next();
+			JavaSet<ITEM_INTERNAL2> n = it.next();
 			n.add(xth);
 			rslt.add(n);
 		}
 		return rslt;
 	}
 
-	private ER ith(int x) {
-		Iterator<ER> it = iterator();
+	private ITEM_INTERNAL2 ith(int x) {
+		Iterator<ITEM_INTERNAL2> it = iterator();
 		while (x > 0) {
 			x--;
 			it.next();
@@ -232,9 +232,9 @@ abstract public class SetImpl<
 	}
 
 	@Override
-	public ER theMember() {
-		Iterator<ER> it = iterator();
-		ER r = it.next();
+	public ITEM_INTERNAL2 theMember() {
+		Iterator<ITEM_INTERNAL2> it = iterator();
+		ITEM_INTERNAL2 r = it.next();
 		if (it.hasNext())
 			throw new IllegalStateException("More than one member.");
 		return r;
@@ -247,8 +247,8 @@ abstract public class SetImpl<
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public SS respectingEquals() {
-		return (SS) this;
+	public SET_INTERNAL2 respectingEquals() {
+		return (SET_INTERNAL2) this;
 	}
 
 }
