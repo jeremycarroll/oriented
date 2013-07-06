@@ -10,6 +10,17 @@ import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.HasFactoryImpl;
 
+/**
+ * Things that have factories that build sets.
+ * @author jeremycarroll
+ *
+ * @param <ITEM_INTERNAL> The internal API or implementation for members.
+ * @param <SET_INTERNAL> The internal API or implementation for sets.
+ * @param <ITEM> The external API for members.
+ * @param <SET> The external API for sets.
+ * @param <ITEM_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ * @param <SET_INTERNAL2> See {@link net.sf.oriented.util.TypeChecker}
+ */
 //@formatter:off
 public class HasSetFactoryImpl<
         ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
