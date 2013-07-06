@@ -10,7 +10,8 @@ import net.sf.oriented.omi.Factory;
 public interface HasFactory<
     ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
     ITEM, 
-    ITEM_INTERNAL2 extends ITEM> {
+    ITEM_INTERNAL2 extends ITEM> 
+{
 //@formatter:on
 	FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> factory();
 

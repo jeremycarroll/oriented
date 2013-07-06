@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.util;
 
-import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -25,7 +24,6 @@ public class TypeChecker {
         if (done.contains(clazz)) {
             return;
         }
-        System.err.println(clazz.getName());
         done.add(clazz);
 
         checkSuper(clazz,clazz.getGenericSuperclass());
@@ -51,25 +49,70 @@ public class TypeChecker {
 
     private static void checkTypeArguments(TypeVariable<?>[] params,
             Type[] args, Class<?> clazz, Class<?> superClazz) {
-        System.err.println(args.length+" = "+params.length);
-        System.err.println(clazz.getName() + " => "+superClazz.getName());
         if (args.length != params.length) {
             throw new Error(formatMessage(clazz,superClazz,"declare inconsistent number of type parameters."));
         }
         for (int i=0;i<params.length;i++) {
             String name = params[i].getName();
-            System.err.println(name + " = "+ args[i].toString()+ " "+args[i].getClass().getName());
-            if (name.endsWith("2")) {
-                name = name.substring(0, name.length()-1);
+            String name1 = name2ToName1(name);
+            if (name1 != null)   {  
+                int ix1 = findIndex(name1,params);
+                checkCompatible(args[ix1],args[i],clazz,superClazz);
             }
         }
+    }
+
+    private static String name2ToName1(String name) {
+        if (name.endsWith("2")) {
+            return name.substring(0, name.length()-1);
+        } else {
+            return null;
+        }
+    }
         
+
+    private static void checkCompatible(Type type1, Type type2, Class<?> clazz,
+            Class<?> superClazz) {
+        if (type1.equals(type2)) {
+            return;
+        }
+        if (type1.getClass() == type2.getClass()) {
+            if (type1.getClass() == Class.class) {
+               // already covered
+            } else if (type1 instanceof TypeVariable) {
+                String name1 = ((TypeVariable<?>) type1).getName();
+                String name2 = ((TypeVariable<?>) type2).getName();
+                if (name1.equals(name2)) {
+                    return;
+                }
+                if (name1.equals(name2ToName1(name2))) {
+                    return;
+                }
+            } else if (type1 instanceof ParameterizedType) {
+                // not implemented
+                throw new UnsupportedOperationException("ParameterizedType support not yet written.");
+            } else {
+                // not even known as not implemented
+                throw new UnsupportedOperationException("Unexpected case in logic.");
+            }
+        }
+        // bad case
+        System.err.println(formatMessage(clazz,superClazz,
+                "Runtime type check failed: "+type1+" is not compatible with "+type2));
+    }
+
+    private static int findIndex(String name, TypeVariable<?>[] params) {
+        for (int i=0;i<params.length;i++) {
+            if (name.equals( params[i].getName() ) ) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Type param "+name+" not found.");
     }
 
     private static String formatMessage(Class<?> clazz, Class<?> superClazz,
-            String string) {
-        // TODO Auto-generated method stub
-        return null;
+            String msg) {
+        return clazz.getName()+":"+superClazz.getName()+":"+msg;
     }
 
 }
