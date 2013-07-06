@@ -28,29 +28,7 @@ public class TestLUDecomposition {
 	static double chap1D[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
 			{ 0, 0, 1, 0, 1, 1 } };
 
-	// @Test
-	// public void testDatum() {
-	// RationalMatrix matrix = new RationalMatrix(chap1);
-	// FieldQRDecomposition<PerisicFieldElement> a = new
-	// FieldQRDecomposition<PerisicFieldElement>(
-	// matrix.getDelegate().transpose());
-	//
-	// System.err.println("Q: " + new RationalMatrix(a.getQ()).toString());
-	// System.err.println("QT: " + new RationalMatrix(a.getQT()).toString());
-	// System.err.println("H: " + new RationalMatrix(a.getH()).toString());
-	// System.err.println("R: " + new RationalMatrix(a.getR()).toString());
-	// }
-
-	// @Test
-	// public void testQR() {
-	// RealMatrix matrix = new Array2DRowRealMatrix(chap1D).transpose();
-	// QRDecomposition a = new QRDecomposition(matrix);
-	//
-	// System.err.println("Q: " + toString(a.getQ()));
-	// System.err.println("QT: " + toString(a.getQT()));
-	// System.err.println("H: " + toString(a.getH()));
-	// System.err.println("R: " + toString(a.getR()));
-	// }
+	
 
 	@Test
 	public void testLUt() {
@@ -76,18 +54,7 @@ public class TestLUDecomposition {
 		System.err.println("U: " + new RationalMatrix(a.getU()).toString());
 	}
 
-	// @Test
-	// public void testREFF() {
-	// RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
-	// .getDelegate().transpose());
-	// FieldREFFDecomposition<PerisicFieldElement> a = new
-	// FieldREFFDecomposition<PerisicFieldElement>(
-	// matrix.getDelegate());
-	//
-	// System.err.println("L: " + new RationalMatrix(a.getL()).toString());
-	// System.err.println("P: " + new RationalMatrix(a.getP()).toString());
-	// System.err.println("U: " + new RationalMatrix(a.getU()).toString());
-	// }
+	
 	@Test
 	public void testDual() {
 		FieldMatrix<PerisicFieldElement> matrix = new RationalMatrix(chap1)

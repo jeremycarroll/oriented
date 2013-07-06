@@ -117,15 +117,16 @@ public class TestLU {
 		FieldMatrix<PerisicFieldElement> L = lu.getL();
 		FieldMatrix<PerisicFieldElement> P = lu.getP();
 		FieldMatrix<PerisicFieldElement> U = lu.getU();
-		System.err.println(nm + " " + name + " A: " + toString(A));
-		System.err.println(" L: " + toString(L));
-		System.err.println(" P: " + toString(P));
-		System.err.println(" U: " + toString(U));
+//		System.err.println(nm + " " + name + " A: " + toString(A));
+//		System.err.println(" L: " + toString(L));
+//		System.err.println(" P: " + toString(P));
+//		System.err.println(" U: " + toString(U));
 		Assert.assertEquals(P.multiply(A), L.multiply(U));
 
 	}
 
-	private String toString(FieldMatrix<PerisicFieldElement> u) {
+	@SuppressWarnings("unused")
+    private String toString(FieldMatrix<PerisicFieldElement> u) {
 		return new RationalMatrix(u).toString();
 	}
 }

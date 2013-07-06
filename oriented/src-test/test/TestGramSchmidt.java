@@ -51,7 +51,8 @@ public class TestGramSchmidt {
 	}
 
 	private final int data[][];
-	private final String name;
+	@SuppressWarnings("unused")
+    private final String name;
 
 	public TestGramSchmidt(String nm, int[][] d) {
 		data = d;
@@ -75,19 +76,20 @@ public class TestGramSchmidt {
 		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
 				matrix.getDelegate());
 
-		FieldMatrix<PerisicFieldElement> A = matrix.getDelegate();
-		FieldMatrix<PerisicFieldElement> B = gs.getBasis();
-		FieldMatrix<PerisicFieldElement> D = gs.getDual();
-		System.err.println(nm + " " + name + " A: " + toString(A));
-		System.err.println(" B: " + toString(B));
-		if (D != null) {
-			System.err.println(" D: " + toString(D));
-		}
+//		FieldMatrix<PerisicFieldElement> A = matrix.getDelegate();
+//		FieldMatrix<PerisicFieldElement> B = gs.getBasis();
+//		FieldMatrix<PerisicFieldElement> D = gs.getDual();
+//		System.err.println(nm + " " + name + " A: " + toString(A));
+//		System.err.println(" B: " + toString(B));
+//		if (D != null) {
+//			System.err.println(" D: " + toString(D));
+//		}
 		Assert.assertTrue(gs.verify());
 
 	}
 
-	private String toString(FieldMatrix<PerisicFieldElement> u) {
+	@SuppressWarnings("unused")
+    private String toString(FieldMatrix<PerisicFieldElement> u) {
 		return new RationalMatrix(u).toString();
 	}
 }

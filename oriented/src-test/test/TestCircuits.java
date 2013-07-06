@@ -6,6 +6,7 @@ package test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static net.sf.oriented.omi.Examples.chapter1;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
@@ -22,13 +23,11 @@ public class TestCircuits {
 		options.setShortLabels();
 		f = new FactoryFactory(options);
 	}
-	static OMS chapter1, tooLittle, tooMuch;
+	static OMS tooLittle, tooMuch;
 	static UnsignedSet e;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		chapter1 = f.circuits().parse(
-				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
 		tooLittle = f.circuits().parse("{12'4,13'5,45'6,12'56',13'46,23'4'5}");
 		tooMuch = f.circuits().parse(
 				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5,12'345'}");
