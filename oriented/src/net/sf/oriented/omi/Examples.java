@@ -14,6 +14,9 @@ import net.sf.oriented.matrix.RationalMatrix;
  * 
  */
 public class Examples {
+    
+
+    public final static OM chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
     /**
      * See the "Sharpness of Circular Saws (2000)"
      */
@@ -54,6 +57,19 @@ public class Examples {
         return new FactoryFactory(opt).chirotope().parse(
                 "(" + u + ", " + r + ", " + chi.replaceAll(" ", "")
                         + ")");
+    }
+    
+    private static OM fromCircuits(String circuits) {
+            Options options = new Options();
+            options.setShortLabels();
+            return new FactoryFactory(options).circuits().parse(circuits);
+    }
+
+    static FactoryFactory f;
+    static {
+        Options options = new Options();
+        options.setShortLabels();
+        f = new FactoryFactory(options);
     }
 
     private static String createUniverse(int n, Options opt) {
