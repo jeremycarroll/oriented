@@ -60,7 +60,8 @@ public class TestLU {
 	}
 
 	private final int data[][];
-	private final String name;
+	@SuppressWarnings("unused")
+    private final String name;
 
 	public TestLU(String nm, int[][] d) {
 		data = d;
