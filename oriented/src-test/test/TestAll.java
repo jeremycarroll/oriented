@@ -24,7 +24,9 @@ import org.junit.runners.Suite.SuiteClasses;
     TestLUDecomposition.class, 
     TestGramSchmidt.class,
     TestDualRealized.class, 
-    TestExamples.class
+    TestExamples.class,
+    TestPermutations.class,
+    TestRealization.class
 
 })
 @RunWith(Suite.class)
