@@ -17,6 +17,7 @@ import org.apache.commons.math3.linear.BlockFieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealMatrixPreservingVisitor;
+import org.junit.Assert;
 import org.junit.Test;
 
 import Jama.LUDecomposition;
@@ -36,10 +37,9 @@ public class TestLUDecomposition {
 				.getDelegate().transpose());
 		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
 				matrix.getDelegate());
-
-		System.err.println("L: " + new RationalMatrix(a.getL()).toString());
-		System.err.println("P: " + new RationalMatrix(a.getP()).toString());
-		System.err.println("U: " + new RationalMatrix(a.getU()).toString());
+		Assert.assertEquals("L","[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]",new RationalMatrix(a.getL()).toString());
+		Assert.assertEquals("P","[ [ 1  0  0  0  0  0 ] [ 0  1  0  0  0  0 ] [ 0  0  1  0  0  0 ] [ 0  0  0  1  0  0 ] [ 0  0  0  0  1  0 ] [ 0  0  0  0  0  1 ] ]",new RationalMatrix(a.getP()).toString());
+		Assert.assertEquals("U","[ [ 1  0  0 ] [ 0  1  0 ] [ 0  0  1 ] ]",new RationalMatrix(a.getU()).toString());
 	}
 
 	@Test
@@ -48,50 +48,62 @@ public class TestLUDecomposition {
 				new RationalMatrix(chap1).getDelegate());
 		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
 				matrix.getDelegate());
+        assertLPU(a, 
+                "[ [ 1  0  0 ] [ 0  1  0 ] [ 0  0  1 ] ]", 
+                "[ [ 1  0  0 ] [ 0  1  0 ] [ 0  0  1 ] ]", 
+                "[ [ 1  0  0 ] [ 1  1  0 ] [ 1  1  1 ] [ 0  1  0 ] [ 0  1  1 ] [ 0  0  1 ] ]");
 
-		System.err.println("L: " + new RationalMatrix(a.getL()).toString());
-		System.err.println("P: " + new RationalMatrix(a.getP()).toString());
-		System.err.println("U: " + new RationalMatrix(a.getU()).toString());
 	}
+
+    private void assertLPU(FieldLUDecomposition<PerisicFieldElement> a,
+            String expectedL, String expectedP, String expectedU) {
+        Assert.assertEquals("L",expectedL,new RationalMatrix(a.getL()).toString());
+        Assert.assertEquals("P",expectedP,new RationalMatrix(a.getP()).toString());
+        Assert.assertEquals("U",expectedU,new RationalMatrix(a.getU()).toString());
+    }
 
 	
 	@Test
 	public void testDual() {
 		FieldMatrix<PerisicFieldElement> matrix = new RationalMatrix(chap1)
 				.getDelegate().transpose();
-		System.err.println("W: " + new RationalMatrix(matrix).toString());
+		Assert.assertEquals("W","[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]",new RationalMatrix(matrix).toString());
 		FieldMatrix<PerisicFieldElement> bigger = new BlockFieldMatrix<PerisicFieldElement>(
 				matrix.getField(), matrix.getRowDimension(),
 				matrix.getColumnDimension() + matrix.getRowDimension());
 		PerisicFieldElement m[][] = matrix.getData();
 		bigger.setSubMatrix(m, 0, 0);
-		System.err.println("X: " + new RationalMatrix(bigger).toString());
+		Assert.assertEquals("X",
+		           "[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] [ 0  0  0  0  0  0 ] [ 0  0  0  0  0  0 ] [ 0  0  0  0  0  0 ] [ 0  0  0  0  0  0 ] [ 0  0  0  0  0  0 ] [ 0  0  0  0  0  0 ] ]", 
+		            new RationalMatrix(bigger).toString());
 		int mm = matrix.getColumnDimension();
 		int n = matrix.getRowDimension();
 		for (int i = 0; i < n; i++) {
 			bigger.setEntry(i, i + mm, matrix.getField().getOne());
 		}
-		System.err.println("Y: " + new RationalMatrix(bigger).toString());
+        Assert.assertEquals("Y",
+                "[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] [ 1  0  0  0  0  0 ] [ 0  1  0  0  0  0 ] [ 0  0  1  0  0  0 ] [ 0  0  0  1  0  0 ] [ 0  0  0  0  1  0 ] [ 0  0  0  0  0  1 ] ]", 
+                 new RationalMatrix(bigger).toString());
 		RationalMatrix matrix2 = new RationalMatrix(bigger.transpose());
 		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
 				matrix2.getDelegate());
-
-		System.err.println("L: " + new RationalMatrix(a.getL()).toString());
-		System.err.println("P: " + new RationalMatrix(a.getP()).toString());
-		System.err.println("U: " + new RationalMatrix(a.getU()).toString());
-
+        assertLPU(a, 
+                "[ [ 1  0  0  1  0  0  0  0  0 ] [ 0  1  0  -1  1  0  0  0  0 ] [ 0  0  1  0  -1  0  1  0  0 ] [ 0  0  0  1  -1  1  0  0  0 ] [ 0  0  0  0  1  -1  -1  1  0 ] [ 0  0  0  0  0  1  0  -1  1 ] ]", 
+                "[ [ 1  0  0  0  0  0  0  0  0 ] [ 0  1  0  0  0  0  0  0  0 ] [ 0  0  1  0  0  0  0  0  0 ] [ 0  0  0  1  0  0  0  0  0 ] [ 0  0  0  0  1  0  0  0  0 ] [ 0  0  0  0  0  0  1  0  0 ] [ 0  0  0  0  0  1  0  0  0 ] [ 0  0  0  0  0  0  0  1  0 ] [ 0  0  0  0  0  0  0  0  1 ] ]", 
+                "[ [ 1  0  0  0  0  0 ] [ 1  1  0  0  0  0 ] [ 1  1  1  0  0  0 ] [ 0  1  0  1  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]");
 	}
 
 	@Test
 	public void testLUJama() {
 		Matrix matrix = new Matrix(chap1D);
 		LUDecomposition a = new LUDecomposition(matrix.transpose());
-		System.err.println("L: " + toString(a.getL()));
-		System.err.println("P: " + toString(a.getPivot()));
-		System.err.println("U: " + toString(a.getU()));
+//		System.err.println("L: " + toString(a.getL()));
+		Assert.assertArrayEquals("P", new int[]{0,1,2,3,4,5},a.getPivot());
+//		System.err.println("U: " + toString(a.getU()));
 	}
 
-	private String toString(Matrix l) {
+	@SuppressWarnings("unused")
+    private String toString(Matrix l) {
 		Writer w = new StringWriter();
 		PrintWriter pw = new PrintWriter(w);
 		l.print(pw, 5, 2);
@@ -99,7 +111,8 @@ public class TestLUDecomposition {
 		return w.toString();
 	}
 
-	private String toString(int[] pivot) {
+	@SuppressWarnings("unused")
+    private String toString(int[] pivot) {
 		final StringBuffer rslt = new StringBuffer();
 		rslt.append("[");
 		rslt.append(pivot[0]);
