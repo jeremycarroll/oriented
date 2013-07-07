@@ -29,40 +29,8 @@ Main goal for 0.2:
 - choose an infinity/zero
 - order the other lines
 
-SubGoal June 28, 2013
-- new feature: given OM, give all possible 'positive' chirotopes, through reorderings
-  and reorientations.
-  Positive chirotope is one in which the first load of signs are non-negative
-  Where first depends on the rank, for rank 3 it is triangle(n-2)
-  
-- add support for permutations
-- check factories really do remake correctly: some doubt around the chirotope factory
-   - add tests that exercise Factory.remake() and equality etc
-   
-   
-SubGoal June 28, 2013
-- add some more examples, add tests for their level of symmetry by looking at
-  the number of reorientations
-- include non-pappus
-- include omega14 +,-,0
-- include general circular saw construct
-- include Ceva
 
-SubGoal June 28, 2013
-- example generating code that is robust against 0 as opposed to +/-
 
-SubGoal June 28
-- sort out Pair in OMChirotopeFactory
-
-Task July 6th
-- sort out legal: GPL for my code, and proper ack of 3rd party code
-
-Task July 6th
-- add support for reorientation
-- add support for reorientation classes
-
-Task July 6th
-- add references in bibtex format
 
 
 
