@@ -47,8 +47,8 @@ public class TestDualRealized {
 	public void testDualDualCoCircuits() {
 		OM dual = all.ffactory().realized()
 				.parse(all.dual().getRealized().toString());
-		System.err.println(dual.dual().getRealized().toString());
-		System.err.println(dual.dual().getCircuits().toString());
+//		System.err.println(dual.dual().getRealized().toString());
+//		System.err.println(dual.dual().getCircuits().toString());
 		Assert.assertEquals(all.getCircuits().toString(), dual.dual()
 				.getCircuits().toString());
 	}

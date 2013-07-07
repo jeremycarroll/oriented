@@ -21,7 +21,7 @@ public class TestExamples {
     public void testVerify() {
         for (Pair<OM,String> om: testOrientedMatroids()) {
             Assert.assertTrue(om.getValue(),om.getKey().verify());
-            System.err.println(om.getValue()+" "+om.getKey().getChirotope().toString());
+//            System.err.println(om.getValue()+" "+om.getKey().getChirotope().toString());
         }
     }
     private Iterable<Pair<OM,String>> testOrientedMatroids() {

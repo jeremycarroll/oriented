@@ -54,7 +54,7 @@ class DeterminantCalculator {
 		assert (((QuotientField) quotient.getRing()).denominator(quotient)
 				.equals(PerisicField.U.one()));
 		formula = ((QuotientField) quotient.getRing()).numerator(quotient);
-		System.err.println(formula);
+//		System.err.println(formula);
 	}
 
 	public static DeterminantCalculator get(int h) {

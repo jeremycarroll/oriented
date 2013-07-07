@@ -112,7 +112,7 @@ public class TypeChecker {
             }
         }
         // bad case
-        System.err.println(formatMessage(clazz,superClazz,
+        throw new UnsupportedOperationException(formatMessage(clazz,superClazz,
                 "Runtime type check failed: "+type1+" is not compatible with "+type2));
     }
 

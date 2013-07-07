@@ -126,7 +126,7 @@ public class Examples {
     }
 
     private static void set(int[][] projective, int ix, int x, int y, int z) {
-        System.err.println("["+ix+"]=("+x+","+y+","+z+")");
+//        System.err.println("["+ix+"]=("+x+","+y+","+z+")");
         projective[0][ix] = x;
         projective[1][ix] = y;
         projective[2][ix] = z;
