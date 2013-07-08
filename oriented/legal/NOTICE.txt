@@ -6,3 +6,6 @@ The Apache Software Foundation (http://www.apache.org/).
 
 This product includes software from the Spring Framework,
 under the Apache License 2.0 (see: StringUtils.containsWhitespace())
+
+The file FieldLUDecomposition.java in package net.sf.oriented.matrix
+has been modified, and contains a PROMINENT NOTICE describing the modification.
