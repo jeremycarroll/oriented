@@ -5,9 +5,6 @@
 
 package test;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 
 import net.sf.oriented.matrix.FieldLUDecomposition;
 import net.sf.oriented.matrix.PerisicFieldElement;
@@ -20,8 +17,6 @@ import org.apache.commons.math3.linear.RealMatrixPreservingVisitor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import Jama.LUDecomposition;
-import Jama.Matrix;
 
 public class TestLUDecomposition {
 	static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
@@ -93,23 +88,6 @@ public class TestLUDecomposition {
                 "[ [ 1  0  0  0  0  0 ] [ 1  1  0  0  0  0 ] [ 1  1  1  0  0  0 ] [ 0  1  0  1  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]");
 	}
 
-	@Test
-	public void testLUJama() {
-		Matrix matrix = new Matrix(chap1D);
-		LUDecomposition a = new LUDecomposition(matrix.transpose());
-//		System.err.println("L: " + toString(a.getL()));
-		Assert.assertArrayEquals("P", new int[]{0,1,2,3,4,5},a.getPivot());
-//		System.err.println("U: " + toString(a.getU()));
-	}
-
-	@SuppressWarnings("unused")
-    private String toString(Matrix l) {
-		Writer w = new StringWriter();
-		PrintWriter pw = new PrintWriter(w);
-		l.print(pw, 5, 2);
-		pw.close();
-		return w.toString();
-	}
 
 	@SuppressWarnings("unused")
     private String toString(int[] pivot) {
