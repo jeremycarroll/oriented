@@ -5,7 +5,9 @@
 
 package test;
 
+import junit.framework.Assert;
 import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.Options;
@@ -30,14 +32,22 @@ public class TestRealization {
 
 	@Test
 	public void testToString() {
-		System.err.println(testDatum().toString());
+	    Assert.assertTrue(
+	            testDatum()
+	               .toString()
+	               .contains("[ [ 1  0  0 ] [ 1  1  0 ] [ 1  1  1 ] [ 0  1  0 ] [ 0  1  1 ] [ 0  0  1 ] ]"));
 	}
 
 	@Test
 	public void testToChirotope() {
-		System.err.println(testDatum().getChirotope().toString());
+        Assert.assertTrue(
+                testDatum().getChirotope().toString().contains("+0++-0++++--0++++++0"));
 	}
 
+	@Test
+	public void testEquals() {
+	    Assert.assertTrue(testDatum().equals(Examples.chapter1));
+	}
 }
 
 /************************************************************************
