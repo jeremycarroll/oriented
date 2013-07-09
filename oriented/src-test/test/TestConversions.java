@@ -45,11 +45,10 @@ public class TestConversions {
 	@Parameters
 	public static Collection<Object[]> data() {
 
-		FactoryFactory factories[] = new FactoryFactory[4];
+		FactoryFactory factories[] = new FactoryFactory[5];
 		int n = 0;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			Options opt = new Options();
-			opt.setUniverse(new String[] { "1", "2", "3", "4", "5", "6", "7" });
 			switch (i) {
 			case 0:
 				opt.setLongLabels();
@@ -62,7 +61,11 @@ public class TestConversions {
 				break;
 			case 3:
 				break;
+			case 4:
+			    opt.setImplementation(Options.Impl.hash);
+			    break;
 			}
+            opt.setUniverse(new String[] { "1", "2", "3", "4", "5", "6", "7" });
 			factories[i] = new FactoryFactory(opt);
 		}
 		special = factories[3];
@@ -111,6 +114,8 @@ public class TestConversions {
 			return "+/-";
 		case 3:
 			return "special";
+        case 4:
+            return "hash";
 		default:
 			return "!";
 		}
