@@ -6,10 +6,9 @@ package test;
 
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Matroid;
-import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
+import static net.sf.oriented.omi.Examples.chapter1;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestMatroid {
@@ -20,22 +19,17 @@ public class TestMatroid {
 		options.setShortLabels();
 		f = new FactoryFactory(options);
 	}
-	static OMS chapter1;
 
-	@BeforeClass
-	public static void setUpBeforeClass() {
-		chapter1 = f.circuits().parse(
-				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+	private void testMatroid(Matroid m) {
+	    TestCircuits.testStringFormat(m.getBases().toString());
+        TestCircuits.testStringFormat(m.getCircuits().toString());
 	}
 
 	@Test
 	public void testM() {
-		System.out.println("Circuits: " + chapter1.getCircuits().toString());
 		Matroid m = chapter1.getMatroid();
-		System.out.println("CoCircuits: " + m.dual().getCircuits().toString());
-
-		System.out.println("Bases: " + m.getBases().toString());
-		System.out.println("CoBases: " + m.dual().getBases().toString());
+		testMatroid(m);
+		testMatroid(m.dual());
 	}
 
 }
