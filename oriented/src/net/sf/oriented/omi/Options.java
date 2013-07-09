@@ -18,12 +18,24 @@ import net.sf.oriented.omi.impl.items.LabelFactory;
  * 
  */
 public class Options {
+    
+    public enum Impl {
+        /**
+         * Represent a set of labels by a 32 bit structure.
+         * The universe {@link #setUniverse}, must have 32 or fewer
+         * members.
+         */
+        bits32,
+        /**
+         * Use java sets to represent everything ... somewhat inefficient.
+         */
+        hash
+    }
 	LabelFactory label;
 	private boolean plusMinus;
 	private boolean singleChar;
 
-	private final String implementation = Options.class.getPackage().getName()
-			+ ".impl.set.bits32.";
+	private String implementation; 
 	private Class<JavaSet<?>> javaSet;
 
 	// TODO: how to hide this.
@@ -31,7 +43,7 @@ public class Options {
 	public <T> JavaSet<T> javaSetFor(Class<T> cl) {
 		try {
 			if (javaSet == null) {
-				javaSet = (Class<JavaSet<?>>) Class.forName(implementation
+				javaSet = (Class<JavaSet<?>>) Class.forName(getImplementation()
 						+ "JavaHashSet");
 			}
 			return (JavaSet<T>) javaSet.newInstance();
@@ -51,7 +63,7 @@ public class Options {
 			throw new IllegalArgumentException("Naming conventions violated");
 		name = name.substring(0, name.length() - "Factory".length());
 		try {
-			Class<T> impl = (Class<T>) Class.forName(implementation + name
+			Class<T> impl = (Class<T>) Class.forName(getImplementation() + name
 					+ "Impl");
 			Constructor<?> c[] = impl.getConstructors();
 			if (c.length != 1)
@@ -83,7 +95,19 @@ public class Options {
 	public void setUniverse(String a[]) {
 		getLabelFactory().get(Arrays.asList(a));
 	}
+	/**
+	 * Change the implementation. This can be called at most once.
+	 * Different implementations have different limitations.
+	 * @param impl
+	 */
 
+    public void setImplementation(Impl impl) {
+        if (implementation != null) {
+            throw new IllegalStateException("The implementation option cannot be changed.");
+        }
+        implementation = Options.class.getPackage().getName()
+                + ".impl.set." + impl.name() +".";
+    }
 	/**
 	 * Use 0 + - as the representation.
 	 * 
@@ -160,6 +184,13 @@ public class Options {
 	public Label getLabel(int i) {
 		return getUniverseInternal().get(i);
 	}
+	
+    private String getImplementation() {
+        if (implementation == null) {
+            setImplementation(Impl.bits32);
+        }
+        return implementation;
+    }
 
 }
 /************************************************************************
