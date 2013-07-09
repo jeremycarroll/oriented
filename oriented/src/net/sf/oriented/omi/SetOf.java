@@ -11,6 +11,14 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> {
 
 	boolean sameSetAs(SET other);
 
+	/**
+	 * This indicates whether in the implementing class
+	 * the notion of equality is set equality or not.
+	 * For example, some classes that implement this interface
+	 * may also implement {@link #OM} which defines equality as
+	 * Oriented Matroid equality which is not the same as set equality.
+	 * @return
+	 */
 	boolean equalsIsSameSetAs();
 
 	SET respectingEquals();
