@@ -16,7 +16,7 @@ import net.sf.oriented.omi.OMChirotope;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 
-public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
+public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndChirotope>
 		implements ChirotopeFactory {
 
 	public OMChirotopeFactory(FactoryFactory factory) {
@@ -40,12 +40,12 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
 
 	@Override
 	protected OMChirotope construct(Collection<? extends Label> ground,
-			final Pair defn) {
+			final RankAndChirotope defn) {
 		final int n = ground.size();
 		return construct(ground, new Chirotope() {
 			@Override
 			public int chi(int... i) {
-				char ch = defn.s.charAt(pos(n, defn.r, 0, i));
+				char ch = defn.chirotope.charAt(pos(n, defn.rank, 0, i));
 				switch (ch) {
 				case '+':
 					return 1;
@@ -67,7 +67,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
 
 			@Override
 			public int rank() {
-				return defn.r;
+				return defn.rank;
 			}
 		});
 	}
@@ -78,10 +78,10 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
 	}
 
 	@Override
-	Pair parseMatroid(ParseContext pc) {
-		Pair rslt = new Pair();
-		rslt.r = Integer.parseInt(uptoSeparator(pc));
-		rslt.s = uptoSeparator(pc);
+	RankAndChirotope parseMatroid(ParseContext pc) {
+		RankAndChirotope rslt = new RankAndChirotope();
+		rslt.rank = Integer.parseInt(uptoSeparator(pc));
+		rslt.chirotope = uptoSeparator(pc);
 		return rslt;
 	}
 
@@ -94,8 +94,8 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, Pair>
 	}
 
 	@Override
-	OMChirotope construct(Pair p) {
-		return construct(new SimpleLabels(p.r), p);
+	OMChirotope construct(RankAndChirotope p) {
+		return construct(new SimpleLabels(p.rank), p);
 	}
 
 }

@@ -7,9 +7,9 @@
  */
 package net.sf.oriented.omi.impl.om;
 
-class Pair {
-	String s;
-	int r;
+class RankAndChirotope {
+	String chirotope;
+	int rank;
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
