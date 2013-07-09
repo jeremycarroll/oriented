@@ -11,7 +11,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuiteClasses({ 
     TestAlternating.class, 
-    TestChirotope.class, 
     TestCircuits.class,    
     TestConversions.class, 
     TestLexicographic.class, 

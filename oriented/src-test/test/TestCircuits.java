@@ -42,7 +42,6 @@ public class TestCircuits {
 		assertTrue("chapter1", chapter1.verify());
 		assertFalse("tooLittle", tooLittle.verify());
 		assertFalse("tooMuch", tooMuch.verify());
-		System.out.println("Circuits: " + chapter1.toString());
 	}
 	
 	@Test
