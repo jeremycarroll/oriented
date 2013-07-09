@@ -329,6 +329,9 @@ public class OMAll implements OMInternal {
 			return true;
 		if (!(o instanceof OMInternal))
 			return equalsByCircuits((OM) o);
+		if (((OMInternal)o).ffactory() != ffactory()) {
+            return equalsByCircuits((OM) o);
+		}
 		OMAll a = ((OMInternal) o).asAll();
 		int i = hasSameForm(a);
 		if (i != -1)
