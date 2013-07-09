@@ -7,7 +7,9 @@ package test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static net.sf.oriented.omi.Examples.chapter1;
+import junit.framework.Assert;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.UnsignedSet;
@@ -41,6 +43,32 @@ public class TestCircuits {
 		assertFalse("tooLittle", tooLittle.verify());
 		assertFalse("tooMuch", tooMuch.verify());
 		System.out.println("Circuits: " + chapter1.toString());
+	}
+	
+	@Test
+	public void testToString() {
+        testToString(chapter1);
+        testToString(chapter1.dual());
+	    
+	}
+
+    private void testToString(OM om) {
+        testStringFormat( om.getCircuits().toString() );
+        testStringFormat( om.getVectors().toString() );
+        testStringFormat( om.getMaxVectors().toString() );
+        testStringFormat( om.getChirotope().toString() );
+    }
+	
+	/**
+	 * Oriented Matroids and Matroids are systematically
+	 * represented in this library with a string format starting with "( "
+	 * and ending with " )".
+	 * @param m
+	 */
+	public static void testStringFormat(String m) {
+	    //System.err.println(m);
+	    Assert.assertTrue(m.startsWith("( "));
+	    Assert.assertTrue(m.endsWith(" )"));
 	}
 
 }

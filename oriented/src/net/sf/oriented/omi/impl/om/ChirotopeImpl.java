@@ -333,7 +333,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	public String toString(FactoryFactory factory) {
 		List<? extends Label> g = Arrays.asList(ground());
 		UnsignedSetFactory sets = all.unsignedSets(factory);
-		return "(" + sets.toString(g, sets.copyBackingCollection(g)) + ", "
+		return "( " + sets.toString(g, sets.copyBackingCollection(g)) + ", "
 				+ rank() + ", " + toShortString() + " )";
 	}
 
