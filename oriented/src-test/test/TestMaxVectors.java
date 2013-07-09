@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
+import static net.sf.oriented.omi.Examples.chapter1;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,16 +22,11 @@ public class TestMaxVectors {
 		options.setShortLabels();
 		f = new FactoryFactory(options);
 	}
-	static OMS chapter1;
 	static OMS vectors;
 
 	// static UnsignedSet e;
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		chapter1 = f.circuits().parse(
-				"{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
-		// e = new UnsignedSet(Arrays.asList(new
-		// String[]{"1","2","3","4","5","6"}),true);
 		vectors = chapter1.getMaxVectors();
 	}
 
@@ -41,7 +37,6 @@ public class TestMaxVectors {
 
 	@Test
 	public void testToStringSetOfOfString() {
-		System.out.println("MaxVectors: " + vectors.toString());
 		assertEquals("chapter1", vectors,
 				f.maxVectors().parse(vectors.toString()));
 	}
