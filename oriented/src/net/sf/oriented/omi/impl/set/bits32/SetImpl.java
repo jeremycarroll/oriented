@@ -9,7 +9,7 @@ import java.util.Set;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.HasFactory;
-import net.sf.oriented.omi.impl.set.HasSetFactoryImpl;
+import net.sf.oriented.omi.impl.set.AbsSetImpl;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfInternal;
 import net.sf.oriented.omi.impl.set.Test;
@@ -36,14 +36,13 @@ abstract public class SetImpl<
                   ITEM_INTERNAL2 extends ITEM, 
                   SET_INTERNAL2 extends SET
                   >
-		extends HasSetFactoryImpl<
+		extends AbsSetImpl<
 		      ITEM_INTERNAL, 
 		      SET_INTERNAL, 
 		      ITEM, 
 		      SET, 
 		      ITEM_INTERNAL2, 
-		      SET_INTERNAL2> implements
-		SetOfInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> {
+		      SET_INTERNAL2>  {
 //@formatter:on
 	private final class PowerJavaSet extends AbstractCollection<SET_INTERNAL2> implements
 			JavaSet<SET_INTERNAL2> {

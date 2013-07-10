@@ -126,7 +126,7 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 
 	@Override
 	public boolean verify() {
-		return (!vectors.isEmpty()) && verifySymmetry();
+		return (!vectors.isEmpty()) && verifySymmetry() && vectors.verify();
 	}
 
 	private boolean verifySymmetry() {
