@@ -129,19 +129,19 @@ public class Bibliography {
 */
     public static final String motzkin1983 = "Select Papers";
 /**
-    [Pappus, c340] Pappus (c340). υναγωγ´η or Collection . Alexandria.
+    [Pappus, c340] Pappus (c340). Συναγωγή or Collection . Alexandria.
 */
-    public static final String pappusC340 = "υναγωγ´η or Collection";
+    public static final String πάπποςC340 = "Συναγωή or Collection";
 /**
     [Pappus and Jones, 1986a] Pappus and Jones, A. (1986a). Book 7 of the Collection: Part 1.
     Introduction, text and translation. Springer-Verlag, New York.
 */
-    public static final String pappusAndJones1986a = "Book 7 of the Collection: Part 1. Introduction, text and translation";
+    public static final String πάπποςAndJones1986a = "Book 7 of the Collection: Part 1. Introduction, text and translation";
 /**
     [Pappus and Jones, 1986b] — (1986b). Book 7 of the Collection: Part 2. Commentary, index,
     and figures. Springer-Verlag, New York.
 */
-    public static final String pappusAndJones1986b = "Book 7 of the Collection: Part 2. Commentary, index, and figures";
+    public static final String πάπποςAndJones1986b = "Book 7 of the Collection: Part 2. Commentary, index, and figures";
 /**
     [Plücker, 1835] Plücker, J. (1835). System der analytischen Geometrie, auf neue betrachtungsweisen
     gegrundet . . .. Duncker und Humblot, Berlin.
