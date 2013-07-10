@@ -109,6 +109,56 @@ abstract public class AbsSetImpl<
     public SET_INTERNAL2 respectingEquals() {
     	return (SET_INTERNAL2) this;
     }
+
+    @Override
+    public int hashCode() {
+    	int rslt = 0;
+    	Iterator<ITEM_INTERNAL2> it = iterator();
+    	while (it.hasNext()) {
+    		rslt += it.next().hashCode();
+    	}
+    	return rslt;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+    	if (o == null || (!(o instanceof SetOf)))
+    		return false;
+    	SET sx = (SET) o;
+    	return sx.equalsIsSameSetAs() && sameSetAs(sx);
+    }
+
+    @Override
+    public boolean sameSetAs(SET a) {
+    	if (size() != a.size())
+    		return false;
+    	return isSubsetOf(a) && isSupersetOf(a);
+    }
+
+    /**
+     * r is dedicated to being the backing collection for this set. It is *not*
+     * copied, and must not be modified after this call.
+     * 
+     * @param bases
+     * @return
+     */
+    @Override
+    public SET_INTERNAL2 useCollection(JavaSet<ITEM_INTERNAL2> bases) {
+    	return factory().fromBackingCollection(bases);
+    }
+
+    public SET_INTERNAL2 excluding(Test<ITEM> t) {
+    	JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
+    	Iterator<ITEM_INTERNAL2> i = iterator();
+    	while (i.hasNext()) {
+    		ITEM_INTERNAL2 n = i.next();
+    		if (!t.test(n)) {
+    			r.add(n);
+    		}
+    	}
+    	return useCollection(r);
+    }
 }
 
 /************************************************************************
