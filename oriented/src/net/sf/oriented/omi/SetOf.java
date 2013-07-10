@@ -7,7 +7,8 @@ package net.sf.oriented.omi;
 import java.util.Iterator;
 import java.util.Set;
 
-public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> {
+public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> 
+       extends Verify {
 	public abstract SET union(SET b);
 
 	boolean sameSetAs(SET other);
@@ -75,7 +76,15 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> {
 
 	public abstract JavaSet<? extends SET> subsetsOfSize(int i);
 
-	// S useCollection(Collection<? extends E> a);
+
+    /**
+     * Check invariants of the object, in particular
+     * check that {@link #hashCode()} satisfies its contract.
+     * 
+     * @return true if the object is not known to have violated its invariants.
+     */
+    @Override
+    boolean verify();
 
 }
 /************************************************************************
