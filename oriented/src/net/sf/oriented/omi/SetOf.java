@@ -5,6 +5,7 @@
 package net.sf.oriented.omi;
 
 import java.util.Iterator;
+import java.util.Set;
 
 public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> {
 	public abstract SET union(SET b);
@@ -20,7 +21,32 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> {
 	 * @return
 	 */
 	boolean equalsIsSameSetAs();
+	
+    /**
+     * Returns the hash code value for this set.  
+     * If {@link #equalsIsSameSetAs()} is true, then the 
+     * hash code of a set is defined to be the sum of the hash codes of the elements in the set,
+     * see {@link java.util.Set#hashCode()}.
+     * If {@link #equalsIsSameSetAs()} is false, then the 
+     * hash code of a set is not restricted except to the general contract,
+     * see {@link java.lang.Object#hashCode()}.
+     *
+     * @return the hash code value for this set
+     * @see Object#equals(Object)
+     * @see Set#equals(Object)
+     */
+    @Override
+    int hashCode();
 
+    /**
+     * Return a set <code>s</code> such that:
+     * <code>s.sameSetSetAs(this) && s.equalsIsSameSetAs()</code>.
+     * If  {@link #equalsIsSameSetAs()} is true, then this method
+     * should usually return <code>this</code>.
+     * If {@link #equalsIsSameSetAs()} is false, then a different
+     * SET containing the same members is returned.
+     * @return
+     */
 	SET respectingEquals();
 
 	public abstract SET union(ITEM b);
