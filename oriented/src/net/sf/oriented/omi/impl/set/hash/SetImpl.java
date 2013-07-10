@@ -204,18 +204,6 @@ abstract public class SetImpl<
 		return members.isEmpty();
 	}
 
-	public SET_INTERNAL2 only(Test<ITEM> t) {
-		JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
-		Iterator<ITEM_INTERNAL2> i = iterator();
-		while (i.hasNext()) {
-			ITEM_INTERNAL2 n = i.next();
-			if (t.test(n)) {
-				r.add(n);
-			}
-		}
-		return useCollection(r);
-	}
-
 	/**
 	 * r is dedicated to being the backing collection for this set. It is *not*
 	 * copied, and must not be modified after this call.
@@ -238,10 +226,6 @@ abstract public class SetImpl<
 			}
 		}
 		return useCollection(r);
-	}
-
-	protected JavaSet<ITEM_INTERNAL2> emptyCollectionOf() {
-		return factory().itemFactory().emptyCollectionOf();
 	}
 
 	@Override
@@ -304,35 +288,6 @@ abstract public class SetImpl<
 			rslt.add(n);
 		}
 		return rslt;
-	}
-
-	private ITEM_INTERNAL2 ith(int x) {
-		Iterator<ITEM_INTERNAL2> it = iterator();
-		while (x > 0) {
-			x--;
-			it.next();
-		}
-		return it.next();
-	}
-
-	@Override
-	public ITEM_INTERNAL2 theMember() {
-		Iterator<ITEM_INTERNAL2> it = iterator();
-		ITEM_INTERNAL2 r = it.next();
-		if (it.hasNext())
-			throw new IllegalStateException("More than one member.");
-		return r;
-	}
-
-	@Override
-	public boolean equalsIsSameSetAs() {
-		return true;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public SET_INTERNAL2 respectingEquals() {
-		return (SET_INTERNAL2) this;
 	}
 
 }
