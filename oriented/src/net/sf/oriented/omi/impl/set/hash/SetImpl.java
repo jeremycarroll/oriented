@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set.hash;
 
-import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,53 +45,6 @@ abstract public class SetImpl<
               ITEM_INTERNAL2, 
               SET_INTERNAL2>  {
 //@formatter:on
-	private final class PowerJavaSet extends AbstractCollection<SET_INTERNAL2> implements
-			JavaSet<SET_INTERNAL2> {
-
-		final int size;
-
-		private PowerJavaSet(int sz) {
-			size = 1 << sz;
-		}
-
-		@Override
-		public Iterator<SET_INTERNAL2> iterator() {
-			return new Iterator<SET_INTERNAL2>() {
-				int i = 0;
-
-				@Override
-				public boolean hasNext() {
-					return i < size;
-				}
-
-				@Override
-				public SET_INTERNAL2 next() {
-					JavaSet<ITEM_INTERNAL2> m = emptyCollectionOf();
-					Iterator<ITEM_INTERNAL2> it = members.iterator();
-					int j = 0;
-					while (it.hasNext()) {
-						ITEM_INTERNAL2 n = it.next();
-						if (((1 << j) & i) != 0) {
-							m.add(n);
-						}
-						j++;
-					}
-					i++;
-					return useCollection(m);
-				}
-
-				@Override
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		}
-
-		@Override
-		public int size() {
-			return size;
-		}
-	}
 
 	private final JavaSet<ITEM_INTERNAL2> members;
 
@@ -192,14 +144,6 @@ abstract public class SetImpl<
 		r.addAll(members);
 		r.add((ITEM_INTERNAL2) factory().itemFactory().remake(b));
 		return useCollection(r);
-	}
-
-	@Override
-	public JavaSet<SET_INTERNAL2> powerSet() {
-		final int sz = members.size();
-		if (sz > 20)
-			throw new IllegalArgumentException("unimplemented powerset sz > 20");
-		return new PowerJavaSet(sz);
 	}
 
 	@Override
