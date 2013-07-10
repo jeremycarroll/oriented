@@ -52,8 +52,14 @@ abstract public class AbsSetImpl<
 
     @Override
     public boolean verify() {
-        // TODO Auto-generated method stub
-        return false;
+        if (!equalsIsSameSetAs()) {
+            return true;
+        }
+        int hashCode = 0;
+        for (ITEM_INTERNAL2 member:this) {
+            hashCode += member.hashCode();
+        }
+        return hashCode == hashCode();
     }
 }
 
