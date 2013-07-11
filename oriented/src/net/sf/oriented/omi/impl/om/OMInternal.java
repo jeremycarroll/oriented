@@ -19,7 +19,7 @@ public interface OMInternal extends OM {
 	Vectors getVectors();
 
 	@Override
-	MaxVectors getMaxVectors();
+	AbsVectorsOM getMaxVectors();
 
 	@Override
 	public OMInternal dual();

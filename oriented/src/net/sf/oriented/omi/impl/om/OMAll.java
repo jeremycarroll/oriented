@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -366,6 +367,31 @@ public class OMAll implements OMInternal {
         return get(CIRCUITS).isAcyclic();
     }
 
+    @Override
+    public int n() {
+        return ground().length;
+    }
+
+    @Override
+    public OM permuteGround(Permutation p) {
+        // we generally prefer to use the circuit
+        // implementation, unless we do not have circuits
+        // computed, and we have the chirotope.
+        if ( (has(Cryptomorphisms.CHIROTOPE)
+                || has(Cryptomorphisms.CHIROTOPE) )
+             &&
+             ! has(Cryptomorphisms.CIRCUITS) ) {
+            return getChirotope().permuteGround(p);
+        }
+        return getCircuits().permuteGround(p);
+    }
+
+    @Override
+    public OM permute(Permutation p) {
+        // we only implement for chirotope, everything else
+        // has to piggy back
+        return getChirotope().permute(p);
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

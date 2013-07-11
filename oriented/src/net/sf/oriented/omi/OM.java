@@ -83,6 +83,12 @@ public interface OM extends Verify {
      */
     OM permute(Permutation p);
 
+    /**
+     * The size of {@link #ground()}
+     * @return
+     */
+    int n();
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

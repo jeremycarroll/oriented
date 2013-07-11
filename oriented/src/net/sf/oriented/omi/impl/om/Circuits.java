@@ -121,14 +121,7 @@ public class Circuits extends AbsVectorsOM {
 
     @Override
     public OM permuteGround(Permutation p) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public OM permute(Permutation p) {
-        // TODO Auto-generated method stub
-        return null;
+        return ffactory().circuits().fromSignedSets(p.permute(ground()), vectors);
     }
 
 }

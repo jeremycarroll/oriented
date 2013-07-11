@@ -363,12 +363,6 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		return rank;
 	}
 
-	// TODO: generalize - put on all matroid inferaces
-	@Override
-	public int n() {
-		return ground().length;
-	}
-
 	public SetOfUnsignedSetInternal getBases() {
 		Lexicographic lex = new Lexicographic(n(), rank());
 		Iterator<int[]> it = lex.iterator();
@@ -497,16 +491,16 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
     @Override
     public OM permuteGround(Permutation p) {
-        return permute(ffactory().permute(p),p);
+        return permute(p.permute(ground()),new PermutedChirotope(p.inverse(), alt));
     }
 
     @Override
     public OM permute(Permutation p) {
-        return permute(ffactory(), p);
+        return permute(p.permute(ground()),alt);
     }
 
-    private OMChirotope permute(FactoryFactory factory, Permutation perm) {
-        return factory.chirotope().construct(new PermutedChirotope(perm, alt));
+    private OMChirotope permute(LabelImpl[] labelImpls, Chirotope chi) {
+        return ffactory().chirotope().construct(Arrays.asList(labelImpls),chi);
     }
 }
 /************************************************************************

@@ -4,8 +4,10 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -40,7 +42,7 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
 	}
 
 	@Override
-	public MaxVectors getMaxVectors() {
+	public AbsVectorsOM getMaxVectors() {
 		return all.getMaxVectors();
 	}
 
@@ -100,6 +102,21 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
     @Override
     public boolean isAcyclic() {
         return getCircuits().isAcyclic();
+    }
+
+    @Override
+    public int n() {
+    	return ground().length;
+    }
+
+    @Override
+    public OM permuteGround(Permutation p) {
+        return all.permuteGround(p);
+    }
+
+    @Override
+    public OM permute(Permutation p) {
+        return all.permute(p);
     }
 
 }
