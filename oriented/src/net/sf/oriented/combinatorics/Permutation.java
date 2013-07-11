@@ -117,7 +117,7 @@ public class Permutation {
     public int[] permute(int ... args) {
         int[] result = new int[args.length];
         for (int i=0;i<args.length;i++)
-            result[i] = args[get(i)];
+            result[i] = get(args[i]);
         return result;
         
     }
@@ -130,7 +130,7 @@ public class Permutation {
     }
     
     public Permutation and(Permutation then) {
-        return new Permutation(then.permute(permutation));
+        return new Permutation(permute(then.permutation));
         
     }
     @Override

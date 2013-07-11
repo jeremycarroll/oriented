@@ -491,7 +491,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
     @Override
     public OM permuteGround(Permutation p) {
-        return permute(p.permute(ground()),new PermutedChirotope(p.inverse(), alt));
+        return permute(p.permute(ground()),new PermutedChirotope(p, alt));
     }
 
     @Override
