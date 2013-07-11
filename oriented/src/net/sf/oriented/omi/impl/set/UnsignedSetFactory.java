@@ -62,7 +62,6 @@ public class UnsignedSetFactory
 			case '0':
 				break;
 			case '1':
-				// TODO: unsafe cast!!
 				rslt.add((LabelImpl) u.get(i));
 				break;
 			default:

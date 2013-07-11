@@ -20,7 +20,7 @@ public interface OMSFactory extends SetFactory<SignedSet, OMS> {
 	/**
 	 * 
 	 * @param ground
-	 *            TODO document parameter
+	 *            The ground set from which the symmetric sets are taken.
 	 * @param sym
 	 *            A symmetric set of signed sets, satisfying all the relevant
 	 *            axioms.

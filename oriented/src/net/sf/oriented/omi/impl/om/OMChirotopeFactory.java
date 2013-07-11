@@ -87,7 +87,6 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 
 	@Override
 	public OMChirotope construct(Collection<? extends Label> e, Chirotope chi) {
-		// TODO: this is an unsafe cast:
 		LabelImpl[] g = e.toArray(new LabelImpl[0]);
 		OMAll all = new OMAll(g, factory);
 		return new ChirotopeImpl(all, chi);

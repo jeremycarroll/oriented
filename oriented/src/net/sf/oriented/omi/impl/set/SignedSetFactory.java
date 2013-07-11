@@ -84,7 +84,6 @@ public class SignedSetFactory extends
 			case '0':
 				break;
 			case '+':
-				// TODO: unsafe cast!!!
 				p.add((LabelImpl) u.get(i));
 				break;
 			case '-':
