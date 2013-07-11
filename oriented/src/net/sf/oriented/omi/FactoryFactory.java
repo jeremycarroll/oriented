@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.om.MatroidFactory;
 import net.sf.oriented.omi.impl.om.OMChirotopeFactory;
@@ -206,6 +207,11 @@ final public class FactoryFactory {
 	public Options options() {
 		return options;
 	}
+
+    public FactoryFactory permute(Permutation p) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
 /************************************************************************

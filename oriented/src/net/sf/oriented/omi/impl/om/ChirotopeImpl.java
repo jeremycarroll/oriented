@@ -14,12 +14,14 @@ import java.util.List;
 
 import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMChirotope;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -492,6 +494,20 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 			return equals(((RealizedImpl) o).getChirotope());
 		return all.equals(o);
 	}
+
+    @Override
+    public OM permuteGround(Permutation p) {
+        return permute(ffactory().permute(p),p);
+    }
+
+    @Override
+    public OM permute(Permutation p) {
+        return permute(ffactory(), p);
+    }
+
+    private OMChirotope permute(FactoryFactory factory, Permutation perm) {
+        return factory.chirotope().construct(new PermutedChirotope(perm, alt));
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

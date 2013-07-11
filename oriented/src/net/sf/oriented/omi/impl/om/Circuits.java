@@ -8,8 +8,10 @@ import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CIRCUITS;
 
 import java.util.Iterator;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
@@ -116,6 +118,18 @@ public class Circuits extends AbsVectorsOM {
 	public int hashCode() {
 		return vectors.hashCode();
 	}
+
+    @Override
+    public OM permuteGround(Permutation p) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public OM permute(Permutation p) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
 /************************************************************************

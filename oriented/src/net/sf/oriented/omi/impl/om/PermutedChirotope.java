@@ -1,11 +1,12 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.omi.impl.om;
 
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.FullChirotope;
 
-public class PermutedChirotope implements FullChirotope {
+class PermutedChirotope implements FullChirotope {
 
     private final Permutation permutation;
     private final FullChirotope base;
