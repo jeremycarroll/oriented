@@ -4,6 +4,8 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.combinatorics.Permutation;
+
 public interface OM extends Verify {
 
 	OMChirotope getChirotope();
@@ -61,6 +63,25 @@ public interface OM extends Verify {
 	 *  in a positive cocircuit.
 	 */
     boolean isAcyclic();
+    
+    /**
+     * Permute the ground set.
+     * Returns and om s.t.
+     * <code>om.equals(this)</code>
+     * and <code>p.permute(ground())</code>
+     * and <code>om.ground()</code> are the same.
+     * @param p The permutation to apply.
+     * @return
+     */
+    OM permuteGround(Permutation p);
+    /**
+     * Permute the Oriented Matroid,
+     * the ground set is not permuted.
+     * So in general, <code>this.equals(this.permute(p))</code> is false.
+     * @param p The permutation to apply.
+     * @return
+     */
+    OM permute(Permutation p);
 
 }
 /************************************************************************
