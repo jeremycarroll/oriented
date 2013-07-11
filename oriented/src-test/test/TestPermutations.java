@@ -13,6 +13,9 @@ import org.junit.Test;
 import junit.framework.Assert;
 
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMChirotope;
 
 public class TestPermutations {
     
@@ -107,6 +110,22 @@ public class TestPermutations {
         g.times();
     }
 
+    
+    @Test
+    public void testExampleChapter1() {
+        testPerms(Examples.chapter1);
+    }
+
+    private void testPerms(OM om) {
+        for (Permutation p:Permutation.all(om.n())) {
+            testPerm(om.getCircuits(),p);
+            testPerm(om.getChirotope(),p);
+        }
+    }
+
+    private void testPerm(OM om, Permutation p) {
+        Assert.assertEquals(om, om.permuteGround(p));
+    }
 }
 
 
