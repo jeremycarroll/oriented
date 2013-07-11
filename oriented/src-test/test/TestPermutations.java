@@ -15,7 +15,6 @@ import junit.framework.Assert;
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMChirotope;
 
 public class TestPermutations {
     
