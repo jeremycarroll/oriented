@@ -125,7 +125,39 @@ public class TestPermutations {
     private void testPerm(OM om, Permutation p) {
         Assert.assertEquals(om, om.permuteGround(p));
     }
+
+ 
+    @Test
+    public void testCountSymmetriesChapter1() {
+        countSymmetries(0,Examples.chapter1);
+    }
+    @Test
+    public void testCountSymmetriesCircularSaw() {
+        countSymmetries(0,Examples.circularSaw3);
+    }
+
+    private void countSymmetries(int expected, OM om) {
+        Map<OM,Set<OM>> symmetries = new HashMap<OM,Set<OM>>();
+        for (Permutation p: Permutation.all(om.n())) {
+            OM permuted = om.permute(p);
+            Set<OM> equivalent = symmetries.get(permuted);
+            if (equivalent == null) {
+                equivalent = new HashSet<OM>();
+                symmetries.put(permuted, equivalent);
+            }
+            equivalent.add(permuted);
+        }
+        for (Set<OM> equivalent: symmetries.values()) {
+            System.err.print(equivalent.size()+", ");
+            for (OM a: equivalent) 
+                for (OM b:equivalent)
+                    Assert.assertEquals(a, b);
+        }
+        System.err.println();
+        Assert.assertEquals(expected, symmetries.size());
+    }
 }
+
 
 
 /************************************************************************
