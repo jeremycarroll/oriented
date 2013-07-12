@@ -102,6 +102,45 @@ public class Permutation {
         }
 
     }
+    
+    /**
+     * Use the notation (0 1) (4 5 6) to represent the permutation
+     * (1 0 2 3 5 6 4)
+     * @param n
+     * @param cycles
+     */
+    public Permutation(int n, int[][] cycles) {
+        this(computeCycles(n,cycles));
+    }
+
+    
+
+    private static int[] computeCycles(int n, int[][] cycles) {
+        int rslt[] = new int[n];
+        Arrays.fill(rslt, -1);
+        for (int cycle[] : cycles ) {
+            for (int ix=0;ix<cycle.length-1;ix++) {
+                if (cycle[ix] < 0 || cycle[ix] >= n) {
+                    throw new IllegalArgumentException("Each number once in constructor must be between 0 and n");
+                }
+                setOnce(rslt,cycle[ix],cycle[ix+1]);
+            }
+            setOnce(rslt,cycle[cycle.length-1],cycle[0]);
+        }
+        for (int i=0;i<n;i++) {
+            if (rslt[i]==-1) {
+                rslt[i] = i;
+            }
+        }
+        return rslt;
+    }
+
+    private static void setOnce(int[] rslt, int i, int j) {
+        if (rslt[i] != -1) {
+            throw new IllegalArgumentException("Can only use each number once in constructor");
+        }
+        rslt[i] = j;
+    }
 
     public int get(int i) {
         return permutation[i];
