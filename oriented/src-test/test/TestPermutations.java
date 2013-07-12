@@ -123,10 +123,10 @@ public class TestPermutations {
         
     }
 
-    private void testSym(OM om, Permutation p, boolean b) {
-        // TODO Auto-generated method stub
-        System.err.println(om.getCircuits());
-        System.err.println(om.permute(p).permuteGround(p.inverse()).getCircuits());
+    private void testSym(OM om, Permutation p, boolean equalOrNot) {
+//        System.err.println(om.getCircuits());
+//        System.err.println(om.permute(p).permuteGround(p.inverse()).getCircuits());
+        Assert.assertEquals(equalOrNot, om.equals(om.permute(p)));
         
     }
 
@@ -139,6 +139,36 @@ public class TestPermutations {
         testSym(Examples.chapter1,new Permutation(6,new int[][]{ { 0, 5 } }),false);
         
     }
+    
+    @Test
+    public void testStabilizerChap1() {
+        stabilizer(Examples.chapter1);
+    }
+
+    @Test
+    public void testStabilizerSaw3() {
+        System.err.println(Examples.circularSaw3.dual().getCircuits());
+        stabilizer(Examples.circularSaw3);
+    }
+
+    @Test
+    public void testStabilizerUniform4() {
+        stabilizer(Examples.uniform4);
+    }
+    private int stabilizer(OM om) {
+        int cnt = 0;
+        for (Permutation p: Permutation.all(om.n())) {
+            OM permuted = om.permute(p);
+            if (permuted.equals(om)) {
+                System.err.println(p);
+                cnt++;
+            }
+        }
+        System.err.println(cnt);
+        return cnt;
+        
+    }
+
     @Ignore
     @Test
     public void testExampleChapter1() {
