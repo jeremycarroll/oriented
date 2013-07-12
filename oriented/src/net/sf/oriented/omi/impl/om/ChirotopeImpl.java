@@ -502,6 +502,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
     private OMChirotope permute(LabelImpl[] labelImpls, Chirotope chi) {
         return ffactory().chirotope().construct(Arrays.asList(labelImpls),chi);
     }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -6,6 +6,12 @@ package net.sf.oriented.omi;
 
 public interface OMChirotope extends OM, FullChirotope {
 
+    /**
+     * The simplest form of the chirotope.
+     * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.
+     */
+    String toShortString();
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
