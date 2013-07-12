@@ -19,6 +19,8 @@ public interface OM extends Verify {
 	OMRealized getRealized();
 
 	public OM dual();
+	
+	public OM reorient(Label ... axes);
 
 	public Label[] ground();
 

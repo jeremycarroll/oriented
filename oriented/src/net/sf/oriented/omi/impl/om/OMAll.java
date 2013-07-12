@@ -371,19 +371,24 @@ public class OMAll implements OMInternal {
     public int n() {
         return ground().length;
     }
-
-    @Override
-    public OM permuteGround(Permutation p) {
+    
+    private OM getCircuitsOrChirotope() {
         // we generally prefer to use the circuit
         // implementation, unless we do not have circuits
         // computed, and we have the chirotope.
         if ( (has(Cryptomorphisms.CHIROTOPE)
-                || has(Cryptomorphisms.CHIROTOPE) )
+                || has(Cryptomorphisms.DUALCHIROTOPE) )
              &&
              ! has(Cryptomorphisms.CIRCUITS) ) {
-            return getChirotope().permuteGround(p);
+            return getChirotope();
         }
-        return getCircuits().permuteGround(p);
+        return getCircuits();
+        
+    }
+
+    @Override
+    public OM permuteGround(Permutation p) {
+        return getCircuitsOrChirotope().permuteGround(p);
     }
 
     @Override
@@ -391,6 +396,11 @@ public class OMAll implements OMInternal {
         // we only implement for chirotope, everything else
         // has to piggy back
         return getChirotope().permute(p);
+    }
+
+    @Override
+    public OM reorient(Label ... axes) {
+        return getCircuitsOrChirotope().reorient(axes);
     }
 }
 /************************************************************************

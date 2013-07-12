@@ -339,7 +339,8 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 				+ rank() + ", " + toShortString() + " )";
 	}
 
-	public String toShortString() {
+	@Override
+    public String toShortString() {
 		int sz = choose(ground().length, rank());
 		char r[] = new char[sz];
 		for (int i = 0; i < sz; i++) {
@@ -501,6 +502,12 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
     private OMChirotope permute(LabelImpl[] labelImpls, Chirotope chi) {
         return ffactory().chirotope().construct(Arrays.asList(labelImpls),chi);
+    }
+
+    @Override
+    public OM reorient(Label ... axes) {
+        // TODO: stubb
+        return null;
     }
 
 }

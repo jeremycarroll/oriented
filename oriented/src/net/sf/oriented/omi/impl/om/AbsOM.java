@@ -118,6 +118,11 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
     public OM permute(Permutation p) {
         return all.permute(p);
     }
+    
+    @Override
+    public OM reorient(Label ... axes) {
+        return all.reorient(axes);
+    }
 
 }
 /************************************************************************

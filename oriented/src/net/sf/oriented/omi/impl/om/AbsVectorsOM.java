@@ -4,6 +4,8 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
@@ -24,6 +26,13 @@ abstract class AbsVectorsOM extends AbsVectors implements OMS {
             }
         }
         return true;
+    }
+    
+
+    @Override
+    public OM reorient(Label ... axes) {
+        // TODO: stubb
+        return null;
     }
 
 }
