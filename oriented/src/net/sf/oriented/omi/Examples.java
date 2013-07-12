@@ -19,6 +19,10 @@ public class Examples {
      * This is from the Oriented Matroid book.
      */
     public final static OM chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+    
+    public final static OM uniform3 = fromChirotope(3, 3, "+" );
+    public final static OM uniform4 = fromChirotope(4, 3, "++++" );
+    
     /**
      * See the "Sharpness of Circular Saws (2000)"
      */
