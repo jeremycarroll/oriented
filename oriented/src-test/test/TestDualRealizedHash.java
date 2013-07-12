@@ -1,43 +1,27 @@
 /************************************************************************
-  (c) Copyright 2010 Jeremy J. Carroll
+  (c) Copyright 2012 Jeremy J. Carroll
   
  ************************************************************************/
 
 package test;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import net.sf.oriented.omi.Options;
+import net.sf.oriented.omi.impl.om.OMAll;
 
-@SuiteClasses({ 
-    TestAlternating.class, 
-    TestCircuits.class,    
-    TestConversions.class, 
-    TestLexicographic.class, 
-    TestMatroid.class,
-    TestMaxVectors.class, 
-    TestMSet.class, 
-    TestSignedSet.class,
-    TestVectors.class, 
-    TestLU.class, 
-    TestLUDecomposition.class, 
-    TestGramSchmidt.class,
-    TestDualRealizedBits32.class, 
-    TestDualRealizedHash.class, 
-    TestExamples.class,
-    TestPermutations.class,
-    TestRealization.class
 
-})
-@RunWith(Suite.class)
-public class TestAll {
+public class TestDualRealizedHash extends AbsTestDualRealized {
+	private final OMAll all = TestConversions.asAll(TestRealization.testDatum(Options.Impl.hash));
 
+	@Override
+    OMAll getAll() {
+        return all;
+    }
 }
 
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 
- * 
+ * The Java Oriented Matroid Library is free software: you can
  * 
  * 
  * 

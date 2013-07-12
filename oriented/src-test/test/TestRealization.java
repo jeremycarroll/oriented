@@ -15,19 +15,13 @@ import net.sf.oriented.omi.Options;
 import org.junit.Test;
 
 public class TestRealization {
-	static FactoryFactory f;
-	static {
-		Options options = new Options();
-		options.setShortLabels();
-		f = new FactoryFactory(options);
-	}
 
 	static int chap1[][] = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 1, 0 },
 			{ 0, 0, 1, 0, 1, 1 } };
 
-	static OM testDatum() {
+	static OM testDatum(Options.Impl impl) {
 		RationalMatrix matrix = new RationalMatrix(chap1);
-		return f.realized().construct(matrix);
+		return getFactory(impl).realized().construct(matrix);
 	}
 
 	@Test
@@ -38,7 +32,11 @@ public class TestRealization {
 	               .contains("[ [ 1  0  0 ] [ 1  1  0 ] [ 1  1  1 ] [ 0  1  0 ] [ 0  1  1 ] [ 0  0  1 ] ]"));
 	}
 
-	@Test
+	public static OM testDatum() {
+        return testDatum(Options.Impl.bits32);
+    }
+
+    @Test
 	public void testToChirotope() {
         Assert.assertTrue(
                 testDatum().getChirotope().toString().contains("+0++-0++++--0++++++0"));
@@ -48,6 +46,14 @@ public class TestRealization {
 	public void testEquals() {
 	    Assert.assertTrue(testDatum().equals(Examples.chapter1));
 	}
+
+    static FactoryFactory getFactory(Options.Impl impl) {
+        Options options = new Options();
+        options.setImplementation(impl);
+        options.setShortLabels();
+        return new FactoryFactory(options);
+    }
+
 }
 
 /************************************************************************
