@@ -45,11 +45,11 @@ public abstract class AbsTestDualRealized {
     @Test
     public void testDualDualCoCircuits() {
     		OM dual = getAll().ffactory().realized()
-    				.parse(getAll().dual().getRealized().toString());
+    		              .parse(getAll().dual().getRealized().toString());
     //		System.err.println(dual.dual().getRealized().toString());
     //		System.err.println(dual.dual().getCircuits().toString());
-    		Assert.assertEquals(getAll().getCircuits().toString(), dual.dual()
-    				.getCircuits().toString());
+    		Assert.assertEquals(getAll().getCircuits(), 
+    		        dual.dual().getCircuits());
     	}
 
 }
