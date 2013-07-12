@@ -7,9 +7,23 @@
  */
 package net.sf.oriented.omi.impl.om;
 
+import java.util.regex.Pattern;
+
+import net.sf.oriented.combinatorics.CombinatoricUtils;
+
 class RankAndChirotope {
+    private static Pattern chi = Pattern.compile("^[+0-]*$");
 	String chirotope;
 	int rank;
+    public void checkSize(int n) {
+        if ( CombinatoricUtils.choose(n, rank) != chirotope.length() ) {
+            throw new IllegalArgumentException("Chirotope of wrong length: "
+                       + chirotope.length() + " != " + n + "C" + rank );
+        }
+        if (! chi.matcher(chirotope).matches() ) {
+            throw new IllegalArgumentException("Chirotope must be only +, -, 0");
+        }
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -42,6 +42,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	protected OMChirotope construct(Collection<? extends Label> ground,
 			final RankAndChirotope defn) {
 		final int n = ground.size();
+		defn.checkSize(n);
 		return construct(ground, new Chirotope() {
 			@Override
 			public int chi(int... i) {
