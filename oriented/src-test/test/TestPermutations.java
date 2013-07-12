@@ -3,8 +3,10 @@
  ************************************************************************/
 package test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -110,7 +112,34 @@ public class TestPermutations {
         g.times();
     }
 
-    
+    /**
+     * Swapping 1 with 6 and 2 with 5 in the definition of chapter1 example
+     * leaves it unchanged.
+     */
+    @Test
+    public void testSym16_25_chap1() {
+        // note off by one issue ... :(
+        testSym(Examples.chapter1,new Permutation(6,new int[][]{ { 0, 5 }, {1, 4} }),true);
+        
+    }
+
+    private void testSym(OM om, Permutation p, boolean b) {
+        // TODO Auto-generated method stub
+        System.err.println(om.getCircuits());
+        System.err.println(om.permute(p).permuteGround(p.inverse()).getCircuits());
+        
+    }
+
+    /**
+     * Swapping 1 with 6 in the definition of chapter1 example
+     * makes a real changed.
+     */
+    @Test
+    public void testNotSym16_chap1() {
+        testSym(Examples.chapter1,new Permutation(6,new int[][]{ { 0, 5 } }),false);
+        
+    }
+    @Ignore
     @Test
     public void testExampleChapter1() {
         testPerms(Examples.chapter1);
@@ -127,12 +156,24 @@ public class TestPermutations {
         Assert.assertEquals(om, om.permuteGround(p));
     }
 
+    @Ignore
+    @Test
+    public void testCountSymmetriesUniform3() {
+        countSymmetries(1,Examples.uniform3);
+    }
+
+    @Ignore
+    @Test
+    public void testCountSymmetriesUniform4() {
+        countSymmetries(1,Examples.uniform4);
+    }
 
     @Ignore
     @Test
     public void testCountSymmetriesChapter1() {
         countSymmetries(0,Examples.chapter1.getCircuits());
     }
+
     @Ignore
     @Test
     public void testCountSymmetriesCircularSaw() {
@@ -140,21 +181,23 @@ public class TestPermutations {
     }
 
     private void countSymmetries(int expected, OM om) {
-        Map<OM,Set<OM>> symmetries = new HashMap<OM,Set<OM>>();
+        Map<String,List<OM>> symmetries = new HashMap<String,List<OM>>();
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
-            Set<OM> equivalent = symmetries.get(permuted);
+            String chi = permuted.getChirotope().toShortString();
+            List<OM> equivalent = symmetries.get(chi);
             if (equivalent == null) {
-                equivalent = new HashSet<OM>();
-                symmetries.put(permuted, equivalent);
+                equivalent = new ArrayList<OM>();
+                symmetries.put(chi, equivalent);
             }
             equivalent.add(permuted);
         }
-        for (Set<OM> equivalent: symmetries.values()) {
+        for (List<OM> equivalent: symmetries.values()) {
             System.err.print(equivalent.size()+", ");
-            for (OM a: equivalent) 
-                for (OM b:equivalent)
-                    Assert.assertEquals(a, b);
+            for (OM a: equivalent) {
+                System.err.print(a.toString());
+            }
+            System.err.println();
         }
         System.err.println();
         Assert.assertEquals(expected, symmetries.size());
