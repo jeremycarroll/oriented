@@ -35,9 +35,6 @@ public interface OMInternal extends OM {
 
 	FactoryFactory ffactory();
 	
-	MatroidAll getMatroidAll();
-
-    void setMatroidAll(MatroidAll m);
 
 }
 /************************************************************************

@@ -9,9 +9,14 @@ import net.sf.oriented.omi.OM;
 public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal {
 
 
+    abstract MatroidAll getMatroidAll();
+
+    abstract void setMatroidAll(MatroidAll m);
+
     @Override
     public final OM reorient(Label ... axes) {
-        OMInternal rslt = this.reorientRaw(axes);
+        @SuppressWarnings("rawtypes")
+        AbsOMAxioms<?> rslt = (AbsOMAxioms) this.reorientRaw(axes);
         rslt.setMatroidAll(getMatroidAll());
         return rslt;
     }

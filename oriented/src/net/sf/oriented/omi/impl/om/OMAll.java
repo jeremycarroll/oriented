@@ -407,12 +407,12 @@ public class OMAll extends AbsOMAxioms<Object>  {
     }
 
     @Override
-    public MatroidAll getMatroidAll() {
+    MatroidAll getMatroidAll() {
         return matroid;
     }
 
     @Override
-    public void setMatroidAll(MatroidAll m) {
+    void setMatroidAll(MatroidAll m) {
         matroid = m;
     }
 }
