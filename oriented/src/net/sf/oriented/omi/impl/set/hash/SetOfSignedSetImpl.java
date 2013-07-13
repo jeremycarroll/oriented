@@ -61,42 +61,6 @@ public class SetOfSignedSetImpl
 
 	}
 
-	// public String toString(UnsignedSet e, boolean usePlusMinus,
-	// boolean symmetric) {
-	// StringBuffer rslt = new StringBuffer();
-	// String sep = "";
-	// rslt.append("{");
-	// Iterator<SignedSetI> it = iterator();
-	// while (it.hasNext()) {
-	// String v;
-	// if (usePlusMinus) {
-	// v = it.next().toPlusMinus(e);
-	// if (symmetric) {
-	// int p = v.indexOf('+');
-	// int m = v.indexOf('-');
-	// if (m < p && m >= 0)
-	// continue;
-	// }
-	// } else {
-	// v = it.next().toString(e);
-	// if (symmetric && v.length() > 1 && v.charAt(1) == '\'')
-	// continue;
-	// }
-	// rslt.append(sep);
-	// rslt.append(v);
-	// sep = ",";
-	// }
-	// rslt.append("}");
-	// return rslt.toString();
-	// }
-	//
-	// public String toString(UnsignedSet e) {
-	// return toString(e,false,false);
-	// }
-	// public String toPlusMinus(UnsignedSet e) {
-	// return toString(e,true,false);
-	// }
-
 	public SetOfSignedSetImpl deletion(final Label s) {
 		return (SetOfSignedSetImpl) only(new Test<SignedSet>() {
 			@Override
@@ -186,6 +150,12 @@ public class SetOfSignedSetImpl
 		}
 		return useCollection(tx);
 	}
+
+    @Override
+    public SetOfSignedSet reorient(Label ... axes) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
 /************************************************************************

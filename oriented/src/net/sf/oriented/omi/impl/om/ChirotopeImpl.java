@@ -507,7 +507,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
     @Override
     public OM reorient(Label ... axes) {
         // TODO: stubb
-        return null;
+        return all.getCircuits().reorient(axes);
     }
 
 }
