@@ -385,7 +385,7 @@ final public class SetOfSignedSetImpl
 	}
 
     @Override
-    public SetOfSignedSet reorient(Label ... axes) {
+    public SetOfSignedSet reorientRaw(Label ... axes) {
         UnsignedSetImpl changed = (UnsignedSetImpl) factory().itemFactory().unsignedF.copyBackingCollection(Arrays.asList(axes));
         UnsignedSetImpl unchanged = (UnsignedSetImpl) support().minus(changed);
         int ch = changed.members;

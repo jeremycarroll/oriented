@@ -29,7 +29,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+		OMSInternal construct(SetOfSignedSetInternal signedSets, OMAll all) {
 			return new Circuits(signedSets, all);
 		}
 
@@ -50,7 +50,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+		OMSInternal construct(SetOfSignedSetInternal signedSets, OMAll all) {
 			return new Vectors(signedSets, all);
 		}
 	}
@@ -61,7 +61,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		OMS construct(SetOfSignedSetInternal signedSets, OMAll all) {
+		OMSInternal construct(SetOfSignedSetInternal signedSets, OMAll all) {
 			return new MaxVectors(signedSets, all);
 		}
 
@@ -100,17 +100,17 @@ abstract public class OMFactory extends
 	}
 
 	@Override
-	OMS construct(Collection<? extends Label> ground,
+	OMSInternal construct(Collection<? extends Label> ground,
 			SetOfSignedSet signedSets) {
 		LabelImpl[] g = ground.toArray(new LabelImpl[0]);
 		OMAll all = new OMAll(g, factory);
 		return construct((SetOfSignedSetInternal)signedSets, all);
 	}
 
-	abstract OMS construct(SetOfSignedSetInternal signedSets, OMAll all);
+	abstract OMSInternal construct(SetOfSignedSetInternal signedSets, OMAll all);
 
 	@Override
-	public OMS fromSignedSets(Label[] ground, SetOfSignedSet sym) {
+	public OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym) {
 		return construct(Arrays.asList(ground), sets.remake(sym));
 	}
 

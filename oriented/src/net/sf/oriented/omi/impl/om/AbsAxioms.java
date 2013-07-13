@@ -69,6 +69,8 @@ abstract class AbsAxioms<U> {
 	}
 
 	abstract public Iterator<? extends U> iterator();
+	
+
 
 }
 /************************************************************************

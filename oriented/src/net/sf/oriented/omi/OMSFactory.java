@@ -4,6 +4,8 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.omi.impl.om.OMSInternal;
+
 public interface OMSFactory extends SetFactory<SignedSet, OMS> {
 	/**
 	 * This does not, and will not, work. This is inherited from the
@@ -26,7 +28,7 @@ public interface OMSFactory extends SetFactory<SignedSet, OMS> {
 	 *            axioms.
 	 * @return A new Oriented Matroid, based on the signed sets.
 	 */
-	OMS fromSignedSets(Label[] ground, SetOfSignedSet sym);
+	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
 
 }
 /************************************************************************

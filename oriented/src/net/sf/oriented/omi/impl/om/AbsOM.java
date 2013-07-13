@@ -13,7 +13,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
-abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
+abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 
 	protected final OMAll all;
 
@@ -100,16 +100,6 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
 	}
 
     @Override
-    public boolean isAcyclic() {
-        return getCircuits().isAcyclic();
-    }
-
-    @Override
-    public int n() {
-    	return ground().length;
-    }
-
-    @Override
     public OM permuteGround(Permutation p) {
         return all.permuteGround(p);
     }
@@ -120,8 +110,17 @@ abstract class AbsOM extends AbsAxioms<SignedSet> implements OMInternal {
     }
     
     @Override
-    public OM reorient(Label ... axes) {
-        return all.reorient(axes);
+    public OMInternal reorientRaw(Label ... axes) {
+        return all.reorientRaw(axes);
+    }
+    @Override
+    public MatroidAll getMatroidAll() {
+        return all.getMatroidAll();
+    }
+
+    @Override
+    public void setMatroidAll(MatroidAll m) {
+        all.setMatroidAll(m);
     }
 
 }

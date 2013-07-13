@@ -17,6 +17,7 @@ import static net.sf.oriented.omi.impl.om.Cryptomorphisms.VECTORS;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.oriented.combinatorics.Permutation;
@@ -30,11 +31,11 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
-public class OMAll implements OMInternal {
+public class OMAll extends AbsOMAxioms<Object>  {
 
 	final OMAll dual;
 
-	final MatroidAll matroid;
+	MatroidAll matroid;
 
 	final LabelImpl[] ground;
 
@@ -224,9 +225,9 @@ public class OMAll implements OMInternal {
 	@Override
 	public MatroidInternal getMatroid() {
 		if (!matroid.isSet()) {
-			if (has(CHIROTOPE)) {
+			if (has(CHIROTOPE) || has(REALIZED) ) {
 				matroid.setBases(new Bases(getChirotope().getBases(), matroid));
-			} else if (has(DUALCHIROTOPE)) {
+			} else if (has(DUALCHIROTOPE) || has(DUALREALIZED) ) {
 				dual().getMatroid();
 			} else if (has(CIRCUITS)) {
 				matroid.setCircuits(new MatroidCircuits(getCircuits(), matroid));
@@ -362,17 +363,7 @@ public class OMAll implements OMInternal {
 		return (OMRealized) get(REALIZED);
 	}
 
-    @Override
-    public boolean isAcyclic() {
-        return get(CIRCUITS).isAcyclic();
-    }
-
-    @Override
-    public int n() {
-        return ground().length;
-    }
-    
-    private OM getCircuitsOrChirotope() {
+    private AbsOMAxioms<?> getCircuitsOrChirotope() {
         // we generally prefer to use the circuit
         // implementation, unless we do not have circuits
         // computed, and we have the chirotope.
@@ -399,8 +390,30 @@ public class OMAll implements OMInternal {
     }
 
     @Override
-    public OM reorient(Label ... axes) {
-        return getCircuitsOrChirotope().reorient(axes);
+    public OMInternal reorientRaw(Label ... axes) {
+        return getCircuitsOrChirotope().reorientRaw(axes);
+    }
+
+
+    /**
+     * This method is here by an accident of single inheritance.
+     * It throws an exception
+     * @return
+     * @throws UnsupportedOperationException Always.
+     */
+    @Override
+    public Iterator<? extends Object> iterator() {
+        throw new UnsupportedOperationException("Not part of the interface");
+    }
+
+    @Override
+    public MatroidAll getMatroidAll() {
+        return matroid;
+    }
+
+    @Override
+    public void setMatroidAll(MatroidAll m) {
+        matroid = m;
     }
 }
 /************************************************************************

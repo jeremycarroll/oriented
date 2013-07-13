@@ -43,7 +43,7 @@ public interface SetOfSignedSetInternal
 	public SetOfSignedSetInternal restriction(UnsignedSet x0);
 	
 
-    public SetOfSignedSet reorient(Label ... axes);
+    public SetOfSignedSet reorientRaw(Label ... axes);
 
 
 

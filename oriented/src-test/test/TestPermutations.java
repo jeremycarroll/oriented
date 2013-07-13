@@ -158,14 +158,21 @@ public class TestPermutations {
     }
     private int stabilizer(OM om) {
         int cnt = 0;
+        Set<OM> same = new HashSet<OM>();
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
             if (permuted.equals(om)) {
               //  System.err.println(p);
+                same.add(om);
                 cnt++;
             }
         }
         // System.err.println(cnt);
+        if (cnt>1) {
+            for (OM omm:same) {
+                System.err.println(omm.getCircuits());
+            }
+        }
         return cnt;
         
     }

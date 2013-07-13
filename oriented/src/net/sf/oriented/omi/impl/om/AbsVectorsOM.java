@@ -7,12 +7,11 @@ package net.sf.oriented.omi.impl.om;
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
-abstract class AbsVectorsOM extends AbsVectors implements OMS {
+abstract class AbsVectorsOM extends AbsVectors implements OMSInternal {
 
 	AbsVectorsOM(SetOfSignedSetInternal c, Cryptomorphisms cry, OMInternal a) {
 		super(c, a);
@@ -36,8 +35,8 @@ abstract class AbsVectorsOM extends AbsVectors implements OMS {
     }
 
     @Override
-    public OMS reorient(Label ... axes) {
-        return omsFactory().fromSignedSets(ground(), vectors.reorient(axes));
+    public OMSInternal reorientRaw(Label ... axes) {
+        return omsFactory().fromSignedSets(ground(), vectors.reorientRaw(axes));
     }
 
 

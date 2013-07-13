@@ -152,7 +152,7 @@ public class SetOfSignedSetImpl
 	}
 
     @Override
-    public SetOfSignedSet reorient(Label ... axes) {
+    public SetOfSignedSet reorientRaw(Label ... axes) {
         // TODO Auto-generated method stub
         return null;
     }

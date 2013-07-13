@@ -34,6 +34,10 @@ public interface OMInternal extends OM {
 	ChirotopeImpl getChirotope();
 
 	FactoryFactory ffactory();
+	
+	MatroidAll getMatroidAll();
+
+    void setMatroidAll(MatroidAll m);
 
 }
 /************************************************************************
