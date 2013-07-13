@@ -208,10 +208,6 @@ final public class FactoryFactory {
 		return options;
 	}
 
-    public FactoryFactory permute(Permutation p) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }
 /************************************************************************

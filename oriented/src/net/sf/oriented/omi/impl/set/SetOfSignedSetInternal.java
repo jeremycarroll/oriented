@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set;
 
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -13,18 +14,10 @@ public interface SetOfSignedSetInternal
 		SetOfInternal<SignedSetInternal, SetOfSignedSetInternal, SignedSet, SetOfSignedSet, SignedSetInternal, SetOfSignedSetInternal>,
 		SetOfSignedSet {
 
-	// public String toString(UnsignedSet e);
-	//
-	// public String toPlusMinus(UnsignedSet e);
-
-	// public SetOfSignedSet deletion(final Label s);
-	//
-	// public SetOfSignedSetI contraction(Label l);
 
 	@Override
 	public UnsignedSetInternal support();
 
-	// public SetOfSignedSetI2 useCollection(Collection<SignedSetI> a) ;
 
 	SetOfUnsignedSetInternal unsignedSets();
 
@@ -48,9 +41,11 @@ public interface SetOfSignedSetInternal
 	 * @return the set formed by restricting each member to x0
 	 */
 	public SetOfSignedSetInternal restriction(UnsignedSet x0);
+	
 
-	// public Map<UnsignedSetInternal, SetOfSignedSetInternal>
-	// withSupport(SetOfUnsignedSetInternal vvv);
+    public SetOfSignedSet reorient(Label ... axes);
+
+
 
 }
 /************************************************************************

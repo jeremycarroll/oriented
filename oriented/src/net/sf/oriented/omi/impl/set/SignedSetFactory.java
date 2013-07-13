@@ -156,8 +156,6 @@ public class SignedSetFactory extends
 
 		UnsignedSet plus = unsignedF.remake(s.plus());
 		UnsignedSet minus = unsignedF.remake(s.minus());
-		// opt.extendUniverse(plus.asCollection());
-		// opt.extendUniverse(minus.asCollection());
 
 		Iterator<? extends Label> it = u.iterator();
 		char rslt[] = new char[u.size()];
@@ -207,7 +205,6 @@ public class SignedSetFactory extends
 		return createSignedSet(plus, minus);
 	}
 
-	// private WeakReference<SignedSetInternal> cache[];
 	private SignedSetInternal cache[];
 
 	public void addToCache(int plus, int minus, SignedSetInternal s) {
@@ -215,7 +212,6 @@ public class SignedSetFactory extends
 		long value = toLong(plus, minus);
 		int key = key(value);
 		cache[key] = s;
-		// new WeakReference<SignedSetInternal>(s);
 	}
 
 	private int key(long value) {
@@ -225,16 +221,11 @@ public class SignedSetFactory extends
 	private void initCache() {
 		if (cache == null) {
 			cache = new SignedSetInternal[18371];
-			// new WeakReference[257];
 		}
 	}
 
 	public SignedSetInternal cached(long l) {
 		return cache[key(l)];
-		// WeakReference<SignedSetInternal> w = cache[ key(l) ];
-		// if (w==null)
-		// return null;
-		// return w.get();
 	}
 
 	static public long toLong(int p, int m) {

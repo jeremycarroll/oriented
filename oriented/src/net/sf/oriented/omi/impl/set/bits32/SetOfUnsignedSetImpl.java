@@ -27,11 +27,10 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
  */
 public class SetOfUnsignedSetImpl
 		extends
-		SetImpl
-
-		<UnsignedSetInternal, SetOfUnsignedSetInternal, UnsignedSet, SetOfUnsignedSet, UnsignedSetInternal, SetOfUnsignedSetInternal>
-
-implements SetOfUnsignedSetInternal {
+		SetImpl<UnsignedSetInternal, SetOfUnsignedSetInternal, 
+		        UnsignedSet,         SetOfUnsignedSet, 
+		        UnsignedSetInternal, SetOfUnsignedSetInternal>
+       implements SetOfUnsignedSetInternal {
 
 	@Override
 	public SetOfUnsignedSetFactory factory() {
@@ -290,7 +289,6 @@ implements SetOfUnsignedSetInternal {
 		return new SetOfUnsignedSetImpl(m, factory());
 	}
 
-	// TODO issue about empty set and equality etc....
 	@Override
 	public boolean sameSetAs(SetOfUnsignedSet b) {
 		SetOfUnsignedSetImpl bb = remakex(b);

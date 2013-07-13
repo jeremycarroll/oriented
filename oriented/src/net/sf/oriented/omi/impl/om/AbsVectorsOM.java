@@ -4,9 +4,11 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
@@ -27,12 +29,24 @@ abstract class AbsVectorsOM extends AbsVectors implements OMS {
         }
         return true;
     }
-    
 
     @Override
-    public OM reorient(Label ... axes) {
-        // TODO: stubb
-        return null;
+    public OM permuteGround(Permutation p) {
+        return omsFactory().fromSignedSets(p.permute(ground()), vectors);
+    }
+
+    @Override
+    public OMS reorient(Label ... axes) {
+        return omsFactory().fromSignedSets(ground(), vectors.reorient(axes));
+    }
+
+
+    abstract OMSFactory omsFactory();
+
+
+    @Override
+    public String toString() {
+    	return omsFactory().toString(this);
     }
 
 }

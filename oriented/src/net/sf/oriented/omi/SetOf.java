@@ -11,6 +11,13 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
        extends Verify {
 	public abstract SET union(SET b);
 
+	/**
+	 * This is mathematically set equality, except
+	 * for empty sets - which respect type as well ... i.e. two empty sets
+	 * that can never be modified by adding the same member to each are different.
+	 * @param other
+	 * @return
+	 */
 	boolean sameSetAs(SET other);
 
 	/**

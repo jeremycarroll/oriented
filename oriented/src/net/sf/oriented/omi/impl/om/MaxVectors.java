@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
@@ -105,9 +106,9 @@ public class MaxVectors extends AbsVectorsOM {
 	}
 
 	@Override
-	public String toString() {
-		return ffactory().maxVectors().toString(this);
-	}
+    OMSFactory omsFactory() {
+        return ffactory().maxVectors();
+    }
 
 }
 /************************************************************************

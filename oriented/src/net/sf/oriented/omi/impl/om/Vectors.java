@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
@@ -119,11 +120,6 @@ public class Vectors extends AbsVectorsOM {
 		return withSupport(support());
 	}
 
-	@Override
-	public String toString() {
-		return ffactory().vectors().toString(this);
-	}
-
 	@SuppressWarnings("unchecked")
 	public SetOfUnsignedSetInternal circuits() {
 		JavaSet<UnsignedSetInternal> dependent[] = new JavaSet[ground().length + 1];
@@ -168,6 +164,10 @@ public class Vectors extends AbsVectorsOM {
 		circuits.addAll(c);
 		return !c.isEmpty();
 	}
+    @Override
+    OMSFactory omsFactory() {
+        return ffactory().vectors();
+    }
 
 }
 /************************************************************************

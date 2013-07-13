@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -82,71 +83,6 @@ final public class SetOfSignedSetImpl
 		super(factory);
 		members = m;
 	}
-
-	// public String toString(UnsignedSet e, boolean usePlusMinus,
-	// boolean symmetric) {
-	// StringBuffer rslt = new StringBuffer();
-	// String sep = "";
-	// rslt.append("{");
-	// Iterator<SignedSetI> it = iterator();
-	// while (it.hasNext()) {
-	// String v;
-	// if (usePlusMinus) {
-	// v = it.next().toPlusMinus(e);
-	// if (symmetric) {
-	// int p = v.indexOf('+');
-	// int m = v.indexOf('-');
-	// if (m < p && m >= 0)
-	// continue;
-	// }
-	// } else {
-	// v = it.next().toString(e);
-	// if (symmetric && v.length() > 1 && v.charAt(1) == '\'')
-	// continue;
-	// }
-	// rslt.append(sep);
-	// rslt.append(v);
-	// sep = ",";
-	// }
-	// rslt.append("}");
-	// return rslt.toString();
-	// }
-	//
-	// public String toString(UnsignedSet e) {
-	// return toString(e,false,false);
-	// }
-	// public String toPlusMinus(UnsignedSet e) {
-	// return toString(e,true,false);
-	// }
-
-	// public SetOfSignedSetImpl deletion(final Label s) {
-	// return (SetOfSignedSetImpl) only(new Test<SignedSet>(){
-	// public boolean test(SignedSet e) {
-	// return e.sign(s)==0;
-	// }});
-	// }
-	// public SetOfSignedSet contraction(Label l) {
-	// JavaSet<SignedSetInternal> r = emptyCollectionOf();
-	// Iterator<SignedSetInternal> it = iterator();
-	// while (it.hasNext()) {
-	// SignedSetInternal s = it.next();
-	// switch (s.sign(l)) {
-	// case -1:
-	// r.add(new
-	// SignedSetImpl(s.plus(),s.minus().minus(l),factory().itemFactory()));
-	// break;
-	// case 0:
-	// r.add(s);
-	// break;
-	// case 1:
-	// r.add(new
-	// SignedSetImpl(s.plus().minus(l),s.minus(),factory().itemFactory()));
-	// break;
-	// }
-	// }
-	// return useCollection(r);
-	//
-	// }
 
 	@Override
 	public UnsignedSetInternal support() {
@@ -344,7 +280,6 @@ final public class SetOfSignedSetImpl
 		return toLong(bb.plus, bb.minus);
 	}
 
-	// TODO issue about empty set and equality etc....
 	@Override
 	public boolean sameSetAs(SetOfSignedSet b) {
 		SetOfSignedSetImpl bb = remakex(b);
@@ -448,6 +383,23 @@ final public class SetOfSignedSetImpl
 		}
 		return removeDuplicates(m);
 	}
+
+    @Override
+    public SetOfSignedSet reorient(Label ... axes) {
+        UnsignedSetImpl changed = (UnsignedSetImpl) factory().itemFactory().unsignedF.copyBackingCollection(Arrays.asList(axes));
+        UnsignedSetImpl unchanged = (UnsignedSetImpl) support().minus(changed);
+        int ch = changed.members;
+        int un = unchanged.members;
+        long reoriented[] = new long[members.length];
+        int i = 0;
+        while (i < members.length ) {
+            int p = plus(members[i]);
+            int m = minus(members[i]);
+            reoriented[i] = toLong((p&un)|(m&ch),(m&un)|(p&ch));
+        }
+        Arrays.sort(reoriented);
+        return new SetOfSignedSetImpl(reoriented, factory());
+    }
 
 }
 /************************************************************************

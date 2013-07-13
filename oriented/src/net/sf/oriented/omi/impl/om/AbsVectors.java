@@ -8,6 +8,8 @@ import java.util.Iterator;
 
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -181,6 +183,9 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	public String toString(Factory<SetOfSignedSet> e) {
 		return vectors.toString(e);
 	}
+	
+	@Override
+    abstract public OMS reorient(Label ... axes);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
