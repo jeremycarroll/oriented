@@ -143,9 +143,10 @@ public class TestPermutations {
     
     @Test
     public void testStabilizerChap1() {
-        stabilizer(Examples.chapter1);
+        Assert.assertEquals(2,stabilizer(Examples.chapter1));
     }
 
+    @Ignore
     @Test
     public void testStabilizerSaw3() {
         System.err.println(Examples.circularSaw3.dual().getCircuits());
@@ -154,25 +155,25 @@ public class TestPermutations {
 
     @Test
     public void testStabilizerUniform4() {
-        stabilizer(Examples.uniform4);
+        Assert.assertEquals(8,stabilizer(Examples.uniform4));
     }
     private int stabilizer(OM om) {
         int cnt = 0;
-        Set<OM> same = new HashSet<OM>();
+        List<OM> same = new ArrayList<OM>();
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
             if (permuted.equals(om)) {
               //  System.err.println(p);
-                same.add(om);
+                same.add(permuted);
                 cnt++;
             }
         }
         // System.err.println(cnt);
-        if (cnt>1) {
-            for (OM omm:same) {
-                System.err.println(omm.getCircuits());
-            }
-        }
+//        if (cnt>1) {
+//            for (OM omm:same) {
+//                System.err.println(omm.getCircuits());
+//            }
+//        }
         return cnt;
         
     }
@@ -199,8 +200,9 @@ public class TestPermutations {
                     axes[k++] = g[j+1];
                 }
             }
+            @SuppressWarnings("unused")
             OM reoriented = Examples.circularSaw3.reorient(axes);
-            System.err.println(this.stabilizer(reoriented));
+ //           System.err.println(this.stabilizer(reoriented));
         }
     }
 
