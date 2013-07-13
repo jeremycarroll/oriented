@@ -17,62 +17,46 @@ public abstract class FactoryImpl<
         ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
         ITEM, 
         ITEM_INTERNAL2 extends ITEM>
-		extends IOHelper implements FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> {
+        extends AbsFactoryImpl<ITEM> implements FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> {
 //@formatter:on
 
-	final protected Constructor<ITEM_INTERNAL2> constructor;
+    final protected Constructor<ITEM_INTERNAL2> constructor;
 
-	@SuppressWarnings("unchecked")
-	protected FactoryImpl(Options o) {
+    @SuppressWarnings("unchecked")
+    protected FactoryImpl(Options o) {
         TypeChecker.check(this);
-		options = o;
-		// System.err.println(++cnt+": building: "+getClass().getSimpleName());
-		constructor = (Constructor<ITEM_INTERNAL2>) o.constructorFor(getClass());
-	}
+        options = o;
+        // System.err.println(++cnt+": building: "+getClass().getSimpleName());
+        constructor = (Constructor<ITEM_INTERNAL2>) o.constructorFor(getClass());
+    }
 
-	final private Options options;
+    final private Options options;
 
-	@Override
-	final public ITEM_INTERNAL2 parse(String s) {
-		ParseContext pc = new ParseContext(s.trim());
-		ITEM_INTERNAL2 rslt = parse(pc);
-		if (pc.index != pc.string.length())
-			throw new IllegalArgumentException("Syntax error");
-		return rslt;
-	}
+    @Override
+    final public ITEM_INTERNAL2 parse(String s) {
+        ParseContext pc = new ParseContext(s.trim());
+        ITEM_INTERNAL2 rslt = parse(pc);
+        if (pc.index != pc.string.length())
+            throw new IllegalArgumentException("Syntax error");
+        return rslt;
+    }
 
-	@Override
-	public Options getOptions() {
-		return options;
-	}
+    @Override
+    public Options getOptions() {
+        return options;
+    }
 
-	static int cnt = 0;
+    static int cnt = 0;
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public ITEM_INTERNAL remake(ITEM t) {
-		if (t instanceof HasFactory) {
-			if (((HasFactory<?, ?, ?>) t).factory() == this)
-				return (ITEM_INTERNAL) t;
-		}
-		// System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
-		return fallbackRemake(t);
-	}
+    @Override
+    public JavaSet<ITEM_INTERNAL2> emptyCollectionOf() {
+        return options.javaSetFor(null);
+    }
 
-	@SuppressWarnings("unchecked")
-	protected ITEM_INTERNAL fallbackRemake(ITEM t) {
-		return (ITEM_INTERNAL) parse(toString(t));
-	}
-
-	@Override
-	public JavaSet<ITEM_INTERNAL2> emptyCollectionOf() {
-		return options.javaSetFor(null);
-	}
-
-	@Override
-	public String toString(List<? extends Label> u, ITEM t) {
-		return toString(t);
-	}
+    @Override
+    public String toString(List<? extends Label> u, ITEM t) {
+        return toString(t);
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

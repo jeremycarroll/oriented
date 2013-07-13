@@ -22,6 +22,8 @@ public interface Factory<T> {
 	 */
 	T parse(String s);
 
+
+    <U extends T> U remake(T t);
 	/**
 	 * Convert a T into a String
 	 * 

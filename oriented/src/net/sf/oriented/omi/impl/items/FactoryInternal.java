@@ -34,12 +34,17 @@ public interface FactoryInternal<
 
 	Options getOptions();
 
-	ITEM_INTERNAL remake(ITEM t);
+//	ITEM_INTERNAL remake(ITEM t);
 
 	@Override
 	JavaSet<ITEM_INTERNAL2> emptyCollectionOf();
 
 	String toString(List<? extends Label> u, ITEM t);
+
+//    ITEM_INTERNAL2 remake(ITEM t);
+
+    @Override
+    <U extends ITEM> U remake(ITEM t);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -42,11 +42,11 @@ abstract public class SetImpl<
 		      ITEM_INTERNAL2, 
 		      SET_INTERNAL2>  {
 //@formatter:on
-	SET_INTERNAL remake(SET x) {
+	SET_INTERNAL2 remake(SET x) {
 		return factory.remake(x);
 	}
 
-	ITEM_INTERNAL remake(ITEM x) {
+	ITEM_INTERNAL2 remake(ITEM x) {
 		return factory().itemFactory().remake(x);
 	}
 

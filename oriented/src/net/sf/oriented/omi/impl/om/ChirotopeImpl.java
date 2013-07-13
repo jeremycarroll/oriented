@@ -506,6 +506,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
     @Override
     public OMInternal reorientRaw(Label ... axes) {
+        if (true) throw new IllegalStateException();
         // TODO: stubb
         return all.getCircuits().reorientRaw(axes);
     }

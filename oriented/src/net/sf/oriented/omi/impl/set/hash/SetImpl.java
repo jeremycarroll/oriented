@@ -58,11 +58,12 @@ abstract public class SetImpl<
 		return members;
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public SET_INTERNAL2 union(SET b) {
 		JavaSet<ITEM_INTERNAL2> mm = emptyCollectionOf();
 		mm.addAll(members);
-		mm.addAll(factory().remake(b).asCollection());
+		mm.addAll((Collection<? extends ITEM_INTERNAL2>) factory().remake(b).asCollection());
 		return useCollection(mm);
 	}
 

@@ -17,8 +17,11 @@ import junit.framework.Assert;
 
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.Options;
 
 public class TestPermutations {
     
@@ -180,7 +183,18 @@ public class TestPermutations {
     
     @Test
     public void testReorientation() {
-        Label g[] = Examples.circularSaw3.ground();
+        testReorientation(Examples.circularSaw3);
+    }
+    @Test
+    public void testReorientationHash() {
+        testReorientation(new FactoryFactory(new Options()).circuits().remake(Examples.circularSaw3.getCircuits()));
+        
+        
+      //  Examples.circularSaw3);
+    }
+
+    private void testReorientation(OM om) {
+        Label g[] = om.ground();
         int bitcnt[] = new int[]{ 
                  0,  // 000
                  1, 
@@ -201,7 +215,7 @@ public class TestPermutations {
                 }
             }
             @SuppressWarnings("unused")
-            OM reoriented = Examples.circularSaw3.reorient(axes);
+            OM reoriented = om.reorient(axes);
  //           System.err.println(this.stabilizer(reoriented));
         }
     }

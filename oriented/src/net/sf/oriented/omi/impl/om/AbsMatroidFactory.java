@@ -12,7 +12,7 @@ import java.util.List;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.impl.items.IOHelper;
+import net.sf.oriented.omi.impl.items.AbsFactoryImpl;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
@@ -25,7 +25,7 @@ import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
  * @param <MATROID>       The class of matroid
  * @param <STRUCTURE>     The structured representation
  */
-public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends IOHelper {
+public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryImpl<MATROID> {
 
     final class SimpleLabels extends AbstractCollection<Label> {
         private final int n;
@@ -72,6 +72,7 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends IOHelper {
         return (UnsignedSetFactory) factory.unsignedSets();
     }
 
+    @Override
     public MATROID parse(String s) {
         ParseContext pc = new ParseContext(s.trim());
         MATROID r = parse(pc);
@@ -109,6 +110,7 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends IOHelper {
     abstract MATROID construct(Collection<? extends Label> ground,
             STRUCTURE sets);
 
+    @Override
     final public JavaSet<? extends MATROID> emptyCollectionOf() {
         return factory.options().javaSetFor(null);
     }

@@ -114,9 +114,9 @@ abstract public class SetFactoryImpl<
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	protected SET_INTERNAL fallbackRemake(SET t) {
-		return (SET_INTERNAL) copyBackingCollection(t.asCollection());
+    @Override
+	protected <T extends SET> T fallbackRemake(SET t) {
+		return (T)copyBackingCollection(t.asCollection());
 	}
 
 	protected SET_INTERNAL2 construct(JavaSet<ITEM_INTERNAL2> c,

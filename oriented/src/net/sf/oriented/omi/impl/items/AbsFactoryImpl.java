@@ -7,7 +7,9 @@ package net.sf.oriented.omi.impl.items;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IOHelper {
+import net.sf.oriented.omi.Factory;
+
+public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 
 	static Pattern p = Pattern.compile("([})]|\\]|\\[)|([ \t\n\r,]+)");
 
@@ -47,7 +49,21 @@ public class IOHelper {
 		pc.index++;
 		skip(pc);
 	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ITEM> T remake(ITEM t) {
+        if (t instanceof HasFactory) {
+            if (((HasFactory<?, ?, ?>) t).factory() == this)
+                return (T) t;
+        }
+        // System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
+        return fallbackRemake(t);
+    }
 
+    @SuppressWarnings("unchecked")
+    protected <T extends ITEM> T fallbackRemake(ITEM t) {
+        return (T)parse(toString(t));
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
