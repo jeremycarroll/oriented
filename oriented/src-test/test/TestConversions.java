@@ -62,7 +62,7 @@ public class TestConversions {
 			case 3:
 				break;
 			case 4:
-			    opt.setImplementation(Options.Impl.hash);
+			    opt = new Options(Options.Impl.hash);
 			    break;
 			}
             opt.setUniverse(new String[] { "1", "2", "3", "4", "5", "6", "7" });

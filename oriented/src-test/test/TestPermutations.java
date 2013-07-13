@@ -187,7 +187,7 @@ public class TestPermutations {
     }
     @Test
     public void testReorientationHash() {
-        testReorientation(new FactoryFactory(new Options()).circuits().remake(Examples.circularSaw3.getCircuits()));
+        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()));
         
         
       //  Examples.circularSaw3);

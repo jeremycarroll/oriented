@@ -48,8 +48,7 @@ public class TestRealization {
 	}
 
     static FactoryFactory getFactory(Options.Impl impl) {
-        Options options = new Options();
-        options.setImplementation(impl);
+        Options options = new Options(impl);
         options.setShortLabels();
         return new FactoryFactory(options);
     }

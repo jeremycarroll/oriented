@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.oriented.omi.Options.Impl;
 import net.sf.oriented.omi.impl.items.LabelFactory;
 
 /**
@@ -35,10 +36,17 @@ public class Options {
 	private boolean plusMinus;
 	private boolean singleChar;
 
-	private String implementation; 
+	private final String implementation; 
 	private Class<JavaSet<?>> javaSet;
+	public Options() {
+	    this(Options.Impl.bits32);
+    }
+	public Options(Impl hash) {
+        implementation = Options.class.getPackage().getName()
+                + ".impl.set." + hash.name() +".";
+    }
 
-	// TODO: how to hide this.
+    // TODO: how to hide this.
 	@SuppressWarnings("unchecked")
 	public <T> JavaSet<T> javaSetFor(Class<T> cl) {
 		try {
@@ -76,15 +84,6 @@ public class Options {
 		}
 	}
 
-	// /**
-	// * Provide all the {@link Label}s to be used.
-	// * This allows representations as sequences of {-1, 0, 1},
-	// * for instance.
-	// * @param a The universe of {@link Label}s.
-	// */
-	// public void setUniverse(Label a[]) {
-	// universe = Arrays.asList(a);
-	// }
 	/**
 	 * Provide all the {@link Label}s to be used, as Strings. This allows
 	 * representations as sequences of {-1, 0, 1}, for instance.
@@ -101,13 +100,7 @@ public class Options {
 	 * @param impl
 	 */
 
-    public void setImplementation(Impl impl) {
-        if (implementation != null) {
-            throw new IllegalStateException("The implementation option cannot be changed.");
-        }
-        implementation = Options.class.getPackage().getName()
-                + ".impl.set." + impl.name() +".";
-    }
+  
 	/**
 	 * Use 0 + - as the representation.
 	 * 
@@ -172,23 +165,11 @@ public class Options {
 		return label.getUniverse();
 	}
 
-	// public void extendUniverse(Collection<? extends Label> uu) {
-	// Iterator<? extends Label> it = uu.iterator();
-	// while (it.hasNext()){
-	// Label l = it.next();
-	// if (!universe.contains(l))
-	// universe.add(l);
-	// }
-	// }
-
 	public Label getLabel(int i) {
 		return getUniverseInternal().get(i);
 	}
 	
     private String getImplementation() {
-        if (implementation == null) {
-            setImplementation(Impl.bits32);
-        }
         return implementation;
     }
 
