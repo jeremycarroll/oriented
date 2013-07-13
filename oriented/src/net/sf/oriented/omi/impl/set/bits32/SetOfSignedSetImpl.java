@@ -391,8 +391,7 @@ final public class SetOfSignedSetImpl
         int ch = changed.members;
         int un = unchanged.members;
         long reoriented[] = new long[members.length];
-        int i = 0;
-        while (i < members.length ) {
+        for (int i = 0; i < members.length ; i++ ) {
             int p = plus(members[i]);
             int m = minus(members[i]);
             reoriented[i] = toLong((p&un)|(m&ch),(m&un)|(p&ch));
