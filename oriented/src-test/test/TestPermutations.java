@@ -17,6 +17,7 @@ import junit.framework.Assert;
 
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 
 public class TestPermutations {
@@ -160,13 +161,40 @@ public class TestPermutations {
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
             if (permuted.equals(om)) {
-                System.err.println(p);
+              //  System.err.println(p);
                 cnt++;
             }
         }
-        System.err.println(cnt);
+        // System.err.println(cnt);
         return cnt;
         
+    }
+    
+    @Test
+    public void testReorientation() {
+        Label g[] = Examples.circularSaw3.ground();
+        int bitcnt[] = new int[]{ 
+                 0,  // 000
+                 1, 
+                 1,  // 010
+                 2,
+                 1,  // 100
+                 2, 
+                 2,  // 110
+                 3
+        };
+        for (int i=0;i<(1<<6);i++) {
+            int cnt = bitcnt[i&7] + bitcnt[i>>3];
+            Label axes[] = new Label[cnt];
+            int k = 0;
+            for (int j=0;j<6;j++) {
+                if ( ( i& (1<<j) ) != 0 ) {
+                    axes[k++] = g[j+1];
+                }
+            }
+            OM reoriented = Examples.circularSaw3.reorient(axes);
+            System.err.println(this.stabilizer(reoriented));
+        }
     }
 
     @Ignore
