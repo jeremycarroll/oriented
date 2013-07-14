@@ -7,6 +7,10 @@
  */
 package net.sf.oriented.omi.impl.set.hash;
 
+import static net.sf.oriented.omi.impl.set.SignedSetFactory.plus;
+import static net.sf.oriented.omi.impl.set.SignedSetFactory.toLong;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,6 +24,7 @@ import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
+import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.Test;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
@@ -153,8 +158,18 @@ public class SetOfSignedSetImpl
 
     @Override
     public SetOfSignedSet reorientRaw(Label ... axes) {
-        // TODO Auto-generated method stub
-        return null;
+        SignedSetFactory signedSetFactory = factory().itemFactory();
+        UnsignedSetImpl changed = (UnsignedSetImpl) signedSetFactory.unsignedF.copyBackingCollection(Arrays.asList(axes));
+        UnsignedSetImpl unchanged = (UnsignedSetImpl) support().minus(changed);
+        JavaSet<SignedSetInternal> reoriented = signedSetFactory.emptyCollectionOf();
+        for (SignedSetInternal ss:this ) {
+            UnsignedSetInternal plus = ss.plus().intersection(unchanged)
+                                         .union(ss.minus().intersection(changed));
+            UnsignedSetInternal minus = ss.plus().intersection(changed)
+                    .union(ss.minus().intersection(unchanged));
+            reoriented.add(  new SignedSetImpl(plus,minus,signedSetFactory) );
+        }
+        return new SetOfSignedSetImpl(reoriented, factory());
     }
 
 }
