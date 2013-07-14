@@ -19,6 +19,7 @@ import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.FullChirotope;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
@@ -492,23 +493,46 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
     @Override
     public OM permuteGround(Permutation p) {
-        return permute(p.permute(ground()),new PermutedChirotope(p, alt));
+        return create(p.permute(ground()),new PermutedChirotope(p, alt));
     }
 
     @Override
     public OM permute(Permutation p) {
-        return permute(p.permute(ground()),alt);
+        return create(p.permute(ground()),alt);
     }
 
-    private OMChirotope permute(LabelImpl[] labelImpls, Chirotope chi) {
+    private OMChirotope create(LabelImpl[] labelImpls, FullChirotope chi) {
         return ffactory().chirotope().construct(Arrays.asList(labelImpls),chi);
     }
 
     @Override
     public OMInternal reorientRaw(Label ... axes) {
-        if (true) throw new IllegalStateException();
-        // TODO: stubb
-        return all.getCircuits().reorientRaw(axes);
+        final boolean reoriented[] = new boolean[n()];
+        for (Label lbl:axes) {
+            reoriented[asInt(lbl)] = true;
+        }
+        return (OMInternal) create(ground(),new FullChirotope(){
+
+            @Override
+            public int rank() {
+                return rank;
+            }
+
+            @Override
+            public int n() {
+                return ChirotopeImpl.this.n();
+            }
+
+            @Override
+            public int chi(int ... indexes) {
+                int sign = 1;
+                for (int ix:indexes) {
+                    if (reoriented[ix]) {
+                        sign = sign * -1;
+                    }
+                }
+                return sign*alt.chi(indexes);
+            }});
     }
 
 }
