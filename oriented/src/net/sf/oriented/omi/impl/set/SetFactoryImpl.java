@@ -17,6 +17,7 @@ import net.sf.oriented.omi.impl.items.FactoryImpl;
 import net.sf.oriented.omi.impl.items.FactoryInternal;
 import net.sf.oriented.omi.impl.items.HasFactory;
 import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.util.Misc;
 
 //@formatter:off
 abstract public class SetFactoryImpl<
@@ -121,20 +122,7 @@ abstract public class SetFactoryImpl<
 
 	protected SET_INTERNAL2 construct(JavaSet<ITEM_INTERNAL2> c,
 			SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> f) {
-		try {
-			return constructor.newInstance(new Object[] { c, f });
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (InstantiationException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (InvocationTargetException e) {
-			Throwable rte = e.getCause();
-			if (rte instanceof RuntimeException)
-				throw (RuntimeException) rte;
-			throw new RuntimeException("internal problem", e);
-		}
+	    return Misc.invoke(constructor,c,f);
 	}
 }
 /************************************************************************

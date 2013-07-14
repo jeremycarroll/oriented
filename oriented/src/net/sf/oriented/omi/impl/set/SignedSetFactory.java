@@ -17,6 +17,7 @@ import net.sf.oriented.omi.impl.items.FactoryImpl;
 import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.util.Misc;
 
 public class SignedSetFactory extends
 		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> {
@@ -57,20 +58,7 @@ public class SignedSetFactory extends
 
 	private SignedSetInternal createSignedSet(UnsignedSetInternal p,
 			UnsignedSetInternal m) {
-		try {
-			return constructor.newInstance(new Object[] { p, m, this });
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (InstantiationException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("internal problem", e);
-		} catch (InvocationTargetException e) {
-			Throwable rte = e.getCause();
-			if (rte instanceof RuntimeException)
-				throw (RuntimeException) rte;
-			throw new RuntimeException("internal problem", e);
-		}
+        return Misc.invoke(constructor,p,m,this);
 	}
 
 	private SignedSetInternal parsePlusMinus(ParseContext pc) {
