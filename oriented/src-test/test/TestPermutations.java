@@ -214,8 +214,9 @@ public class TestPermutations {
                     axes[k++] = g[j+1];
                 }
             }
-            @SuppressWarnings("unused")
-            OM reoriented = om.reorient(axes);
+            OM reorientedA = om.getCircuits().reorient(axes);
+            OM reorientedB = om.getCircuits().reorient(axes);
+            Assert.assertEquals(reorientedA, reorientedB);
  //           System.err.println(this.stabilizer(reoriented));
         }
     }
