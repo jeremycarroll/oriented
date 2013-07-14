@@ -4,9 +4,9 @@
  ************************************************************************/
 package test;
 
+import static net.sf.oriented.omi.Examples.chapter1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static net.sf.oriented.omi.Examples.chapter1;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;

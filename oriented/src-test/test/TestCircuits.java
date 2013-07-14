@@ -4,9 +4,9 @@
  ************************************************************************/
 package test;
 
+import static net.sf.oriented.omi.Examples.chapter1;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static net.sf.oriented.omi.Examples.chapter1;
 import junit.framework.Assert;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;

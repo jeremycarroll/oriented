@@ -8,7 +8,6 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.oriented.omi.Options.Impl;
 import net.sf.oriented.omi.impl.items.LabelFactory;
 
 /**

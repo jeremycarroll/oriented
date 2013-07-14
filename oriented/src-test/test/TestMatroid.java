@@ -4,10 +4,10 @@
  ************************************************************************/
 package test;
 
+import static net.sf.oriented.omi.Examples.chapter1;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Matroid;
 import net.sf.oriented.omi.Options;
-import static net.sf.oriented.omi.Examples.chapter1;
 
 import org.junit.Test;
 

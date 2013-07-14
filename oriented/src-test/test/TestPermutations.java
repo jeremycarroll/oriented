@@ -10,18 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import junit.framework.Assert;
-
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class TestPermutations {
     

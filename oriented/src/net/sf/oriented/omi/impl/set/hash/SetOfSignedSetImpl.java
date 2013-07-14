@@ -7,9 +7,6 @@
  */
 package net.sf.oriented.omi.impl.set.hash;
 
-import static net.sf.oriented.omi.impl.set.SignedSetFactory.plus;
-import static net.sf.oriented.omi.impl.set.SignedSetFactory.toLong;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
