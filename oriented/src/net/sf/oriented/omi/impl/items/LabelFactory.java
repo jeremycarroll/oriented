@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.items;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,8 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
+import net.sf.oriented.util.Misc;
 
 public class LabelFactory extends FactoryImpl<LabelImpl, Label, LabelImpl> {
 
@@ -97,6 +101,34 @@ public class LabelFactory extends FactoryImpl<LabelImpl, Label, LabelImpl> {
 		}
 		return r;
 	}
+
+	private Constructor<? extends Permutation> smartPermutation;
+	/**
+	 * Return a permutation of the universe, which
+	 * permutes the items in ground by p, and leaves other
+	 * things unchanged.
+	 * @param ground
+	 * @param p
+	 * @return
+	 */
+    public Permutation permuteUniverse(LabelImpl[] ground, Permutation p) {
+        int permutation[] = Group.identityGroup(count).identity().toArray();
+        for (int i=0;i<ground.length;i++) {
+            LabelImpl l = ground[i];
+            int from = l.ordinal();
+            int to = ground[p.get(i)].ordinal();
+            permutation[from] = to;
+        }
+        return Misc.invoke(getSmartPermutation(),permutation);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Constructor<? extends Permutation> getSmartPermutation() {
+        if (smartPermutation == null) {
+            smartPermutation = (Constructor<? extends Permutation>) getOptions().constructorFor("SmartPermutation");
+        }
+        return smartPermutation;
+    }
 
 }
 /************************************************************************

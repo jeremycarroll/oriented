@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.math.IntMath;
-
 import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.Lexicographic;
 import net.sf.oriented.combinatorics.Permutation;
@@ -35,6 +33,8 @@ import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+
+import com.google.common.math.IntMath;
 
 public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
@@ -438,7 +438,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	private UnsignedSetInternal findBasis(UnsignedSetInternal independent) {
-		Bases bases = getMatroid().getBases();
+		AbsMatroid bases = getMatroid().getBases();
 		if (independent.size() == rank()) {
 			if (bases.contains(independent))
 				return independent;

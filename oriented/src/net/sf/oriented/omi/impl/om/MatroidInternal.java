@@ -37,6 +37,7 @@ public interface MatroidInternal extends Matroid {
 
 	FactoryFactory ffactory();
 
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

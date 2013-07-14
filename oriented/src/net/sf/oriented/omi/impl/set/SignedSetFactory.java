@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 

@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -115,6 +116,8 @@ public interface SignedSetInternal extends
 	 */
 	@Override
 	SignedSetInternal restriction(UnsignedSet x);
+
+    SignedSet permuteUniverse(Permutation universePermuter);
 
 }
 /************************************************************************

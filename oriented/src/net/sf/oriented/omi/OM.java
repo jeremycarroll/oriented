@@ -4,7 +4,10 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.combinatorics.Permutation;
+
+import com.google.common.base.Function;
 
 public interface OM extends Verify {
 
@@ -90,6 +93,10 @@ public interface OM extends Verify {
      * @return
      */
     int n();
+    
+    Group automorphisms();
+
+    Function<SignedSet, SignedSet> signedSetPermuter(Permutation p);
 
 }
 /************************************************************************

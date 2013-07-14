@@ -3,8 +3,15 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+
+import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.impl.set.SignedSetInternal;
+
+import com.google.common.base.Function;
 
 public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal {
 
@@ -44,6 +51,28 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     	return ground().length;
     }
 
+    @Override
+    public Group automorphisms() {
+        return getCircuits().automorphisms();
+    }
+
+    /**
+     * Convert a permutation of the ground set into
+     * a function that will map a signed set to the permuted signed set.
+     * @param p This is a permutation of the ground set
+     */
+    @Override
+    public Function<SignedSet, SignedSet> signedSetPermuter(Permutation p) {
+
+        final Permutation universePermuter = ffactory().labels().permuteUniverse(ground(), p);
+        return new Function<SignedSet, SignedSet>() {
+            @Override
+            public SignedSet apply(SignedSet input) {
+                return ((SignedSetInternal)input).permuteUniverse(universePermuter);
+            }
+            
+        };
+    }
 }
 
 

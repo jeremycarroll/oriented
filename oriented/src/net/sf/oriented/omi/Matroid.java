@@ -4,6 +4,8 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.combinatorics.Group;
+
 public interface Matroid extends Verify {
 
 	public MatroidS getCircuits();
@@ -18,7 +20,8 @@ public interface Matroid extends Verify {
 
 	OM getOM();
 
-	// TODO API for unsigned to signed
+    Group automorphisms();
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

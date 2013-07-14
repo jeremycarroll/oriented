@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
@@ -129,6 +130,13 @@ public class MatroidAll implements MatroidInternal {
 	public FactoryFactory ffactory() {
 		return factory;
 	}
+	
+
+    @Override
+    public Group automorphisms() {
+        // TODO: not implemented. This will work for now .... 
+        return Group.symmetric(ground().length);
+    }
 
 }
 /************************************************************************

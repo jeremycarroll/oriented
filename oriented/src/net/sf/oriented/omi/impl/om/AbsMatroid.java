@@ -7,6 +7,7 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
@@ -185,6 +186,11 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 	protected JavaSet<UnsignedSetInternal> emptyCollectionOf() {
 		return factory().itemFactory().emptyCollectionOf();
 	}
+
+    @Override
+    public Group automorphisms() {
+        return all.automorphisms();
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

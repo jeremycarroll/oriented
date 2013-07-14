@@ -8,6 +8,8 @@ import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CIRCUITS;
 
 import java.util.Iterator;
 
+import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMSFactory;
@@ -16,6 +18,9 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 
 public class Circuits extends AbsVectorsOM {
 
@@ -119,6 +124,24 @@ public class Circuits extends AbsVectorsOM {
     OMSFactory omsFactory() {
         return ffactory().circuits();
     }
+
+
+    @Override
+    public Group automorphisms() {
+        return getMatroid().automorphisms().filter(new Predicate<Permutation>(){
+            @Override
+            public boolean apply(Permutation p) {
+                Function<SignedSet,SignedSet> map = signedSetPermuter(p);
+                for (SignedSet s:vectors) {
+                    if (!vectors.contains(map.apply(s))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
 
 }
 /************************************************************************

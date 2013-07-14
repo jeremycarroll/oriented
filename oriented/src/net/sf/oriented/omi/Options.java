@@ -37,7 +37,7 @@ public class Options {
 	private boolean singleChar;
 
 	private final String implementation; 
-	private Constructor<? extends JavaSet> javaSet;
+	private Constructor<? extends JavaSet<?>> javaSet;
 	public Options() {
 	    this(Options.Impl.bits32);
     }
@@ -52,7 +52,7 @@ public class Options {
 	    if (javaSet == null) {
 	        javaSet = (Constructor<? extends JavaSet<T>>) constructorFor("JavaHashSet");
 	    }
-	    return Misc.invoke(javaSet);
+	    return (JavaSet<T>) Misc.invoke(javaSet);
 	}
 
     // TODO: how to hide this.

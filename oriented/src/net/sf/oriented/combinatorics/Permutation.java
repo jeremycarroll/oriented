@@ -103,9 +103,7 @@ public class Permutation {
                 throw new IllegalArgumentException(v + " occurs more than once");
             }
         }
-
     }
-    
     /**
      * Use the notation (0 1) (4 5 6) to represent the permutation
      * (1 0 2 3 5 6 4)
@@ -115,6 +113,11 @@ public class Permutation {
     public Permutation(int n, int[][] cycles) {
         this(computeCycles(n,cycles));
     }
+    
+    public int[] toArray() {
+        return permutation.clone();
+    }
+    
 
     
 
