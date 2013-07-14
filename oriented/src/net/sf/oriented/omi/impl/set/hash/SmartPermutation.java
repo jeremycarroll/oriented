@@ -3,12 +3,26 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set.hash;
 
+import java.util.List;
+
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.impl.items.LabelFactory;
+import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public class SmartPermutation extends Permutation {
     
     public SmartPermutation(int ... perm) {
         super(perm);
+    }
+
+    LabelImpl get(LabelImpl m) {
+        int ix = m.ordinal();
+        if (ix >= n()) {
+            return m;
+        }
+        List<Label> universe = ((LabelFactory)m.factory()).getUniverse();
+        return (LabelImpl) universe.get(get(m.ordinal()));
     }
 
 }

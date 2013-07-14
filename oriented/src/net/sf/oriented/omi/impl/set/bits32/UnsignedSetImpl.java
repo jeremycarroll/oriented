@@ -7,6 +7,7 @@ package net.sf.oriented.omi.impl.set.bits32;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
@@ -155,6 +156,11 @@ final public class UnsignedSetImpl
 	public UnsignedSetInternal union(Label b) {
 		return new UnsignedSetImpl(members | member(b), factory());
 	}
+
+    @Override
+    public UnsignedSetInternal permuteUniverse(Permutation u) {
+        return new UnsignedSetImpl(((SmartPermutation)u).mapAll(members),factory());
+    }
 
 }
 /************************************************************************

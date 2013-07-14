@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set.hash;
 
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
@@ -16,27 +17,20 @@ public class UnsignedSetImpl
 		SetImpl<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>
 		implements UnsignedSetInternal {
 
-	// public UnsignedSet(String a, UnsignedSetFactory f,boolean copy) {
-	// super(f.itemFactory().parse(a),f,copy);
-	// }
-
 	public UnsignedSetImpl(JavaSet<LabelImpl> a, UnsignedSetFactory f) {
 		super(a, f);
 	}
 
-	// public UnsignedSet(Collection<String> a, UnsignedSetFactory f) {
-	// super(f.itemFactory().get(a),f);
-	// }
+    @Override
+    public UnsignedSetImpl permuteUniverse(Permutation universePermuter) {
+        SmartPermutation s = (SmartPermutation)universePermuter;
+        JavaSet<LabelImpl> result = factory().itemFactory().emptyCollectionOf();
+        for (LabelImpl m:this) {
+            result.add(s.get(m));
+        }
+        return new UnsignedSetImpl(result,(UnsignedSetFactory) factory());
+    }
 
-	// public UnsignedSet(Collection<String> a, UnsignedSetFactory f, boolean
-	// copy){
-	// super(f.itemFactory().get(a),f,copy);
-	// }
-
-	// public String toPlus(UnsignedSet e) {
-	// // TO DO toPlus
-	// return "";
-	// }
 
 }
 /************************************************************************

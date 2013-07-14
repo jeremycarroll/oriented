@@ -9,7 +9,8 @@ import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.impl.set.SignedSetInternal;
+import net.sf.oriented.omi.impl.set.SignedSetFactory;
+import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 import com.google.common.base.Function;
 
@@ -64,11 +65,14 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     @Override
     public Function<SignedSet, SignedSet> signedSetPermuter(Permutation p) {
 
+        final SignedSetFactory signedSetFactory = (SignedSetFactory) ffactory().signedSets();
         final Permutation universePermuter = ffactory().labels().permuteUniverse(ground(), p);
         return new Function<SignedSet, SignedSet>() {
             @Override
             public SignedSet apply(SignedSet input) {
-                return ((SignedSetInternal)input).permuteUniverse(universePermuter);
+                return signedSetFactory.create(
+                        ((UnsignedSetInternal)input.plus()).permuteUniverse(universePermuter),
+                        ((UnsignedSetInternal)input.minus()).permuteUniverse(universePermuter));
             }
             
         };

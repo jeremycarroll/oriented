@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set.hash;
 
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -260,12 +259,6 @@ public class SignedSetImpl extends
 		return new SignedSetImpl(plus().intersection(x), minus()
 				.intersection(x), factory());
 	}
-
-    @Override
-    public SignedSet permuteUniverse(Permutation universePermuter) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }
 /************************************************************************
