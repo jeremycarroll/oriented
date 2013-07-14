@@ -3,3 +3,4 @@
 Jar                           License            File
 commons-math3                 Apache 2.0         ApacheLicense2.0.txt
 perisicRing                   LGPL               LESSER.txt
+guava                         Apache 2.0         ApacheLicense2.0.txt						
