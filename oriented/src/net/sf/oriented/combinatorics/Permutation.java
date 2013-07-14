@@ -146,14 +146,29 @@ public class Permutation {
         return permutation[i];
     }
 
+    /**
+     * This method returns the arguments, which
+     * must be of number {@link #n()}
+     * @param args
+     * @return
+     */
     public <T> T[] permute(T ... args) {
+        if (args.length != n()) {
+            throw new IllegalArgumentException("Wrong length");
+        }
         @SuppressWarnings("unchecked")
         T[] result = (T[]) Array.newInstance(args.getClass().getComponentType(), args.length);
         for (int i=0;i<args.length;i++)
             result[i] = args[get(i)];
         return result;
     }
-    public int[] permute(int ... args) {
+    /**
+     * For each of the arguments, which must be between 0 and {@link #n()}
+     * map it to the new value under this permutation.
+     * @param args
+     * @return
+     */
+    public int[] mapAll(int ... args) {
         int[] result = new int[args.length];
         for (int i=0;i<args.length;i++)
             result[i] = get(args[i]);
@@ -169,7 +184,7 @@ public class Permutation {
     }
     
     public Permutation and(Permutation then) {
-        return new Permutation(permute(then.permutation));
+        return new Permutation(mapAll(then.permutation));
         
     }
     @Override

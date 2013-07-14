@@ -29,7 +29,7 @@ class PermutedChirotope implements FullChirotope {
 
     @Override
     public int chi(int ... index) {
-        return base.chi(permutation.permute(index));
+        return base.chi(permutation.mapAll(index));
     }
 
 }
