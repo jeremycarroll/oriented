@@ -147,7 +147,6 @@ public class TestPermutations {
         Assert.assertEquals(2,stabilizer(Examples.chapter1));
     }
 
-    @Ignore
     @Test
     public void testStabilizerSaw3() {
         System.err.println(Examples.circularSaw3.dual().getCircuits());
@@ -190,9 +189,15 @@ public class TestPermutations {
         
       //  Examples.circularSaw3);
     }
+    
+    @Test
+    public void testReorientationChap1() {
+        testReorientation(Examples.chapter1);
+    }
 
     private void testReorientation(OM om) {
         Label g[] = om.ground();
+        int counts[] = new int[250];
         int bitcnt[] = new int[]{ 
                  0,  // 000
                  1, 
@@ -203,20 +208,28 @@ public class TestPermutations {
                  2,  // 110
                  3
         };
-        for (int i=0;i<(1<<6);i++) {
+        int nn = om.n()-1;
+        for (int i=0;i<(1<<nn);i++) {
             int cnt = bitcnt[i&7] + bitcnt[i>>3];
             Label axes[] = new Label[cnt];
             int k = 0;
-            for (int j=0;j<6;j++) {
+            for (int j=0;j<nn;j++) {
                 if ( ( i& (1<<j) ) != 0 ) {
                     axes[k++] = g[j+1];
                 }
             }
             OM reorientedA = om.getCircuits().reorient(axes);
-            OM reorientedB = om.getCircuits().reorient(axes);
+            OM reorientedB = om.getChirotope().reorient(axes);
             Assert.assertEquals(reorientedA, reorientedB);
  //           System.err.println(this.stabilizer(reoriented));
+            int sz = (int) reorientedA.automorphisms().order();
+            counts[sz]++;
+            
         }
+        for (int j=0;j<counts.length;j++)
+            if (counts[j]!=0) {
+                System.err.println(j+" "+counts[j]);
+            }
     }
 
     @Ignore
