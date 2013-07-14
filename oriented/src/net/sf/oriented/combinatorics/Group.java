@@ -3,8 +3,10 @@
  ************************************************************************/
 package net.sf.oriented.combinatorics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Predicate;
@@ -45,8 +47,14 @@ public abstract class Group implements Iterable<Permutation> {
         return new SubGroup(Arrays.asList(identityN(n)));
     }
     
+    /**
+     * Return a subgroup created by accepting some of the elements
+     * in the group.
+     * @param pred This predicate must define a subgroup - no checking is provided.
+     * @return
+     */
     public Group filter(Predicate<Permutation> pred) {
-        Set<Permutation> contents = new HashSet<Permutation>();
+        List<Permutation> contents = new ArrayList<Permutation>();
         for (Permutation p:this) {
             if (pred.apply(p)) {
                 contents.add(p);

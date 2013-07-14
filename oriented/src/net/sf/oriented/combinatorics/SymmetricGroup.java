@@ -7,6 +7,8 @@ import java.util.Iterator;
 
 import org.apache.commons.math3.util.ArithmeticUtils;
 
+import com.google.common.math.LongMath;
+
 class SymmetricGroup extends Group {
 
     public SymmetricGroup(int n) {
@@ -78,7 +80,7 @@ class SymmetricGroup extends Group {
 
     @Override
     public long order() {
-        return ArithmeticUtils.factorial(n());
+        return LongMath.factorial(n());
     }
 
 }
