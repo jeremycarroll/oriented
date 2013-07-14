@@ -5,8 +5,6 @@ package net.sf.oriented.combinatorics;
 
 import java.util.Iterator;
 
-import org.apache.commons.math3.util.ArithmeticUtils;
-
 import com.google.common.math.LongMath;
 
 class SymmetricGroup extends Group {
