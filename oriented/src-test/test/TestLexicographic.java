@@ -4,7 +4,6 @@
  ************************************************************************/
 package test;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.pos;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,6 +18,8 @@ import net.sf.oriented.combinatorics.Lexicographic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
+
+import com.google.common.math.IntMath;
 
 import test.BetterParameterized.TestName;
 
@@ -47,7 +48,7 @@ public class TestLexicographic {
 
 	@Test
 	public void check() {
-		int sz = choose(n, r);
+		int sz = IntMath.binomial(n, r);
 		Iterator<int[]> it = lex.iterator();
 		for (int i = 0; i < sz; i++) {
 			assertTrue(it.hasNext());

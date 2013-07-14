@@ -4,10 +4,11 @@
  ************************************************************************/
 package net.sf.oriented.combinatorics;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
 
 import java.util.AbstractCollection;
 import java.util.Iterator;
+
+import com.google.common.math.IntMath;
 
 public class Lexicographic extends AbstractCollection<int[]> {
 	final int n, r, sz;
@@ -15,7 +16,7 @@ public class Lexicographic extends AbstractCollection<int[]> {
 	public Lexicographic(int n, int r) {
 		this.n = n;
 		this.r = r;
-		sz = choose(n, r);
+		sz = IntMath.binomial(n, r);
 	}
 
 	@Override

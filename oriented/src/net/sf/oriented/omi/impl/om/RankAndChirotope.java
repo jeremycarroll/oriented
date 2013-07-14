@@ -9,14 +9,15 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.regex.Pattern;
 
-import net.sf.oriented.combinatorics.CombinatoricUtils;
+import com.google.common.math.IntMath;
+
 
 class RankAndChirotope {
     private static Pattern chi = Pattern.compile("^[+0-]*$");
 	String chirotope;
 	int rank;
     public void checkSize(int n) {
-        if ( CombinatoricUtils.choose(n, rank) != chirotope.length() ) {
+        if ( IntMath.binomial(n, rank) != chirotope.length() ) {
             throw new IllegalArgumentException("Chirotope of wrong length: "
                        + chirotope.length() + " != " + n + "C" + rank );
         }

@@ -4,13 +4,14 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
 import static net.sf.oriented.combinatorics.CombinatoricUtils.sign;
 import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CHIROTOPE;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.common.math.IntMath;
 
 import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.Lexicographic;
@@ -83,7 +84,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		int rslt = 0;
 		int nextN = n - 1 - i[p];
 		while (i[p] > 0) {
-			rslt += choose(n - i[p], r - 1);
+			rslt += IntMath.binomial(n - i[p], r - 1);
 			i[p]--;
 		}
 		return rslt + pos(nextN, r - 1, p + 1, i);
@@ -101,7 +102,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	ChirotopeImpl(Circuits a) {
 		super(a);
 		rank = all.rank();
-		bits = new int[(choose(all.ground.length, rank) + 15) / 16];
+		bits = new int[(IntMath.binomial(all.ground.length, rank) + 15) / 16];
 		alt = new Alternating(new Chi());
 		initFromCircuits();
 		all.set(CHIROTOPE, this);
@@ -121,7 +122,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		rank = chi.rank();
 		if (all.ground().length != chi.n())
 			throw new IllegalArgumentException("Size mismatch");
-		bits = new int[(choose(chi.n(), chi.rank()) + 15) / 16];
+		bits = new int[(IntMath.binomial(chi.n(), chi.rank()) + 15) / 16];
 		alt = new Alternating(new Chi());
 		initFromChi(chi);
 		all.set(CHIROTOPE, this);
@@ -342,7 +343,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
 	@Override
     public String toShortString() {
-		int sz = choose(ground().length, rank());
+		int sz = IntMath.binomial(ground().length, rank());
 		char r[] = new char[sz];
 		for (int i = 0; i < sz; i++) {
 			r[i] = "-0+!".charAt(getNthEntry(i) + 1);

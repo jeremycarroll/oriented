@@ -10,17 +10,12 @@ import java.util.Iterator;
 public class Permutation {
 
     public static Iterable<Permutation> all(final int n) {
-        final int value[] = new int[n];
-        for (int i = 0; i < n; i++) {
-            value[i] = i;
-        }
         return new Iterable<Permutation>() {
-
-            private boolean finished = false;
-
             @Override
             public Iterator<Permutation> iterator() {
                 return new Iterator<Permutation>() {
+                    final int[] value = from0toN(n);
+                    private boolean finished = false;
 
                     @Override
                     public boolean hasNext() {
@@ -82,6 +77,14 @@ public class Permutation {
             }
 
         };
+    }
+
+    static int[] from0toN(final int n) {
+        final int value[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            value[i] = i;
+        }
+        return value;
     }
 
     final private int permutation[];

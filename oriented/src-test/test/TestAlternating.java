@@ -4,7 +4,6 @@
  ************************************************************************/
 package test;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.choose;
 import static net.sf.oriented.combinatorics.CombinatoricUtils.sign;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.dualBasis;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.pos;
@@ -14,6 +13,8 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.google.common.math.IntMath;
 
 public class TestAlternating {
 
@@ -33,10 +34,10 @@ public class TestAlternating {
 	@Test
 	public void testChoose() {
 
-		assertEquals(10, choose(5, 3));
-		assertEquals(10 * 3 * 7, choose(10, 4));
-		assertEquals(1, choose(8, 8));
-		assertEquals(35, choose(7, 3));
+		assertEquals(10, IntMath.binomial(5, 3));
+		assertEquals(10 * 3 * 7, IntMath.binomial(10, 4));
+		assertEquals(1, IntMath.binomial(8, 8));
+		assertEquals(35, IntMath.binomial(7, 3));
 	}
 
 	@Test

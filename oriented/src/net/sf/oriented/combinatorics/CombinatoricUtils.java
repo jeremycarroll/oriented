@@ -6,6 +6,7 @@ package net.sf.oriented.combinatorics;
 
 import java.util.Arrays;
 
+
 public class CombinatoricUtils {
 	/**
 	 * 
@@ -70,20 +71,6 @@ public class CombinatoricUtils {
 		int y[] = x.clone();
 		Arrays.sort(y);
 		return sign(x, y);
-	}
-
-	static public int choose(int n, int r) {
-		if (2 * r > n)
-			return choose(n, n - r);
-		if (r < 0 || r > n)
-			throw new IllegalArgumentException("choose(" + n + "," + r
-					+ ") must have 0 <= r <= n");
-		int c = 1;
-		for (int i = 0; i < r; i++) {
-			c *= (n - i);
-			c /= (i + 1);
-		}
-		return c;
 	}
 }
 /************************************************************************
