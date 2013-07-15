@@ -180,11 +180,12 @@ public class TestPermutations {
     
     @Test
     public void testReorientation() {
-        testReorientation(Examples.circularSaw3);
+        testReorientation(Examples.circularSaw3, 1, 60, 3, 4);
     }
     @Test
     public void testReorientationHash() {
-        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()));
+        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()),
+                1, 60, 3, 4);
         
         
       //  Examples.circularSaw3);
@@ -192,10 +193,13 @@ public class TestPermutations {
     
     @Test
     public void testReorientationChap1() {
-        testReorientation(Examples.chapter1);
+        testReorientation(Examples.chapter1, 2, 24, 3, 8);
     }
 
-    private void testReorientation(OM om) {
+    private void testReorientation(OM om, int ... expected) {
+        long circuitsTime = 0;
+        long chiroTime = 0;
+        long autoTime = 0;
         Label g[] = om.ground();
         int counts[] = new int[250];
         int bitcnt[] = new int[]{ 
@@ -218,18 +222,30 @@ public class TestPermutations {
                     axes[k++] = g[j+1];
                 }
             }
+            circuitsTime -= System.nanoTime();
             OM reorientedA = om.getCircuits().reorient(axes);
+            circuitsTime += System.nanoTime();
+            chiroTime -= System.nanoTime();
             OM reorientedB = om.getChirotope().reorient(axes);
+            chiroTime += System.nanoTime();
             Assert.assertEquals(reorientedA, reorientedB);
  //           System.err.println(this.stabilizer(reoriented));
+            autoTime -= System.nanoTime();
             int sz = (int) reorientedA.automorphisms().order();
+            autoTime += System.nanoTime();
             counts[sz]++;
             
         }
+        int k=0;
         for (int j=0;j<counts.length;j++)
             if (counts[j]!=0) {
-                System.err.println(j+" "+counts[j]);
+                Assert.assertEquals(expected[k++], j);
+                Assert.assertEquals(expected[k++], counts[j]);
+//                System.err.println(j+" "+counts[j]);
             }
+        System.err.println("Circuits: "+circuitsTime);
+        System.err.println("Chiro:    "+chiroTime);
+        System.err.println("Auto:     "+autoTime);
     }
 
     @Ignore
