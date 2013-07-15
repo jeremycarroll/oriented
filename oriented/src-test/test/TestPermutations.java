@@ -18,7 +18,6 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.Options;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestPermutations {
@@ -37,6 +36,7 @@ public class TestPermutations {
         for (Permutation p:Permutation.all(n)) {
             Assert.assertTrue(sofar.add(p));
         }
+        Assert.assertEquals(factorial, sofar.size());
     }
     
     @Test
@@ -126,8 +126,6 @@ public class TestPermutations {
     }
 
     private void testSym(OM om, Permutation p, boolean equalOrNot) {
-//        System.err.println(om.getCircuits());
-//        System.err.println(om.permute(p).permuteGround(p.inverse()).getCircuits());
         Assert.assertEquals(equalOrNot, om.equals(om.permute(p)));
         
     }
@@ -143,37 +141,37 @@ public class TestPermutations {
     }
     
     @Test
-    public void testStabilizerChap1() {
-        Assert.assertEquals(2,stabilizer(Examples.chapter1));
+    public void testAutomorphismsChap1() {
+        Assert.assertEquals(2,automorphisms(Examples.chapter1));
     }
 
     @Test
-    public void testStabilizerSaw3() {
-        System.err.println(Examples.circularSaw3.dual().getCircuits());
-        stabilizer(Examples.circularSaw3);
+    public void testAutomorphismsSaw3() {
+//        System.err.println(Examples.circularSaw3.dual().getCircuits());
+        automorphisms(Examples.circularSaw3);
     }
 
     @Test
-    public void testStabilizerUniform4() {
-        Assert.assertEquals(8,stabilizer(Examples.uniform4));
+    public void testAutomorphismsUniform4() {
+        Assert.assertEquals(8,automorphisms(Examples.uniform4));
     }
-    private int stabilizer(OM om) {
+    private int automorphisms(OM om) {
         int cnt = 0;
         List<OM> same = new ArrayList<OM>();
+        Set<Permutation> auto1 = new HashSet<Permutation>();
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
             if (permuted.equals(om)) {
-              //  System.err.println(p);
                 same.add(permuted);
+                auto1.add(p);
                 cnt++;
             }
         }
-        // System.err.println(cnt);
-//        if (cnt>1) {
-//            for (OM omm:same) {
-//                System.err.println(omm.getCircuits());
-//            }
-//        }
+        Assert.assertEquals(auto1.size(),om.automorphisms().order());
+        
+        for (Permutation p:om.automorphisms()) {
+            Assert.assertTrue(auto1.contains(p));
+        }
         return cnt;
         
     }
@@ -186,19 +184,18 @@ public class TestPermutations {
     public void testReorientationHash() {
         testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()),
                 1, 60, 3, 4);
-        
-        
-      //  Examples.circularSaw3);
     }
     
     @Test
     public void testReorientationChap1() {
         testReorientation(Examples.chapter1, 2, 24, 3, 8);
     }
-
     private void testReorientation(OM om, int ... expected) {
+        @SuppressWarnings("unused")
         long circuitsTime = 0;
+        @SuppressWarnings("unused")
         long chiroTime = 0;
+        @SuppressWarnings("unused")
         long autoTime = 0;
         Label g[] = om.ground();
         int counts[] = new int[250];
@@ -241,16 +238,14 @@ public class TestPermutations {
             if (counts[j]!=0) {
                 Assert.assertEquals(expected[k++], j);
                 Assert.assertEquals(expected[k++], counts[j]);
-//                System.err.println(j+" "+counts[j]);
             }
-        System.err.println("Circuits: "+circuitsTime);
-        System.err.println("Chiro:    "+chiroTime);
-        System.err.println("Auto:     "+autoTime);
+//        System.err.println("Circuits: "+circuitsTime);
+//        System.err.println("Chiro:    "+chiroTime);
+//        System.err.println("Auto:     "+autoTime);
     }
 
-    @Ignore
     @Test
-    public void testExampleChapter1() {
+    public void testPermuteGroundExampleChapter1() {
         testPerms(Examples.chapter1);
     }
 
@@ -265,52 +260,6 @@ public class TestPermutations {
         Assert.assertEquals(om, om.permuteGround(p));
     }
 
-    @Ignore
-    @Test
-    public void testCountSymmetriesUniform3() {
-        countSymmetries(1,Examples.uniform3);
-    }
-
-    @Ignore
-    @Test
-    public void testCountSymmetriesUniform4() {
-        countSymmetries(1,Examples.uniform4);
-    }
-
-    @Ignore
-    @Test
-    public void testCountSymmetriesChapter1() {
-        countSymmetries(0,Examples.chapter1.getCircuits());
-    }
-
-    @Ignore
-    @Test
-    public void testCountSymmetriesCircularSaw() {
-        countSymmetries(0,Examples.circularSaw3.getCircuits());
-    }
-
-    private void countSymmetries(int expected, OM om) {
-        Map<String,List<OM>> symmetries = new HashMap<String,List<OM>>();
-        for (Permutation p: Permutation.all(om.n())) {
-            OM permuted = om.permute(p);
-            String chi = permuted.getChirotope().toShortString();
-            List<OM> equivalent = symmetries.get(chi);
-            if (equivalent == null) {
-                equivalent = new ArrayList<OM>();
-                symmetries.put(chi, equivalent);
-            }
-            equivalent.add(permuted);
-        }
-        for (List<OM> equivalent: symmetries.values()) {
-            System.err.print(equivalent.size()+", ");
-            for (OM a: equivalent) {
-                System.err.print(a.toString());
-            }
-            System.err.println();
-        }
-        System.err.println();
-        Assert.assertEquals(expected, symmetries.size());
-    }
 }
 
 
