@@ -52,6 +52,28 @@ public class TestExamples {
         }
     }
 
+    @Test
+    public void testUniform4() {
+        OM fromEuclideanLines = Examples.fromEuclideanLines(
+                new int[][][]{
+                        {{2,1},{1,1},},
+                        {{ 2, 1 },{1,2}},
+                        {{1,1},{1,2}},
+                });
+        /*
+         * [0]=(1,1,0)
+         * [1]=(0,10000,10000)        θ = 0
+         * [2]=(7071,7071,21213)      θ = 45
+         * [3]=(10000,0,10000)        θ = 90
+         */
+        Assert.assertEquals(Examples.uniform4, 
+                fromEuclideanLines);
+    }
+    
+    @Test
+    public void testFromEuclideanLines() {
+        Assert.assertEquals(Examples.circularSaw3, Examples.circularSaw3A);
+    }
 }
 
 

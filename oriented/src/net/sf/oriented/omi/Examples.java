@@ -57,7 +57,7 @@ public class Examples {
 
     );
 
-    private static OM fromChirotope(int n, int r, String chi) {
+    public static OM fromChirotope(int n, int r, String chi) {
         Options opt = new Options();
         String u = createUniverse(n, opt);
         return new FactoryFactory(opt).chirotope().parse(
@@ -65,7 +65,7 @@ public class Examples {
                         + ")");
     }
     
-    private static OM fromCircuits(String circuits) {
+    public static OM fromCircuits(String circuits) {
             Options options = new Options();
             options.setShortLabels();
             return new FactoryFactory(options).circuits().parse(circuits);
@@ -91,6 +91,7 @@ public class Examples {
         return new String(u);
     }
 
+    private final static double epsilon = 0.00000000001d;
     /**
      * Generate an OM from lines being specified as a pair of points (integer coordinates)
      * 
@@ -98,7 +99,7 @@ public class Examples {
      * @param lines
      * @return
      */
-    private static OM fromEuclideanLines(int[][] ... lines) {
+    public static OM fromEuclideanLines(int[][] ... lines) {
         int n = lines.length+1;
         Options opt = new Options();
         createUniverse(n, opt);
@@ -107,30 +108,41 @@ public class Examples {
         int ix=1;
         for (int line[][]:lines) {
             // Find perpendicular
-            double xx = (line[1][1] - line[0][1]);
-            double yy = (line[0][0] - line[1][0]);
+            int yyy = line[0][1];
+            int yy2 = line[1][1];
+            double xx = (yy2 - yyy);
+            int xxx = line[0][0];
+            int xx2 = line[1][0];
+            double yy = (xxx - xx2);
             // Normalize
             double length = Math.sqrt(xx*xx+yy*yy);
             xx = xx/length;
             yy = yy/length;
-            double dotProductA = xx*line[0][0]+yy*line[0][1];
-//            double dotProductB = xx*line[1][0]+yy*line[1][1];
-//            System.err.println(".A = "+dotProductA+ " .B = "+dotProductB);
+            double dotProductA = xx*xxx+yy*yyy;
+            if (dotProductA < epsilon && dotProductA > -epsilon) {
+                throw new IllegalArgumentException("line went through origin");
+            }
+            double dotProductB = xx*xx2+yy*yy2;
+            System.err.println(".A = "+dotProductA+ " .B = "+dotProductB);
             if (yy<0.0 || (yy==0.0 && xx < 0.0) ) {
+                System.err.println("x "+xx+" y "+yy);
                 xx = -xx;
                 yy = -yy;
                 dotProductA = -dotProductA;
             }
+            System.err.println(dotProductA);
             int x = (int) Math.floor(xx*10000);
             int y = (int) Math.floor(yy*10000);
             int z = (int) Math.floor(dotProductA*10000);
+            System.err.println("First:  "+((1l*xxx*x)+(1l*yyy*y)));
+            System.err.println("Second: "+((1l*xx2*x)+(1l*yy2*y)));
             set(projective,ix++,x,y,z);
         }
         return new FactoryFactory(opt).realized().construct(new RationalMatrix(projective));
     }
 
     private static void set(int[][] projective, int ix, int x, int y, int z) {
-//        System.err.println("["+ix+"]=("+x+","+y+","+z+")");
+        System.err.println("["+ix+"]=("+x+","+y+","+z+")");
         projective[0][ix] = x;
         projective[1][ix] = y;
         projective[2][ix] = z;
