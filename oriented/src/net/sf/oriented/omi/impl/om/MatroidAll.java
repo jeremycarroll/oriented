@@ -134,8 +134,7 @@ public class MatroidAll implements MatroidInternal {
 
     @Override
     public Group automorphisms() {
-        // TODO: not implemented. This will work for now .... 
-        return Group.symmetric(ground().length);
+        return getCircuits().automorphisms();
     }
 
 }

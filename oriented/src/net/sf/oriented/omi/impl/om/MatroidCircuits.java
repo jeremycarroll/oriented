@@ -6,6 +6,11 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Iterator;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+
+import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
@@ -15,7 +20,9 @@ import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
 public class MatroidCircuits extends AbsMatroid {
 
-	MatroidCircuits(SetOfUnsignedSetInternal c, MatroidInternal a) {
+	private Group automorphisms;
+
+    MatroidCircuits(SetOfUnsignedSetInternal c, MatroidInternal a) {
 		super(c, a);
 		a.asAll().setCircuits(this);
 	}
@@ -123,6 +130,36 @@ public class MatroidCircuits extends AbsMatroid {
 		return ffactory().unsignedCircuits().toString(this);
 	}
 
+    @Override
+    public Group automorphisms() {
+        if (automorphisms == null) {
+            automorphisms = Group.symmetric(ground().length).filter(new Predicate<Permutation>(){
+                @Override
+                public boolean apply(Permutation p) {
+                    Function<UnsignedSet,UnsignedSet> map = setPermuter(p);
+                    for (UnsignedSet s:set) {
+                        if (!set.contains(map.apply(s))) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            });
+//            System.err.println(automorphisms.order()+" matroid automorphisms");
+        }
+        return automorphisms;
+    }
+
+    protected Function<UnsignedSet, UnsignedSet> setPermuter(Permutation p) {
+        final Permutation universePermuter = ffactory().labels().permuteUniverse(ground(), p);
+        return new Function<UnsignedSet, UnsignedSet>() {
+            @Override
+            public UnsignedSet apply(UnsignedSet input) {
+                return ((UnsignedSetInternal)input).permuteUniverse(universePermuter);
+            }
+            
+        };
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
