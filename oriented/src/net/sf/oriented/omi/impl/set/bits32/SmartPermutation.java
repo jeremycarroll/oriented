@@ -13,7 +13,6 @@ public class SmartPermutation extends Permutation {
     public SmartPermutation(int ... perm) {
         super(perm);
     }
-    
     @Override
     public int get(int k) {
         if (k>=n()) {
