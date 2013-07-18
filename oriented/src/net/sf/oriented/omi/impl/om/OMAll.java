@@ -212,8 +212,8 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		for (OMInternal f : forms)
 			if (f != null && !f.verify())
 				return false;
-		return forms[VECTORS.ordinal()] == null
-				|| (verify(MAXVECTORS) && verify(CIRCUITS));
+		return matroid.verify() && (forms[VECTORS.ordinal()] == null
+				|| (verify(MAXVECTORS) && verify(CIRCUITS)));
 	}
 
 	private boolean verify(Cryptomorphisms v) {
