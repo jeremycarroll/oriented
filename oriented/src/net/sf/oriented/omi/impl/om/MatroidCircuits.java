@@ -52,7 +52,7 @@ public class MatroidCircuits extends AbsMatroid {
 	}
 
 	private boolean verifyWeakElimination() {
-		return new ForAllForAllExists<Label>() {
+		return new ForAllForAllExists<Label,UnsignedSet>() {
 
 			private UnsignedSet union;
 
@@ -64,7 +64,7 @@ public class MatroidCircuits extends AbsMatroid {
 
 			@Override
 			public Iterator<? extends Label> check(UnsignedSet a, UnsignedSet b) {
-				if (a == b)
+				if (a.equals(b))
 					return null;
 				union = a.union(b);
 				return a.intersection(b).iterator();
@@ -78,7 +78,7 @@ public class MatroidCircuits extends AbsMatroid {
 		return new ForAllForAll() {
 			@Override
 			public boolean check(UnsignedSet a, UnsignedSet b) {
-				return (!a.isSubsetOf(b)) || a == b;
+				return (!a.isSubsetOf(b)) || a.equals(b);
 			}
 		}.verify();
 	}

@@ -10,9 +10,34 @@ import net.sf.oriented.omi.Verify;
 
 abstract class AbsAxioms<U> {
 
-	abstract class ForAllForAllExists<T> implements Verify {
-		abstract boolean check(T e, U x, U y, U z);
+    /**
+     * Check an axiom of the form Forall a, forall b  c
+     * where the forall's are over the iterator of this set,
+     * and the c is of type T
+     * @author jeremycarroll
+     *
+     * @param <T>
+     */
+	abstract class ForAllForAllExists<T,W> implements Verify {
+	    /**
+	     * return true if e, x and y satisfy the axiom
+	     * with z provided by innerIterator()
+	     * @param e
+	     * @param x
+	     * @param y
+	     * @param z
+	     * @return
+	     */
+		abstract boolean check(T e, U x, U y, W z);
 
+		/**
+		 * Checks the axiom for x and y
+		 * return null if this is trivially true
+		 * otherwise return an iterator over Ts that are then checked
+		 * @param x
+		 * @param y
+		 * @return
+		 */
 		abstract Iterator<? extends T> check(U x, U y);
 
 		boolean postCheck(U x, U y) {
@@ -21,7 +46,8 @@ abstract class AbsAxioms<U> {
 
 		@Override
 		public boolean verify() {
-			Iterator<? extends U> i, j, k;
+			Iterator<? extends U> i, j;
+			Iterator<? extends W> k;
 			i = iterator();
 			while (i.hasNext()) {
 				U a = i.next();
@@ -34,7 +60,7 @@ abstract class AbsAxioms<U> {
 					}
 					loopu: while (u.hasNext()) {
 						T e = u.next();
-						k = iterator();
+						k = innerIterator(a,b);
 						while (k.hasNext())
 							if (check(e, a, b, k.next())) {
 								continue loopu;
@@ -47,6 +73,17 @@ abstract class AbsAxioms<U> {
 			}
 			return true;
 		}
+
+		/**
+		 * An iterator used in an inner loop for checking the axiom.
+		 * @return
+		 */
+        @SuppressWarnings("unchecked")
+        protected Iterator<? extends W> innerIterator(U a, U b) {
+            return (Iterator<? extends W>) iterator();
+        }
+		
+		
 	}
 
 	abstract class ForAllForAll implements Verify {

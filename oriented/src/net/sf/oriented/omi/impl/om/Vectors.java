@@ -52,7 +52,7 @@ public class Vectors extends AbsVectorsOM {
 	 * @return
 	 */
 	private boolean verifyYapproxX() {
-		return new ForAllForAllExists<Object>() {
+		return new ForAllForAllExists<Object,SignedSet>() {
 
 			@Override
 			boolean check(Object e, SignedSet x, SignedSet y, SignedSet z) {

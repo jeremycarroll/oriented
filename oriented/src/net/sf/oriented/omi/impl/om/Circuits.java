@@ -46,7 +46,7 @@ public class Circuits extends AbsVectorsOM {
 	}
 
 	private boolean verifyWeakElimination() {
-		return new ForAllForAllExists<Label>() {
+		return new ForAllForAllExists<Label,SignedSet>() {
 			UnsignedSet plus;
 			UnsignedSet minus;
 
