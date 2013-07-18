@@ -62,7 +62,7 @@ public class Vectors extends AbsVectorsOM {
 			}
 
 			@Override
-			Iterator<Object> check(SignedSet x, SignedSet y) {
+			Iterator<Object> suchThatForAll(SignedSet x, SignedSet y) {
 				if (x.plus().intersection(y.minus()).isEmpty())
 					return null;
 				if (y.support().isSubsetOf(x.support()))
@@ -82,7 +82,7 @@ public class Vectors extends AbsVectorsOM {
 		return new ForAllForAll() {
 
 			@Override
-			boolean check(SignedSet a, SignedSet b) {
+			boolean suchThatForAll(SignedSet a, SignedSet b) {
 				if (!a.conformsWith(b))
 					return true;
 				return vectors.contains(a.compose(b));

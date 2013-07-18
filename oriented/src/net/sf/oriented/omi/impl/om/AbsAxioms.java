@@ -8,7 +8,13 @@ import java.util.Iterator;
 
 import net.sf.oriented.omi.Verify;
 
-abstract class AbsAxioms<U> {
+/**
+ * 
+ * @author jeremycarroll
+ *
+ * @param <ForAll> Type of things we have axioms about
+ */
+abstract class AbsAxioms<ForAll> {
 
     /**
      * Check an axiom of the form Forall a, forall b  c
@@ -16,9 +22,10 @@ abstract class AbsAxioms<U> {
      * and the c is of type T
      * @author jeremycarroll
      *
-     * @param <T>
+     * @param <ForAll3> type returned by first check
+     * @param <Exists> type returned by inner iterator, suggest <U>
      */
-	abstract class ForAllForAllExists<T,W> implements Verify {
+	abstract class ForAllForAllExists<ForAll3,Exists> implements Verify {
 	    /**
 	     * return true if e, x and y satisfy the axiom
 	     * with z provided by innerIterator()
@@ -28,38 +35,38 @@ abstract class AbsAxioms<U> {
 	     * @param z
 	     * @return
 	     */
-		abstract boolean check(T e, U x, U y, W z);
+		abstract boolean check(ForAll3 e, ForAll x, ForAll y, Exists z);
 
 		/**
 		 * Checks the axiom for x and y
 		 * return null if this is trivially true
-		 * otherwise return an iterator over Ts that are then checked
+		 * otherwise return an iterator over ForAll3s that are then checked
 		 * @param x
 		 * @param y
 		 * @return
 		 */
-		abstract Iterator<? extends T> check(U x, U y);
+		abstract Iterator<? extends ForAll3> suchThatForAll(ForAll x, ForAll y);
 
-		boolean postCheck(U x, U y) {
+		boolean postCheck(ForAll x, ForAll y) {
 			return true;
 		}
 
 		@Override
 		public boolean verify() {
-			Iterator<? extends U> i, j;
-			Iterator<? extends W> k;
+			Iterator<? extends ForAll> i, j;
+			Iterator<? extends Exists> k;
 			i = iterator();
 			while (i.hasNext()) {
-				U a = i.next();
+				ForAll a = i.next();
 				j = iterator();
 				while (j.hasNext()) {
-					U b = j.next();
-					Iterator<? extends T> u = check(a, b);
+					ForAll b = j.next();
+					Iterator<? extends ForAll3> u = suchThatForAll(a, b);
 					if (u == null) {
 						continue;
 					}
 					loopu: while (u.hasNext()) {
-						T e = u.next();
+						ForAll3 e = u.next();
 						k = innerIterator(a,b);
 						while (k.hasNext())
 							if (check(e, a, b, k.next())) {
@@ -79,22 +86,22 @@ abstract class AbsAxioms<U> {
 		 * @return
 		 */
         @SuppressWarnings("unchecked")
-        protected Iterator<? extends W> innerIterator(U a, U b) {
-            return (Iterator<? extends W>) iterator();
+        protected Iterator<? extends Exists> innerIterator(ForAll a, ForAll b) {
+            return (Iterator<? extends Exists>) iterator();
         }
 		
 		
 	}
 
 	abstract class ForAllForAll implements Verify {
-		abstract boolean check(U a, U b);
+		abstract boolean check(ForAll a, ForAll b);
 
 		@Override
 		public boolean verify() {
-			Iterator<? extends U> i, j;
+			Iterator<? extends ForAll> i, j;
 			i = iterator();
 			while (i.hasNext()) {
-				U a = i.next();
+				ForAll a = i.next();
 				j = iterator();
 				while (j.hasNext()) {
 					if (!check(a, j.next()))
@@ -105,7 +112,7 @@ abstract class AbsAxioms<U> {
 		}
 	}
 
-	abstract public Iterator<? extends U> iterator();
+	abstract public Iterator<? extends ForAll> iterator();
 	
 
 

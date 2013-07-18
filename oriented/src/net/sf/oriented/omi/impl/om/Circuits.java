@@ -57,7 +57,7 @@ public class Circuits extends AbsVectorsOM {
 			}
 
 			@Override
-			public Iterator<? extends Label> check(SignedSet a, SignedSet b) {
+			public Iterator<? extends Label> suchThatForAll(SignedSet a, SignedSet b) {
 				if (a.equalsOpposite(b))
 					return null;
 				UnsignedSet result = a.plus().intersection(b.minus());
@@ -75,7 +75,7 @@ public class Circuits extends AbsVectorsOM {
 
 		return new ForAllForAll() {
 			@Override
-			public boolean check(SignedSet a, SignedSet b) {
+			public boolean suchThatForAll(SignedSet a, SignedSet b) {
 				return (!a.support().isSubsetOf(b.support()))
 						|| a.equalsIgnoreSign(b);
 			}

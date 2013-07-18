@@ -63,7 +63,7 @@ public class Bases extends AbsMatroid {
             }
 
             @Override
-            Iterator<? extends Label> check(UnsignedSet A, UnsignedSet B) {
+            Iterator<? extends Label> suchThatForAll(UnsignedSet A, UnsignedSet B) {
                 return A.equals(B) ? null : A.minus(B).iterator();
             }
             @Override

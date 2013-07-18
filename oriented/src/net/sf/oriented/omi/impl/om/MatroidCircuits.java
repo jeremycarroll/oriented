@@ -63,7 +63,7 @@ public class MatroidCircuits extends AbsMatroid {
 			}
 
 			@Override
-			public Iterator<? extends Label> check(UnsignedSet a, UnsignedSet b) {
+			public Iterator<? extends Label> suchThatForAll(UnsignedSet a, UnsignedSet b) {
 				if (a.equals(b))
 					return null;
 				union = a.union(b);
@@ -77,7 +77,7 @@ public class MatroidCircuits extends AbsMatroid {
 
 		return new ForAllForAll() {
 			@Override
-			public boolean check(UnsignedSet a, UnsignedSet b) {
+			public boolean suchThatForAll(UnsignedSet a, UnsignedSet b) {
 				return (!a.isSubsetOf(b)) || a.equals(b);
 			}
 		}.verify();
