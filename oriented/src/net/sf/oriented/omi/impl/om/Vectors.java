@@ -82,7 +82,7 @@ public class Vectors extends AbsVectorsOM {
 		return new ForAllForAll() {
 
 			@Override
-			boolean suchThatForAll(SignedSet a, SignedSet b) {
+			boolean check(SignedSet a, SignedSet b) {
 				if (!a.conformsWith(b))
 					return true;
 				return vectors.contains(a.compose(b));

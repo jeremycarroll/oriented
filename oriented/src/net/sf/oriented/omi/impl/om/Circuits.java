@@ -75,7 +75,7 @@ public class Circuits extends AbsVectorsOM {
 
 		return new ForAllForAll() {
 			@Override
-			public boolean suchThatForAll(SignedSet a, SignedSet b) {
+			public boolean check(SignedSet a, SignedSet b) {
 				return (!a.support().isSubsetOf(b.support()))
 						|| a.equalsIgnoreSign(b);
 			}
