@@ -71,6 +71,26 @@ public class TestExamples {
     }
     
     @Test
+    public void testCeva() {
+        // There are four poitns of intersection in Ceva's construction.
+       Assert.assertTrue( Examples.ceva.getChirotope().toShortString().matches("^.*0.*0.*0.*0.*$") );
+    }
+    @Test
+    public void testFromCrossing() {
+        OM fromEuclideanCrossings = Examples.fromCrossings(
+                  "A:BCD",
+                  "B:ACD",
+                  "C:ABD",
+                  "D:ABC" );
+        /*
+         * [0]=(1,1,0)
+         * [1]=(0,10000,10000)        θ = 0
+         * [2]=(7071,7071,21213)      θ = 45
+         * [3]=(10000,0,10000)        θ = 90
+         */
+        Assert.assertEquals(Examples.uniform4.dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
+    }
+    @Test
     public void testFromEuclideanLines() {
         Assert.assertEquals(Examples.circularSaw3, Examples.circularSaw3A);
     }
