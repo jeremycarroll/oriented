@@ -322,12 +322,28 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 
 	@Override
 	public boolean verify() {
-		for (int bit : bits)
+		 return verifyNonZero()
+		       && verifyMatroid()
+		       && verify3TermGrassmannPlücker();
+		
+	}
+
+    private boolean verify3TermGrassmannPlücker() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    private boolean verifyMatroid() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    private boolean verifyNonZero() {
+        for (int bit : bits)
 			if (bit != 0)
 				return true;
-		// TODO chi verify
-		return false;
-	}
+        return false;
+    }
 
 	@Override
 	public int chi(int... i) {
