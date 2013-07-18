@@ -51,7 +51,11 @@ public class Bases extends AbsMatroid {
 	@Override
 	public boolean verify() {
 
-        return (!set.isEmpty()) && new ForAllForAllExists<Label,Label>() {
+        return verifyNonEmpty() && verifyBasesExchange();
+	}
+
+    private boolean verifyBasesExchange() {
+        return new ForAllForAllExists<Label,Label>() {
 
             @Override
             boolean check(Label a, UnsignedSet A, UnsignedSet B, Label b) {
@@ -67,7 +71,11 @@ public class Bases extends AbsMatroid {
                 return B.minus(A).iterator();
             }
         }.verify();
-	}
+    }
+
+    private boolean verifyNonEmpty() {
+        return !set.isEmpty();
+    }
 
 	SetOfUnsignedSetInternal computeCircuits() {
 		/*
