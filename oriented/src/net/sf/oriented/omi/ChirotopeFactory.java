@@ -9,6 +9,14 @@ import java.util.Collection;
 public interface ChirotopeFactory extends Factory<OMChirotope> {
 	OMChirotope construct(Chirotope chi);
 
+	/**
+	 * Note that the contract for Chirotope only requires it to be defined
+	 * on {@link Chirotope#rank()} monotonic increasing values. The factory
+	 * is responsible for implementing the alternating nature of the chirotope.
+	 * @param e
+	 * @param chi
+	 * @return
+	 */
 	OMChirotope construct(Collection<? extends Label> e, Chirotope chi);
 }
 /************************************************************************
