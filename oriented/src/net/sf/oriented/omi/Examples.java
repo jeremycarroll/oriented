@@ -20,13 +20,15 @@ import net.sf.oriented.matrix.RationalMatrix;
 public class Examples {
     
     /**
-     * This is from the Oriented Matroid book.
+     * This is from the Oriented Matroid book {@link Bibliography#bjšrnerEtAl1999}
      */
     public final static OM chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
     
     public final static OM uniform3 = fromChirotope(3, 3, "+" );
     public final static OM uniform4 = fromChirotope(4, 3, "++++" );
-    
+    /**
+     * See {@link Bibliography#ceva1678}
+     */
     public final static OM ceva = fromCrossings("0:ABCDEF",
              "A:0(BC)D(EF)",
              "B:0(AC)(DF)E",
@@ -39,7 +41,7 @@ public class Examples {
           
     
     /**
-     * See the "Sharpness of Circular Saws (2000)"
+     * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
      */
     public final static OM circularSaw3 = fromChirotope(7, 3,
     // 0
@@ -56,6 +58,9 @@ public class Examples {
     /* Draw a circular saw on squared paper and take the co-ordinates of two
      * points on each line
      *
+     */
+    /**
+     * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
      */
     public final static OM circularSaw3A = fromEuclideanLines(new int[][][] {
             // here is the first line, two points
