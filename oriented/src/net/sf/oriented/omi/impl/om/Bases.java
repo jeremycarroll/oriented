@@ -7,6 +7,8 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Iterator;
 
 import net.sf.oriented.omi.JavaSet;
+import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
@@ -48,8 +50,23 @@ public class Bases extends AbsMatroid {
 
 	@Override
 	public boolean verify() {
-		// TODO verify
-		return true;
+
+        return (!set.isEmpty()) && new ForAllForAllExists<Label,Label>() {
+
+            @Override
+            boolean check(Label a, UnsignedSet A, UnsignedSet B, Label b) {
+                return set.contains(A.minus(a).union(b));
+            }
+
+            @Override
+            Iterator<? extends Label> check(UnsignedSet A, UnsignedSet B) {
+                return A.equals(B) ? null : A.minus(B).iterator();
+            }
+            @Override
+            protected Iterator<? extends Label> innerIterator(UnsignedSet A, UnsignedSet B) {
+                return B.minus(A).iterator();
+            }
+        }.verify();
 	}
 
 	SetOfUnsignedSetInternal computeCircuits() {
