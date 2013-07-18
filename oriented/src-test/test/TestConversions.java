@@ -158,6 +158,8 @@ public class TestConversions {
 		assertEquals(first, clean);
 		checkEquals(to, mod, first);
 		assertNotSame(first, first.dual());
+        assertTrue(first.asAll().verify());
+        assertTrue(mod.asAll().verify());
 	}
 
 	private void checkEquals(Cryptomorphisms f, OM x, OM y) {
