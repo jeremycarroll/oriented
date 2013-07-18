@@ -136,7 +136,7 @@ final public class SetOfSignedSetImpl
 	}
 
 	private SetOfSignedSetImpl remakex(SetOfSignedSet b) {
-		return (SetOfSignedSetImpl) remake(b);
+		return (SetOfSignedSetImpl) remake(b.respectingEquals());
 	}
 
 	private int remakex(UnsignedSet a) {
