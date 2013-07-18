@@ -17,7 +17,8 @@ import net.sf.oriented.omi.Verify;
 abstract class AbsAxioms<ForAll> {
 
     /**
-     * Check an axiom of the form Forall a, forall b  c
+     * Check an axiom of the form Forall a, forall b suchthat(a,b) forall c in c(a,b) exists z condition(a,b,c,z)
+     * 
      * where the forall's are over the iterator of this set,
      * and the c is of type T
      * @author jeremycarroll
@@ -55,10 +56,10 @@ abstract class AbsAxioms<ForAll> {
 		public boolean verify() {
 			Iterator<? extends ForAll> i, j;
 			Iterator<? extends Exists> k;
-			i = iterator();
+			i = ForAllForAllExists.this.iterator();
 			while (i.hasNext()) {
 				ForAll a = i.next();
-				j = iterator();
+				j = ForAllForAllExists.this.iterator();
 				while (j.hasNext()) {
 					ForAll b = j.next();
 					Iterator<? extends ForAll3> u = suchThatForAll(a, b);
@@ -82,6 +83,15 @@ abstract class AbsAxioms<ForAll> {
 		}
 
 		/**
+		 * This method can be overridden to give the forall A forall B at the beginning
+		 * of the expression
+		 * @return
+		 */
+		protected Iterator<? extends ForAll> iterator() {
+            return AbsAxioms.this.iterator();
+        }
+
+        /**
 		 * An iterator used in an inner loop for checking the axiom.
 		 * @return
 		 */
