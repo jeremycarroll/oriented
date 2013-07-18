@@ -29,8 +29,7 @@ public class RealizedImpl extends AbsOM implements OMRealized {
 
 	@Override
 	public boolean verify() {
-		// TODO Auto-generated method stub
-		return true;
+		return getChirotope().verify();
 	}
 
 	@Override
