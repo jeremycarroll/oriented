@@ -4,9 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CIRCUITS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.MAXVECTORS;
-import static net.sf.oriented.omi.impl.om.Cryptomorphisms.VECTORS;
 import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
