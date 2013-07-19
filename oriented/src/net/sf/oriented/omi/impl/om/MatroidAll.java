@@ -4,8 +4,11 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import java.util.Arrays;
+
 import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public class MatroidAll implements MatroidInternal {
@@ -141,6 +144,11 @@ public class MatroidAll implements MatroidInternal {
         return getCircuits().automorphisms();
     }
 
+
+    @Override
+    public UnsignedSet support() {
+        return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(ground()));
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

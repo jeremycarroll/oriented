@@ -4,8 +4,12 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.Verify;
 
 /**
@@ -124,7 +128,13 @@ abstract class AbsAxioms<ForAll> {
 
 	abstract public Iterator<? extends ForAll> iterator();
 	
+	public UnsignedSet support() {
+	    return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(ground()));
+	}
 
+	abstract Label[] ground();
+	
+	abstract FactoryFactory ffactory();
 
 }
 /************************************************************************

@@ -9,6 +9,7 @@ import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
 
@@ -56,6 +57,9 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     public Group automorphisms() {
         return getCircuits().automorphisms();
     }
+    
+    @Override
+    public abstract LabelImpl[] ground();
 
     /**
      * Convert a permutation of the ground set into

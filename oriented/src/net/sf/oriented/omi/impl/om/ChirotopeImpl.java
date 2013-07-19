@@ -324,18 +324,67 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	public boolean verify() {
 		 return verifyNonZero()
 		       && verifyMatroid()
-		       && verify3TermGrassmannPlücker();
+		       && verify3TermGrassmannPl√ºcker();
 		
 	}
 
-    private boolean verify3TermGrassmannPlücker() {
-        // TODO Auto-generated method stub
+    private boolean verify3TermGrassmannPl√ºcker() {
+        UnsignedSet g = this.support();  // need to reformulate
+        JavaSet<? extends UnsignedSet> aa = g.subsetsOfSize(rank-2);
+        JavaSet<? extends UnsignedSet> bb = g.subsetsOfSize(4);
+        for (UnsignedSet AA:aa) {
+            int indexes[] = new int[rank];
+            int ix=2;
+            for (Label l:(UnsignedSetInternal)AA) {
+                indexes[ix++] = asInt(l);
+            }
+            for (UnsignedSet BB:bb) {
+                if (AA.intersection(BB).isEmpty()) {
+                    @SuppressWarnings("unchecked")
+                    JavaSet<UnsignedSet> done = (JavaSet<UnsignedSet>) ffactory().unsignedSets().emptyCollectionOf();
+                    // check condition splitting BB three times
+                    for (UnsignedSet X1X2:BB.subsetsOfSize(2) ) {
+                        if (done.contains(X1X2)) continue;
+                        UnsignedSet Y1Y2 = BB.minus(X1X2);
+                        done.add(Y1Y2);
+                        Label X1 = amember(X1X2);
+                        Label X2 = amember(X1X2.minus(X1));
+                        Label Y1 = amember(Y1Y2);
+                        Label Y2 = amember(Y1Y2.minus(Y1));
+                        int e = chiTimesChi(X1,X2,Y1,Y2,indexes);
+                        if (e == 0) {
+                            continue;
+                        }
+                        if (e != chiTimesChi(Y1,X2,X1,Y2,indexes)
+                            && e != chiTimesChi(Y2,X2,Y1,X1,indexes) ) {
+                            return false;
+                        }
+                        
+                    }
+                }
+            }
+        }
         return true;
     }
 
+    private int chiTimesChi(Label x1, Label x2, Label y1, Label y2,
+            int[] indexes) {
+        return chi(x1,x2,indexes) * chi(y1,y2,indexes);
+    }
+
+    private int chi(Label x1, Label x2, int[] indexes) {
+        indexes[0] = asInt(x1);
+        indexes[1] = asInt(x2);
+        return chi(indexes);
+    }
+
+    private Label amember(UnsignedSet x1x2) {
+        return x1x2.iterator().next();
+    }
+
     private boolean verifyMatroid() {
-        // TODO Auto-generated method stub
-        return true;
+        return getMatroid().getBases().verify() && 
+                getMatroid().getBases().sameSetAs(getBases());
     }
 
     private boolean verifyNonZero() {

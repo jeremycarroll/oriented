@@ -26,6 +26,13 @@ public interface OM extends Verify {
 	public OM reorient(Label ... axes);
 
 	public Label[] ground();
+	
+
+    /**
+     * This is the same as {@link #ground()}, except it is unordered.
+     * @return
+     */
+    public UnsignedSet support();
 
 	public Matroid getMatroid();
 
