@@ -18,6 +18,14 @@ public interface ChirotopeFactory extends Factory<OMChirotope> {
 	 * @return
 	 */
 	OMChirotope construct(Collection<? extends Label> e, Chirotope chi);
+
+	/**
+	 * Create an oriented matroid from its representation as a series of +, -, 0s.
+	 * We also need to know its rank.
+	 * @param rank
+	 * @param plusMinusZeros
+	 */
+	OMChirotope fromShortString(int rank, String plusMinusZeros);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

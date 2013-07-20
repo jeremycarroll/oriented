@@ -20,7 +20,7 @@ import net.sf.oriented.matrix.RationalMatrix;
 public class Examples {
     
     /**
-     * This is from the Oriented Matroid book {@link Bibliography#bjšrnerEtAl1999}
+     * This is from the Oriented Matroid book {@link Bibliography#bjï¿½rnerEtAl1999}
      */
     public final static OM chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
     
@@ -39,21 +39,21 @@ public class Examples {
             
             
           
-    
-    /**
-     * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
-     */
-    public final static OM circularSaw3 = fromChirotope(7, 3,
-    // 0
-            "+++++ ++++ +++ ++ +" +
-            // 1
-                    "---- --- -- +" +
-                    // 2
-                    "--- -- +" +
-                    // 3
-                    "++ +" +
-                    // 4
-                    "+");
+//    
+//    /**
+//     * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
+//     */
+//    public final static OM circularSaw3 = fromChirotope(7, 3,
+//    // 0
+//            "+++++ ++++ +++ ++ +" +
+//            // 1
+//                    "---- --- -- +" +
+//                    // 2
+//                    "--- -- +" +
+//                    // 3
+//                    "++ +" +
+//                    // 4
+//                    "+");
 
     /* Draw a circular saw on squared paper and take the co-ordinates of two
      * points on each line

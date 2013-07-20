@@ -14,8 +14,12 @@ import com.google.common.math.IntMath;
 
 class RankAndChirotope {
     private static Pattern chi = Pattern.compile("^[+0-]*$");
-	String chirotope;
-	int rank;
+	final String chirotope;
+	final int rank;
+    public RankAndChirotope(int rank, String chirotope) {
+        this.rank = rank;
+        this.chirotope = chirotope;
+    }
     public void checkSize(int n) {
         if ( IntMath.binomial(n, rank) != chirotope.length() ) {
             throw new IllegalArgumentException("Chirotope of wrong length: "

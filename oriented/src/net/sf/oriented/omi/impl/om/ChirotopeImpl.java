@@ -47,7 +47,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 			if (i.length != r)
 				throw new IllegalArgumentException("rank is " + r + ", not "
 						+ i.length);
-			return getNthEntry(pos(ground().length, r, 0, i.clone()));
+			return getNthEntry(Lexicographic.pos3(ground().length, r, i.clone()));
 		}
 
 		@Override
@@ -59,35 +59,6 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		public int n() {
 			return ChirotopeImpl.this.n();
 		}
-	}
-
-	/**
-	 * Return the index in the lexicographic sequence of r elements from n of
-	 * the sequence i. p is how far we have got in the sequence.
-	 * 
-	 * @param n
-	 * @param r
-	 * @param p
-	 * @param i
-	 * @return
-	 */
-	static public int pos(int n, int r, int p, int... i) {
-		if (r == 0)
-			return 0;
-		if (i[p] < 0 || i[p] >= n)
-			throw new IllegalArgumentException("value out of range.");
-		for (int q = 1; q < r; q++)
-			if (i[p + q] > i[p]) {
-				i[p + q] -= (i[p] + 1);
-			} else
-				throw new IllegalArgumentException("sequence not monotonic");
-		int rslt = 0;
-		int nextN = n - 1 - i[p];
-		while (i[p] > 0) {
-			rslt += IntMath.binomial(n - i[p], r - 1);
-			i[p]--;
-		}
-		return rslt + pos(nextN, r - 1, p + 1, i);
 	}
 
 	/**
@@ -172,7 +143,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		while (it.hasNext()) {
 			int[] dBasis = it.next();
 			int basis[] = dualBasis(n, r, dBasis);
-			setNthEntry(pos(n, r, 0, basis.clone()),
+			setNthEntry(Lexicographic.pos3(n, r, basis.clone()),
 					signDualBasis(basis, dBasis) * d.chi(dBasis));
 		}
 
@@ -268,7 +239,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	private int indexFor(UnsignedSetInternal basis) {
-		return pos(ground().length, rank(), 0, asInt(basis));
+		return Lexicographic.pos3(ground().length, rank(), asInt(basis));
 	}
 
 	private int signFor(LabelImpl e, UnsignedSetInternal inter) {

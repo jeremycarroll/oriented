@@ -4,7 +4,6 @@
  ************************************************************************/
 package test;
 
-import static net.sf.oriented.omi.impl.om.ChirotopeImpl.pos;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -56,7 +55,7 @@ public class TestLexicographic {
 			// for (int j=0;j<r;j++)
 			// System.err.print(seq[j]+",");
 			// System.err.println();
-			assertEquals(i, pos(n, r, 0, seq));
+			assertEquals(i, Lexicographic.pos3(n, r, seq));
 		}
 		assertFalse(it.hasNext());
 	}

@@ -4,10 +4,11 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.omi.impl.om.ChirotopeImpl.pos;
-
 import java.util.Collection;
 
+import com.google.common.math.IntMath;
+
+import net.sf.oriented.combinatorics.Lexicographic;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
@@ -46,7 +47,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 		return construct(ground, new Chirotope() {
 			@Override
 			public int chi(int... i) {
-				char ch = defn.chirotope.charAt(pos(n, defn.rank, 0, i));
+				char ch = defn.chirotope.charAt(Lexicographic.pos3(n, defn.rank, i));
 				switch (ch) {
 				case '+':
 					return 1;
@@ -80,10 +81,9 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 
 	@Override
 	RankAndChirotope parseMatroid(ParseContext pc) {
-		RankAndChirotope rslt = new RankAndChirotope();
-		rslt.rank = Integer.parseInt(uptoSeparator(pc));
-		rslt.chirotope = uptoSeparator(pc);
-		return rslt;
+		return new RankAndChirotope(
+		        Integer.parseInt(uptoSeparator(pc)),
+		        uptoSeparator(pc));
 	}
 
 	@Override
@@ -95,8 +95,31 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 
 	@Override
 	OMChirotope construct(RankAndChirotope p) {
-		return construct(new SimpleLabels(p.rank), p);
+	    int l = p.chirotope.length();
+        int nHigh = p.rank;
+        int n;
+        while (IntMath.binomial(nHigh, p.rank)<l) {
+            nHigh *= 2;
+        }
+        int nLow = nHigh/2;
+        // following should be divide and conquer, but lazily we use brute force.
+        for (n = nLow; n<=nHigh; n++) {
+            int b = IntMath.binomial(n, p.rank);
+            if ( b==l ) {
+                break;
+            }
+            if ( b > l ) {
+                throw new IllegalArgumentException("Initialization string is of length "+l+
+                        ". Nearby legal values are: "+IntMath.binomial(n-1, p.rank)+" and "+b);
+            }
+        }
+		return construct(new SimpleLabels(n), p);
 	}
+
+    @Override
+    public OMChirotope fromShortString(int rank, String plusMinusZeros) {
+        return construct(new RankAndChirotope(rank,plusMinusZeros));
+    }
 
 }
 /************************************************************************

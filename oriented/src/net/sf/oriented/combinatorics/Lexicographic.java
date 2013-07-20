@@ -24,7 +24,6 @@ public class Lexicographic extends AbstractCollection<int[]> {
 		return new Iterator<int[]>() {
 			int cnt = 0;
 
-			int pos = r - 1;
 
 			int rslt[];
 
@@ -42,14 +41,14 @@ public class Lexicographic extends AbstractCollection<int[]> {
 						rslt[i] = i;
 					}
 				} else {
-					while (rslt[pos] == n - (r - pos)) {
-						pos--;
-					}
-					rslt[pos]++;
-					for (pos++; pos < r; pos++) {
-						rslt[pos] = rslt[pos - 1] + 1;
-					}
-					pos--;
+				    int pos = 0;
+				    while (pos != r-1 && rslt[pos]+1 == rslt[pos+1] ) {
+				        pos ++;
+				    }
+				    rslt[pos]++;
+				    for (int p=0;p<pos;p++) {
+				        rslt[p] = p;
+				    }
 				}
 				return rslt.clone();
 			}
@@ -66,13 +65,68 @@ public class Lexicographic extends AbstractCollection<int[]> {
 		return sz;
 	}
 	
-	public static void main(String args[]) {
+    /**
+     * Return the index in the lexicographic sequence of r elements from n of
+     * the sequence i.
+     * 
+     * @param n
+     * @param r
+     * @param i
+     * @return
+     */
+    public static int pos3(int n, int r,  int ... i) {
+        return pos5(i);
+    }
+    private static int pos5(int ... ix) {
+        int r = ix.length;
+        int result = 0;
+        for (int i=0;i<r;i++) {
+            if (i+1<=ix[i]) {
+               result += IntMath.binomial(ix[i], i+1);
+            }
+        }
+        return result;
+        
+//        0: 0: 0 1 2 
+//        1: 0: 0 1 3 
+//        2: 0: 0 2 3 
+//        3: 0: 1 2 3 
+//        4: 0: 0 1 4 
+//        5: 0: 0 2 4 
+//        6: 0: 1 2 4 
+//        7: 0: 0 3 4 
+//        8: 0: 1 3 4 
+//        9: 0: 2 3 4 
+//        10: 0: 0 1 5 
+
+ // 6 => 20 6.5.4/3.2.1
+ // 5 => 10 5.4.3/3.2.1
+ // 7 => 35 7.6.5/3.2.1
+ 
+        
+//    	if (i[p] < 0 || i[p] >= n)
+//    		throw new IllegalArgumentException("value out of range.");
+//    	for (int q = 1; q < r; q++)
+//    		if (i[p + q] > i[p]) {
+//    			i[p + q] -= (i[p] + 1);
+//    		} else
+//    			throw new IllegalArgumentException("sequence not monotonic");
+//    	int rslt = 0;
+//    	int nextN = n - 1 - i[p];
+//    	while (i[p] > 0) {
+//    		rslt += IntMath.binomial(n - i[p], r - 1);
+//    		i[p]--;
+//    	}
+//    	return rslt + pos5(nextN, r - 1, p + 1, i);
+    }
+
+    public static void main(String args[]) {
 	    Lexicographic lex = new Lexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	    int i = 0;
 	    for ( int[] vals : lex ) {
-	        System.out.print(i++ +": ");
+	        System.out.print(i++ +": "+pos5(vals)+": ");
 	        for (int v : vals) {
-	            System.out.print(v+" ");
+	            System.out.print(Integer.toHexString(v)+" ");
 	        }
 	        System.out.println();
 	    }

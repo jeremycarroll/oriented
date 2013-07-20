@@ -90,10 +90,10 @@ public class TestExamples {
          */
         Assert.assertEquals(Examples.uniform4.dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
     }
-    @Test
-    public void testFromEuclideanLines() {
-        Assert.assertEquals(Examples.circularSaw3, Examples.circularSaw3A);
-    }
+//    @Test
+//    public void testFromEuclideanLines() {
+//        Assert.assertEquals(Examples.circularSaw3, Examples.circularSaw3A);
+//    }
 }
 
 
