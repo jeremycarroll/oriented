@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestAlternating.class, 
     TestCircuits.class,    
     TestConversions.class, 
-    TestLexicographic.class, 
+    TestCoLexicographic.class, 
     TestMatroid.class,
     TestMaxVectors.class, 
     TestMSet.class, 

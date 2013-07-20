@@ -23,7 +23,7 @@ import com.google.common.math.IntMath;
 import test.BetterParameterized.TestName;
 
 @RunWith(value = BetterParameterized.class)
-public class TestLexicographic {
+public class TestCoLexicographic {
 	@Parameters
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] { { "10-4", 10, 4 },
@@ -34,7 +34,7 @@ public class TestLexicographic {
 	final CoLexicographic lex;
 	final int n, r;
 
-	public TestLexicographic(String nm, int n, int r) {
+	public TestCoLexicographic(String nm, int n, int r) {
 		lex = new CoLexicographic(n, r);
 		this.n = n;
 		this.r = r;
@@ -52,9 +52,6 @@ public class TestLexicographic {
 		for (int i = 0; i < sz; i++) {
 			assertTrue(it.hasNext());
 			int[] seq = it.next();
-			// for (int j=0;j<r;j++)
-			// System.err.print(seq[j]+",");
-			// System.err.println();
 			assertEquals(i, CoLexicographic.index(seq));
 		}
 		assertFalse(it.hasNext());
