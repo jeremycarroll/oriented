@@ -148,7 +148,7 @@ public class TestPermutations {
     @Test
     public void testAutomorphismsSaw3() {
 //        System.err.println(Examples.circularSaw3.dual().getCircuits());
-        automorphisms(Examples.circularSaw3A);
+        automorphisms(Examples.circularSaw3);
     }
 
     @Test
@@ -178,11 +178,11 @@ public class TestPermutations {
     
     @Test
     public void testReorientation() {
-        testReorientation(Examples.circularSaw3A, 1, 60, 3, 4);
+        testReorientation(Examples.circularSaw3, 1, 60, 3, 4);
     }
     @Test
     public void testReorientationHash() {
-        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3A.getCircuits()),
+        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()),
                 1, 60, 3, 4);
     }
     

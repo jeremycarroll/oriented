@@ -37,24 +37,19 @@ public class Examples {
              "E:0(AF)B(CD)",
              "F:0(AE)(BD)C");
             
-            
-          
-//    
-//    /**
-//     * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
-//     */
-//    public final static OM circularSaw3 = fromChirotope(7, 3,
-//    // 0
-//            "+++++ ++++ +++ ++ +" +
-//            // 1
-//                    "---- --- -- +" +
-//                    // 2
-//                    "--- -- +" +
-//                    // 3
-//                    "++ +" +
-//                    // 4
-//                    "+");
+    public final static OM pappus = fromCrossings(
+            "0:(12)(34)5(67)8",
+            "1:(02)4(35)7(68)",
+            "2:(01)(48)(57)63",
+            "3:(04)(15)(78)62",
+            "4:(03)1(28)7(56)",
+            "5:0(13)8(27)(46)",
+            "6:(07)(18)32(45)",
+            "7:(06)1(38)(25)4",
+            "8:0(16)(37)5(24)"
+            );  
 
+    public final static OM πάππος = pappus;
     /* Draw a circular saw on squared paper and take the co-ordinates of two
      * points on each line
      *
@@ -62,7 +57,7 @@ public class Examples {
     /**
      * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
      */
-    public final static OM circularSaw3A = fromEuclideanLines(new int[][][] {
+    public final static OM circularSaw3 = fromEuclideanLines(new int[][][] {
             // here is the first line, two points
             { { 10, 75 }, { 65, 90 } },
             // here is the second line, two points
@@ -92,6 +87,7 @@ public class Examples {
     }
 
     static FactoryFactory f;
+
     static {
         Options options = new Options();
         options.setShortLabels();
@@ -115,7 +111,7 @@ public class Examples {
     /**
      * Generate an OM from lines being specified as a pair of points (integer coordinates)
      * 
-     * This is very easy to do from a reasonably precise accurate sketch, see {@link #circularSaw3A} for a documented example.
+     * This is very easy to do from a reasonably precise accurate sketch, see {@link #circularSaw3} for a documented example.
      * @param lines
      * @return
      */

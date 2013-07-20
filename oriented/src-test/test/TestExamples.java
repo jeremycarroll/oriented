@@ -71,8 +71,14 @@ public class TestExamples {
     }
     
     @Test
+    public void testΠάππος() {
+        // There are nine points of intersection in Pappus's construction.
+        Assert.assertTrue( Examples.πάππος.getChirotope().toShortString().matches("^.*0.*0.*0.*0.*0.*0.*0.*0.*0.*$") );
+        
+    }
+    @Test
     public void testCeva() {
-        // There are four poitns of intersection in Ceva's construction.
+        // There are four points of intersection in Ceva's construction.
        Assert.assertTrue( Examples.ceva.getChirotope().toShortString().matches("^.*0.*0.*0.*0.*$") );
     }
     @Test
@@ -90,10 +96,6 @@ public class TestExamples {
          */
         Assert.assertEquals(Examples.uniform4.dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
     }
-//    @Test
-//    public void testFromEuclideanLines() {
-//        Assert.assertEquals(Examples.circularSaw3, Examples.circularSaw3A);
-//    }
 }
 
 
