@@ -5,7 +5,7 @@ package test;
 
 import junit.framework.Assert;
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.OMChirotope;
+import net.sf.oriented.omi.OM;
 
 import org.junit.Test;
 
@@ -17,10 +17,52 @@ public class TestGrassmannPlucker {
      */
     @Test
     public void test65052736() {
-       OMChirotope om = factory.chirotope().fromShortString(3,
-  "0++++++0++++++0-+---++++++++0-++++++++++++++--++++-++++++++++++++--++++-+++++0++++--+++------+--------------+0++---+++++"
-                    );
-       Assert.assertTrue( om.verify() );
+       String base = "0++++++0++++++0-+---++++++++0-++++++++++++++--++++-++++++++++++++--++++-+++++0++++--+++------+--------------+0++---+++++";
+       testRank3(true, base);
+       testRank3(false, set(base,2,'-'));
+       testRank3(false,  set(base,4,'-'));
+       int badCount = 0, goodCount=0;
+       for (int i=0;i<base.length()/4;i++) {
+           String changed = set(base,i,'-');
+           if (!base.equals(changed)) {
+           if (! om(changed).verify()) {
+               badCount++;
+           } else {
+               goodCount++;
+           }
+           }
+       }
+       Assert.assertEquals(21,badCount);
+       Assert.assertEquals(4,goodCount);
+    }
+    private String set(String base, int pos, char c) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(base.substring(0,pos));
+        buffer.append(c);
+        buffer.append(base.substring(pos+1));
+        return buffer.toString();
+    }
+    private void testRank3(boolean expected, String chi) {
+        Assert.assertEquals( expected, om(chi).verify() );
+    }
+    private OM om(String chi) {
+        return factory.chirotope().fromShortString(3,chi);
+    }
+    
+    @Test
+    public void testOrder5() {
+// http://www.om.math.ethz.ch/?p=catom&card=5&rank=3
+//        IC(5,3,1) = ++++++++++
+//        IC(5,3,2) = 0+++++++++
+//        IC(5,3,3) = 0++++++0++
+//        IC(5,3,4) = 0000++++++
+        testRank3(true,"++++++++++");
+        testRank3(true,"0+++++++++");
+        testRank3(true,"0++++++0++");
+        testRank3(true,"0000++++++");
+        testRank3(false,"+-++++++++");
+        testRank3(false,"0+0++++0++");
+        testRank3(false,"0+-++++0++");
     }
 
     /*
