@@ -76,6 +76,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		bits = new int[(IntMath.binomial(all.ground.length, rank) + 15) / 16];
 		alt = new Alternating(new Chi());
 		initFromCircuits();
+        ensureFirstSignIsPositive();
 		all.set(CHIROTOPE, this);
 	}
 
@@ -85,6 +86,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		bits = new int[d.bits.length];
 		alt = new Alternating(new Chi());
 		initFromDual(d);
+		ensureFirstSignIsPositive();
 		all.set(CHIROTOPE, this);
 	}
 
@@ -96,10 +98,12 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		bits = new int[(IntMath.binomial(chi.n(), chi.rank()) + 15) / 16];
 		alt = new Alternating(new Chi());
 		initFromChi(chi);
+        ensureFirstSignIsPositive();
 		all.set(CHIROTOPE, this);
 	}
 
-	public ChirotopeImpl(OMAll all, final RationalMatrix matrix) {
+
+    public ChirotopeImpl(OMAll all, final RationalMatrix matrix) {
 		this(all, new Chirotope() {
 
 			@Override
@@ -250,6 +254,33 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		return CombinatoricUtils.sign(ix2);
 	}
 
+	/**
+	 * The chirotope is only unique up to multiplication by -1;
+	 * make first sign positive.
+	 */
+    private void ensureFirstSignIsPositive() {
+        int sz = IntMath.binomial(n(), rank());
+        boolean flipping = false;
+        for (int i=0;i<sz;i++) {
+            switch (getNthEntry(i)) {
+            case -1:
+                flipping = true;
+                setNthEntry(i,1);
+                break;
+            case 0:
+                break;
+            case 1:
+                if (!flipping) {
+                    return;
+                }
+                setNthEntry(i,-1);
+                break;
+            }
+        }
+        if (!flipping) {
+            throw new IllegalArgumentException("Bad chirotope initialization: chirotope is zero");
+        }
+    }
 	private int getNthEntry(int x) {
 		int w = x / 16;
 		int shift = (x % 16) * 2;
@@ -287,6 +318,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 					"Trying to set a chirotope entry to: " + v);
 
 		}
+		bits[w] &= ~(3<<shift);
 		bits[w] |= (pairOfBits << shift);
 
 	}
