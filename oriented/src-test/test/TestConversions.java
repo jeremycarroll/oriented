@@ -82,6 +82,8 @@ public class TestConversions {
 								&& !Cryptomorphisms.DUALREALIZED.equals(from)) {
 							continue;
 						}
+//                        if (Cryptomorphisms.REALIZED.equals(from) && Cryptomorphisms.DUALREALIZED
+//                                .equals(to))
 						r.add(new Object[] { name(source, ff, from, to),
 								source, f, from, to, n++ });
 					}
