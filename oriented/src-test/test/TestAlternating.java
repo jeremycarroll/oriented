@@ -12,7 +12,6 @@ import static org.junit.Assert.assertFalse;
 
 import net.sf.oriented.combinatorics.Lexicographic;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.common.math.IntMath;
