@@ -7,6 +7,7 @@ package net.sf.oriented.matrix;
 
 import java.lang.reflect.Array;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Verify;
 
 import org.apache.commons.math3.Field;
@@ -123,18 +124,19 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 	}
 
 	@Override
-	public boolean verify() {
+	public void verify() throws AxiomViolation {
 		T zero = field.getZero();
 		lazyDual();
 		for (int i = 0; i < m; i++) {
-			if (zero.equals(dot(data[i], data[i])))
-				return false;
+			if (zero.equals(dot(data[i], data[i])))  {
+                throw new AxiomViolation(this,"non-zero");
+			}
 			for (int j = i + 1; j < m; j++) {
-				if (!zero.equals(dot(data[i], data[j])))
-					return false;
+				if (!zero.equals(dot(data[i], data[j]))) {
+	                throw new AxiomViolation(this,"perpendicular");
+	            }
 			}
 		}
-		return true;
 	}
 
 }

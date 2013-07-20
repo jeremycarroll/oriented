@@ -6,9 +6,10 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Iterator;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
-import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
@@ -49,13 +50,14 @@ public class Bases extends AbsMatroid {
 	}
 
 	@Override
-	public boolean verify() {
+	public void verify() throws AxiomViolation {
 
-        return verifyNonEmpty() && verifyBasesExchange();
+        verifyNonEmpty();
+        verifyBasesExchange();
 	}
 
-    private boolean verifyBasesExchange() {
-        return new ForAllForAllExists<Label,Label>() {
+    private void verifyBasesExchange() throws AxiomViolation {
+        new ForAllForAllExists<Label,Label>() {
 
             @Override
             boolean check(Label a, UnsignedSet A, UnsignedSet B, Label b) {
@@ -73,11 +75,7 @@ public class Bases extends AbsMatroid {
         }.verify();
     }
 
-    private boolean verifyNonEmpty() {
-        return !set.isEmpty();
-    }
-
-	SetOfUnsignedSetInternal computeCircuits() {
+    SetOfUnsignedSetInternal computeCircuits() {
 		/*
 		 * 0) compute independent sets 1) For i = 1 to r + 1 a) Compute set of
 		 * size i which - is not independent - does not have smaller depedendent

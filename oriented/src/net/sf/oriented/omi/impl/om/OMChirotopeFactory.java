@@ -6,8 +6,6 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Collection;
 
-import com.google.common.math.IntMath;
-
 import net.sf.oriented.combinatorics.CoLexicographic;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
@@ -16,6 +14,8 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMChirotope;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
+
+import com.google.common.math.IntMath;
 
 public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndChirotope>
 		implements ChirotopeFactory {

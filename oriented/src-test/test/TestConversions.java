@@ -7,13 +7,12 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
@@ -144,24 +143,21 @@ public class TestConversions {
 	}
 
 	@Test
-	public void convert() {
+	public void convert() throws AxiomViolation {
 		OMAll om = create(from);
-		assertTrue(om.verify());
+		om.verify();
 		OMInternal first = om.get(from);
-		assertTrue(first.verify());
+		first.verify();
 		checkEquals(from, om, first);
 		OMInternal clean = (OMInternal) inOut(first);
 		OMInternal mod = clean.asAll().get(to);
 		assertNotNull(mod);
-		if (!mod.verify()) {
-			System.err.println(mod);
-			fail(" verification failed");
-		}
+		mod.verify();
 		assertEquals(first, clean);
 		checkEquals(to, mod, first);
 		assertNotSame(first, first.dual());
-        assertTrue(first.asAll().verify());
-        assertTrue(mod.asAll().verify());
+        first.asAll().verify();
+        mod.asAll().verify();
 	}
 
 	private void checkEquals(Cryptomorphisms f, OM x, OM y) {

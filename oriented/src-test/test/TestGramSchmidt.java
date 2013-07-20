@@ -8,10 +8,10 @@ package test;
 import java.util.Arrays;
 import java.util.Collection;
 
-import junit.framework.Assert;
 import net.sf.oriented.matrix.GramSchmidt;
 import net.sf.oriented.matrix.PerisicFieldElement;
 import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.omi.AxiomViolation;
 
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class TestGramSchmidt {
 	}
 
 	@Test
-	public void testPlain() {
+	public void testPlain() throws AxiomViolation {
 		test("plain", new RationalMatrix(data));
 
 	}
@@ -72,19 +72,12 @@ public class TestGramSchmidt {
 	//
 	// }
 
-	private void test(String nm, RationalMatrix matrix) {
+	private void test(String nm, RationalMatrix matrix) throws AxiomViolation {
 		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
 				matrix.getDelegate());
 
-//		FieldMatrix<PerisicFieldElement> A = matrix.getDelegate();
-//		FieldMatrix<PerisicFieldElement> B = gs.getBasis();
-//		FieldMatrix<PerisicFieldElement> D = gs.getDual();
-//		System.err.println(nm + " " + name + " A: " + toString(A));
-//		System.err.println(" B: " + toString(B));
-//		if (D != null) {
-//			System.err.println(" D: " + toString(D));
-//		}
-		Assert.assertTrue(gs.verify());
+
+		gs.verify();
 
 	}
 

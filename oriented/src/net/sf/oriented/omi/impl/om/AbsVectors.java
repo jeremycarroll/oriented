@@ -6,6 +6,7 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Iterator;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -126,8 +127,15 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	}
 
 	@Override
-	public boolean verify() {
-		return (!vectors.isEmpty()) && verifySymmetry() && vectors.verify();
+	public void verify() throws AxiomViolation {
+	    if (vectors.isEmpty()) {
+            throw new AxiomViolation(this,"non-emtpy");
+	        
+	    }
+		if (!verifySymmetry()) {
+            throw new AxiomViolation(this,"symmetric");
+		}
+		vectors.verify();
 	}
 
 	private boolean verifySymmetry() {

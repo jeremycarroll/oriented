@@ -7,6 +7,7 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
@@ -31,6 +32,8 @@ abstract class AbsAxioms<ForAll> {
      * @param <Exists> type returned by inner iterator, suggest <U>
      */
 	abstract class ForAllForAllExists<ForAll3,Exists> implements Verify {
+	    
+	    private String name = "Some axiom";
 	    /**
 	     * return true if e, x and y satisfy the axiom
 	     * with z provided by innerIterator()
@@ -57,7 +60,7 @@ abstract class AbsAxioms<ForAll> {
 		}
 
 		@Override
-		public boolean verify() {
+		public void verify()  throws AxiomViolation  {
 			Iterator<? extends ForAll> i, j;
 			Iterator<? extends Exists> k;
 			i = ForAllForAllExists.this.iterator();
@@ -77,13 +80,13 @@ abstract class AbsAxioms<ForAll> {
 							if (check(e, a, b, k.next())) {
 								continue loopu;
 							}
-						return false;
+						throw new AxiomViolation(AbsAxioms.this,name);
 					}
-					if (!postCheck(a, b))
-						return false;
+					if (!postCheck(a, b)) {
+                        throw new AxiomViolation(AbsAxioms.this,name);
+					}
 				}
 			}
-			return true;
 		}
 
 		/**
@@ -108,21 +111,22 @@ abstract class AbsAxioms<ForAll> {
 	}
 
 	abstract class ForAllForAll implements Verify {
+	    private String name = "some axiom";
 		abstract boolean check(ForAll a, ForAll b);
 
 		@Override
-		public boolean verify() {
+		public void verify() throws AxiomViolation {
 			Iterator<? extends ForAll> i, j;
 			i = iterator();
 			while (i.hasNext()) {
 				ForAll a = i.next();
 				j = iterator();
 				while (j.hasNext()) {
-					if (!check(a, j.next()))
-						return false;
+					if (!check(a, j.next())) {
+                        throw new AxiomViolation(AbsAxioms.this,name);
+					}
 				}
 			}
-			return true;
 		}
 	}
 

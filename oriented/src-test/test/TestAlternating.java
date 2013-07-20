@@ -9,7 +9,6 @@ import static net.sf.oriented.omi.impl.om.ChirotopeImpl.dualBasis;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.signDualBasis;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
 import net.sf.oriented.combinatorics.CoLexicographic;
 
 import org.junit.Test;

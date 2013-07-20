@@ -11,11 +11,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.CoLexicographic;
+import net.sf.oriented.combinatorics.CombinatoricUtils;
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.FullChirotope;
@@ -324,14 +325,14 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	@Override
-	public boolean verify() {
-		 return verifyNonZero()
-		       && verifyMatroid()
-		       && verify3TermGrassmannPlücker();
+	public void verify()  throws AxiomViolation {
+		 verifyNonZero();
+		 verifyMatroid();
+		 verify3TermGrassmannPlücker();
 		
 	}
 
-    private boolean verify3TermGrassmannPlücker() {
+    private void verify3TermGrassmannPlücker()  throws AxiomViolation {
         UnsignedSet g = this.support();  // need to reformulate
         JavaSet<? extends UnsignedSet> aa = g.subsetsOfSize(rank-2);
         JavaSet<? extends UnsignedSet> bb = g.subsetsOfSize(4);
@@ -360,14 +361,13 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
                         }
                         if (e != chiTimesChi(Y1,X2,X1,Y2,indexes)
                             && e != chiTimesChi(Y2,X2,Y1,X1,indexes) ) {
-                            return false;
+                            throw new AxiomViolation(this,"3TermGrassmannPlücker");
                         }
                         
                     }
                 }
             }
         }
-        return true;
     }
 
     private int chiTimesChi(Label x1, Label x2, Label y1, Label y2,
@@ -385,16 +385,18 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
         return x1x2.iterator().next();
     }
 
-    private boolean verifyMatroid() {
-        return getMatroid().getBases().verify() && 
-                getMatroid().getBases().sameSetAs(getBases());
+    private void verifyMatroid()  throws AxiomViolation  {
+        getMatroid().getBases().verify();
+        if (!getMatroid().getBases().sameSetAs(getBases())) {
+            throw new AxiomViolation(this,"Chirotope defines matroid bases");
+        }
     }
 
-    private boolean verifyNonZero() {
+    private void verifyNonZero()  throws AxiomViolation  {
         for (int bit : bits)
 			if (bit != 0)
-				return true;
-        return false;
+				return;
+        throw new AxiomViolation(this,"Non-Zero");
     }
 
 	@Override

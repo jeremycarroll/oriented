@@ -10,7 +10,7 @@ public interface Verify {
 	 * 
 	 * @return true if the object is not known to have violated its invariants.
 	 */
-	boolean verify();
+	void verify() throws AxiomViolation;
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

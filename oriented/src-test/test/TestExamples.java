@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 
@@ -18,10 +19,9 @@ import org.junit.Test;
 public class TestExamples {
     
     @Test
-    public void testVerify() {
+    public void testVerify() throws AxiomViolation {
         for (Pair<OM,String> om: testOrientedMatroids()) {
-            Assert.assertTrue(om.getValue(),om.getKey().verify());
-//            System.err.println(om.getValue()+" "+om.getKey().getChirotope().toString());
+            om.getKey().verify();
         }
     }
     private Iterable<Pair<OM,String>> testOrientedMatroids() {

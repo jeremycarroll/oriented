@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
@@ -29,9 +30,10 @@ public class MaxVectors extends AbsVectorsOM {
 	}
 
 	@Override
-	public boolean verify() {
-		UnsignedSet support = verifySupport();
-		return support != null && super.verify() && getVectors().verify();
+	public void verify() throws AxiomViolation {
+		verifySupport();
+		super.verify();
+		getVectors().verify();
 	}
 
 	/**
@@ -94,15 +96,16 @@ public class MaxVectors extends AbsVectorsOM {
 		return Tx;
 	}
 
-	private UnsignedSet verifySupport() {
+	private void verifySupport()  throws AxiomViolation {
 		Iterator<? extends SignedSet> it = iterator();
-		if (!it.hasNext())
-			return null;
+		if (!it.hasNext()) {
+            throw new AxiomViolation(this,"non-empty");
+		}
 		UnsignedSet s = it.next().support();
 		while (it.hasNext())
-			if (!s.equals(it.next().support()))
-				return null;
-		return s;
+			if (!s.equals(it.next().support())) {
+                throw new AxiomViolation(this,"support");
+			}
 	}
 
 	@Override

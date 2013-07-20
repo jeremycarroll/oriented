@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
@@ -190,6 +191,12 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
     @Override
     public Group automorphisms() {
         return all.automorphisms();
+    }
+
+    protected void verifyNonEmpty() throws AxiomViolation {
+        if (set.isEmpty()) {
+            throw new AxiomViolation(this,"non-empty");
+        }
     }
 }
 /************************************************************************

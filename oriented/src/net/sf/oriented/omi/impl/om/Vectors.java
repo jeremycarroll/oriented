@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SignedSet;
@@ -39,8 +40,11 @@ public class Vectors extends AbsVectorsOM {
 	}
 
 	@Override
-	public boolean verify() {
-		return super.verify() && verifyVO() && verifyV2p() && verifyYapproxX();
+	public void verify() throws AxiomViolation {
+		super.verify();
+		verifyVO();
+		verifyV2p();
+		verifyYapproxX();
 
 	}
 
@@ -50,9 +54,10 @@ public class Vectors extends AbsVectorsOM {
 	 * Bible page 145, prop 3.7.10, axiom V3''
 	 * 
 	 * @return
+	 * @throws AxiomViolation 
 	 */
-	private boolean verifyYapproxX() {
-		return new ForAllForAllExists<Object,SignedSet>() {
+	private void verifyYapproxX() throws AxiomViolation {
+		new ForAllForAllExists<Object,SignedSet>() {
 
 			@Override
 			boolean check(Object e, SignedSet x, SignedSet y, SignedSet z) {
@@ -76,10 +81,10 @@ public class Vectors extends AbsVectorsOM {
 	/**
 	 * Bible page 144, Corollary 3.7.7
 	 * 
-	 * @return
+	 * @throws AxiomViolation 
 	 */
-	private boolean verifyV2p() {
-		return new ForAllForAll() {
+	private void verifyV2p() throws AxiomViolation {
+		new ForAllForAll() {
 
 			@Override
 			boolean check(SignedSet a, SignedSet b) {
@@ -95,9 +100,12 @@ public class Vectors extends AbsVectorsOM {
 	 * Bible page 143
 	 * 
 	 * @return
+	 * @throws AxiomViolation 
 	 */
-	private boolean verifyVO() {
-		return vectors.contains(factory().itemFactory().empty());
+	private void verifyVO() throws AxiomViolation {
+		if (!vectors.contains(factory().itemFactory().empty())) {
+		    throw new AxiomViolation(this,"the empty set is a vector");
+		}
 	}
 
 	SetOfSignedSetInternal minimal() {

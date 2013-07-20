@@ -25,11 +25,11 @@ public class TestGrassmannPlucker {
        for (int i=0;i<base.length()/4;i++) {
            String changed = set(base,i,'-');
            if (!base.equals(changed)) {
-           if (! om(changed).verify()) {
-               badCount++;
-           } else {
-               goodCount++;
-           }
+               if (TestAll.verify(om(changed))) {
+                   goodCount++;
+               } else {
+                   badCount++;
+               }
            }
        }
        Assert.assertEquals(21,badCount);
@@ -43,7 +43,7 @@ public class TestGrassmannPlucker {
         return buffer.toString();
     }
     private void testRank3(boolean expected, String chi) {
-        Assert.assertEquals( expected, om(chi).verify() );
+        Assert.assertEquals( expected, TestAll.verify(om(chi)) );
     }
     private OM om(String chi) {
         return factory.chirotope().fromShortString(3,chi);

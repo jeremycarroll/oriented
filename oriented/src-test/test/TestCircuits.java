@@ -6,8 +6,8 @@ package test;
 
 import static net.sf.oriented.omi.Examples.chapter1;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import junit.framework.Assert;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMS;
@@ -38,10 +38,10 @@ public class TestCircuits {
 	}
 
 	@Test
-	public void testVerify() {
-		assertTrue("chapter1", chapter1.verify());
-		assertFalse("tooLittle", tooLittle.verify());
-		assertFalse("tooMuch", tooMuch.verify());
+	public void testVerify() throws AxiomViolation {
+		chapter1.verify();
+		assertFalse("tooLittle", TestAll.verify(tooLittle));
+		assertFalse("tooMuch", TestAll.verify(tooMuch));
 	}
 	
 	@Test

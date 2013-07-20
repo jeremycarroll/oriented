@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMSFactory;
@@ -39,14 +40,15 @@ public class Circuits extends AbsVectorsOM {
 	}
 
 	@Override
-	public boolean verify() {
-		return super.verify() && verifyIncomparability()
-				&& verifyWeakElimination();
+	public void verify() throws AxiomViolation {
+		super.verify();
+		verifyIncomparability();
+		verifyWeakElimination();
 
 	}
 
-	private boolean verifyWeakElimination() {
-		return new ForAllForAllExists<Label,SignedSet>() {
+	private void verifyWeakElimination() throws AxiomViolation {
+		new ForAllForAllExists<Label,SignedSet>() {
 			UnsignedSet plus;
 			UnsignedSet minus;
 
@@ -71,9 +73,8 @@ public class Circuits extends AbsVectorsOM {
 		}.verify();
 	}
 
-	private boolean verifyIncomparability() {
-
-		return new ForAllForAll() {
+	private void verifyIncomparability() throws AxiomViolation {
+       new ForAllForAll() {
 			@Override
 			public boolean check(SignedSet a, SignedSet b) {
 				return (!a.support().isSubsetOf(b.support()))

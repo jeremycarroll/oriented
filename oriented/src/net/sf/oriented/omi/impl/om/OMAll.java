@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -208,18 +209,24 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
 	@Override
-	public boolean verify() {
+	public void verify() throws AxiomViolation {
 		for (OMInternal f : forms)
-			if (f != null && !f.verify())
-				return false;
-		return matroid.verify() && (forms[VECTORS.ordinal()] == null
-				|| (verify(MAXVECTORS) && verify(CIRCUITS)));
+			if (f != null) {
+			    f.verify();
+			}
+		matroid.verify();
+		if (forms[VECTORS.ordinal()] != null) {
+		    verify(MAXVECTORS);
+		    verify(CIRCUITS);
+		}
 	}
 
-	private boolean verify(Cryptomorphisms v) {
-		return forms[v.ordinal()] == null
-				|| ((AbsVectorsOM) forms[v.ordinal()])
-						.isSubsetOf((AbsVectorsOM) forms[VECTORS.ordinal()]);
+	private void verify(Cryptomorphisms v) throws AxiomViolation {
+		if ( forms[v.ordinal()] != null
+				&& ! ((AbsVectorsOM) forms[v.ordinal()])
+						.isSubsetOf((AbsVectorsOM) forms[VECTORS.ordinal()]) ) {
+		    throw new AxiomViolation(this,v+" must be a set of vectors");
+		}
 	}
 
 	@Override

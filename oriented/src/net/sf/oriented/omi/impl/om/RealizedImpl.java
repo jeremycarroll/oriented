@@ -12,6 +12,7 @@ import java.util.Iterator;
 import net.sf.oriented.matrix.GramSchmidt;
 import net.sf.oriented.matrix.PerisicFieldElement;
 import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RealizedFactory;
@@ -28,8 +29,8 @@ public class RealizedImpl extends AbsOM implements OMRealized {
 	}
 
 	@Override
-	public boolean verify() {
-		return getChirotope().verify();
+	public void verify() throws AxiomViolation {
+		getChirotope().verify();
 	}
 
 	@Override

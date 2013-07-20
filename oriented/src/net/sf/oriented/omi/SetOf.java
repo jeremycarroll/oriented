@@ -91,7 +91,7 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
      * @return true if the object is not known to have violated its invariants.
      */
     @Override
-    boolean verify();
+    void verify() throws AxiomViolation;
 
 }
 /************************************************************************

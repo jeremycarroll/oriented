@@ -6,17 +6,18 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Iterator;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-
 import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 
 public class MatroidCircuits extends AbsMatroid {
 
@@ -45,14 +46,15 @@ public class MatroidCircuits extends AbsMatroid {
 	}
 
 	@Override
-	public boolean verify() {
-		return (!isEmpty()) && verifyIncomparability()
-				&& verifyWeakElimination();
+	public void verify() throws AxiomViolation {
+	    verifyNonEmpty();
+	    verifyIncomparability();
+	    verifyWeakElimination();
 
 	}
 
-	private boolean verifyWeakElimination() {
-		return new ForAllForAllExists<Label,UnsignedSet>() {
+	private void verifyWeakElimination() throws AxiomViolation {
+		new ForAllForAllExists<Label,UnsignedSet>() {
 
 			private UnsignedSet union;
 
@@ -73,9 +75,8 @@ public class MatroidCircuits extends AbsMatroid {
 		}.verify();
 	}
 
-	private boolean verifyIncomparability() {
-
-		return new ForAllForAll() {
+	private void verifyIncomparability() throws AxiomViolation {
+		new ForAllForAll() {
 			@Override
 			public boolean check(UnsignedSet a, UnsignedSet b) {
 				return (!a.isSubsetOf(b)) || a.equals(b);

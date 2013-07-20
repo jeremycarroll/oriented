@@ -7,6 +7,7 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Arrays;
 
 import net.sf.oriented.combinatorics.Group;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
@@ -81,12 +82,18 @@ public class MatroidAll implements MatroidInternal {
 	}
 
 	@Override
-	public boolean verify() {
-	    return verify1() && dual.verify1();
+	public void verify() throws AxiomViolation {
+	    verify1();
+	    dual.verify1();
 	}
 	
-	private boolean verify1() {
-	    return (bases == null || bases.verify()) && (circuits == null || circuits.verify());
+	private void verify1() throws AxiomViolation {
+	    if (bases != null) {
+	        bases.verify();
+	    }
+	    if (circuits != null ) {
+	        circuits.verify();
+	    }
 	    
 	}
 

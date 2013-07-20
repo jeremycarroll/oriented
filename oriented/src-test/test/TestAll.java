@@ -5,6 +5,9 @@
 
 package test;
 
+import net.sf.oriented.omi.AxiomViolation;
+import net.sf.oriented.omi.Verify;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -32,8 +35,18 @@ import org.junit.runners.Suite.SuiteClasses;
 })
 @RunWith(Suite.class)
 public class TestAll {
-
+    public static boolean verify(Verify v) {
+        try {
+            v.verify();
+            return true;
+        }
+        catch (AxiomViolation e) {
+            return false;
+        }
+    }
 }
+
+
 
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

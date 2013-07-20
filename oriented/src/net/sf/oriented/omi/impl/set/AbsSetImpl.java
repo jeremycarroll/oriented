@@ -6,6 +6,7 @@ package net.sf.oriented.omi.impl.set;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
 import net.sf.oriented.omi.impl.items.FactoryInternal;
@@ -103,15 +104,17 @@ abstract public class AbsSetImpl<
     }
 
     @Override
-    public boolean verify() {
+    public void verify() throws AxiomViolation {
         if (!equalsIsSameSetAs()) {
-            return true;
+            return;
         }
         int hashCode = 0;
         for (ITEM_INTERNAL2 member:this) {
             hashCode += member.hashCode();
         }
-        return hashCode == hashCode();
+        if ( hashCode != hashCode() ) {
+            throw new AxiomViolation(this,"hashCode and equals (Java Contract)");
+        }
     }
 
     public SET_INTERNAL2 only(Test<ITEM> t) {
