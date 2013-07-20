@@ -6,10 +6,11 @@ package test;
 
 import static net.sf.oriented.combinatorics.CombinatoricUtils.sign;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.dualBasis;
-import static net.sf.oriented.omi.impl.om.ChirotopeImpl.pos;
 import static net.sf.oriented.omi.impl.om.ChirotopeImpl.signDualBasis;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+
+import net.sf.oriented.combinatorics.Lexicographic;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,13 +19,8 @@ import com.google.common.math.IntMath;
 
 public class TestAlternating {
 
-	@BeforeClass
-	public static void setUpBeforeClass() {
-	}
-
 	@Test
 	public void testSign() {
-
 		assertEquals(1, sign(3, 5, 8, 9, 11));
 		assertEquals(-1, sign(5, 3));
 		assertEquals(1, sign(4, 6, 2));
@@ -33,7 +29,6 @@ public class TestAlternating {
 
 	@Test
 	public void testChoose() {
-
 		assertEquals(10, IntMath.binomial(5, 3));
 		assertEquals(10 * 3 * 7, IntMath.binomial(10, 4));
 		assertEquals(1, IntMath.binomial(8, 8));
@@ -42,47 +37,52 @@ public class TestAlternating {
 
 	@Test
 	public void testPos1() {
-
-		assertEquals(0, pos(1, 1, 0, 0));
-		assertEquals(0, pos(2, 1, 0, 0));
-		assertEquals(0, pos(3, 1, 0, 0));
-		assertEquals(0, pos(3, 2, 0, 0, 1));
-		assertEquals(0, pos(2, 1, 2, 10, 0, 0));
-		assertEquals(0, pos(3, 2, 1, 10, 0, 1));
-		assertEquals(0, pos(4, 2, 0, 0, 1));
-		assertEquals(0, pos(5, 2, 0, 0, 1));
-		assertEquals(0, pos(4, 3, 0, 0, 1, 2));
-		assertEquals(0, pos(5, 3, 0, 0, 1, 2));
-
+		int[] i = { 0 };
+        assertEquals(0, Lexicographic.pos3(1, 1, i));
+        int[] i1 = { 0 };
+		assertEquals(0, Lexicographic.pos3(2, 1, i1));
+        int[] i2 = { 0 };
+		assertEquals(0, Lexicographic.pos3(3, 1, i2));
+        int[] i3 = { 0, 1 };
+		assertEquals(0, Lexicographic.pos3(3, 2, i3));
+        int[] i4 = { 0, 1 };
+		assertEquals(0, Lexicographic.pos3(4, 2, i4));
+        int[] i5 = { 0, 1 };
+		assertEquals(0, Lexicographic.pos3(5, 2, i5));
+        int[] i6 = { 0, 1, 2 };
+		assertEquals(0, Lexicographic.pos3(4, 3, i6));
+        int[] i7 = { 0, 1, 2 };
+		assertEquals(0, Lexicographic.pos3(5, 3, i7));
 	}
 
 	@Test
 	public void testPos2() {
-
-		assertEquals(0, pos(2, 0, 3, 1, 3, 4));
-		assertEquals(0, pos(3, 1, 2, 1, 3, 0));
-		assertEquals(0, pos(4, 2, 1, 1, 0, 1));
-		assertEquals(1, pos(4, 2, 1, 1, 0, 2));
-		assertEquals(2, pos(4, 2, 1, 1, 0, 3));
-		assertEquals(3, pos(4, 2, 1, 1, 1, 2));
-		assertEquals(8, pos(5, 3, 0, 1, 3, 4));
-
+		int[] i = { 1, 3, 4 };
+        assertEquals(8, Lexicographic.pos3(5, 3, i));
 	}
 
 	@Test
 	public void testPos() {
-
-		assertEquals(0, pos(5, 3, 0, 0, 1, 2)); // 3,4
-		assertEquals(1, pos(5, 3, 0, 0, 1, 3)); // 2,4
-		assertEquals(2, pos(5, 3, 0, 0, 1, 4)); // 2,3
-		assertEquals(3, pos(5, 3, 0, 0, 2, 3)); // 1,4
-		assertEquals(4, pos(5, 3, 0, 0, 2, 4)); // 1,3
-		assertEquals(5, pos(5, 3, 0, 0, 3, 4)); // 1,2
-		assertEquals(6, pos(5, 3, 0, 1, 2, 3)); // 0,4
-		assertEquals(7, pos(5, 3, 0, 1, 2, 4)); // 0,3
-		assertEquals(8, pos(5, 3, 0, 1, 3, 4)); // 0,2
-		assertEquals(9, pos(5, 3, 0, 2, 3, 4)); // 0,1
-
+		int[] i = { 0, 1, 2 };
+        assertEquals(0, Lexicographic.pos3(5, 3, i));
+        int[] i1 = { 0, 1, 3 }; // 3,4
+		assertEquals(1, Lexicographic.pos3(5, 3, i1));
+        int[] i2 = { 0, 1, 4 }; // 2,4
+		assertEquals(4, Lexicographic.pos3(5, 3, i2));
+        int[] i3 = { 0, 2, 3 }; // 2,3
+		assertEquals(2, Lexicographic.pos3(5, 3, i3));
+        int[] i4 = { 0, 2, 4 }; // 1,4
+		assertEquals(5, Lexicographic.pos3(5, 3, i4));
+        int[] i5 = { 0, 3, 4 }; // 1,3
+		assertEquals(7, Lexicographic.pos3(5, 3, i5));
+        int[] i6 = { 1, 2, 3 }; // 1,2
+		assertEquals(3, Lexicographic.pos3(5, 3, i6));
+        int[] i7 = { 1, 2, 4 }; // 0,4
+		assertEquals(6, Lexicographic.pos3(5, 3, i7));
+        int[] i8 = { 1, 3, 4 }; // 0,3
+		assertEquals(8, Lexicographic.pos3(5, 3, i8));
+        int[] i9 = { 2, 3, 4 }; // 0,2
+		assertEquals(9, Lexicographic.pos3(5, 3, i9)); // 0,1
 	}
 
 	@Test
@@ -97,28 +97,8 @@ public class TestAlternating {
 		assertEquals(1, sign(1, 2, 4, 0, 3));
 		assertEquals(-1, sign(1, 3, 4, 0, 2));
 		assertEquals(1, sign(2, 3, 4, 0, 1));
-
 	}
 
-	public void tpos(int n) {
-		int x = 0;
-		for (int i0 = 0; i0 < n; i0++) {
-			for (int i1 = i0 + 1; i1 < n; i1++) {
-				for (int i2 = i1 + 1; i2 < n; i2++) {
-					for (int i3 = i2 + 1; i3 < n; i3++) {
-						assertEquals(x++, pos(n, 4, 0, i0, i1, i2, i3));
-					}
-				}
-			}
-		}
-
-	}
-
-	@Test
-	public void testPos4() {
-		tpos(7);
-		tpos(20);
-	}
 
 	@Test
 	public void dual() {
