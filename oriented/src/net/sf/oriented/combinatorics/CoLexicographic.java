@@ -10,10 +10,10 @@ import java.util.Iterator;
 
 import com.google.common.math.IntMath;
 
-public class Lexicographic extends AbstractCollection<int[]> {
+public class CoLexicographic extends AbstractCollection<int[]> {
 	final int n, r, sz;
 
-	public Lexicographic(int n, int r) {
+	public CoLexicographic(int n, int r) {
 		this.n = n;
 		this.r = r;
 		sz = IntMath.binomial(n, r);
@@ -121,7 +121,7 @@ public class Lexicographic extends AbstractCollection<int[]> {
     }
 
     public static void main(String args[]) {
-	    Lexicographic lex = new Lexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+	    CoLexicographic lex = new CoLexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	    int i = 0;
 	    for ( int[] vals : lex ) {
 	        System.out.print(i++ +": "+pos5(vals)+": ");

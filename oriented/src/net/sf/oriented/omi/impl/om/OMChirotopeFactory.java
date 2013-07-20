@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import com.google.common.math.IntMath;
 
-import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.combinatorics.CoLexicographic;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
@@ -47,7 +47,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 		return construct(ground, new Chirotope() {
 			@Override
 			public int chi(int... i) {
-				char ch = defn.chirotope.charAt(Lexicographic.pos3(n, defn.rank, i));
+				char ch = defn.chirotope.charAt(CoLexicographic.pos3(n, defn.rank, i));
 				switch (ch) {
 				case '+':
 					return 1;

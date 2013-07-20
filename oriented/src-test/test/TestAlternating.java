@@ -10,7 +10,7 @@ import static net.sf.oriented.omi.impl.om.ChirotopeImpl.signDualBasis;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.combinatorics.CoLexicographic;
 
 import org.junit.Test;
 
@@ -37,51 +37,51 @@ public class TestAlternating {
 	@Test
 	public void testPos1() {
 		int[] i = { 0 };
-        assertEquals(0, Lexicographic.pos3(1, 1, i));
+        assertEquals(0, CoLexicographic.pos3(1, 1, i));
         int[] i1 = { 0 };
-		assertEquals(0, Lexicographic.pos3(2, 1, i1));
+		assertEquals(0, CoLexicographic.pos3(2, 1, i1));
         int[] i2 = { 0 };
-		assertEquals(0, Lexicographic.pos3(3, 1, i2));
+		assertEquals(0, CoLexicographic.pos3(3, 1, i2));
         int[] i3 = { 0, 1 };
-		assertEquals(0, Lexicographic.pos3(3, 2, i3));
+		assertEquals(0, CoLexicographic.pos3(3, 2, i3));
         int[] i4 = { 0, 1 };
-		assertEquals(0, Lexicographic.pos3(4, 2, i4));
+		assertEquals(0, CoLexicographic.pos3(4, 2, i4));
         int[] i5 = { 0, 1 };
-		assertEquals(0, Lexicographic.pos3(5, 2, i5));
+		assertEquals(0, CoLexicographic.pos3(5, 2, i5));
         int[] i6 = { 0, 1, 2 };
-		assertEquals(0, Lexicographic.pos3(4, 3, i6));
+		assertEquals(0, CoLexicographic.pos3(4, 3, i6));
         int[] i7 = { 0, 1, 2 };
-		assertEquals(0, Lexicographic.pos3(5, 3, i7));
+		assertEquals(0, CoLexicographic.pos3(5, 3, i7));
 	}
 
 	@Test
 	public void testPos2() {
 		int[] i = { 1, 3, 4 };
-        assertEquals(8, Lexicographic.pos3(5, 3, i));
+        assertEquals(8, CoLexicographic.pos3(5, 3, i));
 	}
 
 	@Test
 	public void testPos() {
 		int[] i = { 0, 1, 2 };
-        assertEquals(0, Lexicographic.pos3(5, 3, i));
+        assertEquals(0, CoLexicographic.pos3(5, 3, i));
         int[] i1 = { 0, 1, 3 }; // 3,4
-		assertEquals(1, Lexicographic.pos3(5, 3, i1));
+		assertEquals(1, CoLexicographic.pos3(5, 3, i1));
         int[] i2 = { 0, 1, 4 }; // 2,4
-		assertEquals(4, Lexicographic.pos3(5, 3, i2));
+		assertEquals(4, CoLexicographic.pos3(5, 3, i2));
         int[] i3 = { 0, 2, 3 }; // 2,3
-		assertEquals(2, Lexicographic.pos3(5, 3, i3));
+		assertEquals(2, CoLexicographic.pos3(5, 3, i3));
         int[] i4 = { 0, 2, 4 }; // 1,4
-		assertEquals(5, Lexicographic.pos3(5, 3, i4));
+		assertEquals(5, CoLexicographic.pos3(5, 3, i4));
         int[] i5 = { 0, 3, 4 }; // 1,3
-		assertEquals(7, Lexicographic.pos3(5, 3, i5));
+		assertEquals(7, CoLexicographic.pos3(5, 3, i5));
         int[] i6 = { 1, 2, 3 }; // 1,2
-		assertEquals(3, Lexicographic.pos3(5, 3, i6));
+		assertEquals(3, CoLexicographic.pos3(5, 3, i6));
         int[] i7 = { 1, 2, 4 }; // 0,4
-		assertEquals(6, Lexicographic.pos3(5, 3, i7));
+		assertEquals(6, CoLexicographic.pos3(5, 3, i7));
         int[] i8 = { 1, 3, 4 }; // 0,3
-		assertEquals(8, Lexicographic.pos3(5, 3, i8));
+		assertEquals(8, CoLexicographic.pos3(5, 3, i8));
         int[] i9 = { 2, 3, 4 }; // 0,2
-		assertEquals(9, Lexicographic.pos3(5, 3, i9)); // 0,1
+		assertEquals(9, CoLexicographic.pos3(5, 3, i9)); // 0,1
 	}
 
 	@Test

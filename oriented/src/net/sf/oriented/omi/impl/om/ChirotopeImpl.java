@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.oriented.combinatorics.CombinatoricUtils;
-import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.combinatorics.CoLexicographic;
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
@@ -47,7 +47,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 			if (i.length != r)
 				throw new IllegalArgumentException("rank is " + r + ", not "
 						+ i.length);
-			return getNthEntry(Lexicographic.pos3(ground().length, r, i.clone()));
+			return getNthEntry(CoLexicographic.pos3(ground().length, r, i.clone()));
 		}
 
 		@Override
@@ -124,7 +124,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	private void initFromChi(Chirotope chi) {
-		Lexicographic lex = new Lexicographic(chi.n(), chi.rank());
+		CoLexicographic lex = new CoLexicographic(chi.n(), chi.rank());
 		int i = 0;
 		Iterator<int[]> it = lex.iterator();
 		while (it.hasNext()) {
@@ -142,12 +142,12 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		int n = g.size();
 		int r = rank();
 
-		Lexicographic lex = new Lexicographic(n, d.rank());
+		CoLexicographic lex = new CoLexicographic(n, d.rank());
 		Iterator<int[]> it = lex.iterator();
 		while (it.hasNext()) {
 			int[] dBasis = it.next();
 			int basis[] = dualBasis(n, r, dBasis);
-			setNthEntry(Lexicographic.pos3(n, r, basis.clone()),
+			setNthEntry(CoLexicographic.pos3(n, r, basis.clone()),
 					signDualBasis(basis, dBasis) * d.chi(dBasis));
 		}
 
@@ -243,7 +243,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	private int indexFor(UnsignedSetInternal basis) {
-		return Lexicographic.pos3(ground().length, rank(), asInt(basis));
+		return CoLexicographic.pos3(ground().length, rank(), asInt(basis));
 	}
 
 	private int signFor(LabelImpl e, UnsignedSetInternal inter) {
@@ -435,7 +435,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	public SetOfUnsignedSetInternal getBases() {
-		Lexicographic lex = new Lexicographic(n(), rank());
+		CoLexicographic lex = new CoLexicographic(n(), rank());
 		Iterator<int[]> it = lex.iterator();
 		SetOfUnsignedSetFactory f = (SetOfUnsignedSetFactory) ffactory()
 				.setsOfUnsignedSet();

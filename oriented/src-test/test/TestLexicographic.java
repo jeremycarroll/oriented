@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.oriented.combinatorics.Lexicographic;
+import net.sf.oriented.combinatorics.CoLexicographic;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +31,11 @@ public class TestLexicographic {
 
 	}
 
-	final Lexicographic lex;
+	final CoLexicographic lex;
 	final int n, r;
 
 	public TestLexicographic(String nm, int n, int r) {
-		lex = new Lexicographic(n, r);
+		lex = new CoLexicographic(n, r);
 		this.n = n;
 		this.r = r;
 	}
@@ -55,7 +55,7 @@ public class TestLexicographic {
 			// for (int j=0;j<r;j++)
 			// System.err.print(seq[j]+",");
 			// System.err.println();
-			assertEquals(i, Lexicographic.pos3(n, r, seq));
+			assertEquals(i, CoLexicographic.pos3(n, r, seq));
 		}
 		assertFalse(it.hasNext());
 	}
