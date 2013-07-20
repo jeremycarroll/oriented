@@ -38,8 +38,7 @@ public class TestRealization {
 
     @Test
 	public void testToChirotope() {
-        Assert.assertTrue(
-                testDatum().getChirotope().toString().contains("+0++-0++++--0++++++0"));
+        Assert.assertTrue(testDatum().getChirotope().toString().contains("+0--+0-+++++0++++++0"));
 	}
 
 	@Test
