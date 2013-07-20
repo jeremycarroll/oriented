@@ -47,7 +47,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 		return construct(ground, new Chirotope() {
 			@Override
 			public int chi(int... i) {
-				char ch = defn.chirotope.charAt(CoLexicographic.pos3(n, defn.rank, i));
+				char ch = defn.chirotope.charAt(CoLexicographic.index(i));
 				switch (ch) {
 				case '+':
 					return 1;

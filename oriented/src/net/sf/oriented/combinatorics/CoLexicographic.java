@@ -65,19 +65,7 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 		return sz;
 	}
 	
-    /**
-     * Return the index in the lexicographic sequence of r elements from n of
-     * the sequence i.
-     * 
-     * @param n
-     * @param r
-     * @param i
-     * @return
-     */
-    public static int pos3(int n, int r,  int ... i) {
-        return pos5(i);
-    }
-    private static int pos5(int ... ix) {
+    public static int index(int ... ix) {
         int r = ix.length;
         int result = 0;
         for (int i=0;i<r;i++) {
@@ -124,7 +112,7 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 	    CoLexicographic lex = new CoLexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	    int i = 0;
 	    for ( int[] vals : lex ) {
-	        System.out.print(i++ +": "+pos5(vals)+": ");
+	        System.out.print(i++ +": "+index(vals)+": ");
 	        for (int v : vals) {
 	            System.out.print(Integer.toHexString(v)+" ");
 	        }

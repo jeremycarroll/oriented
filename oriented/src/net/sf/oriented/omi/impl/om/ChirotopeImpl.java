@@ -47,7 +47,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 			if (i.length != r)
 				throw new IllegalArgumentException("rank is " + r + ", not "
 						+ i.length);
-			return getNthEntry(CoLexicographic.pos3(ground().length, r, i.clone()));
+			return getNthEntry(CoLexicographic.index(i.clone()));
 		}
 
 		@Override
@@ -147,7 +147,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		while (it.hasNext()) {
 			int[] dBasis = it.next();
 			int basis[] = dualBasis(n, r, dBasis);
-			setNthEntry(CoLexicographic.pos3(n, r, basis.clone()),
+			setNthEntry(CoLexicographic.index(basis.clone()),
 					signDualBasis(basis, dBasis) * d.chi(dBasis));
 		}
 
@@ -243,7 +243,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 	}
 
 	private int indexFor(UnsignedSetInternal basis) {
-		return CoLexicographic.pos3(ground().length, rank(), asInt(basis));
+		return CoLexicographic.index(asInt(basis));
 	}
 
 	private int signFor(LabelImpl e, UnsignedSetInternal inter) {

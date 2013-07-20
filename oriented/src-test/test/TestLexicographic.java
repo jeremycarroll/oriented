@@ -55,7 +55,7 @@ public class TestLexicographic {
 			// for (int j=0;j<r;j++)
 			// System.err.print(seq[j]+",");
 			// System.err.println();
-			assertEquals(i, CoLexicographic.pos3(n, r, seq));
+			assertEquals(i, CoLexicographic.index(seq));
 		}
 		assertFalse(it.hasNext());
 	}
