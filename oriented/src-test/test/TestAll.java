@@ -26,7 +26,8 @@ import org.junit.runners.Suite.SuiteClasses;
     TestDualRealizedHash.class, 
     TestExamples.class,
     TestPermutations.class,
-    TestRealization.class
+    TestRealization.class,
+    TestGrassmannPlucker.class
 
 })
 @RunWith(Suite.class)
