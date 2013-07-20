@@ -14,10 +14,17 @@ import junit.framework.Assert;
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMS;
 import net.sf.oriented.omi.Options;
+import net.sf.oriented.omi.SetOfSignedSet;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.impl.om.OMInternal;
+import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestPermutations {
@@ -121,7 +128,7 @@ public class TestPermutations {
     @Test
     public void testSym16_25_chap1() {
         // note off by one issue ... :(
-        testSym(Examples.chapter1,new Permutation(6,new int[][]{ { 0, 5 }, {1, 4} }),true);
+        testSym(Examples.chapter1(),new Permutation(6,new int[][]{ { 0, 5 }, {1, 4} }),true);
         
     }
 
@@ -136,24 +143,72 @@ public class TestPermutations {
      */
     @Test
     public void testNotSym16_chap1() {
-        testSym(Examples.chapter1,new Permutation(6,new int[][]{ { 0, 5 } }),false);
+        testSym(Examples.chapter1(),new Permutation(6,new int[][]{ { 0, 5 } }),false);
         
     }
     
+    SetOfSignedSet setsWithZeroOrOneMinus(OMS om) {
+        FactoryFactory f = ((OMInternal)om).ffactory();
+        @SuppressWarnings("unchecked")
+        JavaSet<SignedSet> rslt = (JavaSet<SignedSet>) f.signedSets().emptyCollectionOf();
+        for (SignedSet ss:(SetOfSignedSetInternal)om) {
+            if (ss.minus().size()<=1) {
+                rslt.add(ss);
+            }
+        }
+        return f.setsOfSignedSet().copyBackingCollection(rslt);
+    }
+    
+    @Ignore
+    @Test
+    public void testRingel() {
+        
+        System.err.println(Examples.ringel().dual().getMaxVectors());
+        System.err.println(setsWithZeroOrOneMinus(Examples.ringel().dual().getMaxVectors()));
+        testReorientation(Examples.ringel(), 1, 60, 3, 4);
+    }
     @Test
     public void testAutomorphismsChap1() {
-        Assert.assertEquals(2,automorphisms(Examples.chapter1));
+        Assert.assertEquals(2,automorphisms(Examples.chapter1()));
     }
 
+ 
+
+    @Test
+    public void testTopesAutomorphismsChap1Chirotope() {
+        System.err.println(Examples.chapter1().dual().getMaxVectors());
+
+        Label g[] = Examples.chapter1().ground();
+        OM reorientedB = Examples.chapter1().getChirotope().reorient(g[2],g[4]);
+        
+        System.err.println("Reoriented: "+g[2]+", "+g[4]);
+        System.err.println(reorientedB.dual().getMaxVectors());
+        Assert.assertFalse(Examples.chapter1().dual().getMaxVectors().sameSetAs(reorientedB.dual().getMaxVectors()));
+//        Assert.assertEquals(2,automorphisms(Examples.chapter1));
+    }
+    
+    @Ignore
+    @Test
+    public void testTopesAutomorphismsChap1Circuits() {
+        System.err.println(Examples.chapter1().dual().getMaxVectors());
+
+        Label g[] = Examples.chapter1().ground();
+        OM reorientedB = Examples.chapter1().getCircuits().reorient(g[2],g[4]);
+        
+//        System.err.println("Reoriented: "+g[2]+", "+g[4]);
+//        System.err.println(reorientedB.dual().getMaxVectors());
+        Assert.assertFalse(Examples.chapter1().dual().getMaxVectors().sameSetAs(reorientedB.dual().getMaxVectors()));
+//        Assert.assertEquals(2,automorphisms(Examples.chapter1));
+    }
     @Test
     public void testAutomorphismsSaw3() {
 //        System.err.println(Examples.circularSaw3.dual().getCircuits());
-        automorphisms(Examples.circularSaw3);
+        automorphisms(Examples.circularsaw3());
     }
 
     @Test
     public void testAutomorphismsUniform4() {
-        Assert.assertEquals(8,automorphisms(Examples.uniform4));
+        Assert.assertEquals(8,automorphisms(Examples.uniform4()));
     }
     private int automorphisms(OM om) {
         int cnt = 0;
@@ -178,17 +233,17 @@ public class TestPermutations {
     
     @Test
     public void testReorientation() {
-        testReorientation(Examples.circularSaw3, 1, 60, 3, 4);
+        testReorientation(Examples.circularsaw3(), 1, 60, 3, 4);
     }
     @Test
     public void testReorientationHash() {
-        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularSaw3.getCircuits()),
+        testReorientation(new FactoryFactory(new Options(Options.Impl.hash)).circuits().remake(Examples.circularsaw3().getCircuits()),
                 1, 60, 3, 4);
     }
     
     @Test
     public void testReorientationChap1() {
-        testReorientation(Examples.chapter1, 2, 24, 3, 8);
+        testReorientation(Examples.chapter1(), 2, 24, 3, 8);
     }
     private void testReorientation(OM om, int ... expected) {
         @SuppressWarnings("unused")
@@ -210,8 +265,9 @@ public class TestPermutations {
                  3
         };
         int nn = om.n()-1;
+        Assert.assertTrue(nn<12);
         for (int i=0;i<(1<<nn);i++) {
-            int cnt = bitcnt[i&7] + bitcnt[i>>3];
+            int cnt = bitcnt[i&7] + bitcnt[(i>>3)&7] + bitcnt[(i>>6)&7] + bitcnt[(i>>9)&7];
             Label axes[] = new Label[cnt];
             int k = 0;
             for (int j=0;j<nn;j++) {
@@ -221,14 +277,25 @@ public class TestPermutations {
             }
             circuitsTime -= System.nanoTime();
             OM reorientedA = om.getCircuits().reorient(axes);
+//            Assert.assertFalse(om.dual().getMaxVectors().sameSetAs(reorientedA.dual().getMaxVectors()));
             circuitsTime += System.nanoTime();
             chiroTime -= System.nanoTime();
             OM reorientedB = om.getChirotope().reorient(axes);
+//            Assert.assertFalse(om.dual().getMaxVectors().sameSetAs(reorientedB.dual().getMaxVectors()));
+            
             chiroTime += System.nanoTime();
             Assert.assertEquals(reorientedA, reorientedB);
  //           System.err.println(this.stabilizer(reoriented));
             autoTime -= System.nanoTime();
             int sz = (int) reorientedA.automorphisms().order();
+            if (false && sz==3) {
+                System.err.print("Auto: " + Integer.toString(i, 2));
+                for (Label l : axes) {
+                    System.err.print(" "+l.label());
+                }
+                System.err.println();
+                System.err.println(setsWithZeroOrOneMinus(reorientedA.dual().getMaxVectors()));
+            }
             autoTime += System.nanoTime();
             counts[sz]++;
             
@@ -236,6 +303,7 @@ public class TestPermutations {
         int k=0;
         for (int j=0;j<counts.length;j++)
             if (counts[j]!=0) {
+//                System.err.println(j+" "+counts[j]);
                 Assert.assertEquals(expected[k++], j);
                 Assert.assertEquals(expected[k++], counts[j]);
             }
@@ -246,7 +314,7 @@ public class TestPermutations {
 
     @Test
     public void testPermuteGroundExampleChapter1() {
-        testPerms(Examples.chapter1);
+        testPerms(Examples.chapter1());
     }
 
     private void testPerms(OM om) {

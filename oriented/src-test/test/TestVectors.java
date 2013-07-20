@@ -27,7 +27,7 @@ public class TestVectors {
 	// static UnsignedSet e;
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		vectors = chapter1.getVectors();
+		vectors = chapter1().getVectors();
 	}
 
 	@Test

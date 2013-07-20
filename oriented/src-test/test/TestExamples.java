@@ -66,21 +66,23 @@ public class TestExamples {
          * [2]=(7071,7071,21213)      θ = 45
          * [3]=(10000,0,10000)        θ = 90
          */
-        Assert.assertEquals(Examples.uniform4, 
+        Assert.assertEquals(Examples.uniform4(), 
                 fromEuclideanLines);
     }
     
     @Test
     public void testΠάππος() {
         // There are nine points of intersection in Pappus's construction.
-        Assert.assertTrue( Examples.πάππος.getChirotope().toShortString().matches("^.*0.*0.*0.*0.*0.*0.*0.*0.*0.*$") );
+        Assert.assertTrue( Examples.πάππος().getChirotope().toShortString().matches("^.*0.*0.*0.*0.*0.*0.*0.*0.*0.*$") );
         
     }
     @Test
     public void testCeva() {
         // There are four points of intersection in Ceva's construction.
-       Assert.assertTrue( Examples.ceva.getChirotope().toShortString().matches("^.*0.*0.*0.*0.*$") );
+       Assert.assertTrue( Examples.ceva().getChirotope().toShortString().matches("^.*0.*0.*0.*0.*$") );
     }
+    
+   
     @Test
     public void testFromCrossing() {
         OM fromEuclideanCrossings = Examples.fromCrossings(
@@ -94,7 +96,7 @@ public class TestExamples {
          * [2]=(7071,7071,21213)      θ = 45
          * [3]=(10000,0,10000)        θ = 90
          */
-        Assert.assertEquals(Examples.uniform4.dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
+        Assert.assertEquals(Examples.uniform4().dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
     }
 }
 

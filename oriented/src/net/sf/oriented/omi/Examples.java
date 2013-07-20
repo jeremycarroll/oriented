@@ -19,37 +19,15 @@ import net.sf.oriented.matrix.RationalMatrix;
  */
 public class Examples {
     
-    /**
-     * This is from the Oriented Matroid book {@link Bibliography#bj�rnerEtAl1999}
-     */
-    public final static OM chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+    private static OM chapter1;
     
-    public final static OM uniform3 = fromChirotope(3, 3, "+" );
-    public final static OM uniform4 = fromChirotope(4, 3, "++++" );
-    /**
-     * See {@link Bibliography#ceva1678}
-     */
-    public final static OM ceva = fromCrossings("0:ABCDEF",
-             "A:0(BC)D(EF)",
-             "B:0(AC)(DF)E",
-             "C:0(AB)F(DE)",
-             "D:0A(BF)(CE)",
-             "E:0(AF)B(CD)",
-             "F:0(AE)(BD)C");
-            
-    public final static OM pappus = fromCrossings(
-            "0:(12)(34)5(67)8",
-            "1:(02)4(35)7(68)",
-            "2:(01)(48)(57)63",
-            "3:(04)(15)(78)62",
-            "4:(03)1(28)7(56)",
-            "5:0(13)8(27)(46)",
-            "6:(07)(18)32(45)",
-            "7:(06)1(38)(25)4",
-            "8:0(16)(37)5(24)"
-            );  
+    private static OM uniform3;
+    private static OM uniform4;
+    private static OM ceva;
 
-    public final static OM πάππος = pappus;
+    private static OM πάππος;
+    
+    private static OM ringel;  
     /* Draw a circular saw on squared paper and take the co-ordinates of two
      * points on each line
      *
@@ -57,20 +35,7 @@ public class Examples {
     /**
      * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
      */
-    public final static OM circularSaw3 = fromEuclideanLines(new int[][][] {
-            // here is the first line, two points
-            { { 10, 75 }, { 65, 90 } },
-            // here is the second line, two points
-            { { 10, 75 }, { 65, 75 } }, 
-            // notice that in the circular saw construction we have the pointy bits
-            // as the obvious point to specify both lines going through it.
-            { { 40, 75 }, { 85, 10 } }, 
-            { { 85, 10 }, { 55, 75 } },
-            { { 70, 40 }, { 65, 120 } },
-            { { 65, 60 }, { 65, 120 } },
-            }
-
-    );
+    private static OM circularSaw3;
 
     public static OM fromChirotope(int n, int r, String chi) {
         Options opt = new Options();
@@ -87,6 +52,8 @@ public class Examples {
     }
 
     static FactoryFactory f;
+
+    private static boolean FreshEachTime = true;
 
     static {
         Options options = new Options();
@@ -176,7 +143,7 @@ public class Examples {
             }
             opt.setUniverse(ground);
             if (!Arrays.equals(ground, toStrippedArray(crossings[0]))) {
-                throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (1)");
+                throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (1): "+crossings[0]);
             }
             String sortedG[] = new String[ground.length];
             System.arraycopy(ground, 0, sortedG, 0, ground.length);
@@ -184,14 +151,14 @@ public class Examples {
             for (int i=1;i<crossings.length;i++) {
                 String stripped[] = toStrippedArray(crossings[i]);
                 if (!stripped[0].equals(ground[i])) {
-                    throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (2)");
+                    throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (2): "+crossings[i]);
                 }
                 if (!stripped[1].equals(ground[0])) {
-                    throw new IllegalArgumentException("First of each crossing must be the line at infinity");
+                    throw new IllegalArgumentException("First of each crossing must be the line at infinity: "+crossings[i]);
                 }
                 Arrays.sort(stripped);
                 if (!Arrays.equals(sortedG, stripped)) {
-                    throw new IllegalArgumentException("Each line should cross every other line exactly once");
+                    throw new IllegalArgumentException("Each line should cross every other line exactly once: "+crossings[i]);
                 }
             }
             for (int i=0;i<crossings.length;i++) {
@@ -319,6 +286,105 @@ public class Examples {
      */
     public static OM fromCrossings( String ... crossings) { 
         return new Crossings(crossings).om();
+    }
+
+    /**
+     * This is from the Oriented Matroid book {@link Bibliography#björnerEtAl1999}
+     */
+    public static OM chapter1() {
+        if (chapter1 == null || FreshEachTime) {
+            chapter1 = fromCircuits("{12'4,13'5,23'6,45'6,12'56',13'46,23'4'5}");
+        }
+        return chapter1;
+    }
+
+    public static OM uniform3() {
+        if (uniform3 == null || FreshEachTime) {
+            uniform3 = fromChirotope(3, 3, "+" );
+        }
+        return uniform3;
+    }
+
+    public static OM uniform4() {
+        if (uniform4 == null || FreshEachTime) {
+            uniform4  = fromChirotope(4, 3, "++++" );
+        }
+        return uniform4;
+    }
+
+    /**
+     * See {@link Bibliography#ceva1678}
+     */
+    public static OM ceva() {
+        if (ceva == null || FreshEachTime) {
+            ceva  = fromCrossings("0:ABCDEF",
+                    "A:0(BC)D(EF)",
+                    "B:0(AC)(DF)E",
+                    "C:0(AB)F(DE)",
+                    "D:0A(BF)(CE)",
+                    "E:0(AF)B(CD)",
+                    "F:0(AE)(BD)C");
+        }
+        return ceva;
+    }
+
+    public static OM pappus() {
+        return πάππος();
+    }
+
+    public static OM πάππος() {
+        if (πάππος == null || FreshEachTime) {
+            πάππος  = fromCrossings(
+                    "0:(12)(34)5(67)8",
+                    "1:(02)4(35)7(68)",
+                    "2:(01)(48)(57)63",
+                    "3:(04)(15)(78)62",
+                    "4:(03)1(28)7(56)",
+                    "5:0(13)8(27)(46)",
+                    "6:(07)(18)32(45)",
+                    "7:(06)1(38)(25)4",
+                    "8:0(16)(37)5(24)"
+                    );
+        }
+        return πάππος;
+    }
+
+    public static OM ringel() {
+        if (ringel == null || FreshEachTime) {
+        ringel = fromCrossings(
+                "0:98765321",
+                "9:07631582",
+                "8:07653192",
+                "7:08963152",
+                "6:08971235",
+                "5:08319726",
+                "3:08597126",
+                "2:01987536",
+                "1:02859736"
+                );
+        }
+        return ringel;
+    }
+
+    public static OM circularsaw3() {
+        if (circularSaw3 == null || FreshEachTime) {
+            circularSaw3= fromEuclideanLines(new int[][][] {
+                    // here is the first line, two points
+                    { { 10, 75 }, { 65, 90 } },
+                    // here is the second line, two points
+                    { { 10, 75 }, { 65, 75 } }, 
+                    // notice that in the circular saw construction we have the pointy bits
+                    // as the obvious point to specify both lines going through it.
+                    { { 40, 75 }, { 85, 10 } }, 
+                    { { 85, 10 }, { 55, 75 } },
+                    { { 70, 40 }, { 65, 120 } },
+                    { { 65, 60 }, { 65, 120 } },
+                    }
+
+            );
+            
+        }
+        return circularSaw3;
     }
 }
 

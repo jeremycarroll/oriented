@@ -27,7 +27,7 @@ public class TestMatroid {
 
 	@Test
 	public void testM() {
-		Matroid m = chapter1.getMatroid();
+		Matroid m = chapter1().getMatroid();
 		testMatroid(m);
 		testMatroid(m.dual());
 	}

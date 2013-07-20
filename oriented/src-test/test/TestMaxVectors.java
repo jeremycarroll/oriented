@@ -27,7 +27,7 @@ public class TestMaxVectors {
 	// static UnsignedSet e;
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		vectors = chapter1.getMaxVectors();
+		vectors = chapter1().getMaxVectors();
 	}
 
 	@Test

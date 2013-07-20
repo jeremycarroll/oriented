@@ -43,7 +43,7 @@ public class TestRealization {
 
 	@Test
 	public void testEquals() {
-	    Assert.assertTrue(testDatum().equals(Examples.chapter1));
+	    Assert.assertTrue(testDatum().equals(Examples.chapter1()));
 	}
 
     static FactoryFactory getFactory(Options.Impl impl) {

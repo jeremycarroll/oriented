@@ -39,15 +39,15 @@ public class TestCircuits {
 
 	@Test
 	public void testVerify() throws AxiomViolation {
-		chapter1.verify();
+		chapter1().verify();
 		assertFalse("tooLittle", TestAll.verify(tooLittle));
 		assertFalse("tooMuch", TestAll.verify(tooMuch));
 	}
 	
 	@Test
 	public void testToString() {
-        testToString(chapter1);
-        testToString(chapter1.dual());
+        testToString(chapter1());
+        testToString(chapter1().dual());
 	    
 	}
 
