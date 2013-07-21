@@ -2,34 +2,54 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.items;
 
-import net.sf.oriented.impl.om.OMSInternal;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.LabelFactory;
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
+public class LabelImpl extends HasFactoryImpl<LabelImpl, Label, LabelImpl>
+		implements Label, Comparable<Label> {
+	final String label;
+	final private int ordinal;
+
+	public LabelImpl(String a, LabelFactory f, int ord) {
+		super(f);
+		label = a;
+		ordinal = ord;
+	}
+
+	@Override
+	public int hashCode() {
+		return label.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		LabelImpl l = (LabelImpl) o;
+		return l == this
+				|| (l != null && factory() != l.factory() && label
+						.equals(l.label));
+
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
+	 * @see omi.LabelX#label()
 	 */
 	@Override
-	OMS empty();
+	public String label() {
+		return label;
+	}
 
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
+	@Override
+	public int compareTo(Label arg0) {
+		return label.compareTo(arg0.label());
+	}
 
+	public int ordinal() {
+		return ordinal;
+	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

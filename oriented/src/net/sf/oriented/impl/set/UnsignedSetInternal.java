@@ -2,33 +2,19 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.set;
 
-import net.sf.oriented.impl.om.OMSInternal;
+import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.util.combinatorics.Permutation;
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
-	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
-	 */
-	@Override
-	OMS empty();
+public interface UnsignedSetInternal
+		extends
+		SetOfInternal<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal>,
+		UnsignedSet {
 
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
+    UnsignedSetInternal permuteUniverse(Permutation universePermuter);
 
 }
 /************************************************************************

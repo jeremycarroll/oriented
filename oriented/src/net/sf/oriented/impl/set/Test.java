@@ -2,34 +2,10 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.set;
 
-import net.sf.oriented.impl.om.OMSInternal;
-
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
-	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
-	 */
-	@Override
-	OMS empty();
-
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
-
+public interface Test<S> {
+	boolean test(S e);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

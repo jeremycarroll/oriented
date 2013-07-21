@@ -2,34 +2,28 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.items;
 
-import net.sf.oriented.impl.om.OMSInternal;
+import net.sf.oriented.omi.Factory;
+/**
+ * 
+ * Things that have factories.
+ * @author jeremycarroll
+ *
+ * @param <ITEM_INTERNAL> The internal API or implementation for things.
+ * @param <ITEM> The external API for things.
+ * @param <ITEM_INTERNAL2> See {@link net.sf.oriented.impl.util.TypeChecker}
+ */
+//@formatter:off
+public interface HasFactory<
+    ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
+    ITEM, 
+    ITEM_INTERNAL2 extends ITEM> 
+{
+//@formatter:on
+	FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> factory();
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
-	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
-	 */
-	@Override
-	OMS empty();
-
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
-
+	String toString(Factory<ITEM> f);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

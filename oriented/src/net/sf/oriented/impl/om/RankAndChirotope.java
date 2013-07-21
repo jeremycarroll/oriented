@@ -2,34 +2,33 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+/**
+ * Copyright 2007, Jeremy J. Carroll
+ */
+package net.sf.oriented.impl.om;
 
-import net.sf.oriented.impl.om.OMSInternal;
+import java.util.regex.Pattern;
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
-	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
-	 */
-	@Override
-	OMS empty();
+import com.google.common.math.IntMath;
 
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
 
+class RankAndChirotope {
+    private static Pattern chi = Pattern.compile("^[+0-]*$");
+	final String chirotope;
+	final int rank;
+    public RankAndChirotope(int rank, String chirotope) {
+        this.rank = rank;
+        this.chirotope = chirotope;
+    }
+    public void checkSize(int n) {
+        if ( IntMath.binomial(n, rank) != chirotope.length() ) {
+            throw new IllegalArgumentException("Chirotope of wrong length: "
+                       + chirotope.length() + " != " + n + "C" + rank );
+        }
+        if (! chi.matcher(chirotope).matches() ) {
+            throw new IllegalArgumentException("Chirotope must be only +, -, 0");
+        }
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

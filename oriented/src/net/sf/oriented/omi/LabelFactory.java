@@ -13,10 +13,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.oriented.omi.impl.items.FactoryImpl;
-import net.sf.oriented.omi.impl.items.LabelImpl;
-import net.sf.oriented.omi.impl.items.ParseContext;
-import net.sf.oriented.util.Misc;
+import net.sf.oriented.impl.items.FactoryImpl;
+import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.impl.items.ParseContext;
+import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.util.combinatorics.Group;
 import net.sf.oriented.util.combinatorics.Permutation;
 

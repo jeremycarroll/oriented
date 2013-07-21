@@ -2,33 +2,36 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.om;
 
-import net.sf.oriented.impl.om.OMSInternal;
+// TODO: maybe refactor some functionality into this enum
+public enum Cryptomorphisms {
+	CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED,
+	// MUST be half way, those below are duals of those above. Must be even
+	// number.
+	COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), 
+	DUALCHIROTOPE(CHIROTOPE), DUALREALIZED(REALIZED);
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
-	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
-	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
-	 */
-	@Override
-	OMS empty();
+	private Cryptomorphisms dual;
+	private final boolean isDualForm;
 
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
+	Cryptomorphisms() {
+		isDualForm = false;
+	}
+
+	Cryptomorphisms(Cryptomorphisms dual) {
+		this.dual = dual;
+		dual.dual = this;
+		isDualForm = true;
+	}
+
+	public Cryptomorphisms getDual() {
+		return dual;
+	}
+
+	public boolean isDualForm() {
+		return isDualForm;
+	}
 
 }
 /************************************************************************

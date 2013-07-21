@@ -8,7 +8,8 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.oriented.util.Misc;
+import net.sf.oriented.impl.set.AbsSetImpl;
+import net.sf.oriented.impl.util.Misc;
 
 /**
  * Provide the options for String representations. See
@@ -41,8 +42,7 @@ public class Options {
 	    this(Options.Impl.bits32);
     }
 	public Options(Impl hash) {
-        implementation = Options.class.getPackage().getName()
-                + ".impl.set." + hash.name() +".";
+        implementation = AbsSetImpl.class.getPackage().getName() + "."+ hash.name() +".";
     }
 
     // TODO: how to hide this.

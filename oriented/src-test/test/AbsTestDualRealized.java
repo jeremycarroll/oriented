@@ -4,8 +4,8 @@
 package test;
 
 import junit.framework.Assert;
+import net.sf.oriented.impl.om.OMAll;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.impl.om.OMAll;
 
 import org.junit.Test;
 

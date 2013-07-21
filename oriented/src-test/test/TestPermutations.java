@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.Assert;
+import net.sf.oriented.impl.om.OMInternal;
+import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
@@ -22,8 +24,6 @@ import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.om.OMInternal;
-import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.util.combinatorics.Permutation;
 
 import org.junit.Test;

@@ -5,8 +5,8 @@
 
 package test;
 
+import net.sf.oriented.impl.om.OMAll;
 import net.sf.oriented.omi.Options;
-import net.sf.oriented.omi.impl.om.OMAll;
 
 
 public class TestDualRealizedHash extends AbsTestDualRealized {

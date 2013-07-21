@@ -4,14 +4,14 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-import net.sf.oriented.omi.impl.om.MatroidFactory;
-import net.sf.oriented.omi.impl.om.OMChirotopeFactory;
-import net.sf.oriented.omi.impl.om.OMFactory;
-import net.sf.oriented.omi.impl.om.OMRealizedFactory;
-import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
-import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
-import net.sf.oriented.omi.impl.set.SignedSetFactory;
-import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
+import net.sf.oriented.impl.om.MatroidFactory;
+import net.sf.oriented.impl.om.OMChirotopeFactory;
+import net.sf.oriented.impl.om.OMFactory;
+import net.sf.oriented.impl.om.OMRealizedFactory;
+import net.sf.oriented.impl.set.SetOfSignedSetFactory;
+import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.UnsignedSetFactory;
 
 /**
  * This class generates {@link Factory}'s and {@link SetFactory}'s for the

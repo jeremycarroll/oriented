@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.oriented.impl.om.Cryptomorphisms;
+import net.sf.oriented.impl.om.OMAll;
+import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
@@ -24,9 +27,6 @@ import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SetOfSignedSet;
-import net.sf.oriented.omi.impl.om.Cryptomorphisms;
-import net.sf.oriented.omi.impl.om.OMAll;
-import net.sf.oriented.omi.impl.om.OMInternal;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -2,33 +2,39 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi;
+package net.sf.oriented.impl.om;
 
-import net.sf.oriented.impl.om.OMSInternal;
+import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Matroid;
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
+public interface MatroidInternal extends Matroid {
+
 	/**
-	 * This does not, and will not, work. This is inherited from the
-	 * {@link SetFactory} interface, and is not appropriate for Oriented
-	 * Matroids.
+	 * Not part of API
 	 * 
-	 * @return Never.
-	 * @throws UnsupportedOperationException
-	 *             Always.
+	 * @return
 	 */
+	MatroidAll asAll();
+
 	@Override
-	OMS empty();
+	public MatroidCircuits getCircuits();
 
-	/**
-	 * 
-	 * @param ground
-	 *            The ground set from which the symmetric sets are taken.
-	 * @param sym
-	 *            A symmetric set of signed sets, satisfying all the relevant
-	 *            axioms.
-	 * @return A new Oriented Matroid, based on the signed sets.
-	 */
-	OMSInternal fromSignedSets(Label[] ground, SetOfSignedSet sym);
+	@Override
+	public Bases getBases();
+
+	@Override
+	public MatroidInternal dual();
+
+	@Override
+	public int rank();
+
+	@Override
+	public LabelImpl[] ground();
+
+
+	FactoryFactory ffactory();
+
 
 }
 /************************************************************************
