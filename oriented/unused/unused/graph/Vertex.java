@@ -2,32 +2,27 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.graph;
+package unused.graph;
 
-public class Edge {
-
+public class Vertex {
 	final public String label;
-	final public Vertex from, to;
 
-	public Edge(String s, Vertex f, Vertex t) {
+	public Vertex(String s) {
 		label = s;
-		from = f;
-		to = t;
 	}
 
 	@Override
 	public int hashCode() {
-		return label.hashCode() + 5 * from.hashCode() + 73 * to.hashCode();
+		return label.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
 			return false;
-		if (!(o instanceof Edge))
+		if (!(o instanceof Vertex))
 			return false;
-		Edge e = (Edge) o;
-		return e.label.equals(label) && e.from.equals(from) && e.to.equals(to);
+		return ((Vertex) o).label.equals(label);
 	}
 }
 /************************************************************************

@@ -2,28 +2,21 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.graph;
+package unused.graph;
 
-public class Vertex {
-	final public String label;
+import java.util.Collection;
 
-	public Vertex(String s) {
-		label = s;
+public class DGraph // extends SetImpl<Edge,DGraph> {
+{
+
+	public DGraph(Collection<Edge> a) {
+		// / super(a,true);
 	}
 
-	@Override
-	public int hashCode() {
-		return label.hashCode();
+	public DGraph useCollection(Collection<Edge> r) {
+		return new DGraph(r);
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		if (!(o instanceof Vertex))
-			return false;
-		return ((Vertex) o).label.equals(label);
-	}
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
