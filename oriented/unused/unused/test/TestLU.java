@@ -3,14 +3,12 @@
   
  ************************************************************************/
 
-package test;
+package unused.test;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import junit.framework.Assert;
-import net.sf.oriented.matrix.FieldLUDecomposition;
-import net.sf.oriented.matrix.MatrixUtil;
 import net.sf.oriented.matrix.PerisicFieldElement;
 import net.sf.oriented.matrix.RationalMatrix;
 
@@ -19,7 +17,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 
+import test.BetterParameterized;
 import test.BetterParameterized.TestName;
+import unused.matrix.FieldLUDecomposition;
+import unused.matrix.MatrixUtil;
 
 @RunWith(BetterParameterized.class)
 public class TestLU {

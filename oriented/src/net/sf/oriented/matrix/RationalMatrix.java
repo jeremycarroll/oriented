@@ -12,6 +12,7 @@ import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrixChangingVisitor;
 import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
 
+
 public class RationalMatrix {
 
 	private final FieldMatrix<PerisicFieldElement> delegate;

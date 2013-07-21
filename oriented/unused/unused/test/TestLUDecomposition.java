@@ -3,10 +3,9 @@
   
  ************************************************************************/
 
-package test;
+package unused.test;
 
 
-import net.sf.oriented.matrix.FieldLUDecomposition;
 import net.sf.oriented.matrix.PerisicFieldElement;
 import net.sf.oriented.matrix.RationalMatrix;
 
@@ -16,6 +15,8 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealMatrixPreservingVisitor;
 import org.junit.Assert;
 import org.junit.Test;
+
+import unused.matrix.FieldLUDecomposition;
 
 
 public class TestLUDecomposition {

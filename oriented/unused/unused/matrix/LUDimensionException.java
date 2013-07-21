@@ -3,7 +3,7 @@
   
  ************************************************************************/
 
-package net.sf.oriented.matrix;
+package unused.matrix;
 
 @SuppressWarnings("serial")
 public class LUDimensionException extends IllegalArgumentException {

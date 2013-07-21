@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+
 @SuiteClasses({ 
     TestAlternating.class, 
     TestCircuits.class,    
@@ -22,8 +23,6 @@ import org.junit.runners.Suite.SuiteClasses;
     TestMSet.class, 
     TestSignedSet.class,
     TestVectors.class, 
-    TestLU.class, 
-    TestLUDecomposition.class, 
     TestGramSchmidt.class,
     TestDualRealizedBits32.class, 
     TestDualRealizedHash.class, 

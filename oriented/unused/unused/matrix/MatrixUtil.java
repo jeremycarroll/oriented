@@ -3,7 +3,7 @@
   
  ************************************************************************/
 
-package net.sf.oriented.matrix;
+package unused.matrix;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;

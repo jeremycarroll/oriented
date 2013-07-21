@@ -37,7 +37,7 @@
  * limitations under the License.
  */
 
-package net.sf.oriented.matrix;
+package unused.matrix;
 
 import java.lang.reflect.Array;
 
