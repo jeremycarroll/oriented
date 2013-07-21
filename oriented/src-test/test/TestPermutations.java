@@ -311,7 +311,7 @@ public class TestPermutations {
             }
             circuitsTime -= System.nanoTime();
             OM reorientedA = om.getCircuits().reorient(axes);
-            if (om.dual().getMaxVectors().sameSetAs(reorientedA.dual().getMaxVectors())) {
+            if ( i != 0 && om.dual().getMaxVectors().sameSetAs(reorientedA.dual().getMaxVectors())) {
                 System.err.print("Auto: " + Integer.toString(i, 2));
                 for (Label l : axes) {
                     System.err.print(" "+l.label());
