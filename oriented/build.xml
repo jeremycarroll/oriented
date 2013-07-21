@@ -47,10 +47,9 @@
         	     nonavbar="false" 
         	       notree="false" 
         	  packagenames="net.sf.oriented.combinatorics,
-        	                net.sf.oriented.graph,
                             net.sf.oriented.matrix,
-                            net.sf.oriented.util,
         	                net.sf.oriented.omi" 
+        	      overview="src/overview.html"
         	        source="1.7" 
         	    sourcepath="src" 
         	    splitindex="false" 
