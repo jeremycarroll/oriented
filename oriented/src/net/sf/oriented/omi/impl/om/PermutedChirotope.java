@@ -3,8 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.FullChirotope;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 class PermutedChirotope implements FullChirotope {
 

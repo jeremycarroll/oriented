@@ -6,7 +6,7 @@ package net.sf.oriented.omi;
 
 import java.util.Arrays;
 
-import net.sf.oriented.combinatorics.CombinatoricUtils;
+import net.sf.oriented.util.combinatorics.CombinatoricUtils;
 
 /**
  * 

@@ -5,7 +5,7 @@
 
 package net.sf.oriented.omi;
 
-import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 public interface OMRealized extends OM {
 

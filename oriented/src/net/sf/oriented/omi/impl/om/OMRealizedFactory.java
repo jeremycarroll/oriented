@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.oriented.matrix.PerisicField;
-import net.sf.oriented.matrix.PerisicFieldElement;
-import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.util.matrix.PerisicField;
+import net.sf.oriented.util.matrix.PerisicFieldElement;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 public class OMRealizedFactory extends
 		AbsMatroidFactory<OMRealized, RationalMatrix> implements RealizedFactory {

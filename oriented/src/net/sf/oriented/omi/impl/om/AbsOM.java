@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
@@ -12,6 +11,7 @@ import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 

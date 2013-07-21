@@ -3,7 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set.bits32;
 
-import net.sf.oriented.combinatorics.Permutation;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 
 public class SmartPermutation extends Permutation {

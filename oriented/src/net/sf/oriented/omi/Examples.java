@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 /**
  * Here are some 'interesting' oriented matroids. Of course, all we mean by

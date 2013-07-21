@@ -9,14 +9,14 @@ import static net.sf.oriented.omi.impl.om.Cryptomorphisms.REALIZED;
 
 import java.util.Iterator;
 
-import net.sf.oriented.matrix.GramSchmidt;
-import net.sf.oriented.matrix.PerisicFieldElement;
-import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.util.matrix.GramSchmidt;
+import net.sf.oriented.util.matrix.PerisicFieldElement;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 public class RealizedImpl extends AbsOM implements OMRealized {
 

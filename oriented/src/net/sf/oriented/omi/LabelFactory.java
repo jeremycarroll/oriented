@@ -13,12 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.oriented.combinatorics.Group;
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.impl.items.FactoryImpl;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.util.Misc;
+import net.sf.oriented.util.combinatorics.Group;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 public class LabelFactory extends FactoryImpl<LabelImpl, Label, LabelImpl> {
 

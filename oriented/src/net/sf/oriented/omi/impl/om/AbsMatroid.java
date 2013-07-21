@@ -7,7 +7,6 @@ package net.sf.oriented.omi.impl.om;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.FactoryFactory;
@@ -19,6 +18,7 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+import net.sf.oriented.util.combinatorics.Group;
 
 abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 		MatroidInternal, MatroidS {

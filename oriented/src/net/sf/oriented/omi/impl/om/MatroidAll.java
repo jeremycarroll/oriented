@@ -6,11 +6,11 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Arrays;
 
-import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.util.combinatorics.Group;
 
 public class MatroidAll implements MatroidInternal {
 

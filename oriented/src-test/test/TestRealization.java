@@ -6,11 +6,11 @@
 package test;
 
 import junit.framework.Assert;
-import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.Options;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 import org.junit.Test;
 

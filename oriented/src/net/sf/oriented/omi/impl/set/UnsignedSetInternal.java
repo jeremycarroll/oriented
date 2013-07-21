@@ -4,10 +4,10 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.set;
 
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 public interface UnsignedSetInternal
 		extends

@@ -6,8 +6,8 @@
 package unused.test;
 
 
-import net.sf.oriented.matrix.PerisicFieldElement;
-import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.util.matrix.PerisicFieldElement;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 import org.apache.commons.math3.linear.BlockFieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;

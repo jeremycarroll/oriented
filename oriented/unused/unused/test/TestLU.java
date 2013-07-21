@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import junit.framework.Assert;
-import net.sf.oriented.matrix.PerisicFieldElement;
-import net.sf.oriented.matrix.RationalMatrix;
+import net.sf.oriented.util.matrix.PerisicFieldElement;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.junit.Test;

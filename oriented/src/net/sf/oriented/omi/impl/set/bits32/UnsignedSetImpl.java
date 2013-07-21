@@ -7,7 +7,6 @@ package net.sf.oriented.omi.impl.set.bits32;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.UnsignedSet;
@@ -15,6 +14,7 @@ import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 final public class UnsignedSetImpl
 		extends

@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.combinatorics;
+package net.sf.oriented.util.combinatorics;
 
 import java.util.Collection;
 import java.util.HashSet;

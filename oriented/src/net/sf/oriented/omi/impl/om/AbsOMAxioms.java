@@ -4,14 +4,14 @@
 package net.sf.oriented.omi.impl.om;
 
 
-import net.sf.oriented.combinatorics.Group;
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+import net.sf.oriented.util.combinatorics.Group;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 import com.google.common.base.Function;
 

@@ -3,7 +3,7 @@
   
  ************************************************************************/
 
-package net.sf.oriented.matrix;
+package net.sf.oriented.util.matrix;
 
 import java.math.BigInteger;
 

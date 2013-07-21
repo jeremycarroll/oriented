@@ -2,7 +2,7 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.combinatorics;
+package net.sf.oriented.util.combinatorics;
 
 
 import java.util.AbstractCollection;

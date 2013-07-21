@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.oriented.combinatorics.CoLexicographic;
+import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

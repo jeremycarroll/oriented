@@ -8,8 +8,6 @@ import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CIRCUITS;
 
 import java.util.Iterator;
 
-import net.sf.oriented.combinatorics.Group;
-import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -19,6 +17,8 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
+import net.sf.oriented.util.combinatorics.Group;
+import net.sf.oriented.util.combinatorics.Permutation;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

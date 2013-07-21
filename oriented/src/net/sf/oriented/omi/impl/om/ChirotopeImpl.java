@@ -4,17 +4,13 @@
  ************************************************************************/
 package net.sf.oriented.omi.impl.om;
 
-import static net.sf.oriented.combinatorics.CombinatoricUtils.sign;
 import static net.sf.oriented.omi.impl.om.Cryptomorphisms.CHIROTOPE;
+import static net.sf.oriented.util.combinatorics.CombinatoricUtils.sign;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.oriented.combinatorics.CoLexicographic;
-import net.sf.oriented.combinatorics.CombinatoricUtils;
-import net.sf.oriented.combinatorics.Permutation;
-import net.sf.oriented.matrix.RationalMatrix;
 import net.sf.oriented.omi.Alternating;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Chirotope;
@@ -34,6 +30,10 @@ import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.UnsignedSetInternal;
+import net.sf.oriented.util.combinatorics.CoLexicographic;
+import net.sf.oriented.util.combinatorics.CombinatoricUtils;
+import net.sf.oriented.util.combinatorics.Permutation;
+import net.sf.oriented.util.matrix.RationalMatrix;
 
 import com.google.common.math.IntMath;
 

@@ -6,7 +6,6 @@ package net.sf.oriented.omi.impl.om;
 
 import java.util.Collection;
 
-import net.sf.oriented.combinatorics.CoLexicographic;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
@@ -14,6 +13,7 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMChirotope;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
+import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import com.google.common.math.IntMath;
 
