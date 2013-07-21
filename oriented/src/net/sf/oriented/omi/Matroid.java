@@ -18,7 +18,6 @@ public interface Matroid extends Verify {
 
 	public Label[] ground();
 
-	OM getOM();
 	
     /**
      * This is the same as {@link #ground()}, except it is unordered.

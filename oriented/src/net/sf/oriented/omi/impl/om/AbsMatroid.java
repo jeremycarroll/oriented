@@ -156,11 +156,6 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 	}
 
 	@Override
-	public OMInternal getOM() {
-		return all.getOM();
-	}
-
-	@Override
 	public boolean equalsIsSameSetAs() {
 		return false;
 	}

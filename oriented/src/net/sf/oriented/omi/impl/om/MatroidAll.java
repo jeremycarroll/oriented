@@ -18,8 +18,6 @@ public class MatroidAll implements MatroidInternal {
 
 	final private LabelImpl[] ground;
 
-	final private OMInternal om;
-
 	private Bases bases;
 
 	private MatroidCircuits circuits;
@@ -40,7 +38,6 @@ public class MatroidAll implements MatroidInternal {
 
 	MatroidAll(LabelImpl[] g, OMInternal om, FactoryFactory f) {
 		ground = g;
-		this.om = om;
 		factory = f;
 		dual = new MatroidAll(this);
 		older = true;
@@ -51,7 +48,6 @@ public class MatroidAll implements MatroidInternal {
 		older = false;
 		ground = d.ground;
 		factory = d.factory;
-		om = d.om == null ? null : d.om.dual();
 	}
 
 	@Override
@@ -135,10 +131,6 @@ public class MatroidAll implements MatroidInternal {
 		return !(bases == null && circuits == null && dual.bases == null && dual.circuits == null);
 	}
 
-	@Override
-	public OMInternal getOM() {
-		return om;
-	}
 
 	@Override
 	public FactoryFactory ffactory() {

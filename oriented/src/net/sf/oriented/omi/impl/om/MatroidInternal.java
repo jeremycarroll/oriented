@@ -32,8 +32,6 @@ public interface MatroidInternal extends Matroid {
 	@Override
 	public LabelImpl[] ground();
 
-	@Override
-	OMInternal getOM();
 
 	FactoryFactory ffactory();
 
