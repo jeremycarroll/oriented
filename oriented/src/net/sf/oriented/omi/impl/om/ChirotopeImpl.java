@@ -208,7 +208,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
 		if (p == null)
 			throw new IllegalStateException(
 					"No circuit found for pivoting rule.");
-		pivot(nBasis, exchanged, circuitsM.signed(p));
+		pivot(nBasis, exchanged, circuitsM.signed(getCircuits(),p));
 	}
 
 	private UnsignedSetInternal findPivot(UnsignedSetInternal nBasis,

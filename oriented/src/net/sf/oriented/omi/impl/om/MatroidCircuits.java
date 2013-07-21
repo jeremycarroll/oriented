@@ -117,10 +117,7 @@ public class MatroidCircuits extends AbsMatroid {
 		return useCollection(bases);
 	}
 
-	public SignedSetInternal signed(UnsignedSetInternal circuit) {
-		OMInternal om = getOM();
-		if (om == null)
-			throw new IllegalStateException("No associated Oriented Matroid");
+	public SignedSetInternal signed(OMInternal om, UnsignedSetInternal circuit) {
 		Circuits c = om.getCircuits();
 		return c.withSupport(circuit).asCollection().iterator().next();
 
