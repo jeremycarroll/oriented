@@ -12,9 +12,9 @@ import java.util.Iterator;
 
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfUnsignedSetInternal;

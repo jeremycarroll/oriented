@@ -2,7 +2,7 @@
   (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-package net.sf.oriented.omi.impl.items;
+package net.sf.oriented.omi;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -15,8 +15,9 @@ import java.util.Map;
 
 import net.sf.oriented.combinatorics.Group;
 import net.sf.oriented.combinatorics.Permutation;
-import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.Options;
+import net.sf.oriented.omi.impl.items.FactoryImpl;
+import net.sf.oriented.omi.impl.items.LabelImpl;
+import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.util.Misc;
 
 public class LabelFactory extends FactoryImpl<LabelImpl, Label, LabelImpl> {

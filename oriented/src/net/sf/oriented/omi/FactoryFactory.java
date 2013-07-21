@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.om.MatroidFactory;
 import net.sf.oriented.omi.impl.om.OMChirotopeFactory;
 import net.sf.oriented.omi.impl.om.OMFactory;

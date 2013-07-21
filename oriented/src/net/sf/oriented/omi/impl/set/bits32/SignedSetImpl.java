@@ -6,10 +6,10 @@ package net.sf.oriented.omi.impl.set.bits32;
 
 import static net.sf.oriented.omi.impl.set.bits32.UnsignedSetImpl.sizex;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.HasFactoryImpl;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.set.SignedSetFactory;
 import net.sf.oriented.omi.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.impl.set.UnsignedSetFactory;

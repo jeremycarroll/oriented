@@ -9,11 +9,11 @@ import java.util.List;
 
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.omi.impl.items.FactoryImpl;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 import net.sf.oriented.omi.impl.items.ParseContext;
 import net.sf.oriented.util.Misc;

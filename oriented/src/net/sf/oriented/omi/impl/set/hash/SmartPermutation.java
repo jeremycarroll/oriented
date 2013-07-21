@@ -7,7 +7,7 @@ import java.util.List;
 
 import net.sf.oriented.combinatorics.Permutation;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.impl.items.LabelFactory;
+import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.impl.items.LabelImpl;
 
 public class SmartPermutation extends Permutation {

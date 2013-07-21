@@ -15,10 +15,10 @@ import java.util.Iterator;
 
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.omi.impl.items.LabelFactory;
 import net.sf.oriented.omi.impl.set.SetFactoryInternal;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.omi.impl.set.SetOfSignedSetInternal;
