@@ -36,8 +36,10 @@
     <target name="javadoc">
         <javadoc   access="public" 
         	       author="true" 
-        	    classpath="lib/junit-4.8.2.jar" 
+        	    classpath="lib/junit-4.8.2.jar:lib/commons-math3-3.0.jar:lib/guava-14.0.1.jar:lib/perisicRingAllv3.jar" 
         	      destdir="doc/javadoc" 
+            encoding="UTF-8"
+            charset="UTF-8"
         	     doctitle="Java Oriented Matroids API" 
         	 nodeprecated="false" 
          nodeprecatedlist="false" 
@@ -46,8 +48,10 @@
         	       notree="false" 
         	  packagenames="net.sf.oriented.combinatorics,
         	                net.sf.oriented.graph,
+                            net.sf.oriented.matrix,
+                            net.sf.oriented.util,
         	                net.sf.oriented.omi" 
-        	        source="1.6" 
+        	        source="1.7" 
         	    sourcepath="src" 
         	    splitindex="false" 
         	           use="true" 
