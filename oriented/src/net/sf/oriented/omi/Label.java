@@ -7,6 +7,8 @@ package net.sf.oriented.omi;
 /**
  * The base items in sets and signed sets are these, which essentially
  * correspond to Strings.
+ * Reimplementing this interface may, or may not, work. It is not tested, so it probably
+ * will not.
  * 
  * @author jeremy
  * 

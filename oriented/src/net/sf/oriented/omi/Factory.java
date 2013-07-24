@@ -6,6 +6,8 @@ package net.sf.oriented.omi;
 
 /**
  * Provides conversion to and from String for some class.
+ * The {@link #remake(Object)} method may be useful for switching
+ * between different implementations of the same interface.
  * 
  * @author jeremy
  * 
@@ -23,7 +25,7 @@ public interface Factory<T> {
 	T parse(String s);
 
 
-    <U extends T> U remake(T t);
+
 	/**
 	 * Convert a T into a String
 	 * 

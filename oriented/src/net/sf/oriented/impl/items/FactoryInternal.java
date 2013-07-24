@@ -43,7 +43,6 @@ public interface FactoryInternal<
 
 //    ITEM_INTERNAL2 remake(ITEM t);
 
-    @Override
     <U extends ITEM> U remake(ITEM t);
 }
 /************************************************************************
