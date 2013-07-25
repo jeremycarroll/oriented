@@ -12,15 +12,17 @@ import java.util.Collection;
  * @author jeremy
  * 
  * @param <SET>
- *            The sets to create.
+ *            The sets to create; this does extend {@link SetOf<ITEM,SET>}, but this cannot
+ *            be stated in Java generics. This means that the results from the methods
+ *            in this interface are immutable.
  * @param <ITEM>
  *            The items in such sets.
  */
 public interface SetFactory<ITEM, SET> extends Factory<SET> {
 	/**
-	 * Create a new set by copying a Java collection as the backing collection.
-	 * The collection may be modified after this call, but such modifications
-	 * will have no effect on the set.
+	 * Create an immutable new set by copying a Java collection as the backing collection.
+	 * Later modifications made to c after this call will have no effect on the 
+	 * returned set.
 	 * 
 	 * @param c
 	 *            The members of the set.
@@ -29,7 +31,7 @@ public interface SetFactory<ITEM, SET> extends Factory<SET> {
 	SET copyBackingCollection(Collection<? extends ITEM> c);
 
 	/**
-	 * The empty set.
+	 * The (immutable) empty set.
 	 * 
 	 * @return The empty set.
 	 */

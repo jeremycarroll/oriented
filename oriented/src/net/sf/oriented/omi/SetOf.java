@@ -7,16 +7,31 @@ package net.sf.oriented.omi;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * Immutable mathematical sets. Supports the standard mathematical
+ * operations of: {@link #union(SetOf)}; {@link #intersection(SetOf)}; set difference - {@link #minus(SetOf)};
+ * {@link #isSubsetOf(SetOf)}; {@link #isEmpty()}; membership {@link #contains(Object)}.
+ * Also supports operation which relate to java sets such as {@link #iterator()}, {@link #asCollection()}.
+ * The two operations to produce sets of subsets produce java sets, these are {@link #powerSet()} and {@link #subsetsOfSize(int)}.
+ * 
+ * {@link #sameSetAs(SetOf)}
+ * implements mathematical set equality,
+ * and
+ *  {@link java.lang.Object#equals(Object)} may be mathematical set equality or not. This is indicated by {@link #equalsIsSameSetAs()}
+ * @author jeremycarroll
+ *
+ * @param <ITEM>
+ * @param <SET>
+ */
 public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> 
        extends Verify {
 	public abstract SET union(SET b);
 
 	/**
 	 * This is mathematically set equality, except
-	 * for empty sets - which respect type as well ... i.e. two empty sets
-	 * that can never be modified by adding the same member to each are different.
+	 * for empty sets - which respect type as well. (This is not very well-defined).
 	 * @param other
-	 * @return
+	 * @return true if the two sets have the same members.
 	 */
 	boolean sameSetAs(SET other);
 
@@ -24,9 +39,9 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
 	 * This indicates whether in the implementing class
 	 * the notion of equality is set equality or not.
 	 * For example, some classes that implement this interface
-	 * may also implement {@link #OM} which defines equality as
+	 * may also implement {@link OM} which defines equality as
 	 * Oriented Matroid equality which is not the same as set equality.
-	 * @return
+	 * @return true if {@link java.lang.Object#equals(Object)} and {@link #sameSetAs(SetOf)} return identical results. 
 	 */
 	boolean equalsIsSameSetAs();
 	
@@ -53,7 +68,7 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
      * should usually return <code>this</code>.
      * If {@link #equalsIsSameSetAs()} is false, then a different
      * SET containing the same members is returned.
-     * @return
+     * @return a set with the same members.
      */
 	SET respectingEquals();
 
@@ -86,9 +101,9 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
 
     /**
      * Check invariants of the object, in particular
-     * check that {@link #hashCode()} satisfies its contract.
+     * check that {@link java.lang.Object#hashCode()} satisfies its contract.
      * 
-     * @return true if the object is not known to have violated its invariants.
+     * @throws AxiomViolation if the set violates its contract.
      */
     @Override
     void verify() throws AxiomViolation;
