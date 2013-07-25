@@ -4,7 +4,13 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-public interface OMS extends OM, SetOfSignedSet {
+public interface OMasChirotope extends OM, FullChirotope {
+
+    /**
+     * The simplest form of the chirotope.
+     * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.
+     */
+    String toShortString();
 
 }
 /************************************************************************

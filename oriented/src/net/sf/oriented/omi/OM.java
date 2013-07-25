@@ -11,15 +11,15 @@ import com.google.common.base.Function;
 
 public interface OM extends Verify {
 
-	OMChirotope getChirotope();
+	OMasChirotope getChirotope();
 
-	OMS getCircuits();
+	OMasSignedSet getCircuits();
 
-	OMS getVectors();
+	OMasSignedSet getVectors();
 
-	OMS getMaxVectors();
+	OMasSignedSet getMaxVectors();
 
-	OMRealized getRealized();
+	OMasRealized getRealized();
 
 	public OM dual();
 	

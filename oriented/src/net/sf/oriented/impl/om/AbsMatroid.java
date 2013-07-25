@@ -15,13 +15,13 @@ import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
-import net.sf.oriented.omi.MatroidS;
+import net.sf.oriented.omi.MatroidAsSet;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Group;
 
 abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
-		MatroidInternal, MatroidS {
+		MatroidInternal, MatroidAsSet {
 
 	final private MatroidAll all;
 	final SetOfUnsignedSetInternal set;

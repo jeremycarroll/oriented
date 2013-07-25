@@ -1,20 +1,12 @@
 /************************************************************************
-  (c) Copyright 2012 Jeremy J. Carroll
+  (c) Copyright 2007, 2010 Jeremy J. Carroll
   
  ************************************************************************/
-
 package net.sf.oriented.omi;
 
-import net.sf.oriented.util.matrix.RationalMatrix;
-
-public interface OMRealized extends OM {
-
-	RationalMatrix getMatrix();
-
-	RationalMatrix getDualBasis();
+public interface OMasSignedSet extends OM, SetOfSignedSet {
 
 }
-
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 

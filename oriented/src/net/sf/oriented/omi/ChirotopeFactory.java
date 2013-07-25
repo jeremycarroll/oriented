@@ -6,8 +6,8 @@ package net.sf.oriented.omi;
 
 import java.util.Collection;
 
-public interface ChirotopeFactory extends Factory<OMChirotope> {
-	OMChirotope construct(Chirotope chi);
+public interface ChirotopeFactory extends Factory<OMasChirotope> {
+	OMasChirotope construct(Chirotope chi);
 
 	/**
 	 * Note that the contract for Chirotope only requires it to be defined
@@ -17,7 +17,7 @@ public interface ChirotopeFactory extends Factory<OMChirotope> {
 	 * @param chi
 	 * @return
 	 */
-	OMChirotope construct(Collection<? extends Label> e, Chirotope chi);
+	OMasChirotope construct(Collection<? extends Label> e, Chirotope chi);
 
 	/**
 	 * Create an oriented matroid from its representation as a series of +, -, 0s.
@@ -25,7 +25,7 @@ public interface ChirotopeFactory extends Factory<OMChirotope> {
 	 * @param rank
 	 * @param plusMinusZeros
 	 */
-	OMChirotope fromShortString(int rank, String plusMinusZeros);
+	OMasChirotope fromShortString(int rank, String plusMinusZeros);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

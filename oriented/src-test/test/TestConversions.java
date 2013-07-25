@@ -20,9 +20,9 @@ import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMChirotope;
-import net.sf.oriented.omi.OMRealized;
-import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMasChirotope;
+import net.sf.oriented.omi.OMasRealized;
+import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.RealizedFactory;
@@ -175,17 +175,17 @@ public class TestConversions {
 			ChirotopeFactory chi = factory.chirotope();
 			if (factory == special)
 				return chi.construct((Chirotope) first);
-			return chi.parse(chi.toString((OMChirotope) first));
+			return chi.parse(chi.toString((OMasChirotope) first));
 		case REALIZED:
 		case DUALREALIZED:
 			RealizedFactory rf = factory.realized();
-			return rf.parse(rf.toString((OMRealized) first));
+			return rf.parse(rf.toString((OMasRealized) first));
 
 		default:
 			OMSFactory f = omsFactory();
 			if (factory == special)
 				return f.fromSignedSets(first.ground(), (SetOfSignedSet) first);
-			return f.parse(f.toString((OMS) first));
+			return f.parse(f.toString((OMasSignedSet) first));
 		}
 	}
 

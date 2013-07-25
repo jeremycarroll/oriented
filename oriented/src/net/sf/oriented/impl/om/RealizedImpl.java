@@ -11,14 +11,14 @@ import java.util.Iterator;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.util.matrix.GramSchmidt;
 import net.sf.oriented.util.matrix.PerisicFieldElement;
 import net.sf.oriented.util.matrix.RationalMatrix;
 
-public class RealizedImpl extends AbsOM implements OMRealized {
+public class RealizedImpl extends AbsOM implements OMasRealized {
 
 	private final RationalMatrix matrix;
 

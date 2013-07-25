@@ -35,8 +35,8 @@ final public class FactoryFactory {
 	private SignedSetFactory signedSets;
 	private OMSFactory circuits, vectors, maxVectors;
 	private ChirotopeFactory chirotope;
-	private Factory<MatroidS> bases;
-	private Factory<MatroidS> unsignedCircuits;
+	private Factory<MatroidAsSet> bases;
+	private Factory<MatroidAsSet> unsignedCircuits;
 	private RealizedFactory realized;
 
 	private final Options options;
@@ -96,7 +96,7 @@ final public class FactoryFactory {
 	 * 
 	 * @return A factory for matroids.
 	 */
-	public Factory<MatroidS> bases() {
+	public Factory<MatroidAsSet> bases() {
 		return bases;
 	}
 
@@ -105,7 +105,7 @@ final public class FactoryFactory {
 	 * 
 	 * @return A factory for matroids.
 	 */
-	public Factory<MatroidS> unsignedCircuits() {
+	public Factory<MatroidAsSet> unsignedCircuits() {
 		return unsignedCircuits;
 	}
 

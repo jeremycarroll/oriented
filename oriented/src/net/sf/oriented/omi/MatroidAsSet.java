@@ -4,13 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-public interface OMChirotope extends OM, FullChirotope {
-
-    /**
-     * The simplest form of the chirotope.
-     * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.
-     */
-    String toShortString();
+public interface MatroidAsSet extends Matroid, SetOfUnsignedSet {
 
 }
 /************************************************************************

@@ -8,7 +8,7 @@ import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
@@ -37,7 +37,7 @@ abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 	}
 
 	@Override
-	public OMRealized getRealized() {
+	public OMasRealized getRealized() {
 		return all.getRealized();
 	}
 

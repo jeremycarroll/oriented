@@ -16,14 +16,14 @@ import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.items.ParseContext;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.RealizedFactory;
 import net.sf.oriented.util.matrix.PerisicField;
 import net.sf.oriented.util.matrix.PerisicFieldElement;
 import net.sf.oriented.util.matrix.RationalMatrix;
 
 public class OMRealizedFactory extends
-		AbsMatroidFactory<OMRealized, RationalMatrix> implements RealizedFactory {
+		AbsMatroidFactory<OMasRealized, RationalMatrix> implements RealizedFactory {
 
 	private static final class ParseResult {
 		final ParseContext pc;
@@ -57,7 +57,7 @@ public class OMRealizedFactory extends
 	}
 
 	@Override
-	public String toString(OMRealized t) {
+	public String toString(OMasRealized t) {
 		List<Label> g = Arrays.asList(t.ground());
 		// TODO: this copyBackingCollection is probably spurious and should be
 		// done without copying
@@ -68,7 +68,7 @@ public class OMRealizedFactory extends
 	}
 
 	@Override
-	public OMRealized construct(RationalMatrix mat) {
+	public OMasRealized construct(RationalMatrix mat) {
 		final int n = mat.width();
 		Collection<? extends Label> labels = factory.labels().getUniverse();
 		if (labels.size()!=n) {
@@ -78,7 +78,7 @@ public class OMRealizedFactory extends
 	}
 
 	@Override
-	public OMRealized construct(Collection<? extends Label> e,
+	public OMasRealized construct(Collection<? extends Label> e,
 			RationalMatrix mat) {
 		LabelImpl[] g = e.toArray(new LabelImpl[0]);
 		OMAll all = new OMAll(g, factory);

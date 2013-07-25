@@ -28,7 +28,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMRealized;
+import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
@@ -366,8 +366,8 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
 	@Override
-	public OMRealized getRealized() {
-		return (OMRealized) get(REALIZED);
+	public OMasRealized getRealized() {
+		return (OMasRealized) get(REALIZED);
 	}
 
     private AbsOMAxioms<?> getCircuitsOrChirotope() {

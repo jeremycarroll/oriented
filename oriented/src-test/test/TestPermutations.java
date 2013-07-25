@@ -19,7 +19,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
@@ -148,7 +148,7 @@ public class TestPermutations {
         
     }
     
-    SetOfSignedSet setsWithZeroOrOneMinus(OMS om) {
+    SetOfSignedSet setsWithZeroOrOneMinus(OMasSignedSet om) {
         FactoryFactory f = ((OMInternal)om).ffactory();
         @SuppressWarnings("unchecked")
         JavaSet<SignedSet> rslt = (JavaSet<SignedSet>) f.signedSets().emptyCollectionOf();

@@ -12,12 +12,12 @@ import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OMChirotope;
+import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import com.google.common.math.IntMath;
 
-public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndChirotope>
+public class OMChirotopeFactory extends AbsMatroidFactory<OMasChirotope, RankAndChirotope>
 		implements ChirotopeFactory {
 
 	public OMChirotopeFactory(FactoryFactory factory) {
@@ -25,13 +25,13 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	}
 
 	@Override
-	public OMChirotope construct(Chirotope chi) {
+	public OMasChirotope construct(Chirotope chi) {
 		final int n = chi.n();
 		return construct(new SimpleLabels(n), chi);
 	}
 
 	@Override
-	public String toString(OMChirotope t) {
+	public String toString(OMasChirotope t) {
 		if (t instanceof ChirotopeImpl) {
 			ChirotopeImpl x = (ChirotopeImpl) t;
 			return x.toString(factory);
@@ -40,7 +40,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	}
 
 	@Override
-	protected OMChirotope construct(Collection<? extends Label> ground,
+	protected OMasChirotope construct(Collection<? extends Label> ground,
 			final RankAndChirotope defn) {
 		final int n = ground.size();
 		defn.checkSize(n);
@@ -75,7 +75,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	}
 
 	@Override
-	OMChirotope parse(ParseContext pc) {
+	OMasChirotope parse(ParseContext pc) {
 		return parsePair(pc);
 	}
 
@@ -87,14 +87,14 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	}
 
 	@Override
-	public OMChirotope construct(Collection<? extends Label> e, Chirotope chi) {
+	public OMasChirotope construct(Collection<? extends Label> e, Chirotope chi) {
 		LabelImpl[] g = e.toArray(new LabelImpl[0]);
 		OMAll all = new OMAll(g, factory);
 		return new ChirotopeImpl(all, chi);
 	}
 
 	@Override
-	OMChirotope construct(RankAndChirotope p) {
+	OMasChirotope construct(RankAndChirotope p) {
 	    int l = p.chirotope.length();
         int nHigh = p.rank;
         int n;
@@ -117,7 +117,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMChirotope, RankAndCh
 	}
 
     @Override
-    public OMChirotope fromShortString(int rank, String plusMinusZeros) {
+    public OMasChirotope fromShortString(int rank, String plusMinusZeros) {
         return construct(new RankAndChirotope(rank,plusMinusZeros));
     }
 

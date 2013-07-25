@@ -3,9 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.impl.om;
 
-import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMasSignedSet;
 
-public interface OMSInternal extends OMS, OMInternal {
+public interface OMSInternal extends OMasSignedSet, OMInternal {
 
 }
 

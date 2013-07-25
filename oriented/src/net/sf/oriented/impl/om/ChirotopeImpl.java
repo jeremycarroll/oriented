@@ -27,7 +27,7 @@ import net.sf.oriented.omi.FullChirotope;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMChirotope;
+import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
@@ -37,7 +37,7 @@ import net.sf.oriented.util.matrix.RationalMatrix;
 
 import com.google.common.math.IntMath;
 
-public class ChirotopeImpl extends AbsOM implements OMChirotope {
+public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 	final private int rank;
 
@@ -572,7 +572,7 @@ public class ChirotopeImpl extends AbsOM implements OMChirotope {
         return create(p.permute(ground()),alt);
     }
 
-    private OMChirotope create(LabelImpl[] labelImpls, FullChirotope chi) {
+    private OMasChirotope create(LabelImpl[] labelImpls, FullChirotope chi) {
         return ffactory().chirotope().construct(Arrays.asList(labelImpls),chi);
     }
 

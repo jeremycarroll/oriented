@@ -15,13 +15,13 @@ import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.OMSFactory;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 
 abstract public class OMFactory extends
-		AbsMatroidFromSetFactory<OMS,  SetOfSignedSet, SetOfSignedSetInternal,SetOfSignedSetFactory>
+		AbsMatroidFromSetFactory<OMasSignedSet,  SetOfSignedSet, SetOfSignedSetInternal,SetOfSignedSetFactory>
 		implements OMSFactory {
 	private static final class CFactory extends OMFactory {
 		private CFactory(FactoryFactory f) {
@@ -34,7 +34,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		public String toString(OMS s) {
+		public String toString(OMasSignedSet s) {
 			return formatString(s, s.getCircuits());
 		}
 	}
@@ -45,7 +45,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		public String toString(OMS s) {
+		public String toString(OMasSignedSet s) {
 			return formatString(s, s.getVectors());
 		}
 
@@ -66,7 +66,7 @@ abstract public class OMFactory extends
 		}
 
 		@Override
-		public String toString(OMS s) {
+		public String toString(OMasSignedSet s) {
 			return formatString(s, s.getMaxVectors());
 		}
 	}
@@ -88,12 +88,12 @@ abstract public class OMFactory extends
 	}
 
 	@Override
-	public OMS copyBackingCollection(Collection<? extends SignedSet> c) {
+	public OMasSignedSet copyBackingCollection(Collection<? extends SignedSet> c) {
 		return construct(sets.copyBackingCollection(c));
 	}
 
 	@Override
-	OMS construct(SetOfSignedSet signedSets) {
+	OMasSignedSet construct(SetOfSignedSet signedSets) {
 		Set<Label> ground = new TreeSet<Label>(signedSets.support()
 				.asCollection());
 		return construct(ground, signedSets);
@@ -115,7 +115,7 @@ abstract public class OMFactory extends
 	}
 
 	@Override
-	public List<Label> ground(OMS s) {
+	public List<Label> ground(OMasSignedSet s) {
 		return Arrays.asList(s.ground());
 	}
 

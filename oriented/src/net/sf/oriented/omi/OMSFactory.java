@@ -6,7 +6,7 @@ package net.sf.oriented.omi;
 
 import net.sf.oriented.impl.om.OMSInternal;
 
-public interface OMSFactory extends SetFactory<SignedSet, OMS> {
+public interface OMSFactory extends SetFactory<SignedSet, OMasSignedSet> {
 	/**
 	 * This does not, and will not, work. This is inherited from the
 	 * {@link SetFactory} interface, and is not appropriate for Oriented
@@ -17,7 +17,7 @@ public interface OMSFactory extends SetFactory<SignedSet, OMS> {
 	 *             Always.
 	 */
 	@Override
-	OMS empty();
+	OMasSignedSet empty();
 
 	/**
 	 * 

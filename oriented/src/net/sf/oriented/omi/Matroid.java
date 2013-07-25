@@ -8,9 +8,9 @@ import net.sf.oriented.util.combinatorics.Group;
 
 public interface Matroid extends Verify {
 
-	public MatroidS getCircuits();
+	public MatroidAsSet getCircuits();
 
-	public MatroidS getBases();
+	public MatroidAsSet getBases();
 
 	public Matroid dual();
 

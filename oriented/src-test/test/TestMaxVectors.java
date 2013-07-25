@@ -8,7 +8,7 @@ import static net.sf.oriented.omi.Examples.chapter1;
 import static org.junit.Assert.assertEquals;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.OMS;
+import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.Options;
 
 import org.junit.BeforeClass;
@@ -22,7 +22,7 @@ public class TestMaxVectors {
 		options.setShortLabels();
 		f = new FactoryFactory(options);
 	}
-	static OMS vectors;
+	static OMasSignedSet vectors;
 
 	// static UnsignedSet e;
 	@BeforeClass

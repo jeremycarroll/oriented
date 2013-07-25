@@ -4,7 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-public interface MFactory extends SetFactory<UnsignedSet, MatroidS> {
+public interface MFactory extends SetFactory<UnsignedSet, MatroidAsSet> {
 	/**
 	 * This does not, and will not, work. This is inherited from the
 	 * {@link SetFactory} interface, and is not appropriate for Matroids.
@@ -14,7 +14,7 @@ public interface MFactory extends SetFactory<UnsignedSet, MatroidS> {
 	 *             Always.
 	 */
 	@Override
-	MatroidS empty();
+	MatroidAsSet empty();
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public interface MFactory extends SetFactory<UnsignedSet, MatroidS> {
 	 *            A set of sets, satisfying all the relevant axioms.
 	 * @return A new Matroid, based on the sets.
 	 */
-	MatroidS fromSets(SetOfUnsignedSet sym);
+	MatroidAsSet fromSets(SetOfUnsignedSet sym);
 
 }
 /************************************************************************

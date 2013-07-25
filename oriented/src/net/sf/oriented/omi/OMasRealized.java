@@ -1,12 +1,20 @@
 /************************************************************************
-  (c) Copyright 2007, 2010 Jeremy J. Carroll
+  (c) Copyright 2012 Jeremy J. Carroll
   
  ************************************************************************/
+
 package net.sf.oriented.omi;
 
-public interface MatroidS extends Matroid, SetOfUnsignedSet {
+import net.sf.oriented.util.matrix.RationalMatrix;
+
+public interface OMasRealized extends OM {
+
+	RationalMatrix getMatrix();
+
+	RationalMatrix getDualBasis();
 
 }
+
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
  * 
