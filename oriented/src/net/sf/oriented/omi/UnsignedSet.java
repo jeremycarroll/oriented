@@ -4,6 +4,12 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * This class represents mathematical sets of {@link Label}s
+ * which are the base elements in our universe of discourse.
+ * @author jeremycarroll
+ *
+ */
 public interface UnsignedSet extends SetOf<Label, UnsignedSet> {
 
 }

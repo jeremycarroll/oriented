@@ -3,7 +3,13 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * A list of references from the literature.
+ * @author jeremycarroll
+ *
+ */
 public class Bibliography {
+    private Bibliography(){}
   
     
 /**

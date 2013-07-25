@@ -3,11 +3,22 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * An object does not satisfy its invariants and/or axioms.
+ * See {@link Verify}.
+ * @author jeremycarroll
+ *
+ */
 public class AxiomViolation extends Exception {
 
 
 
     private final Object illFormed;
+    /**
+     * Construct a new AxiomViolation.
+     * @param illFormed Is the object that fails to meet its invariants
+     * @param message Is the base message concerning the problem.
+     */
     public AxiomViolation(Object illFormed, String message) {
         super(message);
         this.illFormed = illFormed;

@@ -4,11 +4,25 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * This interface is implemented by classes
+ * which represent mathematical concepts that have certain
+ * axioms, and/or by java classes that have invariants.
+ * In normal operation, it is assumed that these axioms and invariants hold; but
+ * programming errors, or poor input, may result in an object that does not satisfy
+ * such assumptions.
+ * Calling {@link #verify()} on such an object asks it to check all axioms
+ * and invariants.
+ * 
+ * @author jeremycarroll
+ *
+ */
 public interface Verify {
 	/**
 	 * Check invariants of the object.
+	 * Calling code should not assume that this operation is quick.
 	 * 
-	 * @return true if the object is not known to have violated its invariants.
+	 * @throws AxiomViolation If an invariant did not hold.
 	 */
 	void verify() throws AxiomViolation;
 }
