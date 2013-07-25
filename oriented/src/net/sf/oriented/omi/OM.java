@@ -9,31 +9,97 @@ import net.sf.oriented.util.combinatorics.Permutation;
 
 import com.google.common.base.Function;
 
+/**
+ * An Oriented Matroid.
+ * This interface represents operations on and between oriented matroids
+ * independently of the cryptomorphic representations available.
+ * These are accessor methods to get a representation specific view of the oriented
+ * matroid. For example, to get the circuits of an oriented matroid use
+ * {@link #getCircuits()}. This returns an oriented matroid that is equal to this one,
+ * and also implements the {@link SetOfSignedSet} interface giving the circuits.
+ * Each of five cryptomorphisms is similarly implemented.
+ * <p>
+ * Many methods return an {@link OM}. In practice it might be found
+ * that the returned {@link OM} is always the circuit representation:
+ * this is not part of the contract, and should not be relied on - call {@link #getCircuits()}
+ * if that is the representation you need.
+ * @author jeremycarroll
+ *
+ */
 public interface OM extends Verify {
 
+    /**
+     * Get the chirotope representation of the oriented matroid.
+     * <code>equals(getChirotope())</code> is true.
+     * @return The chirotope representation.
+     */
 	OMasChirotope getChirotope();
 
+    /**
+     * Get the circuit representation of the oriented matroid.
+     * <code>equals(getCircuits())</code> is true.
+     * @return The circuit representation.
+     */
 	OMasSignedSet getCircuits();
-
+	 /**
+     * Get the vector representation of the oriented matroid.
+     * <code>equals(getVectors())</code> is true.
+     * @return The vector representation.
+     */
 	OMasSignedSet getVectors();
-
+	/**
+     * Get the maximum vector representation of the oriented matroid.
+     * <code>equals(getMaxVectors())</code> is true.
+     * @return The maximum vector representation.
+     */
 	OMasSignedSet getMaxVectors();
+    /**
+     * Get the realized representation of the oriented matroid.
+     * <code>equals(getRealized())</code> is true.
+     * This is (currently) only implemented for oriented matroids
+     * that were initially created from matrices; i.e. the original realization
+     * of this oriented matroid or its dual is remembered.
+     * <p>
+     * The principal goal of the <a href="http://oriented.sf.net">Java Oriented Matroid</a>
+     * project is to improve the implementation of this method.
+     * </p>
+     * @return The remembered realization
+     * @see Bibliography#shor1991
+     * @throws UnsupportedOperationException Realization not implemented in most cases.
+     */
 
 	OMasRealized getRealized();
 
+	/**
+	 * The dual oriented matroid.
+	 * @return The dual oriented matroid.
+	 */
 	public OM dual();
 	
-	public OM reorient(Label ... axes);
+	/**
+	 * Reorients (i.e. swaps the signs in circuits) of the given set.
+	 * @param reorientationSet The elements to reorient
+	 * @return a reoriented oriented matroid
+	 */
+	public OM reorient(Label ... reorientationSet);
 
+	/**
+	 * 
+	 * @return The ordered ground
+	 */
 	public Label[] ground();
 	
 
     /**
      * This is the same as {@link #ground()}, except it is unordered.
-     * @return
+     * @return The unordered ground
      */
     public UnsignedSet support();
 
+    /**
+     * The underlying matroid.
+     * @return The underlying matroid.
+     */
 	public Matroid getMatroid();
 
 	int rank();
@@ -78,12 +144,11 @@ public interface OM extends Verify {
     
     /**
      * Permute the ground set.
-     * Returns and om s.t.
+     * Returns an oriented matroid  <code>om</code> s.t.
      * <code>om.equals(this)</code>
-     * and <code>p.permute(ground())</code>
-     * and <code>om.ground()</code> are the same.
+     * and <code>Arrays.equals(p.permute(this.ground()),om.ground()</code> are the same.
      * @param p The permutation to apply.
-     * @return
+     * @return An equal oriented matroid with permuted ground set
      */
     OM permuteGround(Permutation p);
     /**
@@ -91,16 +156,23 @@ public interface OM extends Verify {
      * the ground set is not permuted.
      * So in general, <code>this.equals(this.permute(p))</code> is false.
      * @param p The permutation to apply.
-     * @return
+     * @return An oriented matroid after the action of the permutation
      */
     OM permute(Permutation p);
 
     /**
      * The size of {@link #ground()}
-     * @return
+     * @return The size of {@link #ground()}.
      */
     int n();
     
+    /**
+     * The automorphism group of this oriented matroid.
+     * For each permutation <code>π &in; automorphisms()</code>
+     * we have <code>this.equals(this.permute(π))</code>
+     * 
+     * @return The automorphism group of this oriented matroid.
+     */
     Group automorphisms();
 
     Function<SignedSet, SignedSet> signedSetPermuter(Permutation p);
