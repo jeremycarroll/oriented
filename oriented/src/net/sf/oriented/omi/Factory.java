@@ -6,8 +6,6 @@ package net.sf.oriented.omi;
 
 /**
  * Provides conversion to and from String for some class.
- * The {@link #remake(Object)} method may be useful for switching
- * between different implementations of the same interface.
  * 
  * @author jeremy
  * 

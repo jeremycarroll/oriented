@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author jeremy
  * 
  * @param <SET>
- *            The sets to create; this does extend {@link SetOf<ITEM,SET>}, but this cannot
+ *            The sets to create; this does extend {@link SetOf}<code>&lt;SET,LINK&gt;</code>, but this cannot
  *            be stated in Java generics. This means that the results from the methods
  *            in this interface are immutable.
  * @param <ITEM>
@@ -24,9 +24,8 @@ public interface SetFactory<ITEM, SET> extends Factory<SET> {
 	 * Later modifications made to c after this call will have no effect on the 
 	 * returned set.
 	 * 
-	 * @param c
-	 *            The members of the set.
-	 * @return
+	 * @param c The members of the set.
+	 * @return A new set
 	 */
 	SET copyBackingCollection(Collection<? extends ITEM> c);
 
