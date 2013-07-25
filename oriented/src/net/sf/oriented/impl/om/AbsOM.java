@@ -87,8 +87,8 @@ abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 	}
 
 	@Override
-	public LabelImpl[] ground() {
-		return all.ground();
+	public LabelImpl[] elements() {
+		return all.elements();
 	}
 
 	@Override

@@ -94,9 +94,9 @@ public class MatroidCircuits extends AbsMatroid {
 			}
 		}
 		UnsignedSetInternal support = union();
-		max += ground().length - support.size();
+		max += elements().length - support.size();
 
-		JavaSet<UnsignedSetInternal> bases = convert(ground()).subsetsOfSize(
+		JavaSet<UnsignedSetInternal> bases = convert(elements()).subsetsOfSize(
 				max - 1);
 		// System.out.println(support().size() + " " + bases.size());
 		it = iterator();
@@ -131,7 +131,7 @@ public class MatroidCircuits extends AbsMatroid {
     @Override
     public Group automorphisms() {
         if (automorphisms == null) {
-            automorphisms = Group.symmetric(ground().length).filter(new Predicate<Permutation>(){
+            automorphisms = Group.symmetric(elements().length).filter(new Predicate<Permutation>(){
                 @Override
                 public boolean apply(Permutation p) {
                     Function<UnsignedSet,UnsignedSet> map = setPermuter(p);
@@ -149,7 +149,7 @@ public class MatroidCircuits extends AbsMatroid {
     }
 
     protected Function<UnsignedSet, UnsignedSet> setPermuter(Permutation p) {
-        final Permutation universePermuter = ffactory().labels().permuteUniverse(ground(), p);
+        final Permutation universePermuter = ffactory().labels().permuteUniverse(elements(), p);
         return new Function<UnsignedSet, UnsignedSet>() {
             @Override
             public UnsignedSet apply(UnsignedSet input) {

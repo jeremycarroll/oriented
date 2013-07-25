@@ -87,14 +87,14 @@ public interface OM extends Verify {
 	 * 
 	 * @return The ordered ground
 	 */
-	public Label[] ground();
+	public Label[] elements(); 
 	
 
     /**
-     * This is the same as {@link #ground()}, except it is unordered.
+     * This is the same as {@link #elements()}, except it is unordered.
      * @return The unordered ground
      */
-    public UnsignedSet support();
+    public UnsignedSet setOfElements();
 
     /**
      * The underlying matroid.
@@ -161,8 +161,8 @@ public interface OM extends Verify {
     OM permute(Permutation p);
 
     /**
-     * The size of {@link #ground()}
-     * @return The size of {@link #ground()}.
+     * The size of {@link #elements()}
+     * @return The size of {@link #elements()}.
      */
     int n();
     

@@ -50,7 +50,7 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
 
     @Override
     public int n() {
-    	return ground().length;
+    	return elements().length;
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     }
     
     @Override
-    public abstract LabelImpl[] ground();
+    public abstract LabelImpl[] elements();
 
     /**
      * Convert a permutation of the ground set into
@@ -70,7 +70,7 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     public Function<SignedSet, SignedSet> signedSetPermuter(Permutation p) {
 
         final SignedSetFactory signedSetFactory = (SignedSetFactory) ffactory().signedSets();
-        final Permutation universePermuter = ffactory().labels().permuteUniverse(ground(), p);
+        final Permutation universePermuter = ffactory().labels().permuteUniverse(elements(), p);
         return new Function<SignedSet, SignedSet>() {
             @Override
             public SignedSet apply(SignedSet input) {

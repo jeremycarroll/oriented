@@ -31,12 +31,12 @@ abstract class AbsVectorsOM extends AbsVectors implements OMSInternal {
 
     @Override
     public OM permuteGround(Permutation p) {
-        return omsFactory().fromSignedSets(p.permute(ground()), vectors);
+        return omsFactory().fromSignedSets(p.permute(elements()), vectors);
     }
 
     @Override
     public OMSInternal reorientRaw(Label ... axes) {
-        return omsFactory().fromSignedSets(ground(), vectors.reorientRaw(axes));
+        return omsFactory().fromSignedSets(elements(), vectors.reorientRaw(axes));
     }
 
 

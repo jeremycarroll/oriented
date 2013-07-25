@@ -73,7 +73,7 @@ public class MatroidAll implements MatroidInternal {
 	}
 
 	@Override
-	public LabelImpl[] ground() {
+	public LabelImpl[] elements() {
 		return ground;
 	}
 
@@ -145,8 +145,8 @@ public class MatroidAll implements MatroidInternal {
 
 
     @Override
-    public UnsignedSet support() {
-        return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(ground()));
+    public UnsignedSet setOfElements() {
+        return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(elements()));
     }
 }
 /************************************************************************

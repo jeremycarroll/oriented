@@ -30,7 +30,7 @@ public class Bases extends AbsMatroid {
 	}
 
 	private SetOfUnsignedSetInternal dualBases() {
-		UnsignedSetInternal s = convert(ground());
+		UnsignedSetInternal s = convert(elements());
 		JavaSet<UnsignedSetInternal> db = emptyCollectionOf();
 		Iterator<UnsignedSetInternal> it = iterator();
 		while (it.hasNext()) {
@@ -81,7 +81,7 @@ public class Bases extends AbsMatroid {
 		 * size i which - is not independent - does not have smaller depedendent
 		 * set as subset b) Add it
 		 */
-		UnsignedSetInternal s = convert(ground());
+		UnsignedSetInternal s = convert(elements());
 		JavaSet<UnsignedSetInternal> independent = independentSets();
 		JavaSet<UnsignedSetInternal> circuits = emptyCollectionOf();
 		JavaSet<UnsignedSetInternal> c0 = emptyCollectionOf();

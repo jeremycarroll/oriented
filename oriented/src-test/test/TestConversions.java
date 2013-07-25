@@ -184,7 +184,7 @@ public class TestConversions {
 		default:
 			OMSFactory f = omsFactory();
 			if (factory == special)
-				return f.fromSignedSets(first.ground(), (SetOfSignedSet) first);
+				return f.fromSignedSets(first.elements(), (SetOfSignedSet) first);
 			return f.parse(f.toString((OMasSignedSet) first));
 		}
 	}

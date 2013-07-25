@@ -94,7 +94,7 @@ abstract public class OMFactory extends
 
 	@Override
 	OMasSignedSet construct(SetOfSignedSet signedSets) {
-		Set<Label> ground = new TreeSet<Label>(signedSets.support()
+		Set<Label> ground = new TreeSet<Label>(signedSets.setOfElements()
 				.asCollection());
 		return construct(ground, signedSets);
 	}
@@ -116,7 +116,7 @@ abstract public class OMFactory extends
 
 	@Override
 	public List<Label> ground(OMasSignedSet s) {
-		return Arrays.asList(s.ground());
+		return Arrays.asList(s.elements());
 	}
 
 }

@@ -83,7 +83,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 	ChirotopeImpl(ChirotopeImpl d) {
 		super(d.dual());
-		rank = ground().length - d.rank;
+		rank = elements().length - d.rank;
 		bits = new int[d.bits.length];
 		alt = new Alternating(new Chi());
 		initFromDual(d);
@@ -94,7 +94,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	public ChirotopeImpl(OMAll all, Chirotope chi) {
 		super(all);
 		rank = chi.rank();
-		if (all.ground().length != chi.n())
+		if (all.elements().length != chi.n())
 			throw new IllegalArgumentException("Size mismatch");
 		bits = new int[(IntMath.binomial(chi.n(), chi.rank()) + 15) / 16];
 		alt = new Alternating(new Chi());
@@ -139,7 +139,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	}
 
 	private void initFromDual(ChirotopeImpl d) {
-		UnsignedSet g = convert(ground());
+		UnsignedSet g = convert(elements());
 		int n = g.size();
 		int r = rank();
 
@@ -333,7 +333,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	}
 
     private void verify3TermGrassmannPlücker()  throws AxiomViolation {
-        UnsignedSet g = this.support();  // need to reformulate
+        UnsignedSet g = this.setOfElements();  // need to reformulate
         JavaSet<? extends UnsignedSet> aa = g.subsetsOfSize(rank-2);
         JavaSet<? extends UnsignedSet> bb = g.subsetsOfSize(4);
         for (UnsignedSet AA:aa) {
@@ -405,7 +405,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	}
 
 	public String toString(FactoryFactory factory) {
-		List<? extends Label> g = Arrays.asList(ground());
+		List<? extends Label> g = Arrays.asList(elements());
 		UnsignedSetFactory sets = all.unsignedSets(factory);
 		return "( " + sets.toString(g, sets.copyBackingCollection(g)) + ", "
 				+ rank() + ", " + toShortString() + " )";
@@ -413,7 +413,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 	@Override
     public String toShortString() {
-		int sz = IntMath.binomial(ground().length, rank());
+		int sz = IntMath.binomial(elements().length, rank());
 		char r[] = new char[sz];
 		for (int i = 0; i < sz; i++) {
 			r[i] = "-0+!".charAt(getNthEntry(i) + 1);
@@ -553,7 +553,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 			ChirotopeImpl c = (ChirotopeImpl) o;
 			if (rank != c.rank)
 				return false;
-			if (Arrays.equals(ground(), c.ground()))
+			if (Arrays.equals(elements(), c.elements()))
 				return Arrays.equals(bits, c.bits);
 			return all.equalsByCircuits((OMInternal) o);
 		}
@@ -564,12 +564,12 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
     @Override
     public OM permuteGround(Permutation p) {
-        return create(p.permute(ground()),new PermutedChirotope(p, alt));
+        return create(p.permute(elements()),new PermutedChirotope(p, alt));
     }
 
     @Override
     public OM permute(Permutation p) {
-        return create(p.permute(ground()),alt);
+        return create(p.permute(elements()),alt);
     }
 
     private OMasChirotope create(LabelImpl[] labelImpls, FullChirotope chi) {
@@ -582,7 +582,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
         for (Label lbl:axes) {
             reoriented[asInt(lbl)] = true;
         }
-        return (OMInternal) create(ground(),new FullChirotope(){
+        return (OMInternal) create(elements(),new FullChirotope(){
 
             @Override
             public int rank() {

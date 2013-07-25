@@ -204,7 +204,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
 	@Override
-	public LabelImpl[] ground() {
+	public LabelImpl[] elements() {
 		return ground;
 	}
 
@@ -260,7 +260,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		if (has(CHIROTOPE))
 			return get(CHIROTOPE).rank();
 		if (has(DUALCHIROTOPE))
-			return ground().length - get(DUALCHIROTOPE).rank();
+			return elements().length - get(DUALCHIROTOPE).rank();
 		return getMatroid().rank();
 	}
 
@@ -312,7 +312,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
 	public boolean sameGroundAs(OM o) {
-		Label g[] = o.ground();
+		Label g[] = o.elements();
 		if (g.length != ground.length)
 			return false;
 		outer: for (int i = 0; i < g.length; i++) {

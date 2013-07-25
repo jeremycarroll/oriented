@@ -152,8 +152,8 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	}
 
 	@Override
-	public UnsignedSetInternal support() {
-		return vectors.support();
+	public UnsignedSetInternal setOfElements() {
+		return vectors.setOfElements();
 	}
 
 	@Override

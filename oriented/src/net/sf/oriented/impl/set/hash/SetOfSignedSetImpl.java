@@ -96,7 +96,7 @@ public class SetOfSignedSetImpl
 	}
 
 	@Override
-	public UnsignedSetInternal support() {
+	public UnsignedSetInternal setOfElements() {
 		if (support == null) {
 			support = computeSupport();
 		}
@@ -157,7 +157,7 @@ public class SetOfSignedSetImpl
     public SetOfSignedSet reorientRaw(Label ... axes) {
         SignedSetFactory signedSetFactory = factory().itemFactory();
         UnsignedSetImpl changed = (UnsignedSetImpl) signedSetFactory.unsignedF.copyBackingCollection(Arrays.asList(axes));
-        UnsignedSetImpl unchanged = (UnsignedSetImpl) support().minus(changed);
+        UnsignedSetImpl unchanged = (UnsignedSetImpl) setOfElements().minus(changed);
         JavaSet<SignedSetInternal> reoriented = signedSetFactory.emptyCollectionOf();
         for (SignedSetInternal ss:this ) {
             UnsignedSetInternal plus = ss.plus().intersection(unchanged)

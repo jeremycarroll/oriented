@@ -125,12 +125,12 @@ public class Vectors extends AbsVectorsOM {
 	}
 
 	SetOfSignedSetInternal maximal() {
-		return withSupport(support());
+		return withSupport(setOfElements());
 	}
 
 	@SuppressWarnings("unchecked")
 	public SetOfUnsignedSetInternal circuits() {
-		JavaSet<UnsignedSetInternal> dependent[] = new JavaSet[ground().length + 1];
+		JavaSet<UnsignedSetInternal> dependent[] = new JavaSet[elements().length + 1];
 		for (int i = 0; i < dependent.length; i++) {
 			dependent[i] = all.unsignedSets().emptyCollectionOf();
 		}

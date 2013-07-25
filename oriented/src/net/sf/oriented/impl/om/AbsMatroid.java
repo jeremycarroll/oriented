@@ -44,8 +44,8 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 	}
 
 	@Override
-	public LabelImpl[] ground() {
-		return all.ground();
+	public LabelImpl[] elements() {
+		return all.elements();
 	}
 
 	@Override

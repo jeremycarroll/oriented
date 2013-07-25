@@ -30,7 +30,7 @@ public interface MatroidInternal extends Matroid {
 	public int rank();
 
 	@Override
-	public LabelImpl[] ground();
+	public LabelImpl[] elements();
 
 
 	FactoryFactory ffactory();

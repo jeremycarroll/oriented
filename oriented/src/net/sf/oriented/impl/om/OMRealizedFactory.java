@@ -58,7 +58,7 @@ public class OMRealizedFactory extends
 
 	@Override
 	public String toString(OMasRealized t) {
-		List<Label> g = Arrays.asList(t.ground());
+		List<Label> g = Arrays.asList(t.elements());
 		// TODO: this copyBackingCollection is probably spurious and should be
 		// done without copying
 		return "( "

@@ -16,14 +16,14 @@ public interface Matroid extends Verify {
 
 	public int rank();
 
-	public Label[] ground();
+	public Label[] elements();
 
 	
     /**
-     * This is the same as {@link #ground()}, except it is unordered.
+     * This is the same as {@link #elements()}, except it is unordered.
      * @return
      */
-    public UnsignedSet support();
+    public UnsignedSet setOfElements();
 
     Group automorphisms();
 

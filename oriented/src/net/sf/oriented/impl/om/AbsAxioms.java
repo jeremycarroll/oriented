@@ -132,11 +132,11 @@ abstract class AbsAxioms<ForAll> {
 
 	abstract public Iterator<? extends ForAll> iterator();
 	
-	public UnsignedSet support() {
-	    return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(ground()));
+	public UnsignedSet setOfElements() {
+	    return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(elements()));
 	}
 
-	abstract Label[] ground();
+	abstract Label[] elements();
 	
 	abstract FactoryFactory ffactory();
 

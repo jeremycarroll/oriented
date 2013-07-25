@@ -16,7 +16,7 @@ public interface SetOfSignedSet extends SetOf<SignedSet, SetOfSignedSet> {
      * This is the union over this set of the support of each member.
      * @return The set of all elements mentioned in an element in this set.
      */
-	public UnsignedSet support();
+	public UnsignedSet setOfElements();
 
 }
 /************************************************************************

@@ -96,7 +96,7 @@ public abstract class MatroidFactory extends
 
 	@Override
 	public List<Label> ground(MatroidAsSet s) {
-		return Arrays.asList(s.ground());
+		return Arrays.asList(s.elements());
 	}
 
 }

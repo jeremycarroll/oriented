@@ -25,7 +25,7 @@ public interface OMInternal extends OM {
 	public OMInternal dual();
 
 	@Override
-	public LabelImpl[] ground();
+	public LabelImpl[] elements();
 
 	@Override
 	public MatroidInternal getMatroid();

@@ -16,7 +16,7 @@ public interface SetOfSignedSetInternal
 
 
 	@Override
-	public UnsignedSetInternal support();
+	public UnsignedSetInternal setOfElements();
 
 
 	SetOfUnsignedSetInternal unsignedSets();

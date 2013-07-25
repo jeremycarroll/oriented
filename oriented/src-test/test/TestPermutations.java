@@ -221,7 +221,7 @@ public class TestPermutations {
     @Test
     public void testTopesAutomorphismsChap1Chirotope() {
         OM chapter1 = Examples.chapter1();
-        Label g[] = chapter1.ground();
+        Label g[] = chapter1.elements();
         OM reorientedB = chapter1.getChirotope().reorient(g[2],g[4]);
         Assert.assertFalse(chapter1.dual().getMaxVectors().sameSetAs(reorientedB.dual().getMaxVectors()));
     }
@@ -230,7 +230,7 @@ public class TestPermutations {
     public void testTopesAutomorphismsChap1Circuits() {
         OM chapter1 = Examples.chapter1();
 
-        Label g[] = chapter1.ground();
+        Label g[] = chapter1.elements();
         OM reorientedB = chapter1.getCircuits().reorient(g[2],g[4]);
         
         Assert.assertFalse(chapter1.dual().getMaxVectors().sameSetAs(reorientedB.dual().getMaxVectors()));
@@ -288,7 +288,7 @@ public class TestPermutations {
         long chiroTime = 0;
         @SuppressWarnings("unused")
         long autoTime = 0;
-        Label g[] = om.ground();
+        Label g[] = om.elements();
         int counts[] = new int[250];
         int bitcnt[] = new int[]{ 
                  0,  // 000
