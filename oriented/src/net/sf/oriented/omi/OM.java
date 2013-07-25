@@ -84,15 +84,17 @@ public interface OM extends Verify {
 	public OM reorient(Label ... reorientationSet);
 
 	/**
-	 * 
-	 * @return The ordered ground
+	 * The elements on which this oriented matroid is defined.
+	 * The order is significant with respect to some representations (e.g. {@link #getChirotope()}
+	 * and {@link #getRealized()}
+	 * @return The ordered elements on which this oriented matroid is defined.
 	 */
 	public Label[] elements(); 
 	
 
     /**
      * This is the same as {@link #elements()}, except it is unordered.
-     * @return The unordered ground
+     * @return The unordered elements on which this oriented matroid is defined.
      */
     public UnsignedSet setOfElements();
 
@@ -102,6 +104,10 @@ public interface OM extends Verify {
      */
 	public Matroid getMatroid();
 
+	/**
+	 * The rank of this oriented matroid.
+	 * @return The rank of this oriented matroid.
+	 */
 	int rank();
 
 	/**
@@ -116,7 +122,7 @@ public interface OM extends Verify {
 	/**
 	 * An Oriented Matroid is equal to any other object implementing this
 	 * interface, which represents the same underlying oriented matroid,
-	 * including the {@link #ground} being equal.
+	 * including the {@link #elements()} being equal.
 	 * 
 	 * @param om
 	 * @return true if these both represent the same Oriented Matroid
@@ -124,14 +130,23 @@ public interface OM extends Verify {
 	@Override
 	boolean equals(Object om);
 
-	int asInt(Label l);
-
-	<T extends Label> int[] asInt(T[] l);
+	/**
+	 * The integer corresponding to this element (counting from 0).
+	 * @param e  An element in {@link #elements()}
+	 * @return The index of <code>e</code> in {@link #elements()}
+	 */
+	int asInt(Label e);
+    /**
+     * The integers corresponding to these elements (counting from 0).
+     * @param e  Elements in {@link #elements()}
+     * @return The corresponding indexes of <code>e</code> in {@link #elements()}
+     */
+	<T extends Label> int[] asInt(T[] e);
 
 	/**
-	 * 
-	 * @param u
-	 * @return Sorted array of indexes.
+	 * Gets the indexes of each element in <code>u</code>
+	 * @param u a subset of {@link #setOfElements()}
+	 * @return The increasing corresponding indexes
 	 */
 	int[] asInt(UnsignedSet u);
 
@@ -175,6 +190,12 @@ public interface OM extends Verify {
      */
     Group automorphisms();
 
+    /**
+     * Convert a permutation of the {@link #elements()} into
+     * a function that will map a signed set to the permuted signed set.
+     * @param p This is a permutation of {@link #elements()}
+     * @return A function that invokes the action of the permutation on signed sets
+     */
     Function<SignedSet, SignedSet> signedSetPermuter(Permutation p);
 
 }
