@@ -4,8 +4,18 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * Mathematical sets {@link SetOf} of mathematical sets {@link SetOf} of {@link Label}s.
+ * @author jeremycarroll
+ *
+ */
 
 public interface SetOfUnsignedSet extends SetOf<UnsignedSet, SetOfUnsignedSet> {
+    /**
+     * The union over this set of the members of this set. I.e. 
+     * <code>a &in; b.union()</code> if and only if <code>&exist; c</code> s.t. <code>c &in; b && a &in; c</code>
+     * @return The set theoretic union of the set.
+     */
     UnsignedSet union();
 
 }
