@@ -5,7 +5,6 @@
 package net.sf.oriented.impl.set;
 
 import net.sf.oriented.impl.items.HasFactory;
-import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
@@ -36,29 +35,6 @@ public interface SignedSetInternal extends
 	@Override
 	UnsignedSetInternal minus();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#equalsIgnoreSign(omi.SignedSetI)
-	 */
-	@Override
-	boolean equalsIgnoreSign(SignedSet s);
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#equalsOpposite(omi.SignedSetI)
-	 */
-	@Override
-	boolean equalsOpposite(SignedSet s);
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#separation(omi.SignedSet)
-	 */
-	@Override
-	UnsignedSet separation(SignedSet b);
 
 	/*
 	 * (non-Javadoc)
@@ -68,21 +44,6 @@ public interface SignedSetInternal extends
 	@Override
 	SignedSetInternal compose(SignedSet b);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#size()
-	 */
-	@Override
-	int size();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#conformsWith(omi.SignedSet)
-	 */
-	@Override
-	boolean conformsWith(SignedSet a);
 
 	/*
 	 * (non-Javadoc)
@@ -91,22 +52,6 @@ public interface SignedSetInternal extends
 	 */
 	@Override
 	UnsignedSetInternal support();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#sign(omi.Label)
-	 */
-	@Override
-	int sign(Label e);
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see omi.SignedSetI#isRestrictionOf(omi.SignedSetI)
-	 */
-	@Override
-	boolean isRestrictionOf(SignedSet x);
 
 	/*
 	 * (non-Javadoc)
