@@ -8,6 +8,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+
 import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.om.MatroidFactory;
 import net.sf.oriented.impl.om.OMChirotopeFactory;
@@ -466,7 +470,28 @@ final public class FactoryFactory {
         Options opt = new Options();
         return new FactoryFactory(opt).realized().construct(new RationalMatrix(rows));
     }
-
+    /**
+     * This method is for turning a simple matrix of integers into 
+     * an oriented matroid over the columns.
+     * Each array in the array of arrays is a row.
+     * The number of arrays is the rank.
+     * @param rows
+     * @return
+     */
+    public static OM fromMatrix(double[][] rows) {
+        Options opt = new Options();
+        final double data[][] = {
+                { 1.2, 1.4, 1.6 },
+                { 0.5, 0.4, 0.7 }
+        };
+        
+        RealMatrix m = MatrixUtils.createRealMatrix(data);
+        System.err.println(
+        new LUDecomposition(m.getSubMatrix(new int[]{0, 1}, new int[]{1,2}))
+          .getDeterminant() );
+        return null;
+        //new FactoryFactory(opt).realized().construct(new RationalMatrix(rows));
+    }
 
 }
 /************************************************************************
