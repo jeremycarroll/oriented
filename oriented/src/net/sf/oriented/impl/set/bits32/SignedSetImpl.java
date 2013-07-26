@@ -6,12 +6,12 @@ package net.sf.oriented.impl.set.bits32;
 
 import static net.sf.oriented.impl.set.bits32.UnsignedSetImpl.sizex;
 import net.sf.oriented.impl.items.HasFactoryImpl;
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetFactory;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
@@ -96,7 +96,7 @@ public class SignedSetImpl extends
 				* labelFactory().hashCode(minus);
 	}
 
-	private LabelFactory labelFactory() {
+	private LabelFactoryImpl labelFactory() {
 		return unsignedSetFactory().itemFactory();
 	}
 

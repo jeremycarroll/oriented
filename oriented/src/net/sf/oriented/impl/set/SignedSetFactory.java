@@ -8,12 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.oriented.impl.items.FactoryImpl;
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.items.ParseContext;
 import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -27,7 +27,7 @@ public class SignedSetFactory extends
 
 	private final SignedSetInternal empty;
 
-	SignedSetFactory(LabelFactory f, UnsignedSetFactory uf) {
+	SignedSetFactory(LabelFactoryImpl f, UnsignedSetFactory uf) {
 		super(f.getOptions());
 		unsignedF = uf;
 		empty = createSignedSet(unsignedF.empty(), unsignedF.empty());
@@ -87,7 +87,7 @@ public class SignedSetFactory extends
 
 	private SignedSetInternal parseSingleChar(ParseContext pc) {
 		boolean plus = true;
-		LabelFactory lf = unsignedF.itemFactory();
+		LabelFactoryImpl lf = unsignedF.itemFactory();
 		JavaSet<LabelImpl> p = unsignedF.itemFactory.emptyCollectionOf();
 		JavaSet<LabelImpl> m = unsignedF.itemFactory.emptyCollectionOf();
 		String a = uptoSeparator(pc);

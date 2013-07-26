@@ -8,6 +8,8 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
+import net.sf.oriented.impl.items.OptionsInternal;
 import net.sf.oriented.impl.set.AbsSetImpl;
 import net.sf.oriented.impl.util.Misc;
 
@@ -18,7 +20,7 @@ import net.sf.oriented.impl.util.Misc;
  * @author jeremy
  * 
  */
-public class Options {
+public class Options extends OptionsInternal {
     
     public enum Impl {
         /**
@@ -32,7 +34,7 @@ public class Options {
          */
         hash
     }
-	LabelFactory label;
+	LabelFactoryImpl label;
 	private boolean plusMinus;
 	private boolean singleChar;
 
@@ -54,30 +56,7 @@ public class Options {
 	    return (JavaSet<T>) Misc.invoke(javaSet);
 	}
 
-    // TODO: how to hide this.
-	public <T> Constructor<?> constructorFor(Class<T> fc) {
-		String name = fc.getSimpleName();
-		if (!name.endsWith("Factory"))
-			throw new IllegalArgumentException("Naming conventions violated");
-		name = name.substring(0, name.length() - "Factory".length())+ "Impl";
-		return constructorFor(name);
-	}
-
-    // TODO: how to hide this.
-    public <T> Constructor<?> constructorFor(String name) {
-        try {
-            @SuppressWarnings("unchecked")
-			Class<T> impl = (Class<T>) Class.forName(getImplementation() + name);
-			Constructor<?> c[] = impl.getConstructors();
-			if (c.length != 1)
-				throw new RuntimeException("internal problem: more than one constructor found for "+ name);
-			return c[0];
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
-    }
-
-	/**
+    /**
 	 * Provide all the {@link Label}s to be used, as Strings. This allows
 	 * representations as sequences of {-1, 0, 1}, for instance.
 	 * 
@@ -133,9 +112,9 @@ public class Options {
 		return singleChar;
 	}
 
-	LabelFactory getLabelFactory() {
+	LabelFactoryImpl getLabelFactory() {
 		if (label == null) {
-			label = new LabelFactory(this);
+			label = new LabelFactoryImpl(this);
 		}
 		return label;
 	}
@@ -148,7 +127,8 @@ public class Options {
 		return getUniverse().get(i);
 	}
 	
-    private String getImplementation() {
+    @Override
+    protected String getImplementation() {
         return implementation;
     }
 

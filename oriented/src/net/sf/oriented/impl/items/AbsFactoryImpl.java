@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.impl.items;
 
+import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +58,20 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
         }
         // System.err.println(++cnt+":"+TestConversions.TEST_NUMBER+" remaking: "+getClass().getSimpleName());
         return fallbackRemake(t);
+    }
+    
+    protected <T extends ITEM> T[] remake(ITEM t[]) {
+        if (t.length == 0) {
+            throw new IllegalArgumentException("Must be non-zero length");
+        }
+        T first = remake(t[0]);
+        @SuppressWarnings("unchecked")
+        T rslt[] = (T[]) Array.newInstance(first.getClass(), t.length);
+        rslt[0] = first;
+        for (int i=1;i<t.length;i++) {
+            rslt[i] = remake(t[i]);
+        }
+        return rslt;
     }
 
     @SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ public abstract class FactoryImpl<
         TypeChecker.check(this);
         options = o;
         // System.err.println(++cnt+": building: "+getClass().getSimpleName());
-        constructor = (Constructor<ITEM_INTERNAL2>) o.constructorFor(getClass());
+        constructor = (Constructor<ITEM_INTERNAL2>) ((OptionsInternal)o).constructorFor(getClass());
     }
 
     final private Options options;

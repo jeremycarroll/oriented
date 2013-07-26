@@ -70,7 +70,7 @@ public class OMRealizedFactory extends
 	@Override
 	public OMasRealized construct(RationalMatrix mat) {
 		final int n = mat.width();
-		Collection<? extends Label> labels = factory.labels().getUniverse();
+		Collection<Label> labels = factory.labels().getUniverse();
 		if (labels.size()!=n) {
 		    labels = new SimpleLabels(n);
 		}

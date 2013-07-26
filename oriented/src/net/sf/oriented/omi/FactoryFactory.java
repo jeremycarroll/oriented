@@ -4,6 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.om.MatroidFactory;
 import net.sf.oriented.impl.om.OMChirotopeFactory;
 import net.sf.oriented.impl.om.OMFactory;
@@ -27,7 +28,7 @@ import net.sf.oriented.impl.set.UnsignedSetFactory;
  * 
  */
 final public class FactoryFactory {
-	private final LabelFactory label;
+	private final LabelFactoryImpl label;
 	private SetOfSignedSetFactory setsOfSignedSet;
 	private SetOfSignedSetFactory symmetricSetsOfSignedSet;
 	private SetOfUnsignedSetFactory setsOfUnsignedSet;

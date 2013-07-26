@@ -10,6 +10,7 @@ package net.sf.oriented.impl.set.bits32;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.set.SetFactoryInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
@@ -17,7 +18,6 @@ import net.sf.oriented.impl.set.Test;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
@@ -310,7 +310,7 @@ public class SetOfUnsignedSetImpl
 	@Override
 	public int hashCode() {
 		if (hashCode == MARKER) {
-			LabelFactory lf = factory().itemFactory().itemFactory();
+			LabelFactoryImpl lf = factory().itemFactory().itemFactory();
 			hashCode = 0;
 			for (int member : members) {
 				hashCode += lf.hashCode(member);

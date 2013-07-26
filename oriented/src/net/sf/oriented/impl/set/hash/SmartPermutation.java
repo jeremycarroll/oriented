@@ -5,9 +5,9 @@ package net.sf.oriented.impl.set.hash;
 
 import java.util.List;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.util.combinatorics.Permutation;
 
 public class SmartPermutation extends Permutation {
@@ -21,7 +21,7 @@ public class SmartPermutation extends Permutation {
         if (ix >= n()) {
             return m;
         }
-        List<Label> universe = ((LabelFactory)m.factory()).getUniverse();
+        List<Label> universe = ((LabelFactoryImpl)m.factory()).getUniverse();
         return (LabelImpl) universe.get(get(m.ordinal()));
     }
 

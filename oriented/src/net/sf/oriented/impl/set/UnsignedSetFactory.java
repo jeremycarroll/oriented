@@ -8,10 +8,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.items.ParseContext;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.UnsignedSet;
 
@@ -20,11 +20,11 @@ public class UnsignedSetFactory
 		SetFactoryImpl<LabelImpl, UnsignedSetInternal, Label, UnsignedSet, LabelImpl, UnsignedSetInternal> {
 
 	@Override
-	public LabelFactory itemFactory() {
-		return (LabelFactory) super.itemFactory();
+	public LabelFactoryImpl itemFactory() {
+		return (LabelFactoryImpl) super.itemFactory();
 	}
 
-	public UnsignedSetFactory(LabelFactory f) {
+	public UnsignedSetFactory(LabelFactoryImpl f) {
 		super(f);
 	}
 
@@ -47,7 +47,7 @@ public class UnsignedSetFactory
 		String s = uptoSeparator(pc);
 		if ("*".equals(s))
 			return;
-		LabelFactory itemF = itemFactory();
+		LabelFactoryImpl itemF = itemFactory();
 		for (int i = 0; i < s.length(); i++) {
 			rslt.add(itemF.parse(s.substring(i, i + 1)));
 		}

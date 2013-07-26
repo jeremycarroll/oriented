@@ -13,6 +13,7 @@ import static net.sf.oriented.impl.set.SignedSetFactory.toLong;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.set.SetFactoryInternal;
 import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
@@ -22,7 +23,6 @@ import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -301,7 +301,7 @@ final public class SetOfSignedSetImpl
 	@Override
 	public int hashCode() {
 		if (hashCode == MARKER) {
-			LabelFactory lf = factory().itemFactory().unsignedF.itemFactory();
+			LabelFactoryImpl lf = factory().itemFactory().unsignedF.itemFactory();
 			hashCode = 0;
 			for (long member : members) {
 				hashCode += lf.hashCode(plus(member)) + 35
