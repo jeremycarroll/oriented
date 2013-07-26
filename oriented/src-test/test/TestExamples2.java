@@ -3,11 +3,9 @@
  ************************************************************************/
 package test;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,9 +37,9 @@ public class TestExamples2 {
                      rslt.add(new Object[]{m.getName(),Misc.invoke(m, null)});
                      break;
                  case 1:
-                     rslt.add(new Object[]{m.getName()+"(+1)",Misc.invoke(m, null,1)});
-                     rslt.add(new Object[]{m.getName()+"(0)",Misc.invoke(m, null,0)});
-                     rslt.add(new Object[]{m.getName()+"(-1)",Misc.invoke(m, null,-1)});
+                     rslt.add(new Object[]{m.getName()+"[+1]",Misc.invoke(m, null,1)});
+                     rslt.add(new Object[]{m.getName()+"[0]",Misc.invoke(m, null,0)});
+                     rslt.add(new Object[]{m.getName()+"[-1]",Misc.invoke(m, null,-1)});
                      break;
                   default:
                          throw new IllegalStateException("Problem with method: "+m.getName());

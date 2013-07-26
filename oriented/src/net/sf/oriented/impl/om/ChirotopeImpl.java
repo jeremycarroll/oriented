@@ -606,6 +606,40 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
             }});
     }
 
+    @Override
+    public OMasChirotope mutate(int newSign, Label ... basis) {
+        if (basis.length!= rank()) {
+            throw new IllegalArgumentException("Incorrect number of elements in basis, expecting: "+rank());
+        }
+        final int basis2[] = asInt(basis);
+        
+        final int sign = newSign * CombinatoricUtils.sign(basis2);
+        Arrays.sort(basis2);
+
+        OMAll all = new OMAll(elements(), ffactory());
+        return new ChirotopeImpl(all, new Chirotope(){
+
+            @Override
+            public int chi(int ... i) {
+                if (Arrays.equals(basis2, i)) {
+                    return sign;
+                }
+                return alt.chi(i);
+            }
+
+            @Override
+            public int rank() {
+                return ChirotopeImpl.this.rank();
+            }
+
+            @Override
+            public int n() {
+                return ChirotopeImpl.this.n();
+            }
+            
+        });
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

@@ -12,6 +12,15 @@ public interface OMasChirotope extends OM, FullChirotope {
      */
     String toShortString();
 
+    /**
+     * Produce a new oriented matroid by setting the value of the chirotope on
+     * the given basis to i
+     * @param i In { +1, 0, -1}. The value of the resulting oriented matroid's chirotope for this basis
+     * @param basis An array of length {@link OM#rank()}, saying which basis to mutate
+     * @return
+     */
+    OMasChirotope mutate(int i, Label ... basis);
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

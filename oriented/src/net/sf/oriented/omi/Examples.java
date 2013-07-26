@@ -32,6 +32,8 @@ public class Examples {
      * See the "Sharpness of Circular Saws (2000)" {@link Bibliography#carroll2000d}
      */
     private static OM circularSaw3;
+    
+    private static OM omega14[] = new OM[3];
    
     private static boolean FreshEachTime = true;
 
@@ -132,6 +134,36 @@ public class Examples {
             
         }
         return circularSaw3;
+    }
+    /**
+     * Richter-Gebert's interesting oriented matroids.
+     * @param i
+     * @return
+     * @see Bibliography#richterGebert1996
+     */
+    public static OM omega14(int i) {
+        if (omega14[1]==null) {
+            omega14[1] = FactoryFactory.fromMatrix( new int[][] {
+                    {1, 0, 1, 0, 1, 1, 2, 3, 2, 3, 1, 1, -1, 0},
+                    {0, 1, 0, 1, 1, 2, 1, 2, 3, 1, 3, -1, 1, 0},
+                    {0, 0, 1, 1, 2, 2, 2, 4, 4, 4, 4,  4, 4, 1}
+            });
+        }
+        if (omega14[i+1]==null) {
+            Label elements[] = omega14[1].elements();
+            omega14[i+1] = omega14[1].getChirotope().mutate(i,elements[11],elements[12],elements[13]);
+        }
+        return omega14[i+1];
+    }
+
+    /**
+     * Richter-Gebert's interesting oriented matroids.
+     * @param i
+     * @return
+     * @see Bibliography#richterGebert1996
+     */
+    public static OM Ω14(int i) {
+        return omega14(i);
     }
 }
 

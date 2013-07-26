@@ -454,6 +454,19 @@ final public class FactoryFactory {
         return new Crossings(crossings).om();
     }
 
+    /**
+     * This method is for turning a simple matrix of integers into 
+     * an oriented matroid over the columns.
+     * Each array in the array of arrays is a row.
+     * The number of arrays is the rank.
+     * @param rows
+     * @return
+     */
+    public static OM fromMatrix(int[][] rows) {
+        Options opt = new Options();
+        return new FactoryFactory(opt).realized().construct(new RationalMatrix(rows));
+    }
+
 
 }
 /************************************************************************
