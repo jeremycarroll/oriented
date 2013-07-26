@@ -5,6 +5,7 @@ package test;
 
 
 import junit.framework.Assert;
+import net.sf.oriented.impl.om.ExamplesHelper;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
@@ -59,6 +60,13 @@ public class TestExamples {
          * [3]=(10000,0,10000)        θ = 90
          */
         Assert.assertEquals(Examples.uniform4().dual().getMaxVectors(), fromEuclideanCrossings.dual().getMaxVectors());
+    }
+    
+    @Test
+    public void testSuv14() {
+        Assert.assertEquals(Examples.suvorov14(), ExamplesHelper.suv14(1.780776,5.186363));
+        Assert.assertEquals(0, Examples.suvorov14().getChirotope().chi(0,12,13));
+        Assert.assertEquals(0, Examples.suvorov14().getChirotope().chi(5,9,10));
     }
 }
 

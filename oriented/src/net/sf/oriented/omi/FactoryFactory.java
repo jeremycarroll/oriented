@@ -12,6 +12,8 @@ import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
+import com.google.common.math.IntMath;
+
 import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.om.MatroidFactory;
 import net.sf.oriented.impl.om.OMChirotopeFactory;
@@ -21,6 +23,7 @@ import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
+import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.matrix.RationalMatrix;
 
 /**
@@ -478,19 +481,62 @@ final public class FactoryFactory {
      * @param rows
      * @return
      */
-    public static OM fromMatrix(double[][] rows) {
-        Options opt = new Options();
-        final double data[][] = {
-                { 1.2, 1.4, 1.6 },
-                { 0.5, 0.4, 0.7 }
-        };
+    public static OM fromMatrix(double threshold, double[][] rows) {
+        int rank = rows.length;
+        int n = rows[0].length;
         
-        RealMatrix m = MatrixUtils.createRealMatrix(data);
-        System.err.println(
-        new LUDecomposition(m.getSubMatrix(new int[]{0, 1}, new int[]{1,2}))
-          .getDeterminant() );
-        return null;
-        //new FactoryFactory(opt).realized().construct(new RationalMatrix(rows));
+        RealMatrix data = MatrixUtils.createRealMatrix(rows);
+        double determinants[] = new double[IntMath.binomial(n, rank)];
+        int rowIndexes[] = new int[rank];
+        for (int i=0;i<rank;i++) {
+            rowIndexes[i] = i;
+        }
+        int j = 0;
+        for (int ix[]:new CoLexicographic(n, rank)) {
+            determinants[j++] = new LUDecomposition(data
+                    .getSubMatrix(rowIndexes, ix)
+                    ).getDeterminant();
+        }
+        double epsilon = guessEpsilon(threshold, determinants);
+        
+        char signs[] = new char[determinants.length];
+        char plusMinus[] = new char[]{ '-', '0', '+' };
+        for (int i=0;i<determinants.length;i++) {
+            signs[i] = plusMinus[1+sign(epsilon, determinants[i])];
+        }
+        return fromChirotope(n, rank, new String(signs));
+    }
+
+    public static int sign(double epsilon, double d) {
+        if (d<epsilon) {
+            if (d>-epsilon) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    public static double guessEpsilon(double threshold, double[] determinants) {
+        // now compute epsilon
+        double absDeterminants[] = new double[determinants.length];
+        for (int i=0;i<determinants.length;i++) {
+            absDeterminants[i] = Math.abs(determinants[i]);
+        }
+        Arrays.sort(absDeterminants);
+        
+        for (int i=1;i<absDeterminants.length;i++) {
+            if (absDeterminants[i-1]==0) {
+                continue;
+            }
+            if (absDeterminants[i-1]*threshold > absDeterminants[i]) {
+                continue;
+            }
+            return (absDeterminants[i-1]+absDeterminants[i])/2.0;
+        }
+        return Double.MIN_NORMAL;
     }
 
 }

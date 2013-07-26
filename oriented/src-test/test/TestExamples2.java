@@ -15,6 +15,7 @@ import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -64,6 +65,7 @@ public class TestExamples2 {
 
     @Test
     public void testAcyclic() {
+        Assume.assumeTrue(!name.contains("suvorov14"));  // this one is cyclic!
         Assert.assertTrue(name,om.isAcyclic());
     }
     

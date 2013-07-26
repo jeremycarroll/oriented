@@ -186,6 +186,28 @@ public class Bibliography {
     531–554. Amer. Math. Soc., Providence, RI.
 */
     public static final String shor1991 = "Stretchability of pseudolines is NP-hard";
+    
+/**
+ * [Suvorov, 1988]
+ * <pre>
+%0 Book Section
+%D 1988
+%@ 978-3-540-50237-1
+%B Topology and Geometry — Rohlin Seminar
+%V 1346
+%S Lecture Notes in Mathematics
+%E Viro, OlegYanovich
+%E Vershik, AnatolyMoiseevich
+%R 10.1007/BFb0082793
+%T Isotopic but not rigidly isotopic plane systems of straight lines
+%U http://dx.doi.org/10.1007/BFb0082793
+%I Springer Berlin Heidelberg
+%8 1988-01-01
+%A Suvorov, P.
+%P 545-556
+</pre>
+*/
+    public static final String suvorov1988 ="Isotopic but not rigidly isotopic plane systems of straight lines";
 
 }
 

@@ -4,6 +4,8 @@
 
 package net.sf.oriented.omi;
 
+import net.sf.oriented.impl.om.ExamplesHelper;
+
 
 
 /**
@@ -34,6 +36,8 @@ public class Examples {
     private static OM circularSaw3;
     
     private static OM omega14[] = new OM[3];
+    
+    private static OM suv14;
    
     private static boolean FreshEachTime = true;
 
@@ -136,6 +140,19 @@ public class Examples {
         return circularSaw3;
     }
     /**
+     * Suvorov's non-isotopic Oriented Matroid,
+     * (as presented in {@link Bibliography#björnerEtAl1999}
+     * @return Suvorov's non-isotopic Oriented Matroid.
+     * @see Bibliography#suvorov1988
+     */
+    public static OM suvorov14() {
+        if (suv14 == null ||FreshEachTime) {
+            suv14 = ExamplesHelper.suv14(1.780776,3.936742);
+        }
+        return suv14;
+    }
+
+    /**
      * Richter-Gebert's interesting oriented matroids.
      * @param i
      * @return
@@ -149,7 +166,7 @@ public class Examples {
                     {0, 0, 1, 1, 2, 2, 2, 4, 4, 4, 4,  4, 4, 1}
             });
         }
-        if (omega14[i+1]==null) {
+        if (omega14[i+1]==null || FreshEachTime) {
             Label elements[] = omega14[1].elements();
             omega14[i+1] = omega14[1].getChirotope().mutate(i,elements[11],elements[12],elements[13]);
         }
