@@ -20,6 +20,7 @@ public interface OMasChirotope extends OM, FullChirotope {
      * @return
      */
     OMasChirotope mutate(int i, Label ... basis);
+    OMasChirotope mutate(int i, int ... basis);
 
 }
 /************************************************************************
