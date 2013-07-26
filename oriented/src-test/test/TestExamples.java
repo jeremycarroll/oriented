@@ -11,6 +11,7 @@ import java.util.List;
 import junit.framework.Assert;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 
 import org.apache.commons.math3.util.Pair;
@@ -54,7 +55,7 @@ public class TestExamples {
 
     @Test
     public void testUniform4() {
-        OM fromEuclideanLines = Examples.fromEuclideanLines(
+        OM fromEuclideanLines = FactoryFactory.fromEuclideanLines(
                 new int[][][]{
                         {{2,1},{1,1},},
                         {{ 2, 1 },{1,2}},
@@ -85,7 +86,7 @@ public class TestExamples {
    
     @Test
     public void testFromCrossing() {
-        OM fromEuclideanCrossings = Examples.fromCrossings(
+        OM fromEuclideanCrossings = FactoryFactory.fromCrossings(
                   "A:BCD",
                   "B:ACD",
                   "C:ABD",
