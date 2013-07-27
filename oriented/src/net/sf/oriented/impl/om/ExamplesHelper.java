@@ -8,12 +8,20 @@ import net.sf.oriented.omi.OM;
 
 public class ExamplesHelper {
     public static OM suv14(double s, double t) {
-        double M = 1.0;
+        double M = 1;
         return FactoryFactory.fromMatrix(1000.0, new double[][]{
                 { 0, M, 0, M, M, 0, M,     0, s,   2*s,   2*s+M,      -2*s, 2*s,      t - s - M },
                 { M, 0, 0, M, 0, M, M,     M, s+M, 3*s+M, 2*(s+M), t-3*s-M, 3*s-t+M,     0 },
                 { 0, 0, M, M, M, M, 2*M, 2*M, s+M, 4*s,   3*M+2*s,   t - 4*s, 3*s-t+M,   s -M }
-        }).getChirotope();
+        });
+    }
+
+    public static OM tsukamoto13(double s, double t, double u) {
+        return FactoryFactory.fromMatrix(1000.0, new double[][]{
+         { 1, 0, 0, 1, s, s, 0, 1, 1,  s*t,   s+t-u-s*t+s*u, s+t-s*t-s*s*u, s*(t-u+s*u) },
+         { 0, 1, 0, 1, 0, 1, t, t, u,    t,   t-u + s*u,     t,             t-u+s*u },
+         { 0, 0, 1, 1, 1, 1, 1, 1, 0,  1-s*u, 1-u+s*u,       1-s*u,         1-u+s*u }
+        });
     }
 }
 

@@ -38,6 +38,9 @@ public class Examples {
     private static OM omega14[] = new OM[3];
     
     private static OM suv14;
+    
+
+    private static OM tsukamoto13[] = new OM[3];
    
     private static boolean FreshEachTime = true;
 
@@ -151,7 +154,16 @@ public class Examples {
         }
         return suv14;
     }
+    
+    public static OM tsukamoto13(int i) {
 
+        if (tsukamoto13[i+1]==null || FreshEachTime) {
+            tsukamoto13[i+1] = 
+                    ExamplesHelper.tsukamoto13(0.5,0.5,1.0/3.0)
+                       .getChirotope().mutate(i,8,11,12);
+        }
+        return tsukamoto13[i+1];
+    }
     /**
      * Richter-Gebert's interesting oriented matroids.
      * @param i
