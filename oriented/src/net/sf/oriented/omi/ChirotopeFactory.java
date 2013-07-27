@@ -6,26 +6,43 @@ package net.sf.oriented.omi;
 
 import java.util.Collection;
 
+/**
+ * Create Oriented Matroids from their Chirotope.
+ * @author jeremycarroll
+ *
+ */
 public interface ChirotopeFactory extends Factory<OMasChirotope> {
+    /**
+     * Create an oriented matroid from a chirotope provided programmatically.
+     * The element labels are generated automatically.
+     * @param chi This is accessed only in monotone increasing fashion, and is not assumed to be alternating
+     * @return A new oriented matroid
+     */
 	OMasChirotope construct(Chirotope chi);
 
-	/**
-	 * Note that the contract for Chirotope only requires it to be defined
-	 * on {@link Chirotope#rank()} monotonic increasing values. The factory
-	 * is responsible for implementing the alternating nature of the chirotope.
-	 * @param e
-	 * @param chi
-	 * @return
-	 */
+    /**
+     * Create an oriented matroid from a chirotope provided programmatically, with given
+     * element labels.
+     * @param e The elment labels taken in the order of their iterator.
+     * @param chi This is accessed only in monotone increasing fashion, and is not assumed to be alternating
+     * @return A new oriented matroid
+     */
 	OMasChirotope construct(Collection<? extends Label> e, Chirotope chi);
 
 	/**
-	 * Create an oriented matroid from its representation as a series of +, -, 0s.
+	 * Create an oriented matroid from its colexicographic representation as a series of +, -, 0s.
 	 * We also need to know its rank.
 	 * @param rank
 	 * @param plusMinusZeros
 	 */
-	OMasChirotope fromShortString(int rank, String plusMinusZeros);
+	OMasChirotope fromCoLexicographic(int rank, String plusMinusZeros);
+    /**
+     * Create an oriented matroid from its lexicographic representation as a series of +, -, 0s.
+     * We also need to know its rank.
+     * @param rank
+     * @param plusMinusZeros
+     */
+    OMasChirotope fromLexicographic(int rank, String plusMinusZeros);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

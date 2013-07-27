@@ -120,6 +120,15 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 	    }
 	}
 
+    public static String fromLexicographic(int n, int rank, String lex) {
+        char result[] = new char[lex.length()];
+        int i = 0;
+        for ( int index[]:new CoLexicographic(n,rank)) {
+            result[i++] = lex.charAt(Lexicographic.index(n,index));
+        }
+        return new String(result);
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

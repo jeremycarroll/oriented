@@ -95,30 +95,39 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMasChirotope, RankAnd
 
 	@Override
 	OMasChirotope construct(RankAndChirotope p) {
-	    int l = p.chirotope.length();
-        int nHigh = p.rank;
+	    return construct(new SimpleLabels(howManyElements(p.rank, p.chirotope.length())), p);
+	}
+
+    private int howManyElements(int rank, int l) {
+        int nHigh = rank;
         int n;
-        while (IntMath.binomial(nHigh, p.rank)<l) {
+        while (IntMath.binomial(nHigh, rank)<l) {
             nHigh *= 2;
         }
         int nLow = nHigh/2;
         // following should be divide and conquer, but lazily we use brute force.
         for (n = nLow; n<=nHigh; n++) {
-            int b = IntMath.binomial(n, p.rank);
+            int b = IntMath.binomial(n, rank);
             if ( b==l ) {
                 break;
             }
             if ( b > l ) {
                 throw new IllegalArgumentException("Initialization string is of length "+l+
-                        ". Nearby legal values are: "+IntMath.binomial(n-1, p.rank)+" and "+b);
+                        ". Nearby legal values are: "+IntMath.binomial(n-1, rank)+" and "+b);
             }
         }
-		return construct(new SimpleLabels(n), p);
-	}
+        return n;
+    }
 
     @Override
-    public OMasChirotope fromShortString(int rank, String plusMinusZeros) {
+    public OMasChirotope fromCoLexicographic(int rank, String plusMinusZeros) {
         return construct(new RankAndChirotope(rank,plusMinusZeros));
+    }
+
+    @Override
+    public OMasChirotope fromLexicographic(int rank, String plusMinusZeros) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

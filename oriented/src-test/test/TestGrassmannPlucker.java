@@ -46,7 +46,7 @@ public class TestGrassmannPlucker {
         Assert.assertEquals( expected, TestAll.verify(om(chi)) );
     }
     private OM om(String chi) {
-        return factory.chirotope().fromShortString(3,chi);
+        return factory.chirotope().fromCoLexicographic(3,chi);
     }
     
     @Test

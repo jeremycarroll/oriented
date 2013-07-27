@@ -78,6 +78,11 @@ public class Lexicographic extends AbstractCollection<int[]> {
 	    }
 	}
 
+    public static int index(int n2, int[] index) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
