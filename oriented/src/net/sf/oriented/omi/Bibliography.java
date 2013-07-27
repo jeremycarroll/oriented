@@ -208,7 +208,28 @@ public class Bibliography {
 </pre>
 */
     public static final String suvorov1988 ="Isotopic but not rigidly isotopic plane systems of straight lines";
-    public static final String tsukamoto2013 ="Isotopic but not rigidly isotopic plane systems of straight lines";
+ /**
+     * [Tsukamoto, 2013]
+     * <pre>    
+    %0 Journal Article
+    %D 2013
+    %@ 0179-5376
+    %J Discrete & Computational Geometry
+    %V 49
+    %N 2
+    %R 10.1007/s00454-012-9456-y
+    %T New Examples of Oriented Matroids with Disconnected Realization Spaces
+    %U http://dx.doi.org/10.1007/s00454-012-9456-y
+    %I Springer-Verlag
+    %8 2013-03-01
+    %K Oriented matroids
+    %K Realization space
+    %A Tsukamoto, Yasuyuki
+    %P 287-295
+    %G English
+    </pre>
+    */
+    public static final String tsukamoto2013 = "New Examples of Oriented Matroids with Disconnected Realization Spaces";
 
 }
 
