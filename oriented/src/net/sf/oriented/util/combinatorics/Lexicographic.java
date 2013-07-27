@@ -77,10 +77,38 @@ public class Lexicographic extends AbstractCollection<int[]> {
 	        System.out.println();
 	    }
 	}
+	
+	/**
+     * Return the index in the lexicographic sequence of r elements from n of
+     * the sequence i. p is how far we have got in the sequence.
+     * 
+     * @param n
+     * @param r
+     * @param p
+     * @param i
+     * @return
+     */
+    private static int oldCodeForIndex(int n, int r, int p, int... i) {
+        if (r == 0)
+            return 0;
+        if (i[p] < 0 || i[p] >= n)
+            throw new IllegalArgumentException("value out of range.");
+        for (int q = 1; q < r; q++)
+            if (i[p + q] > i[p]) {
+                i[p + q] -= (i[p] + 1);
+            } else
+                throw new IllegalArgumentException("sequence not monotonic");
+        int rslt = 0;
+        int nextN = n - 1 - i[p];
+        while (i[p] > 0) {
+            rslt += IntMath.binomial(n - i[p], r - 1);
+            i[p]--;
+        }
+        return rslt + oldCodeForIndex(nextN, r - 1, p + 1, i);
+    }
 
-    public static int index(int n2, int[] index) {
-        // TODO Auto-generated method stub
-        return 0;
+    public static int index(int n, int[] index) {
+        return oldCodeForIndex(n, index.length, 0, index);
     }
 
 }
