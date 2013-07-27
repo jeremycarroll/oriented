@@ -4,6 +4,13 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * View a matroid also as a set.
+ * This interface is used to view the set of bases or the set of circuits
+ * of a matroid as both a set and a matroid.
+ * @author jeremycarroll
+ *
+ */
 public interface MatroidAsSet extends Matroid, SetOfUnsignedSet {
 
 }

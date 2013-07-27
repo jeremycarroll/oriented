@@ -6,25 +6,61 @@ package net.sf.oriented.omi;
 
 import net.sf.oriented.util.combinatorics.Group;
 
+/**
+ * A minimal matroid interface, not intended as a useful part of this 
+ * library.
+ * Matroid's are only supported in as much as some processing
+ * of oriented matroids requires reference to the underlying matroid, no other usage is 
+ * supported.
+ * Like {@link OM} multiple cryptomorphisms are supported, but actually only two:
+ * {@link #getBases()} and {@link #getCircuits()}.
+ * @author jeremycarroll
+ *
+ */
 public interface Matroid extends Verify {
 
+    /**
+     * A view of the matroid as a set of circuits.
+     * @return  A view of the matroid as a set of circuits.
+     */
 	public MatroidAsSet getCircuits();
 
+	/**
+     * A view of the matroid as a set of bases.
+     * @return  A view of the matroid as a set of bases.
+     */
 	public MatroidAsSet getBases();
 
+	/**
+	 *  The dual of the matroid.
+	 * @return The dual of the matroid.
+	 */
 	public Matroid dual();
 
+	/**
+	 * The rank of the matroid.
+	 * @return The rank of the matroid.
+	 */
 	public int rank();
 
+    /**
+     * The elements on which this matroid is defined.
+     * @return The elements on which this matroid is defined.
+     */
 	public Label[] elements();
 
 	
     /**
      * This is the same as {@link #elements()}, except it is unordered.
-     * @return
+     * @return The set of elements on which this matroid is defined.
      */
     public UnsignedSet setOfElements();
 
+    /**
+     * The automorphism group for this matroid.
+     * (Yes this would be more useful if you could permute matroids, but no that is not supported).
+     * @return The automorphism group for this matroid.
+     */
     Group automorphisms();
 
 }

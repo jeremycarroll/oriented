@@ -4,6 +4,13 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * Convert a set of sets of elements into a matroid.
+ * @see FactoryFactory#bases()
+ * @see FactoryFactory#unsignedCircuits()
+ * @author jeremycarroll
+ *
+ */
 public interface MatroidFactory extends SetFactory<UnsignedSet, MatroidAsSet> {
 	/**
 	 * This does not, and will not, work. This is inherited from the
