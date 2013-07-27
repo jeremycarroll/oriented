@@ -4,7 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-public interface MFactory extends SetFactory<UnsignedSet, MatroidAsSet> {
+public interface MatroidFactory extends SetFactory<UnsignedSet, MatroidAsSet> {
 	/**
 	 * This does not, and will not, work. This is inherited from the
 	 * {@link SetFactory} interface, and is not appropriate for Matroids.

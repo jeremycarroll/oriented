@@ -14,16 +14,16 @@ import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.MFactory;
+import net.sf.oriented.omi.MatroidFactory;
 import net.sf.oriented.omi.MatroidAsSet;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-public abstract class MatroidFactory extends
+public abstract class MatroidFactoryImpl extends
 		AbsMatroidFromSetFactory<MatroidAsSet,  SetOfUnsignedSet, SetOfUnsignedSetInternal,SetOfUnsignedSetFactory>
-		implements MFactory {
+		implements MatroidFactory {
 
-	private static final class CFactory extends MatroidFactory {
+	private static final class CFactory extends MatroidFactoryImpl {
 		private CFactory(FactoryFactory f) {
 			super(f);
 		}
@@ -39,7 +39,7 @@ public abstract class MatroidFactory extends
 		}
 	}
 
-	private static final class BFactory extends MatroidFactory {
+	private static final class BFactory extends MatroidFactoryImpl {
 		private BFactory(FactoryFactory f) {
 			super(f);
 		}
@@ -55,15 +55,15 @@ public abstract class MatroidFactory extends
 		}
 	}
 
-	MatroidFactory(FactoryFactory f) {
+	MatroidFactoryImpl(FactoryFactory f) {
 		super(f, (SetOfUnsignedSetFactory) f.setsOfUnsignedSet());
 	}
 
-	static public MatroidFactory circuits(FactoryFactory f) {
+	static public MatroidFactoryImpl circuits(FactoryFactory f) {
 		return new CFactory(f);
 	}
 
-	static public MatroidFactory bases(FactoryFactory f) {
+	static public MatroidFactoryImpl bases(FactoryFactory f) {
 		return new BFactory(f);
 	}
 

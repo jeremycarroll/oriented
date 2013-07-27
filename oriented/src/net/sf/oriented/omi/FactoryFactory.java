@@ -15,7 +15,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import com.google.common.math.IntMath;
 
 import net.sf.oriented.impl.items.LabelFactoryImpl;
-import net.sf.oriented.impl.om.MatroidFactory;
+import net.sf.oriented.impl.om.MatroidFactoryImpl;
 import net.sf.oriented.impl.om.OMChirotopeFactory;
 import net.sf.oriented.impl.om.OMFactory;
 import net.sf.oriented.impl.om.OMRealizedFactory;
@@ -214,8 +214,8 @@ final public class FactoryFactory {
 		maxVectors = OMFactory.maxVectors(this);
 		chirotope = new OMChirotopeFactory(this);
 
-		bases = MatroidFactory.bases(this);
-		unsignedCircuits = MatroidFactory.circuits(this);
+		bases = MatroidFactoryImpl.bases(this);
+		unsignedCircuits = MatroidFactoryImpl.circuits(this);
 		realized = new OMRealizedFactory(this);
 	}
 
