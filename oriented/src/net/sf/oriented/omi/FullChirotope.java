@@ -4,7 +4,9 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-/**This marker interface show that the arguments to {@link #chi(int...)}
+/**
+ * A true chirotope with an alternating map.
+ * This marker interface show that the arguments to {@link #chi(int...)}
  * do not have to be monotonic increasing.
  * 
  * @author jeremycarroll
@@ -12,10 +14,11 @@ package net.sf.oriented.omi;
  */
 public interface FullChirotope extends Chirotope {
 	/**
+	 * The alternating map.
 	 * This is only called when it has {@link #rank()} arguments.
 	 * They do not have to be monotonic increasing.
 	 * 
-	 * @param i
+	 * @param i an array of {@link Chirotope#rank()} values between 0 and {@link Chirotope#n()} - 1.
 	 * @return -1, 0 or 1
 	 * @throws IllegalArgumentException
 	 *             With the wrong number of arguments or if any is out of range.

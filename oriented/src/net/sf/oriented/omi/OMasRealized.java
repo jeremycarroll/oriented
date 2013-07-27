@@ -7,11 +7,22 @@ package net.sf.oriented.omi;
 
 import net.sf.oriented.util.matrix.RationalMatrix;
 
+/**
+ * For an oriented matroid which was produced, or whose dual was produced,
+ * from a rational matrix, retrieve that view.
+ * Note this is not implemented for matroids produced from double precision
+ * matrixes from {@link FactoryFactory#fromMatrix(double, double[][])}
+ * @author jeremycarroll
+ *
+ */
 public interface OMasRealized extends OM {
 
+    /**
+     * An underlying matrix realizing this oriented matroid.
+     * @return An underlying matrix realizing this oriented matroid.
+     */
 	RationalMatrix getMatrix();
 
-	RationalMatrix getDualBasis();
 
 }
 

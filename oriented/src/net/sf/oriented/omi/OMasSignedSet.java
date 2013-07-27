@@ -4,6 +4,15 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * An oriented matroid viewed as a set of signed sets:
+ * a set of circuits, a set of vectors, or a set of maximum vectors.
+ * 
+ * Note that the equality contract from {@link OM} trumps
+ * the {@link SetOf#sameSetAs(SetOf)} view of equality.
+ * @author jeremycarroll
+ *
+ */
 public interface OMasSignedSet extends OM, SetOfSignedSet {
 
 }

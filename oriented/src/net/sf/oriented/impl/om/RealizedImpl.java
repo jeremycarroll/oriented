@@ -65,7 +65,6 @@ public class RealizedImpl extends AbsOM implements OMasRealized {
 		return getChirotope().equals(o);
 	}
 
-	@Override
 	public RationalMatrix getDualBasis() {
 		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
 				matrix.getDelegate());

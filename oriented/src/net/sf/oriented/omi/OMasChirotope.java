@@ -4,10 +4,18 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * The chirotope view of an oriented matroid.
+ * NB in the literature some authors use lexicographic ordering,
+ * and some authors use colexicographic ordering. This interface
+ * defaults to colexicographic.
+ * @author jeremycarroll
+ *
+ */
 public interface OMasChirotope extends OM, FullChirotope {
 
     /**
-     * The simplest form of the chirotope.
+     * The simplest form of the chirotope: in colexigraphic ordering.
      * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.
      */
     String toShortString();
@@ -15,11 +23,22 @@ public interface OMasChirotope extends OM, FullChirotope {
     /**
      * Produce a new oriented matroid by setting the value of the chirotope on
      * the given basis to i
+     * This method does not check that the mutation is legal. Call {@link OM#verify()}
+     * on the result to check the axioms.
      * @param i In { +1, 0, -1}. The value of the resulting oriented matroid's chirotope for this basis
      * @param basis An array of length {@link OM#rank()}, saying which basis to mutate
-     * @return
+     * @return A possibly invalid oriented matroid with the given mutation.
      */
     OMasChirotope mutate(int i, Label ... basis);
+    /**
+     * Produce a new oriented matroid by setting the value of the chirotope on
+     * the given basis to i
+     * This method does not check that the mutation is legal. Call {@link OM#verify()}
+     * on the result to check the axioms.
+     * @param i In { +1, 0, -1}. The value of the resulting oriented matroid's chirotope for this basis
+     * @param basis An array of length {@link OM#rank()}, indicating by index which basis to mutate
+     * @return A possibly invalid oriented matroid with the given mutation.
+     */
     OMasChirotope mutate(int i, int ... basis);
 
 }

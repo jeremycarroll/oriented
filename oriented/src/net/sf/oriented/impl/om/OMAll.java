@@ -149,8 +149,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 			return new ChirotopeImpl(dual().getChirotope());
 		case REALIZED:
 			if (has(DUALREALIZED))
-				return new RealizedImpl(this, dual().getRealized()
-						.getDualBasis());
+				return new RealizedImpl(this, ((RealizedImpl)dual().getRealized()).getDualBasis());
 			throw new UnsupportedOperationException("Realization not implemented");
 
         case COVECTORS:
