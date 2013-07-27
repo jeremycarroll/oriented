@@ -154,7 +154,12 @@ public class Examples {
         }
         return suv14;
     }
-    
+
+    /**
+     * Tsukamoto's non-isotopic Oriented Matroid
+     * @return Tsukamoto's non-isotopic Oriented Matroid.
+     * @see Bibliography#tsukamoto2013
+     */
     public static OM tsukamoto13(int i) {
 
         if (tsukamoto13[i+1]==null || FreshEachTime) {
@@ -167,7 +172,7 @@ public class Examples {
     /**
      * Richter-Gebert's interesting oriented matroids.
      * @param i
-     * @return
+     * @return Richter-Gebert's interesting oriented matroids.
      * @see Bibliography#richterGebert1996
      */
     public static OM omega14(int i) {
@@ -188,7 +193,7 @@ public class Examples {
     /**
      * Richter-Gebert's interesting oriented matroids.
      * @param i
-     * @return
+     * @return Richter-Gebert's interesting oriented matroids.
      * @see Bibliography#richterGebert1996
      */
     public static OM Ω14(int i) {

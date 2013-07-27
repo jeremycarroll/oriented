@@ -208,6 +208,7 @@ public class Bibliography {
 </pre>
 */
     public static final String suvorov1988 ="Isotopic but not rigidly isotopic plane systems of straight lines";
+    public static final String tsukamoto2013 ="Isotopic but not rigidly isotopic plane systems of straight lines";
 
 }
 
