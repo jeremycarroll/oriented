@@ -18,7 +18,7 @@ public interface OMasChirotope extends OM, FullChirotope {
      * The simplest form of the chirotope: in colexigraphic ordering.
      * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.
      */
-    String toShortString();
+    String toCoLexicographicString();
 
     /**
      * Produce a new oriented matroid by setting the value of the chirotope on

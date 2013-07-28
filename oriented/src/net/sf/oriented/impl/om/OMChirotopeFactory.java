@@ -126,8 +126,8 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMasChirotope, RankAnd
 
     @Override
     public OMasChirotope fromLexicographic(int rank, String plusMinusZeros) {
-        // TODO Auto-generated method stub
-        return null;
+        int n = howManyElements(rank, plusMinusZeros.length());
+        return fromCoLexicographic(rank, CoLexicographic.fromLexicographic(n,rank,plusMinusZeros) );
     }
 
 }

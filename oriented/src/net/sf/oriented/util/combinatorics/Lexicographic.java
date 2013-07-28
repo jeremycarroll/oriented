@@ -110,6 +110,24 @@ public class Lexicographic extends AbstractCollection<int[]> {
     public static int index(int n, int[] index) {
         return oldCodeForIndex(n, index.length, 0, index);
     }
+    
+
+    /**
+     * Convert a colexicographic chirotope string into a lexicographic one
+     * @param n
+     * @param rank
+     * @param colex
+     * @return
+     */
+    public static String fromCoLexicographic(int n, int rank, String colex) {
+        char result[] = new char[colex.length()];
+        int i = 0;
+        for ( int index[]:new Lexicographic(n,rank)) {
+            result[i++] = colex.charAt(CoLexicographic.index(index));
+        }
+        return new String(result);
+    }
+
 
 }
 /************************************************************************

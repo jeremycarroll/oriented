@@ -36,13 +36,13 @@ public class TestExamples {
     @Test
     public void testΠάππος() {
         // There are nine points of intersection in Pappus's construction.
-        Assert.assertTrue( Examples.πάππος().getChirotope().toShortString().matches("^.*0.*0.*0.*0.*0.*0.*0.*0.*0.*$") );
+        Assert.assertTrue( Examples.πάππος().getChirotope().toCoLexicographicString().matches("^.*0.*0.*0.*0.*0.*0.*0.*0.*0.*$") );
         
     }
     @Test
     public void testCeva() {
         // There are four points of intersection in Ceva's construction.
-       Assert.assertTrue( Examples.ceva().getChirotope().toShortString().matches("^.*0.*0.*0.*0.*$") );
+       Assert.assertTrue( Examples.ceva().getChirotope().toCoLexicographicString().matches("^.*0.*0.*0.*0.*$") );
     }
     
    

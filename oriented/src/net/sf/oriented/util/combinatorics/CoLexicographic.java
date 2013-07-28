@@ -120,6 +120,13 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 	    }
 	}
 
+    /**
+     * Convert a lexicographic chirotope string into a colexicographic one
+     * @param n
+     * @param rank
+     * @param lex
+     * @return
+     */
     public static String fromLexicographic(int n, int rank, String lex) {
         char result[] = new char[lex.length()];
         int i = 0;

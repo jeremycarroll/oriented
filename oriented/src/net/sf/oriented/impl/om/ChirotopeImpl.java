@@ -408,11 +408,11 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 		List<? extends Label> g = Arrays.asList(elements());
 		UnsignedSetFactory sets = all.unsignedSets(factory);
 		return "( " + sets.toString(g, sets.copyBackingCollection(g)) + ", "
-				+ rank() + ", " + toShortString() + " )";
+				+ rank() + ", " + toCoLexicographicString() + " )";
 	}
 
 	@Override
-    public String toShortString() {
+    public String toCoLexicographicString() {
 		int sz = IntMath.binomial(elements().length, rank());
 		char r[] = new char[sz];
 		for (int i = 0; i < sz; i++) {
