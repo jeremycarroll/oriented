@@ -6,6 +6,15 @@ package net.sf.oriented.omi;
 
 import net.sf.oriented.impl.om.OMSInternal;
 
+/**
+ * An interface for producing oriented matroids from
+ * sets of signed sets (cicruits, vectors, maximum vectors).
+ * @see FactoryFactory#circuits()
+ * @see FactoryFactory#vectors()
+ * @see FactoryFactory#maxVectors()
+ * @author jeremycarroll
+ *
+ */
 public interface OMSFactory extends SetFactory<SignedSet, OMasSignedSet> {
 	/**
 	 * This does not, and will not, work. This is inherited from the

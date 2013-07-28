@@ -9,10 +9,31 @@ import java.util.Collection;
 
 import net.sf.oriented.util.matrix.RationalMatrix;
 
+/**
+ * An interface for producing oriented matroids from rational matrixes
+ * which realize them. Such matrices are retrievable later.
+ * Note for some case {@link FactoryFactory#fromMatrix(double, double[][])}
+ * may be more appropriate.
+ * @author jeremycarroll
+ *
+ */
 public interface RealizedFactory extends Factory<OMasRealized> {
-	OMasRealized construct(RationalMatrix mat);
+    /**
+     * Construct an oriented matroid from a matrix,
+     * using default labels for the elements.
+     * @param matrix
+     * @return An oriented matroid.
+     */
+	OMasRealized construct(RationalMatrix matrix);
+    /**
+     * Construct an oriented matroid from a matrix,
+     * using given labels for the elements.
+     * @param matrix
+     * @param elements The labels for the elements
+     * @return An oriented matroid.
+     */
 
-	OMasRealized construct(Collection<? extends Label> e, RationalMatrix mat);
+	OMasRealized construct(Collection<? extends Label> elements, RationalMatrix matrix);
 }
 
 /************************************************************************

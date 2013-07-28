@@ -85,14 +85,13 @@ public class Bibliography {
     public static final String felsnerAndZiegler2001 = "Zonotopes associated with higher Bruhat orders";
 /** [Finschi, 2001]
  * <pre>
- @phdthesis{Finschi:893522,
+ Finschi:893522,
       author       = "Finschi, Lukas",
       title        = "A graph theoretical approach for reconstruction and
                       generation of oriented matroids",
       school       = "Mathematische Wissenschaften ETH Zürich",
       address      = "Zürich",
       year         = "2001",
-}
 </pre>
  */
     public static final String finschi2001 = "A Graph Theoretical Approach for Reconstruction and Generation of Oriented Matroids";
