@@ -9,6 +9,7 @@ import java.util.Iterator;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -149,7 +150,7 @@ public class MatroidCircuits extends AbsMatroid {
     }
 
     protected Function<UnsignedSet, UnsignedSet> setPermuter(Permutation p) {
-        final Permutation universePermuter = ffactory().labels().permuteUniverse(elements(), p);
+        final Permutation universePermuter = ((LabelFactoryImpl)ffactory().labels()).permuteUniverse(elements(), p);
         return new Function<UnsignedSet, UnsignedSet>() {
             @Override
             public UnsignedSet apply(UnsignedSet input) {

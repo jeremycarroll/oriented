@@ -379,6 +379,7 @@ final public class FactoryFactory {
 
     /**
      * From lexicographic chirotope
+     * <p>
      * NB: this library uses colexicographic ordering throughout
      * and lexicographic ordering is only available here, and at the two other listed methods.
      * @param n

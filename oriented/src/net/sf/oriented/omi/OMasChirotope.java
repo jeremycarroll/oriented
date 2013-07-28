@@ -22,6 +22,7 @@ public interface OMasChirotope extends OM, FullChirotope {
 
     /**
      * The simplest form of the chirotope: in lexicographic ordering.
+     * <p>
      * NB: this library uses colexicographic ordering throughout
      * and lexicographic ordering is only available here, and at the two other listed methods.
      * @return A string consisting of +, -, 0, of length {@link #n()} choose {@link #rank()}.

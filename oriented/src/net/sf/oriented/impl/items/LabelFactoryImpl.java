@@ -113,7 +113,6 @@ public class LabelFactoryImpl extends FactoryImpl<LabelImpl, Label, LabelImpl> i
 	 * @param p
 	 * @return
 	 */
-    @Override
     public Permutation permuteUniverse(Label[] ground, Permutation p) {
         int permutation[] = Group.identityGroup(count).identity().toArray();
         LabelImpl g[] = remake(ground);

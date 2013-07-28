@@ -5,13 +5,22 @@ package net.sf.oriented.omi;
 
 import java.util.Collection;
 
-import net.sf.oriented.util.combinatorics.Permutation;
 
+/**
+ * A factory for producing labels, which are used as the points or elements
+ * on which our oriented matroids and matroids are defined.
+ * Internally labels are ordered and this is implicit in some places in the interface,
+ * of exmaple {@link #getUniverse()}<code>.iterator()</code> will return the labels in order.
+ * @author jeremycarroll
+ *
+ */
 public interface LabelFactory extends Factory<Label> {
 
+    /**
+     * 
+     * @return A java collection of all the labels used so far by this factory.
+     */
     Collection<Label> getUniverse();
-
-    Permutation permuteUniverse(Label[] elements, Permutation p);
 
 }
 

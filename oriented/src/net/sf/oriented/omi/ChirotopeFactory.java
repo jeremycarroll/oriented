@@ -8,6 +8,11 @@ import java.util.Collection;
 
 /**
  * Create Oriented Matroids from their Chirotope.
+ * <p>
+ * NB: This library uses co-lexicographic ordering, not lexicograpghic ordering.
+ * When using chirotopes from the literature you need to ensure that you know where they are using
+ * lexicographic like {@link Bibliography#björnerEtAl1999} or co-lexicographic like {@link Bibliography#f
+ * 
  * @author jeremycarroll
  *
  */
@@ -32,22 +37,23 @@ public interface ChirotopeFactory extends Factory<OMasChirotope> {
 	/**
 	 * Create an oriented matroid from its colexicographic representation as a series of +, -, 0s.
 	 * We also need to know its rank.
-	 * @param rank
-	 * @param plusMinusZeros
+	 * @param rank  The rank of the oriented matroid encoded in the chirotope
+	 * @param chi The chirotope string, a sequence of + - or 0
 	 */
-	OMasChirotope fromCoLexicographic(int rank, String plusMinusZeros);
+	OMasChirotope fromCoLexicographic(int rank, String chi);
     /**
      * Create an oriented matroid from its lexicographic representation as a series of +, -, 0s.
      * We also need to know its rank.
+     * <p>
      * NB: this library uses colexicographic ordering throughout
      * and lexicographic ordering is only available here, and at the two other listed methods.
-     * @param rank
-     * @param plusMinusZeros
+     * @param rank The rank of the oriented matroid encoded in the chirotope
+     * @param chi  The chirotope string, a sequence of + - or 0
      * @see ChirotopeFactory#fromLexicographic(int, String)
      * @see FactoryFactory#fromLexicographic(int, int, String)
      * @see OMasChirotope#toLexicographicString()
      */
-    OMasChirotope fromLexicographic(int rank, String plusMinusZeros);
+    OMasChirotope fromLexicographic(int rank, String chi);
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

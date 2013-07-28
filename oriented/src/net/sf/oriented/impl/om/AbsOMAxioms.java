@@ -5,6 +5,7 @@ package net.sf.oriented.impl.om;
 
 
 import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.Label;
@@ -70,7 +71,7 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     public Function<SignedSet, SignedSet> signedSetPermuter(Permutation p) {
 
         final SignedSetFactory signedSetFactory = (SignedSetFactory) ffactory().signedSets();
-        final Permutation universePermuter = ffactory().labels().permuteUniverse(elements(), p);
+        final Permutation universePermuter = ((LabelFactoryImpl)ffactory().labels()).permuteUniverse(elements(), p);
         return new Function<SignedSet, SignedSet>() {
             @Override
             public SignedSet apply(SignedSet input) {
