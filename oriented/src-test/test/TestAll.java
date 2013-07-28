@@ -19,6 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestConversions.class, 
     TestCoLexicographic.class, 
     TestLexicographic.class, 
+    TestLexicographic2.class, 
     TestMatroid.class,
     TestMaxVectors.class, 
     TestMSet.class, 
@@ -31,7 +32,6 @@ import org.junit.runners.Suite.SuiteClasses;
     TestPermutations.class,
     TestRealization.class,
     TestGrassmannPlucker.class
-
 })
 @RunWith(Suite.class)
 public class TestAll {
