@@ -10,9 +10,22 @@ import java.util.Iterator;
 
 import com.google.common.math.IntMath;
 
+/**
+ * Iterate over lexicographic orderings of integers.
+ * 
+ * @author jeremycarroll
+ *
+ */
 public class Lexicographic extends AbstractCollection<int[]> {
 	final int n, r, sz;
 
+
+    /**
+     * Construct a lexicographic ordering or r items chosen from 0 through n &minus; 1.
+     * 
+     * @param n The number of things to choose from
+     * @param r The number of things to choose: greater than 0 and less than n
+     */
 	public Lexicographic(int n, int r) {
 		this.n = n;
 		this.r = r;
@@ -66,6 +79,10 @@ public class Lexicographic extends AbstractCollection<int[]> {
 		return sz;
 	}
 	
+	/**
+	 * simple test code
+	 * @param args n and r
+	 */
 	public static void main(String args[]) {
 	    Lexicographic lex = new Lexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	    int i = 0;
@@ -78,16 +95,6 @@ public class Lexicographic extends AbstractCollection<int[]> {
 	    }
 	}
 	
-	/**
-     * Return the index in the lexicographic sequence of r elements from n of
-     * the sequence i. p is how far we have got in the sequence.
-     * 
-     * @param n
-     * @param r
-     * @param p
-     * @param i
-     * @return
-     */
     private static int oldCodeForIndex(int n, int r, int p, int... i) {
         if (r == 0)
             return 0;
@@ -107,22 +114,27 @@ public class Lexicographic extends AbstractCollection<int[]> {
         return rslt + oldCodeForIndex(nextN, r - 1, p + 1, i);
     }
 
-    public static int index(int n, int[] index) {
-        return oldCodeForIndex(n, index.length, 0, index);
+    /**
+     * In a lexicographic ordering, what position is this index.
+     * @param n the number of items being chosen from
+     * @param ix The increasing list of integers in an ordering
+     * @return The position in the iteration of this index.
+     */
+    public static int index(int n, int[] ix) {
+        return oldCodeForIndex(n, ix.length, 0, ix);
     }
     
-
     /**
      * Convert a colexicographic chirotope string into a lexicographic one
-     * @param n
-     * @param rank
-     * @param colex
-     * @return
+     * @param n    The number of things to choose from
+     * @param r    The number of things to choose
+     * @param colex A colexicographically ordered string (one character per index)
+     * @return The same string reordered to be lexicographically ordered.
      */
-    public static String fromCoLexicographic(int n, int rank, String colex) {
+    public static String fromCoLexicographic(int n, int r, String colex) {
         char result[] = new char[colex.length()];
         int i = 0;
-        for ( int index[]:new Lexicographic(n,rank)) {
+        for ( int index[]:new Lexicographic(n,r)) {
             result[i++] = colex.charAt(CoLexicographic.index(index));
         }
         return new String(result);

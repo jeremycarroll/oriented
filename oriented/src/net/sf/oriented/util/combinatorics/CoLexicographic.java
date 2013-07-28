@@ -10,9 +10,21 @@ import java.util.Iterator;
 
 import com.google.common.math.IntMath;
 
+/**
+ * Iterate over colexicographic orderings of integers.
+ * 
+ * @author jeremycarroll
+ *
+ */
 public class CoLexicographic extends AbstractCollection<int[]> {
 	final int n, r, sz;
 
+	/**
+	 * Construct a colexicographic ordering or r items chosen from 0 through n &minus; 1.
+	 * 
+	 * @param n The number of things to choose from
+	 * @param r The number of things to choose: greater than 0 and less than n
+	 */
 	public CoLexicographic(int n, int r) {
 		this.n = n;
 		this.r = r;
@@ -65,6 +77,11 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 		return sz;
 	}
 	
+	/**
+	 * In a colexicographic ordering, what position is this index.
+	 * @param ix The increasing list of integers in an ordering
+	 * @return The position in the iteration of this index.
+	 */
     public static int index(int ... ix) {
         int r = ix.length;
         int result = 0;
@@ -108,6 +125,11 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 //    	return rslt + pos5(nextN, r - 1, p + 1, i);
     }
 
+
+    /**
+     * simple test code
+     * @param args n and r
+     */
     public static void main(String args[]) {
 	    CoLexicographic lex = new CoLexicographic(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	    int i = 0;
@@ -122,15 +144,15 @@ public class CoLexicographic extends AbstractCollection<int[]> {
 
     /**
      * Convert a lexicographic chirotope string into a colexicographic one
-     * @param n
-     * @param rank
-     * @param lex
-     * @return
+     * @param n    The number of things to choose from
+     * @param r    The number of things to choose
+     * @param lex A lexicographically ordered string (one character per index)
+     * @return The same string reordered to be colexicographically ordered.
      */
-    public static String fromLexicographic(int n, int rank, String lex) {
+    public static String fromLexicographic(int n, int r, String lex) {
         char result[] = new char[lex.length()];
         int i = 0;
-        for ( int index[]:new CoLexicographic(n,rank)) {
+        for ( int index[]:new CoLexicographic(n,r)) {
             result[i++] = lex.charAt(Lexicographic.index(n,index));
         }
         return new String(result);
