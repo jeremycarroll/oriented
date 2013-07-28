@@ -35,6 +35,9 @@ import net.sf.oriented.util.matrix.RationalMatrix;
  * {@link FactoryFactory} to another group of factories, arising from a
  * different {@link FactoryFactory}. It is however possible to pass an item
  * constructed from String's between groups of factories.
+ * <p>
+ * Various convenience methods are also provided, for some easy ways 
+ * to produce an oriented matroid.
  * 
  * @author jeremy
  * 
@@ -305,8 +308,6 @@ final public class FactoryFactory {
 	/**
 	 * A factory for oriented matroids which uses a realization of the OM as the
 	 * representation.
-	 * 
-	 * @return
 	 */
 	public RealizedFactory realized() {
 		return realized;
@@ -358,17 +359,23 @@ final public class FactoryFactory {
 		return symmetricSetsOfSignedSet;
 	}
 
+	/**
+	 * The options used by this factory.
+	 * @return The options used by this factory.
+	 */
 	public Options options() {
 		return options;
 	}
 
 	/**
-	 * From colexicographic chirotope
-	 * @param n
-	 * @param r
-	 * @param chi
-	 * @return
-	 */
+	 * Gives an oriented matroid corresponding to a chirotope in
+	 * colexicographic form.
+	 * @param n  The number of elements on which the oriented matroid is defined.
+	 * @param r  The rank
+	 * @param chi The colexicographic chirotope
+	 * @return An oriented matroid
+     * @see ChirotopeFactory#fromCoLexicographic(int, String)
+     */
     public static OM fromCoLexicographic(int n, int r, String chi) {
         Options opt = new Options();
         String u = createUniverse(n, opt);
@@ -378,14 +385,15 @@ final public class FactoryFactory {
     }
 
     /**
-     * From lexicographic chirotope
+     * Gives an oriented matroid corresponding to a chirotope in
+     * lexicographic form.
      * <p>
      * NB: this library uses colexicographic ordering throughout
      * and lexicographic ordering is only available here, and at the two other listed methods.
-     * @param n
-     * @param r
-     * @param chi
-     * @return
+     * @param n  The number of elements on which the oriented matroid is defined.
+     * @param r  The rank
+     * @param chi The lexicographic chirotope
+     * @return An oriented matroid
      * @see ChirotopeFactory#fromLexicographic(int, String)
      * @see FactoryFactory#fromLexicographic(int, int, String)
      * @see OMasChirotope#toLexicographicString()
@@ -393,6 +401,12 @@ final public class FactoryFactory {
     public static OM fromLexicographic(int n, int r, String chi) {
         return fromCoLexicographic(n,r,CoLexicographic.fromLexicographic(n, r, chi));
     }
+    /**
+     * Given a string representation of a set of circuits
+     * create an oriented matroid.
+     * @param circuits A string representation of a set of circuits
+     * @return A oriented matroid.
+     */
     public static OM fromCircuits(String circuits) {
             Options options = new Options();
             options.setShortLabels();
@@ -413,11 +427,11 @@ final public class FactoryFactory {
     }
 
     /**
-     * Generate an OM from lines being specified as a pair of points (integer coordinates)
-     * 
-     * This is very easy to do from a reasonably precise accurate sketch, see {@link Examples#circularSaw3} for a documented example.
-     * @param lines
-     * @return
+     * Generate an OM from lines being specified as a pair of points (integer coordinates).
+     * <p>
+     * This is very easy to do from a reasonably precise accurate sketch, see {@link Examples#circularsaw3()} for a documented example.
+     * @param lines a list of lines each specified by two points by x, y coordinates.
+     * @return An oriented matroid.
      */
     public static OM fromEuclideanLines(int[][] ... lines) {
         int n = lines.length+1;
@@ -477,8 +491,8 @@ final public class FactoryFactory {
      * Then for each of those lines in turn write the line letter and then the lines that it crosses
      * in order, proceeding counterclockwise from the line at infinity. Again if three or more lines
      * meet at a point uses () to show it.
-     * @param crossings
-     * @return
+     * @param crossings Information about the order in which the pseudolines cross each other
+     * @return An oriented matroid
      */
     public static OM fromCrossings( String ... crossings) { 
         return new Crossings(crossings).om();
@@ -489,26 +503,31 @@ final public class FactoryFactory {
      * an oriented matroid over the columns.
      * Each array in the array of arrays is a row.
      * The number of arrays is the rank.
-     * @param rows
-     * @return
+     * @param matrix
+     * @return  An oriented matroid
      */
-    public static OM fromMatrix(int[][] rows) {
+    public static OM fromMatrix(int[][] matrix) {
         Options opt = new Options();
-        return new FactoryFactory(opt).realized().construct(new RationalMatrix(rows));
+        return new FactoryFactory(opt).realized().construct(new RationalMatrix(matrix));
     }
     /**
-     * This method is for turning a simple matrix of integers into 
+     * This method is for turning a simple matrix of doubles into 
      * an oriented matroid over the columns.
      * Each array in the array of arrays is a row.
      * The number of arrays is the rank.
-     * @param rows
-     * @return
+     * The <code>threshold</code> parameter is to deal
+     * with rounding errors. Any determinant which is close to zero
+     * is treated as zero, with the largest close-to-zero determinant
+     * being at least a factor of threshold smaller than the smallest non-zero determinant.
+     * @param matrix
+     * @param threshold Should be 1000 ?
+     * @return An oriented matroid
      */
-    public static OM fromMatrix(double threshold, double[][] rows) {
-        int rank = rows.length;
-        int n = rows[0].length;
+    public static OM fromMatrix(double threshold, double[][] matrix) {
+        int rank = matrix.length;
+        int n = matrix[0].length;
         
-        RealMatrix data = MatrixUtils.createRealMatrix(rows);
+        RealMatrix data = MatrixUtils.createRealMatrix(matrix);
         double determinants[] = new double[IntMath.binomial(n, rank)];
         int rowIndexes[] = new int[rank];
         for (int i=0;i<rank;i++) {
@@ -530,7 +549,7 @@ final public class FactoryFactory {
         return fromCoLexicographic(n, rank, new String(signs));
     }
 
-    public static int sign(double epsilon, double d) {
+    private static int sign(double epsilon, double d) {
         if (d<epsilon) {
             if (d>-epsilon) {
                 return 0;
@@ -542,7 +561,7 @@ final public class FactoryFactory {
         }
     }
 
-    public static double guessEpsilon(double threshold, double[] determinants) {
+    private static double guessEpsilon(double threshold, double[] determinants) {
         // now compute epsilon
         double absDeterminants[] = new double[determinants.length];
         for (int i=0;i<determinants.length;i++) {
