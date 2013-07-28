@@ -54,6 +54,9 @@ public class Examples {
         return chapter1;
     }
 
+    /**
+     * The uniform oriented matroid of 3 points of rank 3
+     */
     public static OM uniform3() {
         if (uniform3 == null || FreshEachTime) {
             uniform3 = FactoryFactory.fromCoLexicographic(3, 3, "+" );
@@ -61,6 +64,9 @@ public class Examples {
         return uniform3;
     }
 
+    /**
+     * The uniform oriented matroid of 4 points of rank 3
+     */
     public static OM uniform4() {
         if (uniform4 == null || FreshEachTime) {
             uniform4  = FactoryFactory.fromCoLexicographic(4, 3, "++++" );
@@ -69,6 +75,7 @@ public class Examples {
     }
 
     /**
+     * An oriented matroid representing Ceva's theorem.
      * See {@link Bibliography#ceva1678}
      */
     public static OM ceva() {
@@ -84,10 +91,20 @@ public class Examples {
         return ceva;
     }
 
+    /**
+     * The oriented matroid corresponding to the arrangement in Pappus's theorm
+     * @see Bibliography#πάπποςC340
+     * @see Bibliography#πάπποςAndJones1986b
+     */
     public static OM pappus() {
         return πάππος();
     }
 
+    /**
+     * The oriented matroid corresponding to the arrangement in Pappus's theorm
+     * @see Bibliography#πάπποςC340
+     * @see Bibliography#πάπποςAndJones1986b
+     */
     public static OM πάππος() {
         if (πάππος == null || FreshEachTime) {
             πάππος  = FactoryFactory.fromCrossings(
@@ -105,6 +122,10 @@ public class Examples {
         return πάππος;
     }
 
+    /**
+     * The oriented matroid corresponding to Ringel's uniform non-realizable, non-Pappus configuration.
+     * @see Bibliography#ringel1956
+     */
     public static OM ringel() {
         if (ringel == null || FreshEachTime) {
         ringel = FactoryFactory.fromCrossings(
@@ -122,6 +143,10 @@ public class Examples {
         return ringel;
     }
 
+    /**
+    The oriented matroid corresponding to the circular saw diagram of size three.
+    @see Bibliography#carroll2000d
+    */
     public static OM circularsaw3() {
         if (circularSaw3 == null || FreshEachTime) {
             circularSaw3= FactoryFactory.fromEuclideanLines(new int[][][] {
@@ -145,7 +170,6 @@ public class Examples {
     /**
      * Suvorov's non-isotopic Oriented Matroid,
      * (as presented in {@link Bibliography#björnerEtAl1999}
-     * @return Suvorov's non-isotopic Oriented Matroid.
      * @see Bibliography#suvorov1988
      */
     public static OM suvorov14() {
@@ -157,7 +181,7 @@ public class Examples {
 
     /**
      * Tsukamoto's non-isotopic Oriented Matroid
-     * @return Tsukamoto's non-isotopic Oriented Matroid.
+     * @param i  1, 0 or -1 giving the chirotope χ(8,11,12) (counting from 0)
      * @see Bibliography#tsukamoto2013
      */
     public static OM tsukamoto13(int i) {
@@ -171,8 +195,7 @@ public class Examples {
     }
     /**
      * Richter-Gebert's interesting oriented matroids.
-     * @param i
-     * @return Richter-Gebert's interesting oriented matroids.
+     * @param i  1, 0 or -1 giving the chirotope χ(11,12,13) (counting from 0)
      * @see Bibliography#richterGebert1996
      */
     public static OM omega14(int i) {
@@ -192,8 +215,7 @@ public class Examples {
 
     /**
      * Richter-Gebert's interesting oriented matroids.
-     * @param i
-     * @return Richter-Gebert's interesting oriented matroids.
+     * @param i  1, 0 or -1 giving the chirotope χ(11,12,13) (counting from 0)
      * @see Bibliography#richterGebert1996
      */
     public static OM Ω14(int i) {

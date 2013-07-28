@@ -4,7 +4,10 @@
 package net.sf.oriented.omi;
 
 /**
- * A list of references from the literature.
+ * A somewhat disorganized list of references from the literature.
+ * The motivation is to provide sufficient information to find the links, 
+ * but this list itself is not intended to be tidy, sorry!
+ * 
  * @author jeremycarroll
  *
  */

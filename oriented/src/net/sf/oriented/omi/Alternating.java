@@ -10,6 +10,7 @@ import net.sf.oriented.util.combinatorics.CombinatoricUtils;
 
 /**
  * 
+ * Implements an alternating function over a non-alternating one.
  * @author jeremy
  * 
  */
@@ -17,6 +18,11 @@ public class Alternating implements FullChirotope {
 
 	final private Chirotope base;
 
+	/**
+	 * We pass in a map that is not necessarily alternating,
+	 * and we get back one that is.
+	 * @param base
+	 */
 	public Alternating(Chirotope base) {
 		this.base = base;
 	}
