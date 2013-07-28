@@ -22,6 +22,11 @@ import net.sf.oriented.impl.util.Misc;
  */
 public class Options extends OptionsInternal {
     
+    /**
+     * The choices of underlying implementation.
+     * @author jeremycarroll
+     *
+     */
     public enum Impl {
         /**
          * Represent a set of labels by a 32 bit structure.
@@ -40,14 +45,22 @@ public class Options extends OptionsInternal {
 
 	private final String implementation; 
 	private Constructor<? extends JavaSet<?>> javaSet;
+	/**
+	 * Default options (32 bit implementation).
+	 */
 	public Options() {
 	    this(Options.Impl.bits32);
     }
+    /**
+     * Allows using the non-default implementation.
+     */
 	public Options(Impl hash) {
         implementation = AbsSetImpl.class.getPackage().getName() + "."+ hash.name() +".";
     }
 
-    // TODO: how to hide this.
+	/**
+	 * Not part of the API
+	 */
 	@SuppressWarnings("unchecked")
 	public <T> JavaSet<T> javaSetFor(Class<T> cl) {
 	    if (javaSet == null) {
@@ -60,24 +73,17 @@ public class Options extends OptionsInternal {
 	 * Provide all the {@link Label}s to be used, as Strings. This allows
 	 * representations as sequences of {-1, 0, 1}, for instance.
 	 * 
-	 * @param a
-	 *            Converted to {@link Label}
+	 * @param a Converted to {@link Label}
 	 */
 	public void setUniverse(String a[]) {
 		getLabelFactory().get(Arrays.asList(a));
 	}
-	/**
-	 * Change the implementation. This can be called at most once.
-	 * Different implementations have different limitations.
-	 * @param impl
-	 */
 
   
 	/**
 	 * Use 0 + - as the representation.
 	 * 
-	 * @param usePM
-	 *            If true uses the +/- form.
+	 * @param usePM  If true uses the +/- form.
 	 * @return old value.
 	 */
 	public boolean setPlusMinus(boolean usePM) {
@@ -86,6 +92,9 @@ public class Options extends OptionsInternal {
 		return old;
 	}
 
+	/**
+	 * Are we using the +/- form.
+	 */
 	public boolean getPlusMinus() {
 		return plusMinus;
 	}
@@ -100,7 +109,7 @@ public class Options extends OptionsInternal {
 	}
 
 	/**
-	 * Some of the {@link Label}'s used consist of more than one character. Use
+	 * Some of the {@link Label}'s used may consist of more than one character. Use
 	 * longer forms for everything.
 	 * 
 	 */
@@ -108,6 +117,10 @@ public class Options extends OptionsInternal {
 		singleChar = false;
 	}
 
+	/**
+	 * Are we using short labels or long labels?
+	 * @return true if we are using short labels.
+	 */
 	public boolean getSingleChar() {
 		return singleChar;
 	}
@@ -119,10 +132,17 @@ public class Options extends OptionsInternal {
 		return label;
 	}
 
+	/**
+	 * Returns all the known labels.
+	 * @return The universe of labels used.
+	 */
 	public List<Label> getUniverse() {
 		return label.getUniverse();
 	}
 
+	/**
+	 * Get the ith label from the universe.
+	 */
 	public Label getLabel(int i) {
 		return getUniverse().get(i);
 	}
