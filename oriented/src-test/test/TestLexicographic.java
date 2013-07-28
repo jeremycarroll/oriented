@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.combinatorics.Lexicographic;
 
 import org.junit.Test;
