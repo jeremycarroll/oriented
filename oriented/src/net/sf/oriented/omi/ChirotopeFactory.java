@@ -11,7 +11,7 @@ import java.util.Collection;
  * <p>
  * NB: This library uses co-lexicographic ordering, not lexicograpghic ordering.
  * When using chirotopes from the literature you need to ensure that you know where they are using
- * lexicographic like {@link Bibliography#björnerEtAl1999} or co-lexicographic like {@link Bibliography#f
+ * lexicographic like {@link Bibliography#björnerEtAl1999} or co-lexicographic like {@link Bibliography#finschi2001}
  * 
  * @author jeremycarroll
  *

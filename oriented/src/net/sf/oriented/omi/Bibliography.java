@@ -83,6 +83,19 @@ public class Bibliography {
     Bruhat orders. Discrete Mathematics, 241(1-3):301–312.
 */
     public static final String felsnerAndZiegler2001 = "Zonotopes associated with higher Bruhat orders";
+/** [Finschi, 2001]
+ * <pre>
+ @phdthesis{Finschi:893522,
+      author       = "Finschi, Lukas",
+      title        = "A graph theoretical approach for reconstruction and
+                      generation of oriented matroids",
+      school       = "Mathematische Wissenschaften ETH Zürich",
+      address      = "Zürich",
+      year         = "2001",
+}
+</pre>
+ */
+    public static final String finschi2001 = "A Graph Theoretical Approach for Reconstruction and Generation of Oriented Matroids";
 /**
     [Folkman and Lawrence, 1978] Folkman, J. and Lawrence, J. (1978). Oriented matroids. J. Combin.
     Theory Ser. B, 25(2):199–236.
