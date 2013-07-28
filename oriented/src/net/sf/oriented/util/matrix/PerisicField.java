@@ -14,6 +14,13 @@ import com.perisic.ring.Ring;
 import com.perisic.ring.RingElt;
 import com.perisic.ring.UniversalPolynomialRing;
 
+/**
+ * Combine the perisic library with the apache commons math library.
+ * We implement {@link org.apache.commons.math3.Field} using
+ * classes from {@link com.perisic.ring}
+ * @author jeremycarroll
+ *
+ */
 public abstract class PerisicField implements Field<PerisicFieldElement> {
 
 	static final UniversalPolynomialRing U = new UniversalPolynomialRing(Ring.Q);
