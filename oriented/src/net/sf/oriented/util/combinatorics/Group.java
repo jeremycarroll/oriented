@@ -21,9 +21,12 @@ public abstract class Group implements Iterable<Permutation> {
     
     private Permutation identity;
     private final int n;
-    public Group(int n) {
+    protected Group(int n) {
         this.n = n;
     }
+    /**
+     * The identity element of this group.
+     */
     public Permutation identity(){
         if (identity == null) {
             identity = identityN(n());
@@ -33,23 +36,35 @@ public abstract class Group implements Iterable<Permutation> {
     private static Permutation identityN(int n) {
         return new Permutation(Permutation.from0toN(n));
     }
+    /**
+     * The number of elements in this group.
+     */
     public abstract long order();
     
+
+    /**
+     * The permutations in this group permute the numbers <code>0, 1, .... n - 1</code>
+     */
     public int n() {
         return n;
     }
+    /**
+     * The symmetric group of permutations over <code>0, 1, .... n - 1</code>
+     */
     public static Group symmetric(int n) {
         return new SymmetricGroup(n);
     }
+    /**
+     * The group consisting of the identity permutation over  <code>0, 1, .... n - 1</code>
+     */
     public static Group identityGroup(int n) {
         return new SubGroup(Arrays.asList(identityN(n)));
     }
     
     /**
-     * Return a subgroup created by accepting some of the elements
+     * Create a subgroup by accepting some of the elements
      * in the group.
      * @param pred This predicate must define a subgroup - no checking is provided.
-     * @return
      */
     public Group filter(Predicate<Permutation> pred) {
         List<Permutation> contents = new ArrayList<Permutation>();
