@@ -56,14 +56,14 @@ public class Examples {
 
     public static OM uniform3() {
         if (uniform3 == null || FreshEachTime) {
-            uniform3 = FactoryFactory.fromChirotope(3, 3, "+" );
+            uniform3 = FactoryFactory.fromCoLexicographic(3, 3, "+" );
         }
         return uniform3;
     }
 
     public static OM uniform4() {
         if (uniform4 == null || FreshEachTime) {
-            uniform4  = FactoryFactory.fromChirotope(4, 3, "++++" );
+            uniform4  = FactoryFactory.fromCoLexicographic(4, 3, "++++" );
         }
         return uniform4;
     }

@@ -39,8 +39,13 @@ public interface ChirotopeFactory extends Factory<OMasChirotope> {
     /**
      * Create an oriented matroid from its lexicographic representation as a series of +, -, 0s.
      * We also need to know its rank.
+     * NB: this library uses colexicographic ordering throughout
+     * and lexicographic ordering is only available here, and at the two other listed methods.
      * @param rank
      * @param plusMinusZeros
+     * @see ChirotopeFactory#fromLexicographic(int, String)
+     * @see FactoryFactory#fromLexicographic(int, int, String)
+     * @see OMasChirotope#toLexicographicString()
      */
     OMasChirotope fromLexicographic(int rank, String plusMinusZeros);
 }

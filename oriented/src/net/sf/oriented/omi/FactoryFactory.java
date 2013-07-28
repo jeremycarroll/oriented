@@ -362,7 +362,14 @@ final public class FactoryFactory {
 		return options;
 	}
 
-    public static OM fromChirotope(int n, int r, String chi) {
+	/**
+	 * From colexicographic chirotope
+	 * @param n
+	 * @param r
+	 * @param chi
+	 * @return
+	 */
+    public static OM fromCoLexicographic(int n, int r, String chi) {
         Options opt = new Options();
         String u = createUniverse(n, opt);
         return new FactoryFactory(opt).chirotope().parse(
@@ -370,6 +377,21 @@ final public class FactoryFactory {
                         + ")");
     }
 
+    /**
+     * From lexicographic chirotope
+     * NB: this library uses colexicographic ordering throughout
+     * and lexicographic ordering is only available here, and at the two other listed methods.
+     * @param n
+     * @param r
+     * @param chi
+     * @return
+     * @see ChirotopeFactory#fromLexicographic(int, String)
+     * @see FactoryFactory#fromLexicographic(int, int, String)
+     * @see OMasChirotope#toLexicographicString()
+     */
+    public static OM fromLexicographic(int n, int r, String chi) {
+        return fromCoLexicographic(n,r,CoLexicographic.fromLexicographic(n, r, chi));
+    }
     public static OM fromCircuits(String circuits) {
             Options options = new Options();
             options.setShortLabels();
@@ -504,7 +526,7 @@ final public class FactoryFactory {
         for (int i=0;i<determinants.length;i++) {
             signs[i] = plusMinus[1+sign(epsilon, determinants[i])];
         }
-        return fromChirotope(n, rank, new String(signs));
+        return fromCoLexicographic(n, rank, new String(signs));
     }
 
     public static int sign(double epsilon, double d) {
