@@ -6,9 +6,9 @@ package test;
 
 import static net.sf.oriented.impl.om.ChirotopeImpl.dualBasis;
 import static net.sf.oriented.impl.om.ChirotopeImpl.signDualBasis;
-import static net.sf.oriented.util.combinatorics.CombinatoricUtils.sign;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import net.sf.oriented.omi.Alternating;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import org.junit.Test;
@@ -19,10 +19,10 @@ public class TestAlternating {
 
 	@Test
 	public void testSign() {
-		assertEquals(1, sign(3, 5, 8, 9, 11));
-		assertEquals(-1, sign(5, 3));
-		assertEquals(1, sign(4, 6, 2));
-		assertEquals(-1, sign(4, 6, 2, 3, 5));
+		assertEquals(1, Alternating.sign(3, 5, 8, 9, 11));
+		assertEquals(-1, Alternating.sign(5, 3));
+		assertEquals(1, Alternating.sign(4, 6, 2));
+		assertEquals(-1, Alternating.sign(4, 6, 2, 3, 5));
 	}
 
 	@Test
@@ -85,16 +85,16 @@ public class TestAlternating {
 
 	@Test
 	public void testSign2() {
-		assertEquals(1, sign(0, 1, 2, 3, 4));
-		assertEquals(-1, sign(0, 1, 3, 2, 4));
-		assertEquals(1, sign(0, 1, 4, 2, 3));
-		assertEquals(1, sign(0, 2, 3, 1, 4));
-		assertEquals(-1, sign(0, 2, 4, 1, 3));
-		assertEquals(1, sign(0, 3, 4, 1, 2));
-		assertEquals(-1, sign(1, 2, 3, 0, 4));
-		assertEquals(1, sign(1, 2, 4, 0, 3));
-		assertEquals(-1, sign(1, 3, 4, 0, 2));
-		assertEquals(1, sign(2, 3, 4, 0, 1));
+		assertEquals(1, Alternating.sign(0, 1, 2, 3, 4));
+		assertEquals(-1, Alternating.sign(0, 1, 3, 2, 4));
+		assertEquals(1, Alternating.sign(0, 1, 4, 2, 3));
+		assertEquals(1, Alternating.sign(0, 2, 3, 1, 4));
+		assertEquals(-1, Alternating.sign(0, 2, 4, 1, 3));
+		assertEquals(1, Alternating.sign(0, 3, 4, 1, 2));
+		assertEquals(-1, Alternating.sign(1, 2, 3, 0, 4));
+		assertEquals(1, Alternating.sign(1, 2, 4, 0, 3));
+		assertEquals(-1, Alternating.sign(1, 3, 4, 0, 2));
+		assertEquals(1, Alternating.sign(2, 3, 4, 0, 1));
 	}
 
 

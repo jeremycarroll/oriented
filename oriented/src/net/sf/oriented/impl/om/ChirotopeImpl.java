@@ -5,7 +5,6 @@
 package net.sf.oriented.impl.om;
 
 import static net.sf.oriented.impl.om.Cryptomorphisms.CHIROTOPE;
-import static net.sf.oriented.util.combinatorics.CombinatoricUtils.sign;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -31,7 +30,6 @@ import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
-import net.sf.oriented.util.combinatorics.CombinatoricUtils;
 import net.sf.oriented.util.combinatorics.Lexicographic;
 import net.sf.oriented.util.combinatorics.Permutation;
 import net.sf.oriented.util.matrix.RationalMatrix;
@@ -173,7 +171,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 		int p[] = new int[ax.length + bx.length];
 		System.arraycopy(ax, 0, p, 0, ax.length);
 		System.arraycopy(bx, 0, p, ax.length, bx.length);
-		int s = sign(p);
+		int s = Alternating.sign(p);
 
 		return s;
 	}
@@ -253,7 +251,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 		int ix2[] = new int[ix.length + 1];
 		ix2[0] = asInt(e);
 		System.arraycopy(ix, 0, ix2, 1, ix.length);
-		return CombinatoricUtils.sign(ix2);
+		return Alternating.sign(ix2);
 	}
 
 	/**
@@ -622,7 +620,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
             throw new IllegalArgumentException("Incorrect number of elements in basis, expecting: "+rank());
         }
         
-        final int sign = newSign * CombinatoricUtils.sign(basis);
+        final int sign = newSign * Alternating.sign(basis);
         Arrays.sort(basis);
 
         OMAll all = new OMAll(elements(), ffactory());
