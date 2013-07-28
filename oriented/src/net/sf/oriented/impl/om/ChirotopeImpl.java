@@ -32,6 +32,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.combinatorics.CombinatoricUtils;
+import net.sf.oriented.util.combinatorics.Lexicographic;
 import net.sf.oriented.util.combinatorics.Permutation;
 import net.sf.oriented.util.matrix.RationalMatrix;
 
@@ -421,6 +422,10 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 		return new String(r);
 	}
 
+    @Override
+    public String toLexicographicString() {
+        return Lexicographic.fromCoLexicographic(n(), rank(), toCoLexicographicString());
+    }
 	@Override
 	public ChirotopeImpl getChirotope() {
 		return this;
