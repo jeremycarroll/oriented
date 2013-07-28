@@ -7,8 +7,18 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * A permutation of integers
+ * @author jeremycarroll
+ *
+ */
 public class Permutation {
 
+    /**
+     * Return all permutations of the sequence <code>( 0, 1, ... n - 1)</code>
+     * @param n
+     * @return an iterator over all such permutations.
+     */
     public static Iterable<Permutation> all(final int n) {
         return new Iterable<Permutation>() {
             @Override
@@ -89,11 +99,17 @@ public class Permutation {
 
     final private int permutation[];
 
-    public Permutation(int ... perm) {
-        int n = perm.length;
-        permutation = perm.clone();
+    /**
+     * Create a new permutations which maps
+     * <code>i</code> to <code>map[i]</code>
+     * for each <code>i</code>.
+     * @param map The numbers 0 to <code>map.length - 1</code> in an arbitrary order.
+     */
+    public Permutation(int ... map) {
+        int n = map.length;
+        permutation = map.clone();
         long mask = (1l << n) - 1;
-        for (int v : perm) {
+        for (int v : map) {
             if (v < 0 || v >= n) {
                 throw new IllegalArgumentException(v
                         + " is not in range. 0 =< v < " + n);
@@ -105,15 +121,18 @@ public class Permutation {
         }
     }
     /**
-     * Use the notation (0 1) (4 5 6) to represent the permutation
-     * (1 0 2 3 5 6 4)
-     * @param n
-     * @param cycles
+     * Use the notation <code>(0 1) (4 5 6)</code>to represent the permutation
+     * <code>(1 0 2 3 5 6 4)</code>
+     * @param n    <code>( 0, 1, ... n - 1)</code>
+     * @param cycles A list of cycles in the permutation to be created.
      */
     public Permutation(int n, int[][] cycles) {
         this(computeCycles(n,cycles));
     }
     
+    /**
+     * The permutation as an array of integers.
+     */
     public int[] toArray() {
         return permutation.clone();
     }
@@ -148,15 +167,20 @@ public class Permutation {
         rslt[i] = j;
     }
 
+    /**
+     * The ith slot from the permutation
+     * @param i An integer from <code>0</code> to <code>n - 1</code>
+     * @return The value of the permutation at i
+     */
     public int get(int i) {
         return permutation[i];
     }
 
     /**
-     * This method returns the arguments, which
+     * This method returns the permuted arguments, which
      * must be of number {@link #n()}
      * @param args
-     * @return
+     * @return the same arguments but in a permuted order
      */
     public <T> T[] permute(T ... args) {
         if (args.length != n()) {
@@ -170,9 +194,9 @@ public class Permutation {
     }
     /**
      * For each of the arguments, which must be between 0 and {@link #n()}
-     * map it to the new value under this permutation.
+     * map it to the new value under this permutation. {@link #get(int)} is the same as this method on one argument.
      * @param args
-     * @return
+     * @return The values of the permutation at each of the arguments.
      */
     public int[] mapAll(int ... args) {
         int[] result = new int[args.length];
@@ -181,6 +205,9 @@ public class Permutation {
         return result;
         
     }
+    /**
+     * The inverse permutation
+     */
     public Permutation inverse() {
         int inverse[] = new int[permutation.length];
         for (int i=0;i<inverse.length;i++) {
@@ -189,6 +216,11 @@ public class Permutation {
         return new Permutation(inverse);
     }
     
+    /**
+     * Permutation composition
+     * @param then Perform <code>this</code> permutation and then <code>then</code>
+     * @return the composed permutation
+     */
     public Permutation and(Permutation then) {
         return new Permutation(mapAll(then.permutation));
         
@@ -215,9 +247,16 @@ public class Permutation {
         return rslt.toString();
     }
 
+    /**
+     * The number of items being permuted by this permutation.
+     */
     public int n() {
         return permutation.length;
     }
+    /**
+     * simple test
+     * @param argv the string representation of <code>n</code>
+     */
     static public void main(String argv[]) {
         for (Permutation p : Permutation.all(Integer.parseInt(argv[0]))) {
             System.out.println(p.toString());
