@@ -12,6 +12,11 @@ import org.apache.commons.math3.FieldElement;
 import com.perisic.ring.Ring;
 import com.perisic.ring.RingElt;
 
+/**
+ * Implements the {@link FieldElement} interface, for {@link PerisicField}
+ * @author jeremycarroll
+ *
+ */
 public final class PerisicFieldElement implements
 		FieldElement<PerisicFieldElement> {
 
@@ -101,6 +106,10 @@ public final class PerisicFieldElement implements
 		return delegate.toString();
 	}
 
+	/**
+	 * compare this value with 0.
+	 * @return -1, 0 or 1 depending on the sign of the value
+	 */
 	public int sign() {
 		return com.perisic.ring.RationalField.numeratorToBigInteger(delegate)
 				.compareTo(BigInteger.ZERO);

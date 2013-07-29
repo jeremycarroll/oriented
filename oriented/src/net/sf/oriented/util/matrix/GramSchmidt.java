@@ -16,6 +16,14 @@ import org.apache.commons.math3.linear.BlockFieldMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.SingularMatrixException;
 
+/**
+ * The Gram–Schmidt process, but without normalizing.
+ * We omit normalization since we work over
+ * the rationals.
+ * @author jeremycarroll
+ *
+ * @param <T>
+ */
 public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 
 	private final Field<T> field;
@@ -25,6 +33,10 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 	private final int m;
 	private boolean dualComputed = false;
 
+	/**
+	 * Initialize the GramSchmidt process over the given matrix.
+	 * @param matrix A matrix with more columns than rows.
+	 */
 	@SuppressWarnings("unchecked")
 	public GramSchmidt(FieldMatrix<T> matrix) {
 		field = matrix.getField();
@@ -74,6 +86,9 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 		return rslt;
 	}
 
+	/**
+	 * An orthogonal basis spanning the same space as the original matrix.
+	 */
 	public FieldMatrix<T> getBasis() {
 		T[][] subData;
 		if (m == n) {
@@ -87,6 +102,10 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 		return r;
 	}
 
+	/**
+	 * Continues the GramSchmidt process to compute a dual basis too.
+	 * This is underdocumented.
+	 */
 	public FieldMatrix<T> getDual() {
 		if (n == m)
 			return null;

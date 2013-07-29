@@ -30,12 +30,19 @@ public abstract class PerisicField implements Field<PerisicFieldElement> {
 	final private PerisicFieldElement zero, one;
 	final private Ring ring;
 
+	/**
+	 * Imports the rationals.
+	 * @see Ring#Q
+	 */
 	public static final PerisicField Q = new PerisicField(Ring.Q) {
 		@Override
 		int hashCode(RingElt delegate) {
 			return rationalHashCode(delegate);
 		}
 	};
+	/**
+	 * A universal polynomial field over the rationals.
+	 */
 	public static final PerisicField Polynomials = new PerisicField(U) {
 
 		@Override
@@ -43,6 +50,9 @@ public abstract class PerisicField implements Field<PerisicFieldElement> {
 			return polyHashCode(delegate);
 		}
 	};
+    /**
+     * A universal polynomial field, with quotient polynomials over the rationals.
+     */
 	public static final PerisicField QPolynomials = new PerisicField(QU) {
 
 		@Override
@@ -91,10 +101,17 @@ public abstract class PerisicField implements Field<PerisicFieldElement> {
 		throw new IllegalArgumentException();
 	}
 
+	/**
+	 * Map an integer into this field.
+	 */
 	public PerisicFieldElement create(int i) {
 		return new PerisicFieldElement(ring.map(i));
 	}
-
+	/**
+	 * Parse some string, and map it into this field
+	 * @param str a string representation recognized by the underlying {@link Ring}
+	 * @return the field element corresponding to {@code str}
+	 */
 	public PerisicFieldElement map(String str) {
 		return new PerisicFieldElement(ring.map(str));
 	}
@@ -103,6 +120,11 @@ public abstract class PerisicField implements Field<PerisicFieldElement> {
 		return new PerisicFieldElement(det);
 	}
 
+    /**
+     * Parse some string as a rational, and map it into this field
+     * @param rational a string representation recognized by the underlying {@link Ring#Q}
+     * @return the field element corresponding to {@code rational}
+     */
 	public static PerisicFieldElement rational(String rational) {
 		return Q.map(rational);
 	}

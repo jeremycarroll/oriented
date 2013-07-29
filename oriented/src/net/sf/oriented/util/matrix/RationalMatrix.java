@@ -13,10 +13,20 @@ import org.apache.commons.math3.linear.FieldMatrixChangingVisitor;
 import org.apache.commons.math3.linear.FieldMatrixPreservingVisitor;
 
 
+/**
+ * A class implementing matrixes of rationals via 
+ * {@link FieldMatrix} and {@link PerisicField}.
+ * This class mainly exists to encapsulate computation of the determinant.
+ * @author jeremycarroll
+ *
+ */
 public class RationalMatrix {
 
 	private final FieldMatrix<PerisicFieldElement> delegate;
 
+	/**
+	 * Initialize a matrix from integers.
+	 */
 	public RationalMatrix(final int[][] data) {
 		delegate = new BlockFieldMatrix<PerisicFieldElement>(PerisicField.Q,
 				data.length, data[0].length);
@@ -40,10 +50,16 @@ public class RationalMatrix {
 		});
 	}
 
-	public RationalMatrix(FieldMatrix<PerisicFieldElement> d) {
-		delegate = d;
+	/**
+	 * Wraps a delegate.
+	 */
+	public RationalMatrix(FieldMatrix<PerisicFieldElement> delegate) {
+		this.delegate = delegate;
 	}
 
+	/**
+	 * Initialize a matrix from lists of lists of {@link PerisicFieldElement}.
+	 */
 	public RationalMatrix(final List<List<PerisicFieldElement>> data) {
 		delegate = new BlockFieldMatrix<PerisicFieldElement>(PerisicField.Q,
 				data.get(0).size(), data.size());
@@ -67,10 +83,16 @@ public class RationalMatrix {
 		});
 	}
 
+	/**
+	 * The height or number of rows of the matrix.
+	 */
 	public int height() {
 		return delegate.getRowDimension();
 	}
 
+    /**
+     * The width or number of columns of the matrix.
+     */
 	public int width() {
 		return delegate.getColumnDimension();
 	}
@@ -116,10 +138,21 @@ public class RationalMatrix {
 		return rslt.toString();
 	}
 
-	public PerisicFieldElement determinant(int[] indices) {
-		return DeterminantCalculator.get(height()).compute(delegate, indices);
+	/**
+	 * Computes the determinant on the sub-matrix formed by the specified columns
+	 * @param columns A list of {@link #height()} column numbers
+	 * @return The determinant
+	 */
+	public PerisicFieldElement determinantFromColumns(int[] columns) {
+	    if (columns.length != height()) {
+	        throw new IllegalArgumentException("Incorrect number of columns specified");
+	    }
+		return DeterminantCalculator.get(height()).computeFromColumns(delegate, columns);
 	}
 
+	/**
+	 * Access the underlying {@link FieldMatrix}
+	 */
 	public FieldMatrix<PerisicFieldElement> getDelegate() {
 		return delegate;
 	}

@@ -108,7 +108,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 			@Override
 			public int chi(int... indices) {
-				return matrix.determinant(indices).sign();
+				return matrix.determinantFromColumns(indices).sign();
 			}
 
 			@Override

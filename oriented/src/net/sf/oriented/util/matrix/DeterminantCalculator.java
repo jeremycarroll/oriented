@@ -65,8 +65,14 @@ class DeterminantCalculator {
 		return all.get(h);
 	}
 
-	public PerisicFieldElement compute(
-			FieldMatrix<PerisicFieldElement> delegate, int[] indices) {
+	/**
+	 * Compute the determinant of a submatrix with specified columns
+	 * @param delegate  Is with rank rows, and more columns
+	 * @param columns  This is a list of rank indices and we select the submatrix on these columns
+	 * @return The determinant of the selected submatrix.
+	 */
+	PerisicFieldElement computeFromColumns(
+			FieldMatrix<PerisicFieldElement> delegate, int[] columns) {
 		final String vars[] = new String[rank * rank];
 		final RingElt values[] = new RingElt[rank * rank];
 		for (int i = 0; i < rank; i++) {
@@ -90,7 +96,7 @@ class DeterminantCalculator {
 						public PerisicFieldElement end() {
 							return null;
 						}
-					}, 0, rank - 1, indices[i], indices[i]);
+					}, 0, rank - 1, columns[i], columns[i]);
 		}
 
 		RingElt det = PerisicField.U.evaluatePolynomial(formula, vars, values);
