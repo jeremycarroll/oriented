@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="dist" name="oriented">
 
-    <property name="version" value="0.1"/>
+    <property name="version" value="0.2"/>
     <property name="src.dir" value="src/"/>
     <property name="src-test.dir" value="src-test/"/>
     <property name="lib.dir" value="lib/"/>
+    <property name="website.dir" value="web/site/"/>
     <property name="doc.dir" value="doc/"/>
     <property name="dist.root" value="dist/"/>
-    <property name="dist.dir" value="${dist.root}/jom-${version}"/>
+    <property name="dist.dir" value="${dist.root}/oriented-${version}"/>
 	<target name="clean" >
         <delete dir="${dist.dir}"/>
         <delete dir="${doc.dir}"/>
@@ -15,6 +16,9 @@
 	</target>
 
 	<target name="copy-all">
+		<copy todir="${doc.dir}">
+            <fileset dir="${website.dir}" includes="**"/>
+		</copy>
     	<copy todir="${dist.dir}" file="COPYING"/>
     	<copy todir="${dist.dir}" file="README"/>
     	<copy todir="${dist.dir}/src">
@@ -29,7 +33,7 @@
     	<copy todir="${dist.dir}/lib">
             <fileset dir="${lib.dir}" includes="**"/>
         </copy>
-		<jar destfile="${dist.dir}/jom-${version}.jar" 
+		<jar destfile="${dist.dir}/oriented-${version}.jar" 
 			  basedir="bin"
 		     index="true"/>
 	</target>

@@ -1,0 +1,90 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="jjc.css"/>
+
+</head>
+<body>
+
+
+<table width="100%">
+<tr>
+<td width="250"><img src="logo.png" width="250"/></td>
+<td valign="top">
+    <br/>
+    <br/>
+    <hr/>
+        <h1 style="font-size: 200%;">Java <br/>Oriented <br/>Matroids</h1>
+        <hr/>
+    <em>Jeremy J. Carroll</em>
+    <br/>
+    <br/>
+    </td></tr>
+<tr>
+<td>
+</td>
+<td>
+<h2>Summary</h2>
+<p>
+This open source library allows for the creation and manipulation of oriented matroids
+with high quality code.
+</p>
+<p>
+It principally covers the cryptomorphic representations
+of oriented matroids, allowing seamless conversion between them.
+</p>
+<p>
+Please <a href="mailto:jeremy_carroll@sourceforge.net">contact me</a>
+if you are using this library. 
+</p>
+
+<h2>Documentation</h2>
+<p>The <a href="javadoc/index.html">on-line javadoc</a> is the guide to the API</p>
+
+<h2>Sourceforge Links</h2>
+<ul>
+<li><a href="https://sourceforge.net/projects/oriented/files/">Downloads</a></li>
+<li><a href="https://sourceforge.net/p/oriented/bugs/">Bug Tracker</a></li>
+<li><a href="https://sourceforge.net/p/oriented/src/ci/master/tree/">code browser</a></li>
+</ul>
+
+<h2>Difficulties in Being Straight</h2>
+<p>The primary goal is to help me on my long-term project concerning pseudoline stretching.</p>
+<p>The fundamental approach is essentially the same as in 
+<a href="https://www.hpl.hp.com/techreports/2000/HPL-2000-72.html">my technical report from 2000</a>,
+significantly updated with an oriented matroid viewpoint, 
+as described in too much length in <a href="http://arxiv.org/abs/0704.3424">A New Proof of Pappus's Theorem</a>:
+</p>
+<ul>
+<li>
+Convert to polar co-ordinates
+</li>
+<li>
+Find slope constraining sub-arrangements
+</li>
+<li>
+Express the slope constraint of each sub-arrangement
+</li>
+<li>
+Simultaneously solve the slope constrains.
+<dl>
+<dt>If insoluble:</dt>
+<dd>Convert constraints into a final polynomial</dd>
+<dt>If soluble:</dt>
+<dd>Create linear program for the <em>r</em> co-ordinates</dd>
+<dd>solve that program</dd>
+</dl>
+</li>
+</ul>
+<p>
+With release 0.2 of July 2013, the prerequisite work on oriented matroids is 
+sufficiently complete: the next release will include some of the implementation of this realizability algorithm
+(for rank 3 oriented matroids)
+</p>
+</td>
+</tr>
+</table>
+<h2>Acknowledgement</h2>
+<p>Many thanks to <a href="Yourkit.com">YourKit Java Profiler</a>, which we whole-heartedly recommend.</p>
+</body>
+
+</html>

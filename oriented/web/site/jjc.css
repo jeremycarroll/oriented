@@ -1,0 +1,58 @@
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+/* cl-specific global styles */
+html, body { height: 100%; }
+body {
+    background: white;
+    color: #222;
+}
+img      { border: 0; }
+em       {  font-weight: bold; font-style: italic; }
+strong,b { font-weight: bolder; }
+big      { font-size: larger; }
+small    { font-size: smaller; }
+sup      {
+    font-size: x-small;
+    line-height: normal;
+    vertical-align: super;
+}
+hr {
+    color: #ccc;
+    background: #ccc;
+    height: 2px;
+    border: 0;
+}
+p {
+    clear: none;
+    margin: 1em 0;
+}
+input.dv, textarea.dv { color: #aaa !important ; }
+ul.ul, ol.ol {
+    padding-left: 40px;
+    margin: 1em 0;
+}
+ul.ul { list-style-type: disc; }
+ol.ol { list-style-type: decimal; }
+ul.ul li, ol.ol li {
+    display: list-item;
+    line-height: 1.3em;
+    margin: 1em 0;
+}
+
+#wrap {
+   margin:0 auto;
+   width: 100%
+}
+#left_col {
+   float:left;
+   width:300;
+}
+#right_col {
+   float:right;
+}
+
