@@ -198,6 +198,8 @@ public interface OM extends Verify {
      */
     Function<SignedSet, SignedSet> signedSetPermuter(Permutation p);
 
+    int asInt(String label);
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
