@@ -4,14 +4,13 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Immutable mathematical sets. Supports the standard mathematical
  * operations of: {@link #union(SetOf)}; {@link #intersection(SetOf)}; set difference - {@link #minus(SetOf)};
  * {@link #isSubsetOf(SetOf)}; {@link #isEmpty()}; membership {@link #contains(Object)}.
- * Also supports operation which relate to java sets such as {@link #iterator()}, {@link #asCollection()}.
+ * Also supports operation which relate to java sets such as {@link java.lang.Iterable#iterator()}, {@link #asCollection()}.
  * The two operations to produce sets of subsets produce java sets, these are {@link #powerSet()} and {@link #subsetsOfSize(int)}.
  * 
  * {@link #sameSetAs(SetOf)}
@@ -24,8 +23,19 @@ import java.util.Set;
  * @param <SET>
  */
 public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>> 
-       extends Verify {
+       extends Verify, Iterable<ITEM> {
+    
+    /**
+     * Set union.
+     * @param b A second set
+     * @return The union of {@code this} and {@code b}
+     */
 	public abstract SET union(SET b);
+	
+	/**
+	 * An array of the members of this set.
+	 */
+	public ITEM[] toArray();
 
 	/**
 	 * This is mathematically set equality, except
@@ -72,6 +82,11 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
      */
 	SET respectingEquals();
 
+	/**
+	 * Set union with the singleton set containing {@code b}
+	 * @param b The new member to be added
+	 * @return The union
+	 */
 	public abstract SET union(ITEM b);
 
 	public abstract SET intersection(SET b);
@@ -89,8 +104,6 @@ public interface SetOf<ITEM, SET extends SetOf<ITEM, SET>>
 	public abstract boolean isSupersetOf(SET b);
 
 	public boolean isEmpty();
-
-	public abstract Iterator<? extends ITEM> iterator();
 
 	public abstract JavaSet<? extends ITEM> asCollection();
 

@@ -116,7 +116,7 @@ public class Vectors extends AbsVectorsOM {
 		MatroidCircuits mc = getMatroid().getCircuits();
 		JavaSet<SignedSetInternal> r = factory().itemFactory()
 				.emptyCollectionOf();
-		Iterator<UnsignedSetInternal> it = mc.iterator();
+		Iterator<UnsignedSetInternal> it = mc.iterator2();
 		while (it.hasNext()) {
 			UnsignedSetInternal circuit = it.next();
 			r.addAll(withSupport(circuit).asCollection());
@@ -134,7 +134,7 @@ public class Vectors extends AbsVectorsOM {
 		for (int i = 0; i < dependent.length; i++) {
 			dependent[i] = all.unsignedSets().emptyCollectionOf();
 		}
-		Iterator<SignedSetInternal> it = iterator();
+		Iterator<SignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			UnsignedSetInternal dep = it.next().support();
 			dependent[dep.size()].add(dep);

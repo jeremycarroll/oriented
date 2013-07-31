@@ -66,7 +66,7 @@ public class MatroidCircuits extends AbsMatroid {
 			}
 
 			@Override
-			public Iterator<? extends Label> suchThatForAll(UnsignedSet a, UnsignedSet b) {
+			public Iterator<Label> suchThatForAll(UnsignedSet a, UnsignedSet b) {
 				if (a.equals(b))
 					return null;
 				union = a.union(b);
@@ -86,7 +86,7 @@ public class MatroidCircuits extends AbsMatroid {
 	}
 
 	SetOfUnsignedSetInternal computeBases() {
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		int max = 0;
 		while (it.hasNext()) {
 			int sz = it.next().size();
@@ -100,7 +100,7 @@ public class MatroidCircuits extends AbsMatroid {
 		JavaSet<UnsignedSetInternal> bases = convert(elements()).subsetsOfSize(
 				max - 1);
 		// System.out.println(support().size() + " " + bases.size());
-		it = iterator();
+		it = iterator2();
 		while (it.hasNext()) {
 			UnsignedSet n = it.next();
 			if (n.size() == max - 1) {

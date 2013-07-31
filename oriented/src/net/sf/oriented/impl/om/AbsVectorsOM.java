@@ -48,6 +48,12 @@ abstract class AbsVectorsOM extends AbsVectors implements OMSInternal {
     	return omsFactory().toString(this);
     }
 
+
+    @Override
+    public SignedSet[] toArray() {
+        return this.vectors.toArray();
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

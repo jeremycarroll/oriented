@@ -34,8 +34,7 @@ public interface SetOfInternal<
             ITEM_INTERNAL2 extends ITEM, 
             SET_INTERNAL2 extends SET>
 		extends HasFactory<SET_INTERNAL, SET, SET_INTERNAL2>, 
-		        SetOf<ITEM, SET>, 
-		        Iterable<ITEM_INTERNAL2> {
+		        SetOf<ITEM, SET> {
 //@formatter:on
 
 	@Override
@@ -70,8 +69,13 @@ public interface SetOfInternal<
 	@Override
 	public abstract boolean contains(ITEM a);
 
-	@Override
-	public abstract Iterator<ITEM_INTERNAL2> iterator();
+	/**
+	 * This method is exactly the same as {@link Iterable#iterator()}
+	 * and implementations should always return the same object.
+	 * The method declaration returns an iterator over the internal subtype.
+	 * 
+	 */
+    public abstract Iterator<ITEM_INTERNAL2> iterator2();
 
 	@Override
 	public abstract int size();

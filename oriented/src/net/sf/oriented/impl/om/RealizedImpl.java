@@ -34,7 +34,7 @@ public class RealizedImpl extends AbsOM implements OMasRealized {
 	}
 
 	@Override
-	public Iterator<? extends SignedSet> iterator() {
+	public Iterator<? extends SignedSet> iterator2() {
 		throw new UnsupportedOperationException();
 	}
 

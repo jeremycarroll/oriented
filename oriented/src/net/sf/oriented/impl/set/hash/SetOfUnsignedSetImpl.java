@@ -33,7 +33,7 @@ public class SetOfUnsignedSetImpl
 	}
 
 	private UnsignedSetInternal computeSupport() {
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		UnsignedSetInternal r = it.next();
 		while (it.hasNext()) {
 			r = r.union(it.next());
@@ -62,7 +62,7 @@ public class SetOfUnsignedSetImpl
 	 */
 	public SetOfUnsignedSetInternal contraction(Label l) {
 		JavaSet<UnsignedSetInternal> r = emptyCollectionOf();
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			UnsignedSetInternal s = it.next();
 			if (s.contains(l)) {

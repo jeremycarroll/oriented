@@ -43,7 +43,7 @@ public class SetOfSignedSetImpl
 	private UnsignedSetInternal support;
 
 	private UnsignedSetInternal computeSupport() {
-		Iterator<SignedSetInternal> it = iterator();
+		Iterator<SignedSetInternal> it = iterator2();
 		UnsignedSetInternal r = factory().setOfUnsignedSetFactory()
 				.itemFactory().empty();
 
@@ -74,7 +74,7 @@ public class SetOfSignedSetImpl
 
 	public SetOfSignedSet contraction(Label l) {
 		JavaSet<SignedSetInternal> r = emptyCollectionOf();
-		Iterator<SignedSetInternal> it = iterator();
+		Iterator<SignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			SignedSetInternal s = it.next();
 			switch (s.sign(l)) {
@@ -112,7 +112,7 @@ public class SetOfSignedSetImpl
 				.setOfUnsignedSetFactory();
 		JavaSet<UnsignedSetInternal> s = setOfUnsignedSetFactory.itemFactory()
 				.emptyCollectionOf();
-		Iterator<SignedSetInternal> it = iterator();
+		Iterator<SignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			SignedSetInternal signed = it.next();
 			UnsignedSetInternal unsigned = signed.support();
@@ -146,7 +146,7 @@ public class SetOfSignedSetImpl
 	public SetOfSignedSetInternal restriction(UnsignedSet x0) {
 		JavaSet<SignedSetInternal> tx = factory().itemFactory()
 				.emptyCollectionOf();
-		Iterator<SignedSetInternal> topes = iterator();
+		Iterator<SignedSetInternal> topes = iterator2();
 		while (topes.hasNext()) {
 			tx.add(topes.next().restriction(x0));
 		}
@@ -159,10 +159,10 @@ public class SetOfSignedSetImpl
         UnsignedSetImpl changed = (UnsignedSetImpl) signedSetFactory.unsignedF.copyBackingCollection(Arrays.asList(axes));
         UnsignedSetImpl unchanged = (UnsignedSetImpl) setOfElements().minus(changed);
         JavaSet<SignedSetInternal> reoriented = signedSetFactory.emptyCollectionOf();
-        for (SignedSetInternal ss:this ) {
-            UnsignedSetInternal plus = ss.plus().intersection(unchanged)
+        for (SignedSet ss:this ) {
+            UnsignedSetInternal plus = (UnsignedSetInternal) ss.plus().intersection(unchanged)
                                          .union(ss.minus().intersection(changed));
-            UnsignedSetInternal minus = ss.plus().intersection(changed)
+            UnsignedSetInternal minus = (UnsignedSetInternal) ss.plus().intersection(changed)
                     .union(ss.minus().intersection(unchanged));
             reoriented.add(  new SignedSetImpl(plus,minus,signedSetFactory) );
         }

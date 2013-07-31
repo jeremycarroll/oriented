@@ -408,7 +408,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
      * @throws UnsupportedOperationException Always.
      */
     @Override
-    public Iterator<? extends Object> iterator() {
+    public Iterator<? extends Object> iterator2() {
         throw new UnsupportedOperationException("Not part of the interface");
     }
 

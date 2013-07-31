@@ -95,7 +95,7 @@ abstract class AbsAxioms<ForAll> {
 		 * @return
 		 */
 		protected Iterator<? extends ForAll> iterator() {
-            return AbsAxioms.this.iterator();
+            return AbsAxioms.this.iterator2();
         }
 
         /**
@@ -117,10 +117,10 @@ abstract class AbsAxioms<ForAll> {
 		@Override
 		public void verify() throws AxiomViolation {
 			Iterator<? extends ForAll> i, j;
-			i = iterator();
+			i = iterator2();
 			while (i.hasNext()) {
 				ForAll a = i.next();
-				j = iterator();
+				j = iterator2();
 				while (j.hasNext()) {
 					if (!check(a, j.next())) {
                         throw new AxiomViolation(AbsAxioms.this,name);
@@ -130,7 +130,7 @@ abstract class AbsAxioms<ForAll> {
 		}
 	}
 
-	abstract public Iterator<? extends ForAll> iterator();
+	abstract public Iterator<? extends ForAll> iterator2();
 	
 	public UnsignedSet setOfElements() {
 	    return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(elements()));

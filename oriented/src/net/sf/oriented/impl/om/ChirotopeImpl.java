@@ -178,7 +178,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 	private void initFromCircuits() {
 		Bases bases = getMatroid().getBases();
-		Iterator<UnsignedSetInternal> it = bases.iterator();
+		Iterator<UnsignedSetInternal> it = bases.iterator2();
 		UnsignedSetInternal theBasis = it.next();
 		setNthEntry(indexFor(theBasis), 1);
 		while (it.hasNext()) {
@@ -458,7 +458,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 
 	SetOfSignedSetInternal circuits() {
 		MatroidCircuits mc = getMatroid().getCircuits();
-		Iterator<UnsignedSetInternal> it = mc.iterator();
+		Iterator<UnsignedSetInternal> it = mc.iterator2();
 		SignedSetInternal rslt[] = new SignedSetInternal[2 * mc.size()];
 		int i = 0;
 		while (it.hasNext()) {
@@ -477,7 +477,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 		JavaSet<LabelImpl> minus = all.unsignedSets().itemFactory()
 				.emptyCollectionOf();
 
-		Iterator<LabelImpl> it = unsigned.iterator();
+		Iterator<LabelImpl> it = unsigned.iterator2();
 		LabelImpl e = it.next();
 		UnsignedSetInternal A = findBasis(unsigned.minus(e));
 		int ix[] = asInt(A);
@@ -516,7 +516,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 			if (bases.contains(independent))
 				return independent;
 		} else {
-			Iterator<UnsignedSetInternal> it = bases.iterator();
+			Iterator<UnsignedSetInternal> it = bases.iterator2();
 			while (it.hasNext()) {
 				UnsignedSetInternal base = it.next();
 				if (base.isSupersetOf(independent))
@@ -541,7 +541,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	}
 
 	@Override
-	public Iterator<? extends SignedSet> iterator() {
+	public Iterator<? extends SignedSet> iterator2() {
 		throw new UnsupportedOperationException(
 				"Chirotopes don't have iterators.");
 	}

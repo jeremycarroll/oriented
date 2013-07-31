@@ -52,7 +52,7 @@ public class MaxVectors extends AbsVectorsOM {
 	SetOfSignedSetInternal vectors() {
 		JavaSet<SignedSetInternal> r = factory().itemFactory()
 				.emptyCollectionOf();
-		UnsignedSetInternal support = iterator().next().support();
+		UnsignedSetInternal support = iterator2().next().support();
 		Map<SignedSetInternal, SetOfSignedSetInternal> covector2tope = allTopesConformingToCovector(support);
 		Map<UnsignedSet, SetOfSignedSetInternal> projections = signedProjection(support);
 		Iterator<SignedSetInternal> it = covector2tope.keySet().iterator();
@@ -73,7 +73,7 @@ public class MaxVectors extends AbsVectorsOM {
 		while (it.hasNext()) {
 			UnsignedSetInternal x0 = it.next();
 			UnsignedSetInternal x1 = support.minus(x0);
-			Iterator<SignedSetInternal> topes = iterator();
+			Iterator<SignedSetInternal> topes = iterator2();
 			while (topes.hasNext()) {
 				SignedSetInternal tope = topes.next();
 				SignedSetInternal x = tope.restriction(x0);
@@ -97,7 +97,7 @@ public class MaxVectors extends AbsVectorsOM {
 	}
 
 	private void verifySupport()  throws AxiomViolation {
-		Iterator<? extends SignedSet> it = iterator();
+		Iterator<? extends SignedSet> it = iterator2();
 		if (!it.hasNext()) {
             throw new AxiomViolation(this,"non-empty");
 		}

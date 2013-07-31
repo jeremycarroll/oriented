@@ -89,7 +89,7 @@ abstract public class SetImpl<
 	}
 
 	@Override
-	public Iterator<ITEM_INTERNAL2> iterator() {
+	public Iterator<ITEM_INTERNAL2> iterator2() {
 		return new Iterator<ITEM_INTERNAL2>() {
 			Iterator<ITEM_INTERNAL2> underlying = members.iterator();
 

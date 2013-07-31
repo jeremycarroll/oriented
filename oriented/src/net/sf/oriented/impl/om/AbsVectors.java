@@ -69,8 +69,8 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	}
 
 	@Override
-	public Iterator<SignedSetInternal> iterator() {
-		return vectors.iterator();
+	public Iterator<SignedSetInternal> iterator2() {
+		return vectors.iterator2();
 	}
 
 	@Override
@@ -139,7 +139,7 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	}
 
 	private boolean verifySymmetry() {
-		Iterator<SignedSetInternal> it = iterator();
+		Iterator<SignedSetInternal> it = iterator2();
 		while (it.hasNext())
 			if (!contains(it.next().opposite()))
 				return false;
@@ -190,6 +190,12 @@ abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
 	public String toString(Factory<SetOfSignedSet> e) {
 		return vectors.toString(e);
 	}
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public Iterator<SignedSet> iterator() {
+        return (Iterator)this.iterator2();
+    }
 	
 	@Override
     abstract public OMSInternal reorientRaw(Label ... axes);

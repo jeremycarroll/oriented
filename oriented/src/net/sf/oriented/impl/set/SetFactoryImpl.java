@@ -83,7 +83,7 @@ abstract public class SetFactoryImpl<
 		StringBuffer rslt = new StringBuffer();
 		String sep = "";
 		rslt.append("{");
-		Iterator<? extends ITEM> it = s.iterator();
+		Iterator<ITEM> it = s.iterator();
 		while (it.hasNext()) {
 			rslt.append(sep);
 			rslt.append(itemFactory.toString(u, it.next()));

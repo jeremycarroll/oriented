@@ -32,7 +32,7 @@ public class Bases extends AbsMatroid {
 	private SetOfUnsignedSetInternal dualBases() {
 		UnsignedSetInternal s = convert(elements());
 		JavaSet<UnsignedSetInternal> db = emptyCollectionOf();
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			db.add(s.minus(it.next()));
 		}
@@ -46,7 +46,7 @@ public class Bases extends AbsMatroid {
 
 	@Override
 	public int rank() {
-		return iterator().next().size();
+		return iterator2().next().size();
 	}
 
 	@Override
@@ -65,11 +65,11 @@ public class Bases extends AbsMatroid {
             }
 
             @Override
-            Iterator<? extends Label> suchThatForAll(UnsignedSet A, UnsignedSet B) {
+            Iterator<Label> suchThatForAll(UnsignedSet A, UnsignedSet B) {
                 return A.equals(B) ? null : A.minus(B).iterator();
             }
             @Override
-            protected Iterator<? extends Label> innerIterator(UnsignedSet A, UnsignedSet B) {
+            protected Iterator<Label> innerIterator(UnsignedSet A, UnsignedSet B) {
                 return B.minus(A).iterator();
             }
         }.verify();
@@ -108,7 +108,7 @@ public class Bases extends AbsMatroid {
 
 	private JavaSet<UnsignedSetInternal> independentSets() {
 		JavaSet<UnsignedSetInternal> rslt = emptyCollectionOf();
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			rslt.addAll(it.next().powerSet());
 		}
@@ -125,13 +125,13 @@ public class Bases extends AbsMatroid {
 	UnsignedSetInternal basisExchange(UnsignedSetInternal A,
 			UnsignedSetInternal B) {
 		// TODO: API for exchange
-		return basisExchange(A, A.minus(B).iterator().next(), B);
+		return basisExchange(A, A.minus(B).iterator2().next(), B);
 	}
 
 	UnsignedSetInternal basisExchange(UnsignedSetInternal A, LabelImpl a,
 			UnsignedSetInternal B) {
 		UnsignedSetInternal big = A.minus(a);
-		Iterator<LabelImpl> it = B.minus(A).iterator();
+		Iterator<LabelImpl> it = B.minus(A).iterator2();
 		while (it.hasNext()) {
 			LabelImpl b = it.next();
 			UnsignedSetInternal newBasis = big.union(b);

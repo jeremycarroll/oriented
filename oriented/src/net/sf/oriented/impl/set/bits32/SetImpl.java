@@ -68,7 +68,7 @@ abstract public class SetImpl<
 	@Override
 	public JavaSet<ITEM_INTERNAL2> asCollection() {
 		JavaSet<ITEM_INTERNAL2> r = factory().itemFactory().emptyCollectionOf();
-		Iterator<ITEM_INTERNAL2> it = iterator();
+		Iterator<ITEM_INTERNAL2> it = iterator2();
 		while (it.hasNext()) {
 			r.add(it.next());
 		}

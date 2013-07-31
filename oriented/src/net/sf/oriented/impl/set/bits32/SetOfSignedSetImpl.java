@@ -176,7 +176,7 @@ final public class SetOfSignedSetImpl
 	}
 
 	@Override
-	public Iterator<SignedSetInternal> iterator() {
+	public Iterator<SignedSetInternal> iterator2() {
 		return new Iterator<SignedSetInternal>() {
 			int i = 0;
 

@@ -89,7 +89,7 @@ public class Circuits extends AbsVectorsOM {
 		r.add(factory().itemFactory().empty());
 
 		JavaSet<SignedSetInternal> x = emptyCollectionOf();
-		Iterator<SignedSetInternal> ic = iterator();
+		Iterator<SignedSetInternal> ic = iterator2();
 		while (ic.hasNext()) {
 			SignedSetInternal c = ic.next();
 			Iterator<SignedSetInternal> iv = r.iterator();

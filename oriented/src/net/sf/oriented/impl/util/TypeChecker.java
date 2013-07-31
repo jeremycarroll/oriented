@@ -6,7 +6,11 @@ package net.sf.oriented.impl.util;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,6 +24,109 @@ import java.util.Set;
  */
 public class TypeChecker {
     
+    
+    public static Class<?> runtimeClass(Object o, Class<?> clazz, String typeParameter) {
+        return getRuntimeClass(o.getClass(),clazz,typeParameter);
+    }
+    
+    private static Map<String,Class<?>> runtimeClass = new HashMap<String,Class<?>>();
+    
+    private static Class<?> getRuntimeClass(Class<?> actualClass,
+            Class<?> declaringClass, String typeParameter) {
+        String key = actualClass.getCanonicalName() + "^^" + declaringClass.getCanonicalName() + "^^" + typeParameter;
+        if (!runtimeClass.containsKey(key)) {
+            runtimeClass.put(key, computeRuntimeClass(actualClass,declaringClass,typeParameter));
+        }
+        return runtimeClass.get(key);
+    }
+
+    private static Class<?> computeRuntimeClass(
+            Class<?> actualClass, Class<?> declaringClass,
+            String typeParameter) {
+        List<Type> superClasses = new ArrayList<Type>();
+        superClasses.add(actualClass);
+        if (!findSuper(declaringClass,0,superClasses)) {
+            throw new IllegalArgumentException(declaringClass.getName() + 
+                    " is not a superclass of " 
+                    + actualClass.getName());
+        }
+        int last = superClasses.size() - 1;
+outer:  while (true) {
+            Type sup = superClasses.get(last);
+            Type sub = superClasses.get(last - 1);
+            if (!(sup instanceof ParameterizedType)) {
+                throw new IllegalArgumentException(((Class<?>)sup).getName()+" is not parameterized");
+            }
+            ParameterizedType superType = (ParameterizedType)sup;
+            Class<?> superClazz = (Class<?>)superType.getRawType();
+            TypeVariable<?>[] params = superClazz.getTypeParameters();
+            Type args[] = superType.getActualTypeArguments();
+            if (args.length != params.length) {
+                throw new IllegalStateException("Mismatch in array length");
+            }
+            for (int i=0;i<params.length;i++) {
+                if (params[i].getName().equals(typeParameter)) {
+                    if (args[i] instanceof Class<?>) {
+                        return (Class<?>)args[i];
+                    }
+                    if (args[i] instanceof TypeVariable) {
+                        System.err.print(superClazz.getName()+"<"+typeParameter+">  --> ");
+                        typeParameter = ((TypeVariable<?>)args[i]).getName();
+                        System.err.println(((Class<?>)((ParameterizedType)sub).getRawType()).getName()+"<"+typeParameter+">");
+                        continue outer;
+                    } else {
+                        throw new UnsupportedOperationException("Unimplemented");
+                    }
+                }
+            }
+        }
+        
+        
+    }
+
+    private static boolean findSuper(Class<?> target, int ix, List<Type> superClasses) {
+        Type current = superClasses.get(ix);
+        if (current instanceof Class) {
+            return findSuper((Class<?>)current,target,ix,superClasses);
+        } else if (current instanceof ParameterizedType) {
+            return findSuper((Class<?>)((ParameterizedType)current).getRawType(),target,ix,superClasses);
+        } else if ( current == null ) {
+            return false;
+        } else {
+            throw new RuntimeException("Probably a coding problem");
+        }
+        
+    }
+
+
+    private static boolean findSuper(Class<?> current, Class<?> target, int ix,
+            List<Type> superClasses) {
+        if (current.equals(target)) {
+            return true;
+        }
+        if (findSuperNext(target,ix+1,current.getGenericSuperclass(),superClasses)) {
+            return true;
+        }
+        for (Type interf: current.getGenericInterfaces()) {
+            if (findSuperNext(target,ix+1,interf,superClasses)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean findSuperNext(Class<?> target, int i, Type type, List<Type> superClasses) {
+        if (type == null) {
+            return false;
+        }
+        superClasses.add(i,type);
+        boolean rslt = findSuper(target,i, superClasses);
+        if (!rslt) {
+            superClasses.remove(i);
+        }
+        return rslt;
+    }
+
     /**
      * Call this method in constructors of
      * top-level superclasses of class hierarchies

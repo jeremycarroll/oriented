@@ -10,7 +10,7 @@ package net.sf.oriented.omi;
  * @author jeremycarroll
  *
  */
-public interface SetOfSignedSet extends SetOf<SignedSet, SetOfSignedSet>, Iterable<SignedSet> {
+public interface SetOfSignedSet extends SetOf<SignedSet, SetOfSignedSet> {
 
     /**
      * This is the union over this set of the support of each member.

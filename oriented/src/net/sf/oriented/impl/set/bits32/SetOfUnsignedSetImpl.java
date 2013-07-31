@@ -92,7 +92,7 @@ public class SetOfUnsignedSetImpl
 	 */
 	public SetOfUnsignedSetInternal contraction(Label l) {
 		JavaSet<UnsignedSetInternal> r = emptyCollectionOf();
-		Iterator<UnsignedSetInternal> it = iterator();
+		Iterator<UnsignedSetInternal> it = iterator2();
 		while (it.hasNext()) {
 			UnsignedSetInternal s = it.next();
 			if (s.contains(l)) {
@@ -191,7 +191,7 @@ public class SetOfUnsignedSetImpl
 	}
 
 	@Override
-	public Iterator<UnsignedSetInternal> iterator() {
+	public Iterator<UnsignedSetInternal> iterator2() {
 		return new Iterator<UnsignedSetInternal>() {
 			int i = 0;
 

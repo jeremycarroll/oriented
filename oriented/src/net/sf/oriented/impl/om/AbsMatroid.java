@@ -74,8 +74,8 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
 	}
 
 	@Override
-	public Iterator<UnsignedSetInternal> iterator() {
-		return set.iterator();
+	public Iterator<UnsignedSetInternal> iterator2() {
+		return set.iterator2();
 	}
 
 	@Override
@@ -192,6 +192,17 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
         if (set.isEmpty()) {
             throw new AxiomViolation(this,"non-empty");
         }
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public Iterator<UnsignedSet> iterator() {
+        return (Iterator)this.iterator2();
+    }
+
+    @Override
+    public UnsignedSet[] toArray() {
+        return this.set.toArray();
     }
 }
 /************************************************************************

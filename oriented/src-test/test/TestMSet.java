@@ -48,7 +48,7 @@ public class TestMSet {
 	public void testParse() {
 		int result = 0;
 		int count = 0;
-		Iterator<? extends Label> it = unsigned("{4,1,2,4}").iterator();
+		Iterator<Label> it = unsigned("{4,1,2,4}").iterator();
 		while (it.hasNext()) {
 			result |= Integer.parseInt(it.next().toString());
 			count++;

@@ -94,7 +94,7 @@ final public class UnsignedSetImpl
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Iterator<LabelImpl> iterator() {
+	public Iterator<LabelImpl> iterator2() {
 		return (Iterator<LabelImpl>) (Iterator<? extends Label>) new Iterator<Label>() {
 
 			int nValue = 0;

@@ -73,7 +73,7 @@ abstract public class AbsSetImpl<
                         @Override
                         public SET_INTERNAL2 next() {
                             JavaSet<ITEM_INTERNAL2> m = emptyCollectionOf();
-                            Iterator<ITEM_INTERNAL2> it = AbsSetImpl.this.iterator();
+                            Iterator<ITEM_INTERNAL2> it = AbsSetImpl.this.iterator2();
                             int j = 0;
                             while (it.hasNext()) {
                                 ITEM_INTERNAL2 n = it.next();
@@ -109,7 +109,7 @@ abstract public class AbsSetImpl<
             return;
         }
         int hashCode = 0;
-        for (ITEM_INTERNAL2 member:this) {
+        for (ITEM member:this) {
             hashCode += member.hashCode();
         }
         if ( hashCode != hashCode() ) {
@@ -119,7 +119,7 @@ abstract public class AbsSetImpl<
 
     public SET_INTERNAL2 only(Test<ITEM> t) {
     	JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
-    	Iterator<ITEM_INTERNAL2> i = iterator();
+    	Iterator<ITEM_INTERNAL2> i = iterator2();
     	while (i.hasNext()) {
     		ITEM_INTERNAL2 n = i.next();
     		if (t.test(n)) {
@@ -134,7 +134,7 @@ abstract public class AbsSetImpl<
     }
 
     protected ITEM_INTERNAL2 ith(int x) {
-    	Iterator<ITEM_INTERNAL2> it = iterator();
+    	Iterator<ITEM_INTERNAL2> it = iterator2();
     	while (x > 0) {
     		x--;
     		it.next();
@@ -144,7 +144,7 @@ abstract public class AbsSetImpl<
 
     @Override
     public ITEM_INTERNAL2 theMember() {
-    	Iterator<ITEM_INTERNAL2> it = iterator();
+    	Iterator<ITEM_INTERNAL2> it = iterator2();
     	ITEM_INTERNAL2 r = it.next();
     	if (it.hasNext())
     		throw new IllegalStateException("More than one member.");
@@ -165,7 +165,7 @@ abstract public class AbsSetImpl<
     @Override
     public int hashCode() {
     	int rslt = 0;
-    	Iterator<ITEM_INTERNAL2> it = iterator();
+    	Iterator<ITEM_INTERNAL2> it = iterator2();
     	while (it.hasNext()) {
     		rslt += it.next().hashCode();
     	}
@@ -202,7 +202,7 @@ abstract public class AbsSetImpl<
 
     public SET_INTERNAL2 excluding(Test<ITEM> t) {
     	JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
-    	Iterator<ITEM_INTERNAL2> i = iterator();
+    	Iterator<ITEM_INTERNAL2> i = iterator2();
     	while (i.hasNext()) {
     		ITEM_INTERNAL2 n = i.next();
     		if (!t.test(n)) {
@@ -218,6 +218,17 @@ abstract public class AbsSetImpl<
     	if (sz > 30)
     		throw new IllegalArgumentException("unimplemented powerset sz > 30");
     	return new PowerJavaSet(sz);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public Iterator<ITEM> iterator() {
+        return (Iterator<ITEM>) this.iterator2();
+    }
+    
+    @Override
+    public ITEM[] toArray(){
+        return null;
     }
 }
 

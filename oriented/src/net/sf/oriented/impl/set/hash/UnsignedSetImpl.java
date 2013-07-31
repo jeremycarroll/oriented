@@ -25,8 +25,8 @@ public class UnsignedSetImpl
     public UnsignedSetImpl permuteUniverse(Permutation universePermuter) {
         SmartPermutation s = (SmartPermutation)universePermuter;
         JavaSet<LabelImpl> result = factory().itemFactory().emptyCollectionOf();
-        for (LabelImpl m:this) {
-            result.add(s.get(m));
+        for (Label m:this) {
+            result.add(s.get((LabelImpl)m));
         }
         return new UnsignedSetImpl(result,(UnsignedSetFactory) factory());
     }
