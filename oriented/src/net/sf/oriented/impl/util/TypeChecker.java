@@ -25,9 +25,16 @@ import java.util.Set;
  */
 public class TypeChecker {
     
-    
-    public static Class<?> runtimeClass(Object o, Class<?> clazz, String typeParameter) {
-        return getRuntimeClass(o.getClass(),clazz,typeParameter);
+    /**
+     * Find the runtime class associated with a particular type parameter.
+     * @param o An instance of some subclass of clazz
+     * @param clazz A class or interface with a type parameter
+     * @param PARAM The name of the type parameter
+     * @return The class corresponding to PARAM in the class hierarchy corresponding to o
+     */
+    @SuppressWarnings("unchecked")
+    public static  <PARAM> Class<PARAM> runtimeClass(Object o, Class<?> clazz, String PARAM) {
+        return (Class<PARAM>) getRuntimeClass(o.getClass(),clazz,PARAM);
     }
     
     private static Map<String,Class<?>> runtimeClass = new HashMap<String,Class<?>>();

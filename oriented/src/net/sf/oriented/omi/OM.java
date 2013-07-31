@@ -200,6 +200,8 @@ public interface OM extends Verify {
 
     int asInt(String label);
 
+    FactoryFactory ffactory();
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

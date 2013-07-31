@@ -5,7 +5,6 @@
 package net.sf.oriented.impl.om;
 
 import net.sf.oriented.impl.items.LabelImpl;
-import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 
 public interface OMInternal extends OM {
@@ -33,7 +32,6 @@ public interface OMInternal extends OM {
 	@Override
 	ChirotopeImpl getChirotope();
 
-	FactoryFactory ffactory();
 	
 
 }

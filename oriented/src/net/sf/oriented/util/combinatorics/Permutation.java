@@ -89,7 +89,7 @@ public class Permutation {
         };
     }
 
-    static int[] from0toN(final int n) {
+    public static int[] from0toN(final int n) {
         final int value[] = new int[n];
         for (int i = 0; i < n; i++) {
             value[i] = i;

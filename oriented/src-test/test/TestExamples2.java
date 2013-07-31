@@ -13,12 +13,16 @@ import junit.framework.Assert;
 import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.stretching.Realization;
 
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
+
+import com.google.common.math.IntMath;
 
 import test.BetterParameterized.TestName;
 
@@ -73,6 +77,26 @@ public class TestExamples2 {
     @Test
     public void testVerify() throws AxiomViolation {
           om.verify();
+    }
+    
+    @Test
+    public void testRealizationA() {
+        int n = om.n();
+        int p = IntMath.binomial(n-1,2);
+        System.err.print(name+": ");
+        for (Label l:om.elements()) {
+            Realization r = new Realization(om,l);
+            Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
+            String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
+            System.err.print(l.label()+"="+r.getReorientation().length
+                       //+" "+lex
+                           +", ");
+            Assert.assertTrue(r.getEquivalentOM().isAcyclic());
+            Assert.assertEquals(-1, lex.indexOf('-') );
+            Assert.assertTrue(r.getReorientation().length<n/2);
+            
+        }
+        System.err.println();
     }
     
 
