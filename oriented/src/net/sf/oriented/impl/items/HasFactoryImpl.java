@@ -17,7 +17,7 @@ import net.sf.oriented.omi.Factory;
  * @param <ITEM_INTERNAL2> See {@link net.sf.oriented.impl.util.TypeChecker}
  */
 // @formatter:off
-public class HasFactoryImpl<
+public abstract class HasFactoryImpl<
      ITEM_INTERNAL extends HasFactory<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2>, 
      ITEM, 
      ITEM_INTERNAL2 extends ITEM>

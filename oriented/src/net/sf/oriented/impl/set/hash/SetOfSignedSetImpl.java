@@ -16,7 +16,7 @@ import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.Test;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
@@ -155,7 +155,7 @@ public class SetOfSignedSetImpl
 
     @Override
     public SetOfSignedSet reorientRaw(Label ... axes) {
-        SignedSetFactory signedSetFactory = factory().itemFactory();
+        SignedSetFactoryImpl signedSetFactory = factory().itemFactory();
         UnsignedSetImpl changed = (UnsignedSetImpl) signedSetFactory.unsignedF.copyBackingCollection(Arrays.asList(axes));
         UnsignedSetImpl unchanged = (UnsignedSetImpl) setOfElements().minus(changed);
         JavaSet<SignedSetInternal> reoriented = signedSetFactory.emptyCollectionOf();

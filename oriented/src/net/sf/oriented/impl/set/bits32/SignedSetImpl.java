@@ -7,7 +7,7 @@ package net.sf.oriented.impl.set.bits32;
 import static net.sf.oriented.impl.set.bits32.UnsignedSetImpl.sizex;
 import net.sf.oriented.impl.items.HasFactoryImpl;
 import net.sf.oriented.impl.items.LabelFactoryImpl;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
@@ -20,15 +20,15 @@ public class SignedSetImpl extends
 		implements SignedSetInternal {
 
 	@Override
-	public SignedSetFactory factory() {
-		return (SignedSetFactory) super.factory();
+	public SignedSetFactoryImpl factory() {
+		return (SignedSetFactoryImpl) super.factory();
 	}
 
 	final int plus;
 	final int minus;
 
 	public SignedSetImpl(UnsignedSetInternal p, UnsignedSetInternal m,
-			SignedSetFactory f) {
+			SignedSetFactoryImpl f) {
 		super(f);
 		plus = remake(p).members;
 		minus = remake(m).members;
@@ -39,7 +39,7 @@ public class SignedSetImpl extends
 
 	static int cnt = 0;
 
-	SignedSetImpl(int p, int m, SignedSetFactory f) {
+	SignedSetImpl(int p, int m, SignedSetFactoryImpl f) {
 		super(f);
 		plus = p;
 		minus = m;
@@ -58,18 +58,18 @@ public class SignedSetImpl extends
 		return make(p, m, factory());
 	}
 
-	static SignedSetImpl make(int p, int m, SignedSetFactory f) {
+	static SignedSetImpl make(int p, int m, SignedSetFactoryImpl f) {
 		return new SignedSetImpl(p, m, f);
 	}
 
 	private static SignedSetImpl fromCache(long l, int p, int m,
-			SignedSetFactory f) {
+			SignedSetFactoryImpl f) {
 		return new SignedSetImpl(p, m, f);
 	}
 
-	static SignedSetImpl make(long key, SignedSetFactory f) {
-		return fromCache(key, SignedSetFactory.plus(key),
-				SignedSetFactory.minus(key), f);
+	static SignedSetImpl make(long key, SignedSetFactoryImpl f) {
+		return fromCache(key, SignedSetFactoryImpl.plus(key),
+				SignedSetFactoryImpl.minus(key), f);
 	}
 
 	@Override

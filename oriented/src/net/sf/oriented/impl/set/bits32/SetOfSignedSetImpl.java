@@ -7,8 +7,8 @@
  */
 package net.sf.oriented.impl.set.bits32;
 
-import static net.sf.oriented.impl.set.SignedSetFactory.plus;
-import static net.sf.oriented.impl.set.SignedSetFactory.toLong;
+import static net.sf.oriented.impl.set.SignedSetFactoryImpl.plus;
+import static net.sf.oriented.impl.set.SignedSetFactoryImpl.toLong;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,7 +18,7 @@ import net.sf.oriented.impl.set.SetFactoryInternal;
 import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.JavaSet;
@@ -57,7 +57,7 @@ final public class SetOfSignedSetImpl
 	}
 
 	static int minus(long l) {
-		return SignedSetFactory.minus(l);
+		return SignedSetFactoryImpl.minus(l);
 	}
 
 	/**
@@ -305,7 +305,7 @@ final public class SetOfSignedSetImpl
 			hashCode = 0;
 			for (long member : members) {
 				hashCode += lf.hashCode(plus(member)) + 35
-						* lf.hashCode(SignedSetFactory.minus(member));
+						* lf.hashCode(SignedSetFactoryImpl.minus(member));
 			}
 		}
 		return hashCode;

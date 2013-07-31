@@ -5,7 +5,7 @@
 package net.sf.oriented.impl.set.hash;
 
 import net.sf.oriented.impl.items.HasFactoryImpl;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.Label;
@@ -16,14 +16,14 @@ public class SignedSetImpl extends
 		HasFactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal>
 		implements SignedSetInternal {
 	@Override
-	public SignedSetFactory factory() {
-		return (SignedSetFactory) super.factory();
+	public SignedSetFactoryImpl factory() {
+		return (SignedSetFactoryImpl) super.factory();
 	}
 
 	final private UnsignedSetInternal plus, minus;
 
 	public SignedSetImpl(UnsignedSetInternal p, UnsignedSetInternal m,
-			SignedSetFactory f) {
+			SignedSetFactoryImpl f) {
 		super(f);
 		plus = p;
 		minus = m;

@@ -21,7 +21,7 @@ import net.sf.oriented.impl.om.OMFactory;
 import net.sf.oriented.impl.om.OMRealizedFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.matrix.RationalMatrix;
@@ -190,7 +190,7 @@ final public class FactoryFactory {
 	private SetOfSignedSetFactory symmetricSetsOfSignedSet;
 	private SetOfUnsignedSetFactory setsOfUnsignedSet;
 	private UnsignedSetFactory unsignedSets;
-	private SignedSetFactory signedSets;
+	private SignedSetFactoryImpl signedSets;
 	private OMSFactory circuits, vectors, maxVectors;
 	private ChirotopeFactory chirotope;
 	private Factory<MatroidAsSet> bases;
@@ -318,7 +318,7 @@ final public class FactoryFactory {
 	 * 
 	 * @return A factory for signed sets.
 	 */
-	public Factory<SignedSet> signedSets() {
+	public SignedSetFactory signedSets() {
 		return signedSets;
 	}
 

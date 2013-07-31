@@ -14,7 +14,7 @@ import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
-import net.sf.oriented.impl.set.SignedSetFactory;
+import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
@@ -498,7 +498,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 			add(plus, minus, -chi(ix), f);
 			ix[i] = Nf;
 		}
-		return ((SignedSetFactory) ffactory().signedSets()).create(all
+		return ((SignedSetFactoryImpl) ffactory().signedSets()).construct(all
 				.unsignedSets().copyBackingCollection(plus), all.unsignedSets()
 				.copyBackingCollection(minus));
 	}

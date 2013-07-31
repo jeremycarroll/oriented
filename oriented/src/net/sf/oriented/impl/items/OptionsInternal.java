@@ -11,11 +11,17 @@ public abstract class OptionsInternal {
         if (fc.equals(LabelFactoryImpl.class)) {
             return LabelImpl.class.getConstructors()[0];
         }
-    	String name = fc.getSimpleName();
-    	if (!name.endsWith("Factory"))
-    		throw new IllegalArgumentException("Naming conventions violated");
-    	name = name.substring(0, name.length() - "Factory".length())+ "Impl";
-    	return constructorFor(name);
+        String name = fc.getSimpleName();
+        String implName = null;
+        for ( String fact: new String[] { "Factory", "FactoryImpl"}) {
+            if (name.endsWith(fact)) {
+                implName = name.substring(0, name.length() - fact.length())+ "Impl";
+            }
+        }
+        if (implName == null) {
+            throw new IllegalArgumentException("Naming conventions violated");
+        }
+        return constructorFor(implName);
     }
 
     protected Constructor<?> constructorFor(String name) {

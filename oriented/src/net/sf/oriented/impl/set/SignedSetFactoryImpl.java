@@ -16,10 +16,11 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.SignedSetFactory;
 import net.sf.oriented.omi.UnsignedSet;
 
-public class SignedSetFactory extends
-		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> {
+public class SignedSetFactoryImpl extends
+		FactoryImpl<SignedSetInternal, SignedSet, SignedSetInternal> implements SignedSetFactory {
 
 	public static final long MASK = (1l << 32) - 1;
 
@@ -27,7 +28,7 @@ public class SignedSetFactory extends
 
 	private final SignedSetInternal empty;
 
-	SignedSetFactory(LabelFactoryImpl f, UnsignedSetFactory uf) {
+	SignedSetFactoryImpl(LabelFactoryImpl f, UnsignedSetFactory uf) {
 		super(f.getOptions());
 		unsignedF = uf;
 		empty = createSignedSet(unsignedF.empty(), unsignedF.empty());
@@ -187,9 +188,9 @@ public class SignedSetFactory extends
 		return new String(rslt);
 	}
 
-	public SignedSetInternal create(UnsignedSetInternal plus,
-			UnsignedSetInternal minus) {
-		return createSignedSet(plus, minus);
+	@Override
+    public SignedSetInternal construct(UnsignedSet plus, UnsignedSet minus) {
+		return createSignedSet((UnsignedSetInternal)unsignedF.remake(plus), (UnsignedSetInternal)unsignedF.remake(minus));
 	}
 
 	private SignedSetInternal cache[];

@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.impl.util;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -53,12 +54,14 @@ public class TypeChecker {
         int last = superClasses.size() - 1;
 outer:  while (true) {
             Type sup = superClasses.get(last);
-            Type sub = superClasses.get(last - 1);
             if (!(sup instanceof ParameterizedType)) {
                 throw new IllegalArgumentException(((Class<?>)sup).getName()+" is not parameterized");
             }
             ParameterizedType superType = (ParameterizedType)sup;
             Class<?> superClazz = (Class<?>)superType.getRawType();
+            if (!Modifier.isAbstract(superClazz.getModifiers())) {
+                throw new IllegalArgumentException(superClazz.getName()+ " should be abstract");
+            }
             TypeVariable<?>[] params = superClazz.getTypeParameters();
             Type args[] = superType.getActualTypeArguments();
             if (args.length != params.length) {
@@ -70,15 +73,18 @@ outer:  while (true) {
                         return (Class<?>)args[i];
                     }
                     if (args[i] instanceof TypeVariable) {
-                        System.err.print(superClazz.getName()+"<"+typeParameter+">  --> ");
+                        // System.err.print(superClazz.getName()+"<"+typeParameter+">  --> ");
                         typeParameter = ((TypeVariable<?>)args[i]).getName();
-                        System.err.println(((Class<?>)((ParameterizedType)sub).getRawType()).getName()+"<"+typeParameter+">");
+                        // System.err.println(((Class<?>)((ParameterizedType)superClasses.get(last - 1)).getRawType()).getName()+"<"+typeParameter+">");
+                        last --;
                         continue outer;
                     } else {
                         throw new UnsupportedOperationException("Unimplemented");
                     }
                 }
             }
+            throw new IllegalArgumentException("Type paramter "+ typeParameter + " not found in "+ superClazz.getName());
+            
         }
         
         
