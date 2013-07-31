@@ -21,15 +21,20 @@ public class TestGetRuntimeClass {
         FactoryFactory f = new FactoryFactory();
         Assert.assertEquals(Label.class, TypeChecker.runtimeClass(f.unsignedSets().empty(), Iterable.class, "T"));
     }
-    private static class A<T> {
+    private static abstract class A<T> {
     }
     private static class B<U> extends A<U> {
     }
     private static class C extends B<BigInteger> {
     }
     @Test(expected=IllegalArgumentException.class)
-    public void testAbsrtact() {
+    public void testAbstract() {
         Assert.assertEquals(BigInteger.class, TypeChecker.runtimeClass(new C(), A.class, "T"));
+    }
+    @SuppressWarnings("rawtypes")
+    @Test(expected=IllegalArgumentException.class)
+    public void testGeneric() {
+        Assert.assertEquals(BigInteger.class, TypeChecker.runtimeClass(new A(){}, A.class, "T"));
     }
     @Test
     public void testSignedSet() {

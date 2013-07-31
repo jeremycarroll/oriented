@@ -55,7 +55,11 @@ public class TypeChecker {
 outer:  while (true) {
             Type sup = superClasses.get(last);
             if (!(sup instanceof ParameterizedType)) {
-                throw new IllegalArgumentException(((Class<?>)sup).getName()+" is not parameterized");
+                String msg = ((Class<?>)sup).getName()+" is not parameterized";
+                if ( last > 0 ) {
+                    msg += " extending "+getName(superClasses.get(last-1));
+                }
+                throw new IllegalArgumentException(msg);
             }
             ParameterizedType superType = (ParameterizedType)sup;
             Class<?> superClazz = (Class<?>)superType.getRawType();
@@ -88,6 +92,16 @@ outer:  while (true) {
         }
         
         
+    }
+
+    private static String getName(Type type) {
+        if (type instanceof Class) {
+            return ((Class<?>)type).getName();
+        }
+        if (type instanceof ParameterizedType) {
+            return getName(((ParameterizedType)type).getRawType());
+        }
+        return "??";
     }
 
     private static boolean findSuper(Class<?> target, int ix, List<Type> superClasses) {
@@ -238,8 +252,7 @@ outer:  while (true) {
         throw new IllegalArgumentException("Type param "+name+" not found.");
     }
 
-    private static String formatMessage(Class<?> clazz, Class<?> superClazz,
-            String msg) {
+    private static String formatMessage(Class<?> clazz, Class<?> superClazz, String msg) {
         return clazz.getName()+":"+superClazz.getName()+":"+msg;
     }
 

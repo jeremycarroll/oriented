@@ -18,6 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestCircuits.class,    
     TestConversions.class, 
     TestCoLexicographic.class, 
+    TestGetRuntimeClass.class,
     TestLexicographic.class, 
     TestLexicographic2.class, 
     TestMatroid.class,
