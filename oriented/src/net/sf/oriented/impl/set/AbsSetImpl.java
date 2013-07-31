@@ -3,11 +3,13 @@
  ************************************************************************/
 package net.sf.oriented.impl.set;
 
+import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
+import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
@@ -228,7 +230,13 @@ abstract public class AbsSetImpl<
     
     @Override
     public ITEM[] toArray(){
-        return null;
+        @SuppressWarnings("unchecked")
+        ITEM rslt[] = (ITEM[]) Array.newInstance(TypeChecker.runtimeClass(this, AbsSetImpl.class, "ITEM"), this.size() );
+        int i = 0;
+        for (ITEM x:this) {
+            rslt[i++] = x;
+        }
+        return rslt;
     }
 }
 
