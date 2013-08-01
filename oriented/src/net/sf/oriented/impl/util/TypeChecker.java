@@ -34,6 +34,7 @@ public class TypeChecker {
      */
     @SuppressWarnings("unchecked")
     public static  <PARAM> Class<PARAM> runtimeClass(Object o, Class<?> clazz, String PARAM) {
+        // TODO: I should have used a guava class ... better coded and someone else's code :(
         return (Class<PARAM>) getRuntimeClass(o.getClass(),clazz,PARAM);
     }
     

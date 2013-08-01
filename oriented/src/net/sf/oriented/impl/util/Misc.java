@@ -7,6 +7,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import net.sf.oriented.util.combinatorics.Permutation;
+
 import com.google.common.reflect.Invokable;
 
 public class Misc {
@@ -30,6 +32,22 @@ public class Misc {
                 throw (RuntimeException) rte;
             throw new RuntimeException("internal problem", e);
         }
+    }
+    
+    public static Integer[] box(int primitive[]) {
+        Integer boxed[] = new Integer[primitive.length];
+        for (int i=0;i<primitive.length;i++) {
+            boxed[i] = primitive[i];
+        }
+        return boxed;
+    }
+
+    public static int[] unbox(Integer boxed[]) {
+        int unboxed[] = new int[boxed.length];
+        for (int i=0;i<boxed.length;i++) {
+            unboxed[i] = boxed[i];
+        }
+        return unboxed;
     }
 
 }

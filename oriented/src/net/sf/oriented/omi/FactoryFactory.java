@@ -55,6 +55,7 @@ final public class FactoryFactory {
             opt.setShortLabels();
             ground = new String[crossings.length];
             for (int i=0;i<crossings.length;i++) {
+                System.err.println(crossings[i]);
                 ground[i]=crossings[i].substring(0, 1);
                 s2i.put(ground[i], i);
             }
