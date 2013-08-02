@@ -130,10 +130,10 @@ final public class FactoryFactory {
             RParen,
             End;
         }
-        private class CLexer {
+        private abstract class CLexer {
             int pos = 0;
             int lastLine = -1;
-            private final String input;
+            protected final String input;
             CLexer(String in) {
                 input = in;
             }
@@ -152,26 +152,47 @@ final public class FactoryFactory {
                     return CToken.Colon;
                 default:
                     pos --;
-                    String token = input.substring(pos).replaceFirst("($|[(),:].*$)","");
-                    Integer code = s2i.get(token);
-                    if (code == null) {
-                        throw new  IllegalArgumentException("Syntax error: unexpected input: '"+token+"'");
-                    }
-                    lastLine = code;
-                    pos += token.length();
+                    lastLine = checkNextWord();
                     return CToken.Line;
                 }
+            }
+            public int checkNextWord() {
+                String token = findNextWord();
+                Integer code = s2i.get(token);
+                if (code == null) {
+                    throw new  IllegalArgumentException("Syntax error: unexpected input: '"+token+"'");
+                }
+                pos += token.length();
+                return code;
+            }
+            abstract public String findNextWord();
+        }
+        private class MultiCharLexer extends CLexer {
+
+            MultiCharLexer(String in) {
+                super(in);
+            }
+            @Override
+            public String findNextWord() {
+                return input.substring(pos).replaceFirst("($|[(),:].*$)","");
+            }
+            
+        }
+        private class SingleCharLexer extends CLexer {
+
+            SingleCharLexer(String in) {
+                super(in);
+            }
+
+            @Override
+            public String findNextWord() {
+                return input.substring(pos,pos+1);
             }
             
         }
         private int[] analyze(boolean singleChar, String crossings) {
-            if (singleChar) {
-                // add in commas
-                //System.err.print(crossings+" => ");
-                crossings = crossings.replaceAll("([^(:])(?!([:)]|$))","$1,");
-                //System.err.println(crossings);
-            }
-            CLexer lexer = new CLexer(crossings);
+            CLexer lexer = singleChar ? new SingleCharLexer(crossings):new MultiCharLexer(crossings);
+//                crossings = crossings.replaceAll("([^(:])(?!([:)]|$))","$1,");
             if (lexer.next() != CToken.Line || lexer.next() != CToken.Colon ) {
                 throw new IllegalArgumentException("Syntax error: expecting ':'");
             }
