@@ -50,24 +50,17 @@ final public class FactoryFactory {
         private final String ground[];
     
         public Crossings( String[] crossings) {
-            Options opt = new Options();
             positions =  new int[crossings.length][];
-            opt.setShortLabels();
             ground = new String[crossings.length];
-            for (int i=0;i<crossings.length;i++) {
-                System.err.println(crossings[i]);
-                ground[i]=crossings[i].substring(0, 1);
-                s2i.put(ground[i], i);
-            }
-            opt.setUniverse(ground);
-            if (!Arrays.equals(ground, toStrippedArray(crossings[0]))) {
+            Options opt = extractUniverse(crossings,ground);
+            if (!Arrays.equals(ground, toStrippedArray(opt.getSingleChar(),crossings[0]))) {
                 throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (1): "+crossings[0]);
             }
             String sortedG[] = new String[ground.length];
             System.arraycopy(ground, 0, sortedG, 0, ground.length);
             Arrays.sort(sortedG);
             for (int i=1;i<crossings.length;i++) {
-                String stripped[] = toStrippedArray(crossings[i]);
+                String stripped[] = toStrippedArray(opt.getSingleChar(),crossings[i]);
                 if (!stripped[0].equals(ground[i])) {
                     throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (2): "+crossings[i]);
                 }
@@ -80,10 +73,29 @@ final public class FactoryFactory {
                 }
             }
             for (int i=0;i<crossings.length;i++) {
-                positions[i] = analyze(crossings[i]);
+                positions[i] = analyze(opt.getSingleChar(),crossings[i]);
             }
             factory = new FactoryFactory(opt);
             verify();
+        }
+
+
+        private Options extractUniverse(String[] crossings,String[] g) {
+            boolean oneChar = true;
+            for (int i=0;i<crossings.length;i++) {
+                int colon = crossings[i].indexOf(':');
+                oneChar = oneChar && (colon == 1);
+                g[i]=crossings[i].substring(0, colon);
+                s2i.put(g[i], i);
+            }
+            Options opt = new Options();
+            if (oneChar) {
+                opt.setShortLabels();
+            } else {
+                opt.setLongLabels();
+            }
+            opt.setUniverse(g);
+            return opt;
         }
     
         private void verify() {
@@ -110,32 +122,84 @@ final public class FactoryFactory {
             return rslt<0?-1:rslt>0?1:0;
         }
     
-        private int[] analyze(String crossings) {
-            if (crossings.charAt(1)!=':') {
+        private static enum CToken {
+            Colon,
+            Comma,
+            Line,
+            LParen,
+            RParen,
+            End;
+        }
+        private class CParser {
+            int pos = 0;
+            int lastLine = -1;
+            private final String input;
+            CParser(String in) {
+                input = in;
+            }
+            CToken next() {
+                if (pos == input.length()) {
+                    return CToken.End;
+                }
+                switch (input.charAt(pos++)) {
+                case '(':
+                    return CToken.LParen;
+                case ')':
+                    return CToken.RParen;
+                case ',':
+                    return CToken.Comma;
+                case ':':
+                    return CToken.Colon;
+                default:
+                    pos --;
+                    String token = input.substring(pos).replaceFirst("($|[(),:].*$)","");
+                    Integer code = s2i.get(token);
+                    if (code == null) {
+                        throw new  IllegalArgumentException("Syntax error: unexpected input: '"+token+"'");
+                    }
+                    lastLine = code;
+                    pos += token.length();
+                    return CToken.Line;
+                }
+            }
+            
+        }
+        private int[] analyze(boolean singleChar, String crossings) {
+            if (singleChar) {
+                // add in commas
+                //System.err.print(crossings+" => ");
+                crossings = crossings.replaceAll("([^(:])(?!([:)]|$))","$1,");
+                //System.err.println(crossings);
+            }
+            CParser lexer = new CParser(crossings);
+            if (lexer.next() != CToken.Line || lexer.next() != CToken.Colon ) {
                 throw new IllegalArgumentException("Syntax error: expecting ':'");
             }
             int rslt[] = new int[positions.length];
             boolean insideBrackets = false;
             int ix = 1;
-            for (int i=2;i<crossings.length();i++) {
-                switch (crossings.charAt(i)) {
-                case '(':
+outer:
+            while (true ) {
+                switch (lexer.next()) {
+                case LParen:
                     insideBrackets = changeFromTo(insideBrackets,true);
                     break;
-                case ')':
+                case RParen:
                     insideBrackets = changeFromTo(insideBrackets,false);
                     ix++;
                     break;
-               default:
-                   String k = crossings.substring(i, i+1);
-                   Integer code = s2i.get(k);
-                   if (code == null) {
-                       throw new  IllegalArgumentException("Syntax error: unexpected input: '"+k+"'");
-                   }
-                   rslt[code] = ix;
+                case Colon:
+                    throw new  IllegalArgumentException("Syntax error: unexpected input: ':'");
+                case Comma:
+                    break;
+                case Line:
+                   rslt[lexer.lastLine] = ix;
                    if (!insideBrackets) {
                        ix++;
                    }
+                   break;
+                case End:
+                    break outer;
                 }
             }
             if (insideBrackets) {
@@ -151,8 +215,26 @@ final public class FactoryFactory {
             }
             return newValue;
         }
-    
-        private String[] toStrippedArray(String oneLine) {
+
+        private String[] toStrippedArray(boolean singleChar, String oneLine) {
+            return singleChar?toStrippedArrayOneChar(oneLine):toStrippedArrayMultiChar(oneLine);
+        }
+        private String[] toStrippedArrayMultiChar(String oneLine) {
+            String strippedLine = oneLine.replaceAll("[\\(\\)]", "").replace(':', ',');
+            String justCommas = strippedLine.replaceAll("[^,]","");
+            String rslt[] = new String[justCommas.length()+1];
+            int pos = 0;
+            for (int i=0;i<rslt.length-1;i++) {
+                int nextComma = strippedLine.indexOf(',',pos);
+                rslt[i] = strippedLine.substring(pos,nextComma);
+                pos = nextComma + 1;
+            }
+            rslt[rslt.length-1] = strippedLine.substring(pos);
+            return rslt;
+        }
+
+
+        private String[] toStrippedArrayOneChar(String oneLine) {
             String strippedLine = oneLine.replaceAll("[\\:\\(\\)]", "");
             String rslt[] = new String[strippedLine.length()];
             for (int i=0;i<rslt.length;i++) {

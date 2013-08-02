@@ -83,9 +83,10 @@ public class Realization {
     }
 
     public String[] toCrossingsString() {
-        Label ground[] = modified.elements();
+        final Label ground[] = modified.elements();
         int n = ground.length;
         Integer result[][] = new Integer[n][];
+        boolean oneChar = allOneChar(ground);
         
 /* for i < j < k we have
         int sA = sign(i,j,k);
@@ -106,6 +107,8 @@ public class Realization {
         result[0] = Misc.box(Permutation.from0toN(n));
         for (int cnt=1;cnt<n;cnt++) {
             final int i = cnt;
+            Label lbl = ground[i];
+//            System.err.println(lbl.label());
             result[i] = Misc.box(Permutation.from0toN(n));
             result[i][0] = i;
             result[i][i] = 1;
@@ -113,18 +116,30 @@ public class Realization {
             Arrays.sort(result[i],2,n,new Comparator<Integer>(){
                 @Override
                 public int compare(Integer o1, Integer o2) {
+                    String l1 = ground[o1].label();
+                    String l2 = ground[o2].label();
+//                    System.err.println(l1 + " <> " + l2);
                     int sign = (o1 - i)*(o2 - i) < 0 ? -1: 1;
-                    return sign*modified.chi(i,o1,o2);
+                    return -sign*modified.chi(i,o1,o2);
                 }});
         }
         String crossings[] = new String[result.length];
         for (int cnt=0;cnt<result.length;cnt++) {
-            crossings[cnt] = toCrossing(cnt,result[cnt],ground);
+            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar);
         }
         return crossings;
     }
 
-    private String toCrossing(int line, Integer[] lines, Label[] ground) {
+    private boolean allOneChar(Label[] ground) {
+        for (Label l:ground) {
+            if (l.label().length()>1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String toString(int line, Integer[] lines, Label[] ground, boolean useCommas) {
         StringBuffer rslt = new StringBuffer();
         rslt.append(ground[line].label());
         rslt.append(':');
@@ -139,6 +154,10 @@ public class Realization {
                 rslt.append(')');
             }
             insideBracket = nextInsideBracket;
+            if (useCommas) {
+                rslt.append(',');
+            }
+            
         }
         rslt.append(ground[lines[lines.length-1]].label());
         if (insideBracket) {
@@ -153,6 +172,10 @@ public class Realization {
 
     public Label[] getReorientation() {
         return this.reorientation;
+    }
+    
+    public Permutation getPermutation() {
+        return permutation;
     }
 
 }

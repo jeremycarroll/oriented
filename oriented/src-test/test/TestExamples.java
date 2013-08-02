@@ -8,7 +8,9 @@ import junit.framework.Assert;
 import net.sf.oriented.impl.om.ExamplesHelper;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.stretching.Realization;
 
 import org.junit.Test;
 
@@ -67,6 +69,38 @@ public class TestExamples {
         Assert.assertEquals(Examples.suvorov14(), ExamplesHelper.suv14(1.780776,5.186363));
         Assert.assertEquals(0, Examples.suvorov14().getChirotope().chi(0,12,13));
         Assert.assertEquals(0, Examples.suvorov14().getChirotope().chi(5,9,10));
+    }
+    
+    @Test
+    public void testRingelAt7() {
+        Realization realization = new Realization(Examples.ringel(),"7");
+        String[] crossings = realization.toCrossingsString();
+        for (String str:crossings) {
+            System.out.println(str);
+        }
+        OM expected = Examples.ringel()
+                .reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
+        OM actual = FactoryFactory.fromCrossings(crossings);
+        Assert.assertEquals(expected.getChirotope().chi(1,2,3),actual.getChirotope().chi(1,2,3));
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testOmega14_0() {
+        OM om = Examples.omega14(0);
+        Label g[] = om.elements();
+//        for (Label lbl : g) {
+//            System.err.println("Label: "+lbl.label());
+        Realization realization = new Realization(om,"1");
+        String[] crossings = realization.toCrossingsString();
+        for (String str:crossings) {
+            System.out.println(str);
+        }
+        OM expected = om.reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
+        OM actual = FactoryFactory.fromCrossings(crossings);
+      //  Assert.assertEquals(expected.getChirotope().chi(1,2,3),actual.getChirotope().chi(1,2,3));
+        Assert.assertEquals(expected, actual);
+//        }
     }
 }
 

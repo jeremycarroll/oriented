@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.stretching.Realization;
@@ -83,20 +84,21 @@ public class TestExamples2 {
     public void testRealizationA() {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
-        System.err.print(name+": ");
+//        System.err.print(name+": ");
         for (Label l:om.elements()) {
             Realization r = new Realization(om,l);
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
-            System.err.print(l.label()+"="+r.getReorientation().length
-                       //+" "+lex
-                           +", ");
+//            System.err.print(l.label()+"="+r.getReorientation().length
+//                       //+" "+lex
+//                           +", ");
             Assert.assertTrue(r.getEquivalentOM().isAcyclic());
             Assert.assertEquals(-1, lex.indexOf('-') );
             Assert.assertTrue(r.getReorientation().length<n/2);
+            Assert.assertEquals(FactoryFactory.fromCrossings(r.toCrossingsString()),r.getEquivalentOM());
             
         }
-        System.err.println();
+//        System.err.println();
     }
     
 
