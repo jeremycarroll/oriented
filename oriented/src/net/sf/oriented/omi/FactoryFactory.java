@@ -130,11 +130,11 @@ final public class FactoryFactory {
             RParen,
             End;
         }
-        private class CParser {
+        private class CLexer {
             int pos = 0;
             int lastLine = -1;
             private final String input;
-            CParser(String in) {
+            CLexer(String in) {
                 input = in;
             }
             CToken next() {
@@ -171,7 +171,7 @@ final public class FactoryFactory {
                 crossings = crossings.replaceAll("([^(:])(?!([:)]|$))","$1,");
                 //System.err.println(crossings);
             }
-            CParser lexer = new CParser(crossings);
+            CLexer lexer = new CLexer(crossings);
             if (lexer.next() != CToken.Line || lexer.next() != CToken.Colon ) {
                 throw new IllegalArgumentException("Syntax error: expecting ':'");
             }
