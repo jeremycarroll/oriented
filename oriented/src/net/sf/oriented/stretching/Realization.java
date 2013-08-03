@@ -3,12 +3,14 @@
  ************************************************************************/
 package net.sf.oriented.stretching;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
@@ -18,22 +20,26 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
 public class Realization {
-    
+    @SuppressWarnings("unused")
     private final OM original;
     private final OMasChirotope modified;
     private Label[] reorientation;
     private Permutation permutation;
     
 
-    public Realization(OM om, String infinity) {
-        this(om,om.asInt(infinity));
+    public Realization(OM om, String infinity, String ... alsoReorient) {
+        this(om,om.asInt(infinity), alsoReorient);
     }
 
     public Realization(OM om, Label infinity) {
         this(om,om.asInt(infinity));
     }
 
-    private Realization(OM om, final int infinity) {
+    final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
+    final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
+    final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
+    
+    private Realization(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
             throw new IllegalArgumentException("Bad choice of infinity");
         }
@@ -64,9 +70,23 @@ public class Realization {
             throw new IllegalArgumentException(infLabel.label()+" is a loop and does not appear in any tope");
         }
         //System.err.print(bestTope);
-        reorientation = bestTope.minus().toArray();
+        UnsignedSet r = bestTope.minus();
+        for (String mm:also) {
+            r = r.union(f.labels().parse(mm));
+        }
+        reorientation = r.toArray();
         
         final OMasChirotope reoriented = om.reorient(reorientation).getChirotope();
+        
+//        UnsignedSet ground = bestTope.support();
+        
+//        for (SignedSet cc:reoriented.dual().getCircuits()) {
+//            for (Label l: ground.minus(cc.support())) {
+//                line2cocircuit.get(l).add(cc);
+//            }
+//            
+//            
+//        }
         
         int newOrder[] = Permutation.from0toN(om.n());
         newOrder[infinity] = 0;
@@ -75,7 +95,17 @@ public class Realization {
         Arrays.sort(newOrderBoxed,1,newOrder.length,new Comparator<Integer>(){
             @Override
             public int compare(Integer o1, Integer o2) {
-                return reoriented.chi(infinity,o1,o2);
+                int chi = reoriented.chi(infinity,o1,o2);
+                if (chi == 0) {
+                    int ix0 = "875".indexOf(om.elements()[o1].label());
+                    int ix1 = "875".indexOf(om.elements()[o1].label());
+                    if ( ix0!=-1
+                        && ix1!=-1 ) {
+                        System.err.println("xxx");
+                        return ix1 - ix0;
+                    }
+                }
+                return chi;
             }});
         permutation = new Permutation(Misc.unbox(newOrderBoxed));
         this.modified = reoriented.permuteGround(permutation).getChirotope();
@@ -107,7 +137,7 @@ public class Realization {
         result[0] = Misc.box(Permutation.from0toN(n));
         for (int cnt=1;cnt<n;cnt++) {
             final int i = cnt;
-            Label lbl = ground[i];
+//            Label lbl = ground[i];
 //            System.err.println(lbl.label());
             result[i] = Misc.box(Permutation.from0toN(n));
             result[i][0] = i;
@@ -116,8 +146,8 @@ public class Realization {
             Arrays.sort(result[i],2,n,new Comparator<Integer>(){
                 @Override
                 public int compare(Integer o1, Integer o2) {
-                    String l1 = ground[o1].label();
-                    String l2 = ground[o2].label();
+//                    String l1 = ground[o1].label();
+//                    String l2 = ground[o2].label();
 //                    System.err.println(l1 + " <> " + l2);
                     int sign = (o1 - i)*(o2 - i) < 0 ? -1: 1;
                     return -sign*modified.chi(i,o1,o2);

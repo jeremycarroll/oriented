@@ -202,6 +202,7 @@ public interface OM extends Verify {
 
     FactoryFactory ffactory();
 
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

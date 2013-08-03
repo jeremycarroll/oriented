@@ -4,14 +4,18 @@
 package test;
 
 
+import java.util.Arrays;
+
 import junit.framework.Assert;
 import net.sf.oriented.impl.om.ExamplesHelper;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.stretching.Realization;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestExamples {
@@ -75,9 +79,6 @@ public class TestExamples {
     public void testRingelAt7() {
         Realization realization = new Realization(Examples.ringel(),"7");
         String[] crossings = realization.toCrossingsString();
-        for (String str:crossings) {
-            System.out.println(str);
-        }
         OM expected = Examples.ringel()
                 .reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
         OM actual = FactoryFactory.fromCrossings(crossings);
@@ -85,23 +86,57 @@ public class TestExamples {
         Assert.assertEquals(expected, actual);
     }
 
+    @Ignore
     @Test
     public void testOmega14_0() {
         OM om = Examples.omega14(0);
-        Label g[] = om.elements();
+//        Label g[] = om.elements();
 //        for (Label lbl : g) {
 //            System.err.println("Label: "+lbl.label());
-        Realization realization = new Realization(om,"1");
+        Realization realization = new Realization(om,"1","4","6","5","8","7");
+        Label one = om.ffactory().labels().parse("1");
         String[] crossings = realization.toCrossingsString();
         for (String str:crossings) {
             System.out.println(str);
         }
+        System.out.print("Circuits of size 3, with 1+: ");
+        for (SignedSet circuit:realization.getEquivalentOM().getCircuits()) {
+            if (circuit.size()==3 && circuit.sign(one)==1) {
+                System.out.print(circuit+" ");
+            }
+        }
+        
+        System.out.println("\nCoCircuits: " + realization.getEquivalentOM().dual().getCircuits());
+        System.out.println("Topes: " + realization.getEquivalentOM().dual().getMaxVectors());
+        System.out.println(om.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(realization.getReorientation())));
         OM expected = om.reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
         OM actual = FactoryFactory.fromCrossings(crossings);
       //  Assert.assertEquals(expected.getChirotope().chi(1,2,3),actual.getChirotope().chi(1,2,3));
         Assert.assertEquals(expected, actual);
 //        }
     }
+    @Ignore
+    @Test
+    public void testChap1() {
+        OM om = Examples.chapter1();
+//        Label g[] = om.elements();
+//        for (Label lbl : g) {
+//            System.err.println("Label: "+lbl.label());
+        Realization realization = new Realization(om,"2");
+        String[] crossings = realization.toCrossingsString();
+        for (String str:crossings) {
+            System.out.println(str);
+        }
+        System.out.println("Circuits: " + realization.getEquivalentOM().getCircuits());
+        System.out.println("CoCircuits: " + realization.getEquivalentOM().dual().getCircuits());
+        System.out.println("Topes: " + realization.getEquivalentOM().dual().getMaxVectors());
+        System.out.println(om.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(realization.getReorientation())));
+        OM expected = om.reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
+        OM actual = FactoryFactory.fromCrossings(crossings);
+      //  Assert.assertEquals(expected.getChirotope().chi(1,2,3),actual.getChirotope().chi(1,2,3));
+        Assert.assertEquals(expected, actual);
+        }
+//    }
 }
 
 

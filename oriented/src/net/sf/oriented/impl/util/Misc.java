@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.sf.oriented.util.combinatorics.Permutation;
 
 import com.google.common.reflect.Invokable;
 
