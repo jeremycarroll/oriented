@@ -84,7 +84,7 @@ public class TestExamples2 {
     public void testRealizationA() {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
-        Assume.assumeTrue(false);
+        Assume.assumeTrue(om.isUniform());
 //        System.err.print(name+": ");
         for (Label l:om.elements()) {
             Realization r = new Realization(om,l);
