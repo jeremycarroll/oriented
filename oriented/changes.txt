@@ -1,0 +1,8 @@
+
+post release 0.2
+- Added method OM.ffactory()
+- Added class SignedSetFactory
+- better use of iterators and Iterable
+- more general args in FactoryFactory.fromCrossings()
+- added OM.isUniform()
+
