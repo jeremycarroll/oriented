@@ -421,6 +421,11 @@ public class OMAll extends AbsOMAxioms<Object>  {
     void setMatroidAll(MatroidAll m) {
         matroid = m;
     }
+
+    @Override
+    public boolean isUniform() {
+        return getChirotope().isUniform();
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

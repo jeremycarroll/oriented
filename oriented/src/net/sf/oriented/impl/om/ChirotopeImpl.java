@@ -647,6 +647,66 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
         });
     }
 
+    @Override
+    public boolean isUniform() {
+        for (int i=0;i<bits.length-1;i++) {
+            if (hasAZero(bits[i],16)) {
+                return false;
+            }
+        }
+        int total = IntMath.binomial(n(), rank());
+        if (hasAZero(bits[bits.length-1],total-(16*(bits.length-1)))) {
+            return false;
+        }
+        return true;
+//        bits = new int[(IntMath.binomial(all.ground.length, rank) + 15) / 16];
+//        int w = x / 16;
+//        int shift = (x % 16) * 2;
+//        int pairOfBits = (bits[w] >>> shift) & 3;
+//        switch (pairOfBits) {
+//        case 2:
+//            throw new IllegalStateException(x
+//                    + "th entry in chirotope has not been defined.");
+//        case 1:
+//            return 1;
+//        case 3:
+//            return -1;
+//        case 0:
+//            return 0;
+//        }
+//        throw new RuntimeException("Unreachable code - has been reached :(");
+//        return true;
+    }
+
+    private static boolean hasAZero4[] = new boolean[256];
+    static {
+        for (int i=0;i<256;i++) {
+            hasAZero4[i] = hasAZeroNaive(i,4);
+        }
+    }
+    private boolean hasAZero(int bits, int nPairsToCheck) {
+        while (nPairsToCheck > 4 ) {
+            if ( hasAZero4[bits&255] ) {
+                return true;
+            }
+            bits = bits >>> 8;
+		    nPairsToCheck -= 4;
+        }
+        return hasAZeroNaive(bits,nPairsToCheck);
+    }
+
+    private static boolean hasAZeroNaive(int bits, int nPairsToCheck) {
+        while (nPairsToCheck > 0 ) {
+            if ( (bits&3) == 0 ) {
+                return true;
+            }
+            bits = bits >>> 2;
+            nPairsToCheck --;
+        }
+        return false;
+    }
+
+
 
 }
 /************************************************************************

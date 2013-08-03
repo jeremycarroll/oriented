@@ -202,6 +202,8 @@ public interface OM extends Verify {
 
     FactoryFactory ffactory();
 
+    boolean isUniform();
+
 
 }
 /************************************************************************

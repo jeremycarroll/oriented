@@ -123,6 +123,11 @@ abstract class AbsOM extends AbsOMAxioms<SignedSet> {
         all.setMatroidAll(m);
     }
 
+    @Override
+    public boolean isUniform() {
+        return all.isUniform();
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
