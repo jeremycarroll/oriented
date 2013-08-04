@@ -16,7 +16,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.stretching.Realization;
+import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Assume;
 import org.junit.Test;

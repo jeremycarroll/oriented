@@ -13,7 +13,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
-abstract class AbsOM extends AbsOMAxioms<SignedSet> {
+public abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 
 	protected final OMAll all;
 

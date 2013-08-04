@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.stretching;
+package net.sf.oriented.pseudoline;
 
 import java.util.Arrays;
 import java.util.Comparator;

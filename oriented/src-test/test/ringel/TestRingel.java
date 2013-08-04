@@ -4,7 +4,7 @@
 package test.ringel;
 
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.stretching.Realization;
+import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Test;
 

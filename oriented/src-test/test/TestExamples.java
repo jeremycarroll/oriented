@@ -13,7 +13,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.stretching.Realization;
+import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Ignore;
 import org.junit.Test;
