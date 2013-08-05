@@ -19,7 +19,7 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-abstract class AbsVectors extends AbsOM implements SetOfSignedSetInternal {
+abstract class AbsVectors extends AbsOM<SignedSet> implements SetOfSignedSetInternal {
 
 	protected final SetOfSignedSetInternal vectors;
 

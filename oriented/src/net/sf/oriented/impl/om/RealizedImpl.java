@@ -13,12 +13,11 @@ import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.RealizedFactory;
-import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.util.matrix.GramSchmidt;
 import net.sf.oriented.util.matrix.PerisicFieldElement;
 import net.sf.oriented.util.matrix.RationalMatrix;
 
-public class RealizedImpl extends AbsOM implements OMasRealized {
+public class RealizedImpl extends AbsOM<Object> implements OMasRealized {
 
 	private final RationalMatrix matrix;
 
@@ -34,7 +33,7 @@ public class RealizedImpl extends AbsOM implements OMasRealized {
 	}
 
 	@Override
-	public Iterator<? extends SignedSet> iterator2() {
+	public Iterator<?> iterator2() {
 		throw new UnsupportedOperationException();
 	}
 

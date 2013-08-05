@@ -31,7 +31,7 @@ abstract class AbsAxioms<ForAll> {
      * @param <ForAll3> type returned by first check
      * @param <Exists> type returned by inner iterator, suggest <U>
      */
-	abstract class ForAllForAllExists<ForAll3,Exists> implements Verify {
+	protected abstract class ForAllForAllExists<ForAll3,Exists> implements Verify {
 	    
 	    private String name = "Some axiom";
 	    /**
@@ -110,7 +110,7 @@ abstract class AbsAxioms<ForAll> {
 		
 	}
 
-	abstract class ForAllForAll implements Verify {
+	protected abstract class ForAllForAll implements Verify {
 	    private String name = "some axiom";
 		abstract boolean check(ForAll a, ForAll b);
 

@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.pseudoline;
+package unused.pseudoline;
 
 import java.util.Iterator;
 
@@ -17,7 +17,7 @@ import net.sf.oriented.omi.SignedSet;
  * @author jeremycarroll
  *
  */
-public class Arrangement  extends AbsOM {
+public class Arrangement  extends AbsOM<Object> {
     
     class General {
         SignedSet covector;

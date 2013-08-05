@@ -8,11 +8,13 @@ import java.util.Arrays;
 
 import junit.framework.Assert;
 import net.sf.oriented.impl.om.ExamplesHelper;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.polytope.FaceLattice;
 import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Ignore;
@@ -115,9 +117,28 @@ public class TestExamples {
         Assert.assertEquals(expected, actual);
 //        }
     }
+    @Test
+    public void testChap1() throws AxiomViolation {
+        FaceLattice fl = new FaceLattice(Examples.uniform3());
+        fl.dump();
+        fl.verify();
+    }
+    @Test
+    public void testSuvorov14Dual() {
+        OM suvorov14 = Examples.suvorov14();
+        System.err.println("Circuits ");
+        suvorov14.getCircuits();
+//        System.err.println("Vectors ");
+//        suvorov14.getVectors();
+//        System.err.println("MaxVectors ");
+//        suvorov14.getMaxVectors();
+        System.err.println("Done ");
+        OM dual = suvorov14.dual();
+     //   new FaceLattice(dual);
+    }
     @Ignore
     @Test
-    public void testChap1() {
+    public void testChap1x() {
         OM om = Examples.chapter1();
 //        Label g[] = om.elements();
 //        for (Label lbl : g) {

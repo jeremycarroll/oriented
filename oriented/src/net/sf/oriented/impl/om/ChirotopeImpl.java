@@ -27,7 +27,6 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
-import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.combinatorics.Lexicographic;
@@ -36,7 +35,7 @@ import net.sf.oriented.util.matrix.RationalMatrix;
 
 import com.google.common.math.IntMath;
 
-public class ChirotopeImpl extends AbsOM implements OMasChirotope {
+public class ChirotopeImpl extends AbsOM<Object> implements OMasChirotope {
 
 	final private int rank;
 
@@ -541,7 +540,7 @@ public class ChirotopeImpl extends AbsOM implements OMasChirotope {
 	}
 
 	@Override
-	public Iterator<? extends SignedSet> iterator2() {
+	public Iterator<?> iterator2() {
 		throw new UnsupportedOperationException(
 				"Chirotopes don't have iterators.");
 	}

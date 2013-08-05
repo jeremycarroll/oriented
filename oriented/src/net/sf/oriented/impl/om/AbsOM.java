@@ -9,11 +9,10 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasRealized;
-import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
-public abstract class AbsOM extends AbsOMAxioms<SignedSet> {
+public abstract class AbsOM<T> extends AbsOMAxioms<T> {
 
 	protected final OMAll all;
 
@@ -72,7 +71,7 @@ public abstract class AbsOM extends AbsOMAxioms<SignedSet> {
 	}
 
 	@Override
-	public <T extends Label> int[] asInt(T[] l) {
+	public <TT extends Label> int[] asInt(TT[] l) {
 		return all.asInt(l);
 	}
 
