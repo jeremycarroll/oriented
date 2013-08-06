@@ -7,22 +7,24 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-public class Bottom extends Face {
+public class Bottom extends AbsFace {
 
-    public Bottom(FaceLattice lattice, FactoryFactory ffactory) {
-        super(lattice,emptySignedSet(ffactory));
+    public Bottom(FaceLattice lattice) {
+        super(lattice, -1);
     }
-
-    private static SignedSet emptySignedSet(FactoryFactory ffactory) {
-        UnsignedSet emptySet = ffactory.unsignedSets().empty();
-        return ffactory.signedSets().construct(emptySet, emptySet);
-    }
-
     @Override
-    void considerComposition(Vertex vertex) {
-        setIsBelow(vertex);
-    
+    public boolean equals(Object o) {
+        if (! (o instanceof Bottom)) {
+            return false;
+        }
+        return lattice == ((Bottom)o).lattice;
     }
+    @Override
+    public int hashCode() {
+        // no particular rationale for this number.
+        return 502;
+    }
+
 }
 
 

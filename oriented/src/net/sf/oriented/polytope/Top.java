@@ -5,28 +5,18 @@ package net.sf.oriented.polytope;
 
 import net.sf.oriented.omi.SignedSet;
 
-public class Top extends Face {
+public class Top extends AbsFace {
 
-    public Top(FaceLattice lattice, int d) {
-        super(lattice,d, null);
+    public Top(FaceLattice lattice) {
+        super(lattice, lattice.n() - lattice.rank());
     }
 
-    @Override
-    protected boolean conformsWith(SignedSet covector2) {
-        return true;
-    }
 
-    @Override
-    protected boolean hasRestriction(Face higher) {
-        return true;
-    }
-    
-
-    @Override
-    boolean isTop() {
-         return true;
-     }
-
+//    @Override
+//    boolean isTop() {
+//         return true;
+//     }
+//
     @Override
     public boolean equals(Object o) {
         if (! (o instanceof Top)) {
@@ -41,10 +31,10 @@ public class Top extends Face {
     }
     
 
-    @Override
-    public void setIsBelow(Face higher) {
-        throw new IllegalStateException("invariant failure");
-    }
+//    @Override
+//    public void setIsBelow(Face higher) {
+//        throw new IllegalStateException("invariant failure");
+//    }
     
 
     @Override
