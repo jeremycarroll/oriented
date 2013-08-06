@@ -134,7 +134,8 @@ public class TestExamples {
 //        suvorov14.getMaxVectors();
         System.err.println("Done ");
         OM dual = suvorov14.dual();
-     //   new FaceLattice(dual);
+        new FaceLattice(dual);
+        new FaceLattice(suvorov14);
     }
     @Ignore
     @Test

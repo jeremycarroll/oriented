@@ -32,8 +32,8 @@ public class Face implements Verify {
     }
     
     private void saveMe() {
-        System.err.println("+ "+this);
-        lattice.faces.put(covector,this);
+//        System.err.println("+ "+this);
+//        lattice.faces.put(covector,this);
     }
 
 
@@ -138,23 +138,23 @@ public class Face implements Verify {
     }
 
     void considerComposition(Vertex vertex) {
-        SignedSet composed = vertex.covector.compose(covector);
-        Face next = lattice.createIfNew(composed);
-        if (next != null) {
-            vertex.setIsBelow(next);
-            setIsBelow(next);
-        } else {
-            // should both of these should already be true
-            next = lattice.faces.get(composed);
-            if (!vertex.above.contains(next)) {
-            //    throw new IllegalStateException("missing");
-                vertex.setIsBelow(next);
-            }
-            if (!above.contains(next)) {
-          //      throw new IllegalStateException("missing");
-                setIsBelow(next);
-            }
-        }
+//        SignedSet composed = vertex.covector.compose(covector);
+//        Face next = lattice.createIfNew(composed);
+//        if (next != null) {
+//            vertex.setIsBelow(next);
+//            setIsBelow(next);
+//        } else {
+//            // should both of these should already be true
+//            next = lattice.faces.get(composed);
+//            if (!vertex.above.contains(next)) {
+//            //    throw new IllegalStateException("missing");
+//                vertex.setIsBelow(next);
+//            }
+//            if (!above.contains(next)) {
+//          //      throw new IllegalStateException("missing");
+//                setIsBelow(next);
+//            }
+//        }
     }
 
     private Iterable<Face> above() {

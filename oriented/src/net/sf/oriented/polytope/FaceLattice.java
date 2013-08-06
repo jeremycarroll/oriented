@@ -3,9 +3,13 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import java.util.BitSet;
 
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
@@ -19,25 +23,84 @@ public class FaceLattice extends AbsOM<Face> {
     
     
  //   final SetOfSignedSet topes;
-    final SetOfSignedSet cocircuits;
-    final Face top;
-    final Face bottom;
-    Map<SignedSet,Face> faces = new HashMap<SignedSet,Face>();
+    final SignedSet circuits[];
+    final List<BitSet> vectorConformsWithCircuit = new ArrayList<BitSet>();
+    final List<BitSet> vectorExtendsCircuit= new ArrayList<BitSet>();
+    final List<SignedSet> vectors = new ArrayList<SignedSet>();
+    final Map<SignedSet,Integer> faces = new HashMap<SignedSet,Integer>();
 
     public FaceLattice(OM om) {
         super((OMInternal)om);
      //  topes = om.dual().getMaxVectors();
-        cocircuits = om.dual().getCircuits();
-        top = new Top(this,rank());
-        bottom = new Bottom(this,ffactory());
-        bottom.setIsBelow(top);
-        for (SignedSet cc:cocircuits) {
-            dump();
-            bottom.augment(new Vertex(this,cc));
-        }
-        bottom.setDimension(-1);
+         circuits = om.getCircuits().toArray();
+         for (SignedSet s:circuits) {
+             initCircuit(s);
+         }
+         
+         int pos = 0;
+         while (pos < vectors.size()) {
+             SignedSet vector = vectors.get(pos);
+             BitSet candidates = (BitSet) vectorConformsWithCircuit.get(pos).clone();
+             BitSet extend = vectorExtendsCircuit.get(pos);
+             candidates.andNot(extend);
+             int ix = 0;
+             while (true) {
+                 ix = candidates.nextSetBit(ix);
+                 if (ix == -1) {
+                     break;
+                 }
+                 SignedSet circuit = circuits[ix];
+                 if (circuit.isRestrictionOf(vector)) {
+                     extend.set(ix);
+                 } else {
+                     SignedSet next = circuit.compose(vector);
+                     Integer key = faces.get(next);
+                     if (key == null) {
+                         initVector(next,pos,ix);
+                     } else {
+                         BitSet exten = vectorExtendsCircuit.get(key);
+                         exten.set(ix);
+                         exten.or(vectorExtendsCircuit.get(pos));
+// need to somehow block some other work
+                     }
+                 }
+                 ix++;
+             }
+             pos++;
+         }
+         
     }
-/*
+    private void initVector(SignedSet vector, int pVector, int pCircuit) {
+        BitSet conform = (BitSet)vectorConformsWithCircuit.get(pVector).clone();
+        int ix = initEntry(vector,conform,vectorExtendsCircuit.get(pVector));
+        conform.and(vectorConformsWithCircuit.get(pCircuit));
+        vectorExtendsCircuit.get(ix).set(pCircuit);
+    }
+    private void initCircuit(SignedSet circuit) {
+        int ix = initEntry(circuit,new BitSet(),new BitSet());
+
+        vectorExtendsCircuit.get(ix).set(ix);
+        BitSet conform = vectorConformsWithCircuit.get(ix);
+        conform.set(ix);
+        for (int i=0;i<ix;i++) {
+            if (vectorConformsWithCircuit.get(i).get(ix)) {
+                conform.set(i);
+            }
+        }
+        for (int i=ix+1;i<circuits.length;i++) {
+            if (circuit.conformsWith(circuits[i])) {
+                conform.set(i);
+            }
+        }
+    }
+    public int initEntry(SignedSet circuit,BitSet conform,BitSet extend ) {
+        int ix = vectors.size();
+        vectors.add(circuit);
+        vectorExtendsCircuit.add(extend);
+        vectorConformsWithCircuit.add(conform);
+        return ix;
+    }
+    /*
  * A lattice which satisfies the identities
 
 Distributivity of ∨ over ∧
@@ -52,9 +115,6 @@ is said to be distributive.
  */
     @Override
     public void verify() throws AxiomViolation {
-        for (Face f:faces.values()) {
-            f.verify();
-        }
     }
 
     @Override
@@ -64,27 +124,22 @@ is said to be distributive.
 
     @Override
     public Iterator<? extends Face> iterator2() {
-        return faces.values().iterator();
+        return null;
     }
 
-    Face createIfNew(SignedSet composed) {
-        if (faces.containsKey(composed)) {
-            return null;
-        }
-        return new Face(this,composed);
-    }
+   
 
     int counter = 1;
     public void dump() {
-        System.err.println("["+counter++ + "]===============");
-        for (Map.Entry<SignedSet, Face> entry: faces.entrySet()) {
-            Face f = entry.getValue();
-            System.err.println(entry.getKey()+":" + f+"["+f.dimension+"]");
-            for (Face ff:f.above) {
-                System.err.println("    : " + ff);
-            }
-            
-        }
+//        System.err.println("["+counter++ + "]===============");
+//        for (Map.Entry<SignedSet, Face> entry: faces.entrySet()) {
+//            Face f = entry.getValue();
+//            System.err.println(entry.getKey()+":" + f+"["+f.dimension+"]");
+//            for (Face ff:f.above) {
+//                System.err.println("    : " + ff);
+//            }
+//            
+//        }
     }
 
 }
