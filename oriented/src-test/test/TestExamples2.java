@@ -16,7 +16,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.polytope.FaceLattice;
+import net.sf.oriented.polytope.DualFaceLattice;
 import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Assume;
@@ -87,7 +87,7 @@ public class TestExamples2 {
     }
 
     public void testFaceLattice(OM om2) throws AxiomViolation {
-        new FaceLattice(om2).verify();
+        new DualFaceLattice(om2).verify();
     }
     @Test
     public void testDualFaceLattice() throws AxiomViolation {

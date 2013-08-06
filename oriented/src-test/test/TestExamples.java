@@ -14,7 +14,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.polytope.FaceLattice;
+import net.sf.oriented.polytope.DualFaceLattice;
 import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Ignore;
@@ -119,7 +119,7 @@ public class TestExamples {
     }
     @Test
     public void testChap1() throws AxiomViolation {
-        FaceLattice fl = new FaceLattice(Examples.uniform3());
+        DualFaceLattice fl = new DualFaceLattice(Examples.uniform3());
         fl.dump();
         fl.verify();
     }
@@ -134,8 +134,8 @@ public class TestExamples {
 //        suvorov14.getMaxVectors();
         System.err.println("Done ");
         OM dual = suvorov14.dual();
-        new FaceLattice(dual);
-        new FaceLattice(suvorov14);
+        new DualFaceLattice(dual);
+        new DualFaceLattice(suvorov14);
     }
     @Ignore
     @Test

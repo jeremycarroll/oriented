@@ -19,7 +19,7 @@ public class Face extends AbsFace  {
     final SignedSet vector;
 
 
-    protected Face(FaceLattice lattice, int d, SignedSet vector) {
+    protected Face(DualFaceLattice lattice, int d, SignedSet vector) {
         super(lattice,d);
         this.vector = vector;
         
@@ -31,7 +31,7 @@ public class Face extends AbsFace  {
 //    }
 
 
-    protected Face(FaceLattice lattice, SignedSet covector) {
+    protected Face(DualFaceLattice lattice, SignedSet covector) {
         this(lattice,UNKNOWN,covector);
     }
 

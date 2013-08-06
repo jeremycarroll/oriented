@@ -8,7 +8,7 @@ import net.sf.oriented.omi.SignedSet;
 public class Vertex extends Face {
 
 
-    public Vertex(FaceLattice faceLattice, SignedSet construct) {
+    public Vertex(DualFaceLattice faceLattice, SignedSet construct) {
         super(faceLattice, construct);
     }
 

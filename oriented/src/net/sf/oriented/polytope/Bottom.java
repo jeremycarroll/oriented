@@ -9,7 +9,7 @@ import net.sf.oriented.omi.UnsignedSet;
 
 public class Bottom extends AbsFace {
 
-    public Bottom(FaceLattice lattice) {
+    public Bottom(DualFaceLattice lattice) {
         super(lattice, -1);
     }
     @Override

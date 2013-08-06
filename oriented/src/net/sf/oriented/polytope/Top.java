@@ -7,7 +7,7 @@ import net.sf.oriented.omi.SignedSet;
 
 public class Top extends AbsFace {
 
-    public Top(FaceLattice lattice) {
+    public Top(DualFaceLattice lattice) {
         super(lattice, lattice.n() - lattice.rank());
     }
 

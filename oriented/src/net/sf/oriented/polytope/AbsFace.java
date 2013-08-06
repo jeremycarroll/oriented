@@ -16,11 +16,11 @@ import net.sf.oriented.omi.Verify;
 public class AbsFace implements Verify{
 
     protected static final int UNKNOWN = -2;
-    final FaceLattice lattice;
+    final DualFaceLattice lattice;
     int dimension;
     List<AbsFace> below = new LinkedList<AbsFace>();
     
-    AbsFace(FaceLattice l, int d) {
+    AbsFace(DualFaceLattice l, int d) {
         lattice = l;
         dimension = d;
     }

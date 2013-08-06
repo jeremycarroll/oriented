@@ -19,7 +19,7 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-public class FaceLattice extends AbsOM<Face> {
+public class DualFaceLattice extends AbsOM<Face> {
     
     
  //   final SetOfSignedSet topes;
@@ -29,7 +29,7 @@ public class FaceLattice extends AbsOM<Face> {
     final List<SignedSet> vectors = new ArrayList<SignedSet>();
     final Map<SignedSet,Integer> faces = new HashMap<SignedSet,Integer>();
 
-    public FaceLattice(OM om) {
+    public DualFaceLattice(OM om) {
         super((OMInternal)om);
      //  topes = om.dual().getMaxVectors();
          circuits = om.getCircuits().toArray();
