@@ -5,11 +5,12 @@ package net.sf.oriented.polytope;
 
 import net.sf.oriented.omi.SignedSet;
 
-public class Vertex extends Face {
+public class Vertex //extends Face {
+{
 
 
     public Vertex(DualFaceLattice faceLattice, SignedSet construct) {
-        super(faceLattice, construct);
+//        super(faceLattice, construct);
     }
 
 }

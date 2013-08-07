@@ -25,6 +25,11 @@ public class Bottom extends AbsFace {
         return 502;
     }
 
+    @Override
+    public String toString() {
+        return "*";
+    }
+
 }
 
 

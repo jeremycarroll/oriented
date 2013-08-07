@@ -3,12 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.BitSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.SignedSet;
@@ -17,13 +14,15 @@ import net.sf.oriented.omi.Verify;
 public class Face extends AbsFace  {
 
     final SignedSet vector;
+    private final BitSet conform;
+    private final BitSet extend;
+    private final int id;
+    
+    
+    
 
 
-    protected Face(DualFaceLattice lattice, int d, SignedSet vector) {
-        super(lattice,d);
-        this.vector = vector;
-        
-    }
+    
     
 //    private void saveMe() {
 ////        System.err.println("+ "+this);
@@ -31,9 +30,7 @@ public class Face extends AbsFace  {
 //    }
 
 
-    protected Face(DualFaceLattice lattice, SignedSet covector) {
-        this(lattice,UNKNOWN,covector);
-    }
+   
 
 //   boolean isTop() {
 //        return false;
@@ -49,6 +46,19 @@ public class Face extends AbsFace  {
 //    }
 
     
+    public Face(DualFaceLattice lattice, SignedSet vector, 
+            BitSet conform, BitSet extend) {
+        super(lattice,UNKNOWN);
+        this.vector = vector;
+        this.conform = conform;
+        this.extend = extend;
+        this.id = lattice.faces.size();
+        lattice.faces.add(this);
+        if (null != lattice.ss2faces.put(vector, this)) {
+            throw new IllegalArgumentException("Duplicate face");
+        }
+    }
+
     public SignedSet vector() {
         return vector;
     }
@@ -64,7 +74,7 @@ public class Face extends AbsFace  {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName()+":"+vector.toString();
+        return getClass().getSimpleName()+":"+vector.toString()+"{"+id+"}";
     }
     
     @Override
@@ -72,10 +82,26 @@ public class Face extends AbsFace  {
         return vector.hashCode();
     }
 
+    public BitSet extendsCircuits() {
+        return extend;
+    }
 
-
-
+    public BitSet conformingCircuits() {
+        return conform;
+    }
     
+
+    @Override
+    public void verify() throws AxiomViolation {
+        super.verify();
+        if (getHigher().isEmpty()) {
+            throw new AxiomViolation(this,"Should be in the middle");
+        }
+        if (getLower().isEmpty()) {
+            throw new AxiomViolation(this,"Should be in the middle");
+        }
+    }
+
 
 }
 
