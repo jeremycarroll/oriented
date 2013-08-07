@@ -16,6 +16,7 @@ import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
     
@@ -27,6 +28,7 @@ public class DualFaceLattice extends AbsOM<Face> {
 
     private final List<AbsFace> byDimension[];
     private final int maxDimension;
+    private UnsignedSet notCoLoops;
 
     public DualFaceLattice(OM om) {
         super((OMInternal)om);
@@ -35,9 +37,11 @@ public class DualFaceLattice extends AbsOM<Face> {
         @SuppressWarnings("unchecked")
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
-        byDimension[top.dimension+1]=Arrays.asList(new AbsFace[]{top});
+        byDimension[top.getDimension()+1]=Arrays.asList(new AbsFace[]{top});
+        notCoLoops = ffactory().unsignedSets().empty();
          circuits = om.getCircuits().toArray();
          for (SignedSet s:circuits) {
+             notCoLoops = notCoLoops.union(s.support());
              initCircuit(s);
          }
          
@@ -163,15 +167,21 @@ public class DualFaceLattice extends AbsOM<Face> {
         Face circuit = faces.get(pCircuit);
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
-        Face rslt = new Face(this,vector,conform,(BitSet)pVector.extendsCircuits().clone());
+        Face rslt = initFace(vector, pVector, conform);
         pVector.addOneHigher(rslt);
         rslt.extendsCircuits().set(pCircuit);
         lowAndHigh(pVector,rslt);
         lowAndHigh(circuit,rslt);
     }
+    public Face initFace(SignedSet vector, Face pVector, BitSet conform) {
+        BitSet extend = (BitSet)pVector.extendsCircuits().clone();
+        return vector.support().equals(this.notCoLoops) ?
+                new MaxFace(this,vector,conform,extend)
+                : new Face(this,vector,conform,extend);
+    }
     private void initCircuit(SignedSet circuit) {
         int ix = faces.size();
-         Face rslt = new Face(this,circuit,new BitSet(),new BitSet());
+         Face rslt = new MinFace(this,circuit);
          bottom.addOneHigher(rslt);
          this.lowAndHigh(bottom, rslt);
         rslt.extendsCircuits().set(ix);

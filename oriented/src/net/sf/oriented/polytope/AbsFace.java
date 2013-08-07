@@ -19,9 +19,33 @@ class AbsFace implements Verify{
 
     protected static final int UNKNOWN = -2;
     protected final DualFaceLattice lattice;
-    int dimension;
-    List<AbsFace> below = new LinkedList<AbsFace>();
+    /**
+     * The dimension if known
+     */
+    private int dimension;
+    /**
+     * A lower bound on dimension if any
+     */
+    private int minDimension;
+    /**
+     * An upper bound on dimension if any
+     */
+    private int maxDimension;
+    /**
+     * Invariant:
+     * for all x in higher x.minDimension <= this.maxDimension+1
+     *   Maintained by throwing x out of higher
+     * 
+     * for all x in higher x.minDimension > this.minDimension+1
+     *   Maintained by throwing error
+     */
     private final Set<AbsFace> higher = new HashSet<AbsFace>();
+    /**
+     * Invariant:
+     * for all x in lower x.maxDimension >= this.minDimension-1
+     * for all x in lower x.maxDimension < this.maxDimension-1
+     *   Maintained by throwing error
+     */
     private final Set<AbsFace> lower = new HashSet<AbsFace>();
     private final List<Face> aLittleHigher = new ArrayList<Face>();
     private Set<AbsFace> lowerLeft;
@@ -29,9 +53,14 @@ class AbsFace implements Verify{
     AbsFace(DualFaceLattice l, int d) {
         lattice = l;
         dimension = d;
+        minDimension = d;
+        maxDimension = d;
+    }
+
+    public int getDimension() {
+        return dimension;
     }
     
-
     void setDimension(int d) {
         if (dimension != UNKNOWN) {
             if (d != dimension) {

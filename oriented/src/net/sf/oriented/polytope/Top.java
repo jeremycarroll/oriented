@@ -3,6 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
+import net.sf.oriented.omi.AxiomViolation;
+
 
 public class Top extends AbsFace {
 
@@ -27,6 +29,24 @@ public class Top extends AbsFace {
     public String toString() {
         return "T";
     }
+    
+    @Override
+    public void verify() throws AxiomViolation {
+        super.verify();
+        for (AbsFace l:this.getLower()) {
+            if (!(l instanceof MaxFace)) {
+                if ( l instanceof MinFace  && getDimension() == 1) {
+                    continue;
+                }
+                if ( l instanceof Bottom  && getDimension() == 0) {
+                    continue;
+                }
+                throw new AxiomViolation(l,"This is a maximum vector?");
+            }
+                
+        }
+    }
+    
 }
 
 

@@ -3,6 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
+import net.sf.oriented.omi.AxiomViolation;
+
 
 public class Bottom extends AbsFace {
 
@@ -27,6 +29,19 @@ public class Bottom extends AbsFace {
         return "*";
     }
 
+    @Override
+    public void verify() throws AxiomViolation {
+        super.verify();
+        for (AbsFace l:this.getHigher()) {
+            if (!(l instanceof MinFace)) {
+                if ( l instanceof Top  && l.getDimension() == 0) {
+                    continue;
+                }
+                throw new AxiomViolation(l,"This is a minimum vector?");
+            }
+                
+        }
+    }
 }
 
 

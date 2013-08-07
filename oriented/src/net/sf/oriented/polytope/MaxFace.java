@@ -3,14 +3,15 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
+import java.util.BitSet;
+
 import net.sf.oriented.omi.SignedSet;
 
-public class Vertex //extends Face {
-{
+public class MaxFace extends Face {
 
-
-    public Vertex(DualFaceLattice faceLattice, SignedSet construct) {
-//        super(faceLattice, construct);
+    public MaxFace(DualFaceLattice lattice, SignedSet vector, BitSet conform,
+            BitSet extend) {
+        super(lattice, vector, conform, extend);
     }
 
 }
