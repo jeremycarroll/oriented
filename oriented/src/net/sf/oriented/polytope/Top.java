@@ -10,12 +10,6 @@ public class Top extends AbsFace {
         super(lattice, lattice.n() - lattice.rank());
     }
 
-
-//    @Override
-//    boolean isTop() {
-//         return true;
-//     }
-//
     @Override
     public boolean equals(Object o) {
         if (! (o instanceof Top)) {
@@ -28,13 +22,6 @@ public class Top extends AbsFace {
         // no particular rationale for this number.
         return 503;
     }
-    
-
-//    @Override
-//    public void setIsBelow(Face higher) {
-//        throw new IllegalStateException("invariant failure");
-//    }
-    
 
     @Override
     public String toString() {

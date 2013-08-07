@@ -8,40 +8,12 @@ import java.util.BitSet;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.SignedSet;
 
-public class Face extends AbsFace  {
+class Face extends AbsFace  {
 
-    final SignedSet vector;
+    private final SignedSet vector;
     private final BitSet conform;
     private final BitSet extend;
     private final int id;
-    
-    
-    
-
-
-    
-    
-//    private void saveMe() {
-////        System.err.println("+ "+this);
-////        lattice.faces.put(covector,this);
-//    }
-
-
-   
-
-//   boolean isTop() {
-//        return false;
-//    }
-//
-//    protected boolean hasRestriction(Face higher) {
-//        return higher.covector().isRestrictionOf(vector);
-//    }
-//
-//
-//    protected boolean conformsWith(SignedSet covector2) {
-//        return vector.conformsWith(covector2);
-//    }
-
     
     public Face(DualFaceLattice lattice, SignedSet vector, 
             BitSet conform, BitSet extend) {
@@ -79,14 +51,13 @@ public class Face extends AbsFace  {
         return vector.hashCode();
     }
 
-    public BitSet extendsCircuits() {
+    BitSet extendsCircuits() {
         return extend;
     }
 
-    public BitSet conformingCircuits() {
+    BitSet conformingCircuits() {
         return conform;
     }
-    
 
     @Override
     public void verify() throws AxiomViolation {
@@ -98,7 +69,6 @@ public class Face extends AbsFace  {
             throw new AxiomViolation(this,"Should be in the middle");
         }
     }
-
 
 }
 

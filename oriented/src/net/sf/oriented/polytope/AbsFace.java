@@ -15,14 +15,14 @@ import java.util.Set;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Verify;
 
-public class AbsFace implements Verify{
+class AbsFace implements Verify{
 
     protected static final int UNKNOWN = -2;
-    final DualFaceLattice lattice;
+    protected final DualFaceLattice lattice;
     int dimension;
     List<AbsFace> below = new LinkedList<AbsFace>();
-    protected final Set<AbsFace> higher = new HashSet<AbsFace>();
-    protected final Set<AbsFace> lower = new HashSet<AbsFace>();
+    private final Set<AbsFace> higher = new HashSet<AbsFace>();
+    private final Set<AbsFace> lower = new HashSet<AbsFace>();
     private final List<Face> aLittleHigher = new ArrayList<Face>();
     private Set<AbsFace> lowerLeft;
     
@@ -32,7 +32,7 @@ public class AbsFace implements Verify{
     }
     
 
-    public void setDimension(int d) {
+    void setDimension(int d) {
         if (dimension != UNKNOWN) {
             if (d != dimension) {
                 throw new IllegalArgumentException("Dimension mismatch: "+d+" != "+dimension);
@@ -40,9 +40,6 @@ public class AbsFace implements Verify{
             return;
         }
         dimension = d;
-//        for (Face f:below) {
-//            f.setDimension(d+1);
-//        }
     }
     
     @Override
@@ -69,52 +66,47 @@ public class AbsFace implements Verify{
         }
     }
 
-
-    public void addHigher(AbsFace b) {
+    void addHigher(AbsFace b) {
         higher.add(b);
     }
 
-
-    public void addLower(AbsFace a) {
+    void addLower(AbsFace a) {
         lower.add(a);
     }
 
-
-    public void addOneHigher(Face rslt) {
+    void addOneHigher(Face rslt) {
         aLittleHigher.add(rslt);
     }
 
-
-    public boolean noLowerLeft() {
+    boolean noLowerLeft() {
         initLowerLeft();
         return lowerLeft.isEmpty();
     }
 
-
-    private void initLowerLeft() {
+    void initLowerLeft() {
         if (lowerLeft==null) {
            lowerLeft = new HashSet<AbsFace>(this.lower);
         }
     }
 
-
-    public Collection<? extends AbsFace> getALittleHigher() {
+    Collection<? extends AbsFace> getALittleHigher() {
         return this.aLittleHigher;
     }
 
-    public Set<AbsFace> getHigher() {
+    Set<AbsFace> getHigher() {
         return higher;
     }
 
-    public Set<AbsFace> getLower() {
+    Set<AbsFace> getLower() {
         return lower;
     }
 
-    public void lowerIsDone(AbsFace me) {
+    void lowerIsDone(AbsFace me) {
         initLowerLeft();
         lowerLeft.remove(me);
     }
-    public void prune() {
+    
+    void prune() {
         if (dimension == UNKNOWN) {
             throw new IllegalStateException("pruning too early");
         }
@@ -129,7 +121,6 @@ public class AbsFace implements Verify{
             }
         }
     }
-
 
     public void dump() {
         System.err.println(toString()+":");

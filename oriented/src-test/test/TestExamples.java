@@ -117,17 +117,17 @@ public class TestExamples {
         Assert.assertEquals(expected, actual);
 //        }
     }
+    
     @Test
     public void testCevaFL() throws AxiomViolation {
         DualFaceLattice fl = new DualFaceLattice(Examples.ceva().dual());
-        fl.dump();
+//        fl.dump();
         fl.verify();
     }
-    @Ignore
     @Test
     public void testCevaDualFL() throws AxiomViolation {
         DualFaceLattice fl = new DualFaceLattice(Examples.ceva());
-        fl.dump();
+//        fl.dump();
         fl.verify();
     }
     @Ignore
@@ -146,20 +146,13 @@ public class TestExamples {
 //        new DualFaceLattice(suvorov14);
     }
 
-    @Ignore
+    @Ignore // This one is very hard - out of memory on 2G, and 13 minutes at the moment
     @Test
     public void testTsukamoto13_1() throws AxiomViolation {
         OM tsukamoto = Examples.tsukamoto13(1);
-        System.err.println("Circuits ");
-        tsukamoto.getCircuits();
-//        System.err.println("Vectors ");
-//        suvorov14.getVectors();
-//        System.err.println("MaxVectors ");
-//        suvorov14.getMaxVectors();
-        System.err.println("Done ");
-//        OM dual = suvorov14.dual();
-//        new DualFaceLattice(dual);
-        new DualFaceLattice(tsukamoto).verify();
+        DualFaceLattice lattice = new DualFaceLattice(tsukamoto);
+        System.err.println(lattice);
+        lattice.verify();
     }
     @Ignore
     @Test

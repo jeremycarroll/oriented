@@ -19,18 +19,13 @@ import net.sf.oriented.omi.SignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
     
-    final Bottom bottom = new Bottom(this);
-    final Top top = new Top(this);
-    
- //   final SetOfSignedSet topes;
-    final SignedSet circuits[];
-//    final List<BitSet> vectorConformsWithCircuit = new ArrayList<BitSet>();
-//    final List<BitSet> vectorExtendsCircuit= new ArrayList<BitSet>();
-//    final List<SignedSet> vectors = new ArrayList<SignedSet>();
+    private final Bottom bottom = new Bottom(this);
+    private final Top top = new Top(this);
+    private final SignedSet circuits[];
     final Map<SignedSet,Face> ss2faces = new HashMap<SignedSet,Face>();
     final List<Face> faces = new ArrayList<Face>();
 
-    final List<AbsFace> byDimension[];
+    private final List<AbsFace> byDimension[];
     private final int maxDimension;
 
     public DualFaceLattice(OM om) {
@@ -41,7 +36,6 @@ public class DualFaceLattice extends AbsOM<Face> {
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
         byDimension[top.dimension+1]=Arrays.asList(new AbsFace[]{top});
-     //  topes = om.dual().getMaxVectors();
          circuits = om.getCircuits().toArray();
          for (SignedSet s:circuits) {
              initCircuit(s);
@@ -80,7 +74,6 @@ public class DualFaceLattice extends AbsOM<Face> {
              pos++;
          }
          BitSet circuitConformsWithVector[] = new BitSet[circuits.length];
-//         System.err.println("A"+circuits.length);
          for (int i=0;i<circuits.length;i++) {
              circuitConformsWithVector[i] = new BitSet();
          }
@@ -94,9 +87,7 @@ public class DualFaceLattice extends AbsOM<Face> {
                  c++;
              }
          }
-//         System.err.println("B"+faces.size());
          for (int i=0;i<faces.size()-1;i++) {
-//             if ((i%1000)==0) System.err.println("C"+i);
              Face a = faces.get(i);
              BitSet extend = a.extendsCircuits();
              int first = extend.nextSetBit(0);
@@ -118,7 +109,6 @@ public class DualFaceLattice extends AbsOM<Face> {
              }
          }
          readGrades();
-//         dump();
          for (Face f:faces) {
              f.prune();
          }
@@ -165,7 +155,7 @@ public class DualFaceLattice extends AbsOM<Face> {
         }
         
     }
-    public void lowAndHigh(AbsFace a, AbsFace b) {
+    private void lowAndHigh(AbsFace a, AbsFace b) {
         a.addHigher(b);
         b.addLower(a);
     }
@@ -173,7 +163,7 @@ public class DualFaceLattice extends AbsOM<Face> {
         Face circuit = faces.get(pCircuit);
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
-        Face rslt = initEntry(vector,conform,(BitSet)pVector.extendsCircuits().clone());
+        Face rslt = new Face(this,vector,conform,(BitSet)pVector.extendsCircuits().clone());
         pVector.addOneHigher(rslt);
         rslt.extendsCircuits().set(pCircuit);
         lowAndHigh(pVector,rslt);
@@ -181,7 +171,7 @@ public class DualFaceLattice extends AbsOM<Face> {
     }
     private void initCircuit(SignedSet circuit) {
         int ix = faces.size();
-         Face rslt = initEntry(circuit,new BitSet(),new BitSet());
+         Face rslt = new Face(this,circuit,new BitSet(),new BitSet());
          bottom.addOneHigher(rslt);
          this.lowAndHigh(bottom, rslt);
         rslt.extendsCircuits().set(ix);
@@ -198,23 +188,6 @@ public class DualFaceLattice extends AbsOM<Face> {
             }
         }
     }
-    public Face initEntry(SignedSet circuit, BitSet conform,BitSet extend ) {
-         Face rslt = new Face(this,circuit,conform,extend);
-         return rslt;
-    }
-    /*
- * A lattice which satisfies the identities
-
-Distributivity of ∨ over ∧
-a∨(b∧c) = (a∨b) ∧ (a∨c).
-Distributivity of ∧ over ∨
-a∧(b∨c) = (a∧b) ∨ (a∧c).
-
-is said to be distributive.
- * 
- * (non-Javadoc)
- * @see net.sf.oriented.omi.Verify#verify()
- */
     @Override
     public void verify() throws AxiomViolation {
         bottom.verify();
@@ -233,10 +206,6 @@ is said to be distributive.
     public Iterator<? extends Face> iterator2() {
         return null;
     }
-
-   
-
-    int counter = 1;
     public void dump() {
         for (int i=0;i<byDimension.length;i++) {
             System.err.println("==== "+(i-1));
