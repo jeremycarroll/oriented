@@ -162,6 +162,10 @@ final public class UnsignedSetImpl
         return new UnsignedSetImpl(((SmartPermutation)u).mapAll(members),factory());
     }
 
+    public int raw() {
+        return this.members;
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

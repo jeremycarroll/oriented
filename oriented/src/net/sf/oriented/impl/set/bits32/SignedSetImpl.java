@@ -179,6 +179,7 @@ public class SignedSetImpl extends
 	}
 
 
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

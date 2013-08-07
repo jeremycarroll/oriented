@@ -7,10 +7,18 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.impl.set.bits32.UnsignedSetImpl;
+
 
 import com.google.common.reflect.Invokable;
 
 public class Misc {
+    
+    public static int raw(UnsignedSet x) {
+        return ((UnsignedSetImpl)x).raw();
+    }
+    
     public static <T> T invoke(Constructor<T> c,  Object ... args) {
         return invoke(Invokable.from(c),null,args);
     }
