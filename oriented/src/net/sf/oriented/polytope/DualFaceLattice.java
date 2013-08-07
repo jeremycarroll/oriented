@@ -40,8 +40,7 @@ public class DualFaceLattice extends AbsOM<Face> {
         @SuppressWarnings("unchecked")
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
-        byDimension[bottom.dimension+1].add(bottom);
-        byDimension[top.dimension+1].add(top);
+        byDimension[top.dimension+1]=Arrays.asList(new AbsFace[]{top});
      //  topes = om.dual().getMaxVectors();
          circuits = om.getCircuits().toArray();
          for (SignedSet s:circuits) {
@@ -239,38 +238,23 @@ is said to be distributive.
 
     int counter = 1;
     public void dump() {
-        for (int i=0;i<maxDimension+1;i++) {
+        for (int i=0;i<byDimension.length;i++) {
             System.err.println("==== "+(i-1));
             for (AbsFace f:byDimension[i]) {
                 f.dump();
             }
         }
-//        System.err.println("["+counter++ + "]===============");
-//        for (Map.Entry<SignedSet, Face> entry: faces.entrySet()) {
-//            Face f = entry.getValue();
-//            System.err.println(entry.getKey()+":" + f+"["+f.dimension+"]");
-//            for (Face ff:f.above) {
-//                System.err.println("    : " + ff);
-//            }
-//            
-//        }
     }
     
     @Override
     public String toString() {
         StringBuilder rslt = new StringBuilder();
-        int cnts[] = new int[maxDimension+2];
-        for (Face f:faces) {
-            cnts[f.dimension+1]++;
-        }
-        cnts[bottom.dimension+1]++;
-        cnts[top.dimension+1]++;
         rslt.append("Lattice{");
         for (int i=0;i<maxDimension+1;i++) {
-            rslt.append(cnts[i]);
+            rslt.append(byDimension[i].size());
             rslt.append(',');
         }
-        rslt.append(cnts[maxDimension+1]);
+        rslt.append(byDimension[maxDimension+1].size());
         rslt.append('}');
         return rslt.toString();
     }
