@@ -7,9 +7,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.impl.set.bits32.UnsignedSetImpl;
-
+import net.sf.oriented.omi.UnsignedSet;
 
 import com.google.common.reflect.Invokable;
 

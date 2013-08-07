@@ -4,8 +4,8 @@
 package net.sf.oriented.impl.om;
 
 
-import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.items.LabelFactoryImpl;
+import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.Label;

@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
-import net.sf.oriented.omi.SignedSet;
 
 public class Top extends AbsFace {
 

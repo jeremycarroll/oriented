@@ -6,10 +6,10 @@ package net.sf.oriented.impl.om;
 
 import java.util.Iterator;
 
+import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
-import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;

@@ -15,8 +15,8 @@ import net.sf.oriented.impl.set.SetOfSignedSetFactory;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.OMSFactory;
+import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 

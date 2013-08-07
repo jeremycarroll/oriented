@@ -118,13 +118,21 @@ public class TestExamples {
 //        }
     }
     @Test
-    public void testChap1() throws AxiomViolation {
-        DualFaceLattice fl = new DualFaceLattice(Examples.uniform3());
+    public void testCevaFL() throws AxiomViolation {
+        DualFaceLattice fl = new DualFaceLattice(Examples.ceva().dual());
         fl.dump();
         fl.verify();
     }
+    @Ignore
     @Test
-    public void testSuvorov14Dual() {
+    public void testCevaDualFL() throws AxiomViolation {
+        DualFaceLattice fl = new DualFaceLattice(Examples.ceva());
+        fl.dump();
+        fl.verify();
+    }
+    @Ignore
+    @Test
+    public void testSuvorov14Dual() throws AxiomViolation {
         OM suvorov14 = Examples.suvorov14();
         System.err.println("Circuits ");
         suvorov14.getCircuits();
@@ -134,8 +142,24 @@ public class TestExamples {
 //        suvorov14.getMaxVectors();
         System.err.println("Done ");
         OM dual = suvorov14.dual();
-        new DualFaceLattice(dual);
-        new DualFaceLattice(suvorov14);
+        new DualFaceLattice(dual).verify();
+//        new DualFaceLattice(suvorov14);
+    }
+
+    @Ignore
+    @Test
+    public void testTsukamoto13_1() throws AxiomViolation {
+        OM tsukamoto = Examples.tsukamoto13(1);
+        System.err.println("Circuits ");
+        tsukamoto.getCircuits();
+//        System.err.println("Vectors ");
+//        suvorov14.getVectors();
+//        System.err.println("MaxVectors ");
+//        suvorov14.getMaxVectors();
+        System.err.println("Done ");
+//        OM dual = suvorov14.dual();
+//        new DualFaceLattice(dual);
+        new DualFaceLattice(tsukamoto).verify();
     }
     @Ignore
     @Test

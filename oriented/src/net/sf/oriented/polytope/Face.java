@@ -4,12 +4,9 @@
 package net.sf.oriented.polytope;
 
 import java.util.BitSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.Verify;
 
 public class Face extends AbsFace  {
 

@@ -14,8 +14,8 @@ import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.MatroidFactory;
 import net.sf.oriented.omi.MatroidAsSet;
+import net.sf.oriented.omi.MatroidFactory;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 

@@ -3,9 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.polytope;
 
-import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.UnsignedSet;
 
 public class Bottom extends AbsFace {
 

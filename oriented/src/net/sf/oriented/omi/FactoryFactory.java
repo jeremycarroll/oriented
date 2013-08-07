@@ -8,12 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
-import com.google.common.math.IntMath;
-
 import net.sf.oriented.impl.items.LabelFactoryImpl;
 import net.sf.oriented.impl.om.MatroidFactoryImpl;
 import net.sf.oriented.impl.om.OMChirotopeFactory;
@@ -25,6 +19,12 @@ import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.util.combinatorics.CoLexicographic;
 import net.sf.oriented.util.matrix.RationalMatrix;
+
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+
+import com.google.common.math.IntMath;
 
 /**
  * This class generates {@link Factory}'s and {@link SetFactory}'s for the

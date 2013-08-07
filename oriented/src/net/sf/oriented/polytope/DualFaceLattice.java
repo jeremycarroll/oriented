@@ -5,20 +5,17 @@ package net.sf.oriented.polytope;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import java.util.BitSet;
-
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.UnsignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
     
@@ -40,7 +37,11 @@ public class DualFaceLattice extends AbsOM<Face> {
         super((OMInternal)om);
         maxDimension = n() - rank();
         top.setDimension(maxDimension);
-        byDimension = new List[maxDimension+2];
+        @SuppressWarnings("unchecked")
+        List<AbsFace>[] suppressWarning = new List[maxDimension+2];
+        byDimension = suppressWarning;
+        byDimension[bottom.dimension+1].add(bottom);
+        byDimension[top.dimension+1].add(top);
      //  topes = om.dual().getMaxVectors();
          circuits = om.getCircuits().toArray();
          for (SignedSet s:circuits) {
@@ -238,16 +239,6 @@ is said to be distributive.
 
     int counter = 1;
     public void dump() {
-        StringBuilder rslt = new StringBuilder();
-        List<AbsFace> byDimension[] = new List[maxDimension+2];
-        for (int i=0;i<byDimension.length;i++) {
-            byDimension[i] = new ArrayList<AbsFace>();
-        }
-        for (Face f:faces) {
-            byDimension[f.dimension+1].add(f);
-        }
-        byDimension[bottom.dimension+1].add(bottom);
-        byDimension[top.dimension+1].add(top);
         for (int i=0;i<maxDimension+1;i++) {
             System.err.println("==== "+(i-1));
             for (AbsFace f:byDimension[i]) {
