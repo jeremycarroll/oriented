@@ -214,8 +214,8 @@ class AbsFace implements Verify{
         }
 //        setMinDimension(b.maxDimension-1);
 //        b.setMaxDimension(minDimension+1);
-        if (b.maxDimension != UNKNOWN ) setMaxDimension(b.maxDimension-1);
-        b.setMinDimension(minDimension+1);
+//        if (b.maxDimension != UNKNOWN ) setMaxDimension(b.maxDimension-1);
+//        b.setMinDimension(minDimension+1);
         addHigher(b);
         b.addLower(this);
     }

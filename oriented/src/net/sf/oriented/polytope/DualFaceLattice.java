@@ -108,6 +108,7 @@ public class DualFaceLattice extends AbsOM<Face> {
                  comparable.and( circuitConformsWithVector[and]);
                  and++;
              }
+             comparable.clear(i);
              clearBits(comparable,a.getLower());
              clearBits(comparable,a.getHigher());
              int j=i+1;
@@ -128,7 +129,7 @@ public class DualFaceLattice extends AbsOM<Face> {
          System.err.println(toString());
     }
     private void clearBits(BitSet comparable, Set<AbsFace> higher) {
-        for (AbsFace f:faces) {
+        for (AbsFace f:higher) {
             if (f instanceof Face) {
                 comparable.clear(((Face)f).id);
             }

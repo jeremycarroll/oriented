@@ -23,6 +23,7 @@ import org.junit.Test;
 public class TestExamples {
   
 
+    @Ignore
     @Test
     public void testUniform4() {
         OM fromEuclideanLines = FactoryFactory.fromEuclideanLines(
@@ -77,6 +78,7 @@ public class TestExamples {
         Assert.assertEquals(0, Examples.suvorov14().getChirotope().chi(5,9,10));
     }
     
+    @Ignore
     @Test
     public void testRingelAt7() {
         Realization realization = new Realization(Examples.ringel(),"7");
@@ -124,6 +126,7 @@ public class TestExamples {
 //        fl.dump();
         fl.verify();
     }
+    @Ignore
     @Test
     public void testCevaDualFL() throws AxiomViolation {
         DualFaceLattice fl = new DualFaceLattice(Examples.ceva());
