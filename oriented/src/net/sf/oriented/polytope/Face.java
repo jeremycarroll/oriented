@@ -13,11 +13,11 @@ class Face extends AbsFace  {
     private final SignedSet vector;
     private final BitSet conform;
     private final BitSet extend;
-    private final int id;
+    final int id;
     
-    public Face(DualFaceLattice lattice, SignedSet vector, 
+    public Face(DualFaceLattice lattice, SignedSet vector,int minDimension, 
             BitSet conform, BitSet extend) {
-        super(lattice,UNKNOWN);
+        super(lattice,minDimension,UNKNOWN);
         this.vector = vector;
         this.conform = conform;
         this.extend = extend;

@@ -47,28 +47,65 @@ class AbsFace implements Verify{
      *   Maintained by throwing error
      */
     private final Set<AbsFace> lower = new HashSet<AbsFace>();
-    private final List<Face> aLittleHigher = new ArrayList<Face>();
-    private Set<AbsFace> lowerLeft;
+//    private final List<Face> aLittleHigher = new ArrayList<Face>();
+//    private Set<AbsFace> lowerLeft;
     
-    AbsFace(DualFaceLattice l, int d) {
+    AbsFace(DualFaceLattice l, int min, int max) {
         lattice = l;
-        dimension = d;
-        minDimension = d;
-        maxDimension = d;
+        dimension = maxDimension = UNKNOWN;
+        minDimension = min;
+        if (min == UNKNOWN) {
+            throw new IllegalArgumentException("We always know the minimum dimension");
+        }
+        setMaxDimension(max);
+    }
+
+    void setMaxDimension(int max) {
+        if (max != UNKNOWN && (maxDimension == UNKNOWN || max < maxDimension)) {
+            maxDimension = max;
+            if (max < minDimension ) {
+                throw new IllegalStateException("max < min: logic error");
+            }
+            if (max == minDimension) {
+                setDimension(max);
+            }
+            for (AbsFace low:lower) {
+                low.setMaxDimension(max-1);
+            }
+        }
+    }
+
+    void setMinDimension(int min) {
+        if ( min > minDimension) {
+            minDimension = min;
+            if (maxDimension != UNKNOWN && min > maxDimension ) {
+                throw new IllegalStateException("max < min: logic error");
+            }
+            if (min == maxDimension) {
+                setDimension(min);
+            }
+            for (AbsFace high:higher) {
+                high.setMinDimension(min+1);
+            }
+        }
     }
 
     public int getDimension() {
         return dimension;
     }
     
-    void setDimension(int d) {
+    private void setDimension(int d) {
         if (dimension != UNKNOWN) {
             if (d != dimension) {
                 throw new IllegalArgumentException("Dimension mismatch: "+d+" != "+dimension);
             }
             return;
         }
+        lattice.byDimension[d+1].add(this);
         dimension = d;
+    }
+    boolean hasDimension() {
+        return dimension != UNKNOWN;
     }
     
     @Override
@@ -95,32 +132,36 @@ class AbsFace implements Verify{
         }
     }
 
-    void addHigher(AbsFace b) {
+    private void addHigher(AbsFace b) {
+        if (b.maxDimension != UNKNOWN) {
+            setMaxDimension(b.maxDimension-1);
+        }
         higher.add(b);
     }
 
-    void addLower(AbsFace a) {
+    private void addLower(AbsFace a) {
+        setMinDimension(a.minDimension+1);
         lower.add(a);
     }
 
-    void addOneHigher(Face rslt) {
-        aLittleHigher.add(rslt);
-    }
+//    void addOneHigher(Face rslt) {
+//        aLittleHigher.add(rslt);
+//    }
 
-    boolean noLowerLeft() {
-        initLowerLeft();
-        return lowerLeft.isEmpty();
-    }
+//    boolean noLowerLeft() {
+//        initLowerLeft();
+//        return lowerLeft.isEmpty();
+//    }
 
-    void initLowerLeft() {
-        if (lowerLeft==null) {
-           lowerLeft = new HashSet<AbsFace>(this.lower);
-        }
-    }
+//    void initLowerLeft() {
+//        if (lowerLeft==null) {
+//           lowerLeft = new HashSet<AbsFace>(this.lower);
+//        }
+//    }
 
-    Collection<? extends AbsFace> getALittleHigher() {
-        return this.aLittleHigher;
-    }
+//    Collection<? extends AbsFace> getALittleHigher() {
+//        return this.aLittleHigher;
+//    }
 
     Set<AbsFace> getHigher() {
         return higher;
@@ -130,14 +171,14 @@ class AbsFace implements Verify{
         return lower;
     }
 
-    void lowerIsDone(AbsFace me) {
-        initLowerLeft();
-        lowerLeft.remove(me);
-    }
+//    void lowerIsDone(AbsFace me) {
+//        initLowerLeft();
+//        lowerLeft.remove(me);
+//    }
     
     void prune() {
         if (dimension == UNKNOWN) {
-            throw new IllegalStateException("pruning too early");
+            throw new IllegalStateException("pruning too early: "+this);
         }
         prune(higher,dimension+1);
         prune(lower,dimension-1);
@@ -160,6 +201,23 @@ class AbsFace implements Verify{
             System.err.println("  > ["+f.dimension+"] " +f);
         }
         
+    }
+
+    protected int getMinDimension() {
+        return minDimension;
+    }
+
+    void setIsLower(AbsFace b) {
+        // not worth it for rank3
+        if (this.maxDimension != UNKNOWN && maxDimension < b.minDimension - 1 ) {
+            return;
+        }
+//        setMinDimension(b.maxDimension-1);
+//        b.setMaxDimension(minDimension+1);
+        if (b.maxDimension != UNKNOWN ) setMaxDimension(b.maxDimension-1);
+        b.setMinDimension(minDimension+1);
+        addHigher(b);
+        b.addLower(this);
     }
 }
 

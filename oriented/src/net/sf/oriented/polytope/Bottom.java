@@ -9,7 +9,7 @@ import net.sf.oriented.omi.AxiomViolation;
 public class Bottom extends AbsFace {
 
     public Bottom(DualFaceLattice lattice) {
-        super(lattice, -1);
+        super(lattice, -1, -1);
     }
     @Override
     public boolean equals(Object o) {

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
@@ -19,25 +20,27 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
-    
-    private final Bottom bottom = new Bottom(this);
-    private final Top top = new Top(this);
+
+    final int maxDimension = n() - rank();
+    private final Bottom bottom;
+    final Top top;
     private final SignedSet circuits[];
     final Map<SignedSet,Face> ss2faces = new HashMap<SignedSet,Face>();
     final List<Face> faces = new ArrayList<Face>();
 
-    private final List<AbsFace> byDimension[];
-    private final int maxDimension;
+    final List<AbsFace> byDimension[];
     private UnsignedSet notCoLoops;
 
     public DualFaceLattice(OM om) {
         super((OMInternal)om);
-        maxDimension = n() - rank();
-        top.setDimension(maxDimension);
         @SuppressWarnings("unchecked")
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
-        byDimension[top.getDimension()+1]=Arrays.asList(new AbsFace[]{top});
+        for (int i=0;i<byDimension.length;i++) {
+            byDimension[i] = new ArrayList<AbsFace>();
+        }
+        bottom = new Bottom(this);
+        top = new Top(this);
         notCoLoops = ffactory().unsignedSets().empty();
          circuits = om.getCircuits().toArray();
          for (SignedSet s:circuits) {
@@ -61,6 +64,7 @@ public class DualFaceLattice extends AbsOM<Face> {
                  SignedSet circuit = circuits[ix];
                  if (circuit.isRestrictionOf(vector)) {
                      extend.set(ix);
+                     faces.get(ix).setIsLower(f);
                  } else {
                      SignedSet next = circuit.compose(vector);
                      Face n = ss2faces.get(next);
@@ -70,6 +74,7 @@ public class DualFaceLattice extends AbsOM<Face> {
                          BitSet exten = n.extendsCircuits();
                          exten.set(ix);
                          exten.or(extend);
+                         faces.get(ix).setIsLower(n);
 // need to somehow block some other work
                      }
                  }
@@ -103,6 +108,8 @@ public class DualFaceLattice extends AbsOM<Face> {
                  comparable.and( circuitConformsWithVector[and]);
                  and++;
              }
+             clearBits(comparable,a.getLower());
+             clearBits(comparable,a.getHigher());
              int j=i+1;
              while ( true ) {
                  j = comparable.nextSetBit(j);
@@ -112,78 +119,85 @@ public class DualFaceLattice extends AbsOM<Face> {
                  j++;
              }
          }
-         readGrades();
+
+         System.err.println("*"+toString());
+//         readGrades();
          for (Face f:faces) {
              f.prune();
          }
          System.err.println(toString());
     }
-    private void readGrades() {
-        Iterable<AbsFace> possibilities = Arrays.asList(new AbsFace[]{bottom});
-        for (int dimension = -1; dimension < maxDimension; dimension++ ){
-            List<AbsFace> grade = byDimension[dimension+1] = new ArrayList<AbsFace>();
-            boolean maxVector = dimension == maxDimension-1;
-            List<AbsFace> nextLevel = new ArrayList<AbsFace>();
-            for (AbsFace me: possibilities) {
-                if (me.noLowerLeft()) {
-                    me.setDimension(dimension);
-                    nextLevel.addAll(me.getALittleHigher());
-                    grade.add(me);
-                    if (maxVector) {
-                        this.lowAndHigh(me, top);
-                    }
-                } else {
-                    if (maxVector) {
-                        throw new IllegalStateException("Logic error?");
-                    }
-                    nextLevel.add(me);
-                }
-            }
-            possibilities = nextLevel;
-            for(AbsFace me:grade) {
-                for (AbsFace higher:me.getHigher()) {
-                    higher.lowerIsDone(me);
-                }
+    private void clearBits(BitSet comparable, Set<AbsFace> higher) {
+        for (AbsFace f:faces) {
+            if (f instanceof Face) {
+                comparable.clear(((Face)f).id);
             }
         }
     }
+    //    private void readGrades() {
+//        Iterable<AbsFace> possibilities = Arrays.asList(new AbsFace[]{bottom});
+//        for (int dimension = -1; dimension < maxDimension; dimension++ ){
+//            List<AbsFace> grade = byDimension[dimension+1];
+//            boolean maxVector = dimension == maxDimension-1;
+//            List<AbsFace> nextLevel = new ArrayList<AbsFace>();
+//            for (AbsFace me: possibilities) {
+//                if (me.hasDimension()) {
+//                    continue;
+//                }
+//                if (me.noLowerLeft()) {
+//                    me.setDimension(dimension);
+//                } else {
+//                    if (maxVector) {
+//                        throw new IllegalStateException("Logic error?");
+//                    }
+//                    nextLevel.add(me);
+//                }
+//            }
+//            for(AbsFace me:grade) {
+//                nextLevel.addAll(me.getALittleHigher());
+//                if (maxVector) {
+//                    this.lowAndHigh(me, top);
+//                }
+//                for (AbsFace higher:me.getHigher()) {
+//                    higher.lowerIsDone(me);
+//                }
+//            }
+//            possibilities = nextLevel;
+//        }
+//    }
     private void computeComparison(Face a, Face b) {
         SignedSet av = a.vector();
         SignedSet bv = b.vector();
         if (av.conformsWith(bv)) {
             if (av.isRestrictionOf(bv)) {
-                lowAndHigh(a, b);
+                a.setIsLower(b);
             } else if (bv.isRestrictionOf(av)) {
-                lowAndHigh(b, a);
+                b.setIsLower(a);
             } 
         }
         
-    }
-    private void lowAndHigh(AbsFace a, AbsFace b) {
-        a.addHigher(b);
-        b.addLower(a);
     }
     private void initVector(SignedSet vector, Face pVector, int pCircuit) {
         Face circuit = faces.get(pCircuit);
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
         Face rslt = initFace(vector, pVector, conform);
-        pVector.addOneHigher(rslt);
+//        pVector.addOneHigher(rslt);
         rslt.extendsCircuits().set(pCircuit);
-        lowAndHigh(pVector,rslt);
-        lowAndHigh(circuit,rslt);
+        pVector.setIsLower(rslt);
+        circuit.setIsLower(rslt);
     }
     public Face initFace(SignedSet vector, Face pVector, BitSet conform) {
         BitSet extend = (BitSet)pVector.extendsCircuits().clone();
         return vector.support().equals(this.notCoLoops) ?
                 new MaxFace(this,vector,conform,extend)
-                : new Face(this,vector,conform,extend);
+                : new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
     }
     private void initCircuit(SignedSet circuit) {
         int ix = faces.size();
          Face rslt = new MinFace(this,circuit);
-         bottom.addOneHigher(rslt);
-         this.lowAndHigh(bottom, rslt);
+//         bottom.addOneHigher(rslt);
+         bottom.setIsLower(rslt);
         rslt.extendsCircuits().set(ix);
         BitSet conform = rslt.conformingCircuits();
         conform.set(ix);

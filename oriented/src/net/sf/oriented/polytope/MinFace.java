@@ -10,7 +10,11 @@ import net.sf.oriented.omi.SignedSet;
 public class MinFace extends Face {
 
     public MinFace(DualFaceLattice lattice, SignedSet circuit) {
-        super(lattice, circuit, new BitSet(),new BitSet());
+        super(lattice, circuit, 0, new BitSet(),new BitSet());
+        setMaxDimension(0);
+        if (lattice.maxDimension==1) {
+            this.setIsLower(lattice.top);
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import net.sf.oriented.omi.AxiomViolation;
 public class Top extends AbsFace {
 
     public Top(DualFaceLattice lattice) {
-        super(lattice, lattice.n() - lattice.rank());
+        super(lattice, lattice.maxDimension, lattice.maxDimension);
     }
 
     @Override
