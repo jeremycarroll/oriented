@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
@@ -125,7 +124,7 @@ public class DualFaceLattice extends AbsOM<Face> {
          }
          System.err.println(toString());
     }
-    private void clearBits(BitSet comparable, Set<AbsFace> higher) {
+    private void clearBits(BitSet comparable,  Iterable<AbsFace> higher) {
         for (AbsFace f:higher) {
             if (f instanceof Face) {
                 comparable.clear(((Face)f).id);

@@ -65,7 +65,7 @@ class AbsFace implements Verify{
             if (max == minDimension) {
                 setDimension(max);
             }
-            for (AbsFace low:lower) {
+            for (AbsFace low:getLower()) {
                 low.setMaxDimension(max-1);
             }
         }
@@ -80,7 +80,7 @@ class AbsFace implements Verify{
             if (min == maxDimension) {
                 setDimension(min);
             }
-            for (AbsFace high:higher) {
+            for (AbsFace high:getHigher()) {
                 high.setMinDimension(min+1);
             }
         }
@@ -111,8 +111,8 @@ class AbsFace implements Verify{
         }
         Set<AbsFace> seenOnce = new HashSet<AbsFace>();
         Set<AbsFace> seenTwice = new HashSet<AbsFace>();
-        for (AbsFace oneUp:higher) {
-            for (AbsFace twoUp: oneUp.higher) {
+        for (AbsFace oneUp:getHigher()) {
+            for (AbsFace twoUp: oneUp.getHigher()) {
                 if (seenTwice.contains(twoUp)) {
                     throw new AxiomViolation(lattice, "Interval from "+this+" to "+twoUp+" has more than four members.");
                 }
@@ -140,11 +140,11 @@ class AbsFace implements Verify{
         lower.add(a);
     }
 
-    Set<AbsFace> getHigher() {
+    Iterable<AbsFace> getHigher() {
         return higher;
     }
 
-    Set<AbsFace> getLower() {
+    Iterable<AbsFace> getLower() {
         return lower;
     }
     
@@ -152,10 +152,10 @@ class AbsFace implements Verify{
         if (dimension == UNKNOWN) {
             throw new IllegalStateException("pruning too early: "+this);
         }
-        prune(higher,dimension+1);
-        prune(lower,dimension-1);
+        prune(getHigher(),dimension+1);
+        prune(getLower(),dimension-1);
     }
-    private void prune(Set<AbsFace> s, int d) {
+    private void prune(Iterable<AbsFace> s, int d) {
         Iterator<AbsFace> it = s.iterator(); 
         while (it.hasNext()) {
             if (it.next().dimension != d) {
@@ -166,10 +166,10 @@ class AbsFace implements Verify{
 
     public void dump() {
         System.err.println(toString()+":");
-        for (AbsFace f:higher) {
+        for (AbsFace f:getHigher()) {
             System.err.println("  < ["+f.dimension+"] "+f);
         }
-        for (AbsFace f:lower) {
+        for (AbsFace f:getLower()) {
             System.err.println("  > ["+f.dimension+"] " +f);
         }
         
