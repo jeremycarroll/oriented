@@ -4,7 +4,6 @@
 package net.sf.oriented.polytope;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -121,8 +120,6 @@ public class DualFaceLattice extends AbsOM<Face> {
              }
          }
 
-         System.err.println("*"+toString());
-//         readGrades();
          for (Face f:faces) {
              f.prune();
          }
@@ -135,37 +132,7 @@ public class DualFaceLattice extends AbsOM<Face> {
             }
         }
     }
-    //    private void readGrades() {
-//        Iterable<AbsFace> possibilities = Arrays.asList(new AbsFace[]{bottom});
-//        for (int dimension = -1; dimension < maxDimension; dimension++ ){
-//            List<AbsFace> grade = byDimension[dimension+1];
-//            boolean maxVector = dimension == maxDimension-1;
-//            List<AbsFace> nextLevel = new ArrayList<AbsFace>();
-//            for (AbsFace me: possibilities) {
-//                if (me.hasDimension()) {
-//                    continue;
-//                }
-//                if (me.noLowerLeft()) {
-//                    me.setDimension(dimension);
-//                } else {
-//                    if (maxVector) {
-//                        throw new IllegalStateException("Logic error?");
-//                    }
-//                    nextLevel.add(me);
-//                }
-//            }
-//            for(AbsFace me:grade) {
-//                nextLevel.addAll(me.getALittleHigher());
-//                if (maxVector) {
-//                    this.lowAndHigh(me, top);
-//                }
-//                for (AbsFace higher:me.getHigher()) {
-//                    higher.lowerIsDone(me);
-//                }
-//            }
-//            possibilities = nextLevel;
-//        }
-//    }
+    
     private void computeComparison(Face a, Face b) {
         SignedSet av = a.vector();
         SignedSet bv = b.vector();
@@ -183,7 +150,6 @@ public class DualFaceLattice extends AbsOM<Face> {
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
         Face rslt = initFace(vector, pVector, conform);
-//        pVector.addOneHigher(rslt);
         rslt.extendsCircuits().set(pCircuit);
         pVector.setIsLower(rslt);
         circuit.setIsLower(rslt);
@@ -197,7 +163,6 @@ public class DualFaceLattice extends AbsOM<Face> {
     private void initCircuit(SignedSet circuit) {
         int ix = faces.size();
          Face rslt = new MinFace(this,circuit);
-//         bottom.addOneHigher(rslt);
          bottom.setIsLower(rslt);
         rslt.extendsCircuits().set(ix);
         BitSet conform = rslt.conformingCircuits();

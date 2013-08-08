@@ -4,12 +4,8 @@
 package net.sf.oriented.polytope;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import net.sf.oriented.omi.AxiomViolation;
@@ -144,25 +140,6 @@ class AbsFace implements Verify{
         lower.add(a);
     }
 
-//    void addOneHigher(Face rslt) {
-//        aLittleHigher.add(rslt);
-//    }
-
-//    boolean noLowerLeft() {
-//        initLowerLeft();
-//        return lowerLeft.isEmpty();
-//    }
-
-//    void initLowerLeft() {
-//        if (lowerLeft==null) {
-//           lowerLeft = new HashSet<AbsFace>(this.lower);
-//        }
-//    }
-
-//    Collection<? extends AbsFace> getALittleHigher() {
-//        return this.aLittleHigher;
-//    }
-
     Set<AbsFace> getHigher() {
         return higher;
     }
@@ -170,11 +147,6 @@ class AbsFace implements Verify{
     Set<AbsFace> getLower() {
         return lower;
     }
-
-//    void lowerIsDone(AbsFace me) {
-//        initLowerLeft();
-//        lowerLeft.remove(me);
-//    }
     
     void prune() {
         if (dimension == UNKNOWN) {
@@ -212,10 +184,6 @@ class AbsFace implements Verify{
         if (this.maxDimension != UNKNOWN && maxDimension < b.minDimension - 1 ) {
             return;
         }
-//        setMinDimension(b.maxDimension-1);
-//        b.setMaxDimension(minDimension+1);
-//        if (b.maxDimension != UNKNOWN ) setMaxDimension(b.maxDimension-1);
-//        b.setMinDimension(minDimension+1);
         addHigher(b);
         b.addLower(this);
     }
