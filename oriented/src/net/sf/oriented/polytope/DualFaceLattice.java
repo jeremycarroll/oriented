@@ -134,12 +134,17 @@ public class DualFaceLattice extends AbsOM<Face> {
     }
     
     private void computeComparison(Face a, Face b) {
+        boolean aMaybeJustUnderB = a.couldSetLower(b);
+        boolean bMaybeJustUnderA = b.couldSetLower(a);
+        if (!(aMaybeJustUnderB||bMaybeJustUnderA)) {
+            return;
+        }
         SignedSet av = a.vector();
         SignedSet bv = b.vector();
         if (av.conformsWith(bv)) {
-            if (av.isRestrictionOf(bv)) {
+            if (aMaybeJustUnderB && av.isRestrictionOf(bv)) {
                 a.setIsLower(b);
-            } else if (bv.isRestrictionOf(av)) {
+            } else if (bMaybeJustUnderA && bv.isRestrictionOf(av)) {
                 b.setIsLower(a);
             } 
         }

@@ -181,11 +181,14 @@ class AbsFace implements Verify{
 
     void setIsLower(AbsFace b) {
         // not worth it for rank3
-        if (this.maxDimension != UNKNOWN && maxDimension < b.minDimension - 1 ) {
-            return;
+        if (couldSetLower(b)) {
+            addHigher(b);
+            b.addLower(this);
         }
-        addHigher(b);
-        b.addLower(this);
+    }
+
+    boolean couldSetLower(AbsFace a) {
+        return this.maxDimension == UNKNOWN || maxDimension >= a.minDimension - 1;
     }
 }
 
