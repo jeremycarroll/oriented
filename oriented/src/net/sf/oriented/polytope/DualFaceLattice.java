@@ -19,6 +19,8 @@ import net.sf.oriented.omi.UnsignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
 
+    private static final int TRACE_FREQ = 100000;
+    private static final boolean TRACE = true;
     final int maxDimension = n() - rank();
     private final Bottom bottom;
     final Top top;
@@ -26,6 +28,7 @@ public class DualFaceLattice extends AbsOM<Face> {
     final Map<SignedSet,Face> ss2faces = new HashMap<SignedSet,Face>();
     final List<Face> faces = new ArrayList<Face>();
 
+    final long start = System.currentTimeMillis();
     final List<AbsFace> byDimension[];
     private UnsignedSet notCoLoops;
 
@@ -48,6 +51,7 @@ public class DualFaceLattice extends AbsOM<Face> {
          
          int pos = 0;
          while (pos < faces.size()) {
+             trace(pos,"A");
              Face f = faces.get(pos);
              SignedSet vector = f.vector();
              BitSet candidates = (BitSet)f.conformingCircuits().clone();
@@ -82,9 +86,10 @@ public class DualFaceLattice extends AbsOM<Face> {
          }
          BitSet circuitConformsWithVector[] = new BitSet[circuits.length];
          for (int i=0;i<circuits.length;i++) {
-             circuitConformsWithVector[i] = new BitSet();
+            circuitConformsWithVector[i] = new BitSet();
          }
          for (int i=0;i<faces.size();i++) {
+             trace(i,"B");
              Face a = faces.get(i);
              int c = 0;
              while ( true ) {
@@ -95,6 +100,7 @@ public class DualFaceLattice extends AbsOM<Face> {
              }
          }
          for (int i=0;i<faces.size()-1;i++) {
+             trace(i,"C");
              Face a = faces.get(i);
              BitSet extend = a.extendsCircuits();
              int first = extend.nextSetBit(0);
@@ -119,10 +125,18 @@ public class DualFaceLattice extends AbsOM<Face> {
              }
          }
 
+         int j=0;
          for (Face f:faces) {
+             trace(j,"D");
+            j++;
              f.prune();
          }
          System.err.println(toString());
+    }
+    private void trace(int pos, String pref) {
+        if (TRACE && pos % TRACE_FREQ == 0) {
+             System.err.println(pref+": "+pos + "/"+faces.size()+ (" "+((System.currentTimeMillis()-start)/1000)));
+         }
     }
     private void clearBits(BitSet comparable,  Iterable<AbsFace> higher) {
         for (AbsFace f:higher) {
@@ -160,9 +174,13 @@ public class DualFaceLattice extends AbsOM<Face> {
     }
     public Face initFace(SignedSet vector, Face pVector, BitSet conform) {
         BitSet extend = (BitSet)pVector.extendsCircuits().clone();
-        return vector.support().equals(this.notCoLoops) ?
-                new MaxFace(this,vector,conform,extend)
-                : new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
+        if (vector.support().equals(this.notCoLoops)) {
+            extend.or(conform);
+            System.err.println("Max > "+extend.cardinality()+" circuits");
+            return new MaxFace(this,vector,conform,extend);
+        } else {
+           return new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
+        }
     }
     private void initCircuit(SignedSet circuit) {
         int ix = faces.size();
