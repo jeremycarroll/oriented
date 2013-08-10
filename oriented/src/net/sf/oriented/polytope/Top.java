@@ -33,18 +33,18 @@ public class Top extends AbsFace {
     @Override
     public void verify() throws AxiomViolation {
         super.verify();
-//        for (AbsFace l:this.getLower()) {
-//            if (!(l instanceof MaxFace)) {
-//                if ( l instanceof MinFace  && getDimension() == 1) {
-//                    continue;
-//                }
-//                if ( l instanceof Bottom  && getDimension() == 0) {
-//                    continue;
-//                }
-//                throw new AxiomViolation(l,"This is a maximum vector?");
-//            }
-//                
-//        }
+        for (AbsFace l:this.getLower()) {
+            if (!(l instanceof MaxFace)) {
+                if ( l instanceof MinFace  && getDimension() == 1) {
+                    continue;
+                }
+                if ( l instanceof Bottom  && getDimension() == 0) {
+                    continue;
+                }
+                throw new AxiomViolation(l,"This is a maximum vector?");
+            }
+                
+        }
     }
     
 }

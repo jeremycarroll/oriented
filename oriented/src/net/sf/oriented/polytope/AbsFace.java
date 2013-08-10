@@ -43,7 +43,7 @@ class AbsFace implements Verify{
      * for all x in higher x.minDimension > this.minDimension+1
      *   Maintained by throwing error
      */
-    private final Set<AbsFace> higher = new HashSet<AbsFace>();
+    private final Set<AbsFace> lower = new HashSet<AbsFace>();
 //    private Set<AbsFace> oneHigher =  new HashSet<AbsFace>();
     /**
      * Invariant:
@@ -284,17 +284,17 @@ class AbsFace implements Verify{
         }
         Map<AbsFace,AbsFace> seenOnce = new HashMap<AbsFace,AbsFace>();
         Map<AbsFace,List<AbsFace>> seenTwice = new HashMap<AbsFace,List<AbsFace>>();
-        for (AbsFace oneUp:getHigher()) {
-            for (AbsFace twoUp: oneUp.getHigher()) {
-                if (seenTwice.containsKey(twoUp) //&& twoUp instanceof Face && ((Face)twoUp).vector().plus().size()==2
+        for (AbsFace oneDown:getLower()) {
+            for (AbsFace twoDown: oneDown.getLower()) {
+                if (seenTwice.containsKey(twoDown) //&& twoUp instanceof Face && ((Face)twoUp).vector().plus().size()==2
                         ) {
-                    throw new AxiomViolation(lattice, "Interval from "+this+" to "+twoUp+" has more than four members: "+seenTwice.get(twoUp)+","+oneUp);
+                    throw new AxiomViolation(lattice, "Interval from "+twoDown+" to "+this+" has more than four members: "+seenTwice.get(twoDown)+","+oneDown);
                 }
-                AbsFace link = seenOnce.remove(twoUp);
+                AbsFace link = seenOnce.remove(twoDown);
                 if (link != null) {
-                    seenTwice.put(twoUp,Arrays.asList(link,oneUp));
+                    seenTwice.put(twoDown,Arrays.asList(link,oneDown));
                 } else {
-                    seenOnce.put(twoUp,oneUp);
+                    seenOnce.put(twoDown,oneDown);
                 }
             }
         }
@@ -304,7 +304,7 @@ class AbsFace implements Verify{
         }
     }
 
-    private void addHigher(AbsFace b) {
+    private void addLower(AbsFace b) {
 //        if (b.maxDimension != UNKNOWN) {
 //            setMaxDimension(b.maxDimension-1);
 ////            if (b.dimension != UNKNOWN && dimension != UNKNOWN ) {
@@ -315,7 +315,7 @@ class AbsFace implements Verify{
 ////                return;
 ////            }
 //        }
-        higher.add(b);
+        lower.add(b);
     }
 
 //    private void addLower(AbsFace a) {
@@ -330,8 +330,8 @@ class AbsFace implements Verify{
 ////        lower.add(a);
 //    }
 
-    Iterable<AbsFace> getHigher() {
-        return higher;
+    Iterable<AbsFace> getLower() {
+        return lower;
 //                oneHigher==null?higher:Iterables.concat(higher,oneHigher);
     }
 
@@ -343,8 +343,7 @@ class AbsFace implements Verify{
         if (dimension == UNKNOWN) {
             throw new IllegalStateException("pruning too early: "+this);
         }
-        prune(getHigher(),dimension+1);
-//        prune(lower,dimension-1);
+        prune(getLower(),dimension-1);
     }
     private void prune(Iterable<AbsFace> s, int d) {
         Iterator<AbsFace> it = s.iterator(); 
@@ -357,8 +356,8 @@ class AbsFace implements Verify{
 
     public void dump() {
         System.err.println(toString()+":");
-        for (AbsFace f:getHigher()) {
-            System.err.println("  < ["+f.dimension+"] "+f);
+        for (AbsFace f:getLower()) {
+            System.err.println("  > ["+f.dimension+"] "+f);
         }
 //        for (AbsFace f:getLower()) {
 //            System.err.println("  > ["+f.dimension+"] " +f);
@@ -373,9 +372,9 @@ class AbsFace implements Verify{
 //    static int cnt = 0;
 //    static int cnt2 = 0;
     void thisIsBelowThat(AbsFace b) {
-        if (couldAddHigher(b)) {
-            addHigher(b);
-//            b.addLower(this);
+        if (couldAddLower(b)) {
+//            addHigher(b);
+            b.addLower(this);
 
             b.setMinDimension(minDimension+1);
 //            System.err.println("Y"+cnt2++);
@@ -384,7 +383,7 @@ class AbsFace implements Verify{
         }
     }
 
-    boolean couldAddHigher(AbsFace a) {
+    boolean couldAddLower(AbsFace a) {
         return a.minDimension <= dimension + 1;
 //        return dimension != UNKNOWN && dimension != a.dimension + 1;
 //        maxDimension >= a.minDimension - 1;

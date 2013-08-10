@@ -67,7 +67,7 @@ class Face extends AbsFace  {
     @Override
     public void verify() throws AxiomViolation {
         super.verify();
-        if (!getHigher().iterator().hasNext()) {
+        if (!getLower().iterator().hasNext()) {
             throw new AxiomViolation(this,"Should be in the middle");
         }
 //        if (!getLower().iterator().hasNext()) {
@@ -108,6 +108,7 @@ class Face extends AbsFace  {
              }
              ix++;
          }
+         prune();
     }
 
 

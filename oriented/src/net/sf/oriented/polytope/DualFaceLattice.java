@@ -22,7 +22,7 @@ import net.sf.oriented.omi.UnsignedSet;
 public class DualFaceLattice extends AbsOM<Face> {
 
     private static final int TRACE_FREQ = 10000;
-    private static final boolean TRACE = true;
+    private static final boolean TRACE = false;
     final int maxDimension = n() - rank();
     int size = 2;
     private final Bottom bottom;
@@ -70,11 +70,11 @@ public class DualFaceLattice extends AbsOM<Face> {
          }
 //         checkAllComparables();
 
-         pos=0;
-         for (Face f:allFaces()) {
-             trace(pos++,"D",f);
-             f.prune();
-         }
+//         pos=0;
+//         for (Face f:allFaces()) {
+//             trace(pos++,"D",f);
+//             f.prune();
+//         }
 //         System.err.println(toString());
     }
    

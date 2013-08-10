@@ -32,14 +32,8 @@ public class Bottom extends AbsFace {
     @Override
     public void verify() throws AxiomViolation {
         super.verify();
-        for (AbsFace l:this.getHigher()) {
-            if (!(l instanceof MinFace)) {
-                if ( l instanceof Top  && l.getDimension() == 0) {
-                    continue;
-                }
-                throw new AxiomViolation(l,"This is a minimum vector?");
-            }
-                
+        if (getLower().iterator().hasNext()) {
+            throw new AxiomViolation(this,"This is bootm?");
         }
     }
 }
