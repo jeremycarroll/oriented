@@ -19,7 +19,7 @@ import net.sf.oriented.omi.UnsignedSet;
 
 import com.google.common.collect.Iterables;
 
-public class DualFaceLattice extends AbsOM<Face> {
+public class DualFaceLattice extends AbsOM<PFace> {
 
     private static final int TRACE_FREQ = 10000;
     private static final boolean TRACE = false;
@@ -27,9 +27,9 @@ public class DualFaceLattice extends AbsOM<Face> {
     int size = 2;
     private final Bottom bottom;
     final Top top;
-    final Face circuits[];
-    final Map<SignedSet,Face> ss2faces = new HashMap<SignedSet,Face>();
-    final List<Face> faces[]; 
+    final PFace circuits[];
+    final Map<SignedSet,PFace> ss2faces = new HashMap<SignedSet,PFace>();
+    final List<PFace> faces[]; 
 
     final long start = System.currentTimeMillis();
     final List<AbsFace> byDimension[];
@@ -50,12 +50,12 @@ public class DualFaceLattice extends AbsOM<Face> {
         for (SignedSet s:cc) {
             notCoLoops = notCoLoops.union(s.support());
         }
-        circuits = new Face[om.getCircuits().size()];
+        circuits = new PFace[om.getCircuits().size()];
         @SuppressWarnings("unchecked")
-        List<Face>[] suppressWarning2 = new List[notCoLoops.size()+1];
+        List<PFace>[] suppressWarning2 = new List[notCoLoops.size()+1];
         faces = suppressWarning2;
         for (int j=0;j<faces.length;j++) {
-            faces[j] = new ArrayList<Face>();
+            faces[j] = new ArrayList<PFace>();
         }
         int i = 0;
          for (SignedSet s:cc) {
@@ -64,43 +64,43 @@ public class DualFaceLattice extends AbsOM<Face> {
          }
          
          int pos = 0;
-         for (Face f:allFaces()) {
+         for (PFace f:allFaces()) {
              trace(pos++,"A",f);
              f.expand();
          }
     }
    
-    private Iterable<Face> allFaces() {
+    private Iterable<PFace> allFaces() {
         return Iterables.concat(faces);
     }
 
     @SuppressWarnings("unused")
-    private void trace(int pos, String pref, Face f) {
+    private void trace(int pos, String pref, PFace f) {
         if (TRACE && pos % TRACE_FREQ == 0) {
              System.err.println(pref+": "+pos + "/"+size+" [" + f.toString() + "] ( "+((System.currentTimeMillis()-start)/1000)+" )");
          }
     }
     
-    void initVector(SignedSet vector, Face pVector, int pCircuit) {
-        Face circuit = circuits[pCircuit];
+    void initVector(SignedSet vector, PFace pVector, int pCircuit) {
+        PFace circuit = circuits[pCircuit];
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
-        Face rslt = initFace(vector, pVector, conform);
+        PFace rslt = initFace(vector, pVector, conform);
         rslt.extendsCircuits().set(pCircuit);
         pVector.thisIsBelowThat(rslt);
         circuit.thisIsBelowThat(rslt);
     }
-    public Face initFace(SignedSet vector, Face pVector, BitSet conform) {
+    public PFace initFace(SignedSet vector, PFace pVector, BitSet conform) {
         BitSet extend = (BitSet)pVector.extendsCircuits().clone();
         if (vector.support().equals(this.notCoLoops)) {
             extend.or(conform);
             return new MaxFace(this,vector,conform,extend);
         } else {
-           return new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
+           return new PFace(this,vector,pVector.getMinDimension()+1,conform,extend);
         }
     }
-    private Face initCircuit(SignedSet circuit, SignedSet cc[], int ix) {
-         Face rslt = new MinFace(this,circuit);
+    private PFace initCircuit(SignedSet circuit, SignedSet cc[], int ix) {
+         PFace rslt = new MinFace(this,circuit);
          bottom.thisIsBelowThat(rslt);
         rslt.extendsCircuits().set(ix);
         BitSet conform = rslt.conformingCircuits();
@@ -121,7 +121,7 @@ public class DualFaceLattice extends AbsOM<Face> {
     public void verify() throws AxiomViolation {
         bottom.verify();
         top.verify();
-        for (Face f:allFaces()) {
+        for (PFace f:allFaces()) {
             f.verify();
         }
     }
@@ -132,7 +132,7 @@ public class DualFaceLattice extends AbsOM<Face> {
     }
 
     @Override
-    public Iterator<? extends Face> iterator2() {
+    public Iterator<? extends PFace> iterator2() {
         return null;
     }
     public void dump() {

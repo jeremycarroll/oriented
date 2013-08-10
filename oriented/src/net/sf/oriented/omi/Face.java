@@ -1,22 +1,23 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.polytope;
+package net.sf.oriented.omi;
 
-import java.util.BitSet;
+import java.util.Collection;
 
-import net.sf.oriented.omi.SignedSet;
-
-final class MinFace extends PFace {
-
-    public MinFace(DualFaceLattice lattice, SignedSet circuit) {
-        super(lattice, circuit, 0, new BitSet(),new BitSet());
-        setDimension(0);
-        if (lattice.maxDimension==1) {
-            this.thisIsBelowThat(lattice.top);
-        }
+public interface Face {
+    enum Type {
+        Bottom,
+        Cocircuit,
+        Face,
+        Tope,
+        Top;
     }
-
+    Type type();
+    SignedSet covector();
+    int dimension();
+    Collection<Face> higher();
+    Collection<Face> lower();
 }
 
 

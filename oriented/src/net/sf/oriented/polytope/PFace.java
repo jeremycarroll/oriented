@@ -9,7 +9,13 @@ import java.util.List;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.SignedSet;
 
-class Face extends AbsFace  {
+/**
+ * Note the P in PFace means nothing, simply to differentiate the
+ * word from {@link net.sf.oriented.omi.Face}
+ * @author jeremycarroll
+ *
+ */
+class PFace extends AbsFace  {
 
     private final SignedSet vector;
     private final BitSet conform;
@@ -17,14 +23,14 @@ class Face extends AbsFace  {
     final int id1;
     final int id2;
     
-    public Face(DualFaceLattice lattice, SignedSet vector,int minDimension, 
+    public PFace(DualFaceLattice lattice, SignedSet vector,int minDimension, 
             BitSet conform, BitSet extend) {
         super(lattice,minDimension,UNKNOWN);
         this.vector = vector;
         this.conform = conform;
         this.extend = extend;
         this.id1 = vector.support().size();
-        List<Face> level = lattice.faces[id1];
+        List<PFace> level = lattice.faces[id1];
         this.id2 = level.size();
         level.add(this);
         lattice.size++;
@@ -39,10 +45,10 @@ class Face extends AbsFace  {
     
     @Override
     public boolean equals(Object o) {
-        if (! (o instanceof Face)) {
+        if (! (o instanceof PFace)) {
             return false;
         }
-        Face f = (Face)o;
+        PFace f = (PFace)o;
         return lattice == f.lattice && vector.equals(f.vector());
     }
 
@@ -90,11 +96,11 @@ class Face extends AbsFace  {
          prune();
     }
     private void extendBy(int ix,SignedSet vector, BitSet extend) {
-        Face circuit = lattice.circuits[ix];
+        PFace circuit = lattice.circuits[ix];
         SignedSet circ = circuit.vector;
 
         SignedSet next = circ.compose(vector);
-        Face n = lattice.ss2faces.get(next);
+        PFace n = lattice.ss2faces.get(next);
         if (n == null) {
             lattice.initVector(next,this,ix);
         } else {
