@@ -12,8 +12,8 @@ public class MaxFace extends Face {
     public MaxFace(DualFaceLattice lattice, SignedSet vector, BitSet conform,
             BitSet extend) {
         super(lattice, vector, lattice.maxDimension - 1, conform, extend);
-        setMaxDimension(lattice.maxDimension - 1);
-        setIsLower(lattice.top);
+        setDimension(lattice.maxDimension - 1);
+        thisIsBelowThat(lattice.top);
     }
 
 }

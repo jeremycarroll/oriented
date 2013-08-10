@@ -11,9 +11,9 @@ public class MinFace extends Face {
 
     public MinFace(DualFaceLattice lattice, SignedSet circuit) {
         super(lattice, circuit, 0, new BitSet(),new BitSet());
-        setMaxDimension(0);
+        setDimension(0);
         if (lattice.maxDimension==1) {
-            this.setIsLower(lattice.top);
+            this.thisIsBelowThat(lattice.top);
         }
     }
 

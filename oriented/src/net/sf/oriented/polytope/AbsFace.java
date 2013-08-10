@@ -5,9 +5,13 @@ package net.sf.oriented.polytope;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.common.collect.Iterables;
@@ -30,7 +34,7 @@ class AbsFace implements Verify{
     /**
      * An upper bound on dimension if any
      */
-    private int maxDimension;
+//    private int maxDimension;
     /**
      * Invariant:
      * for all x in higher x.minDimension <= this.maxDimension+1
@@ -40,58 +44,61 @@ class AbsFace implements Verify{
      *   Maintained by throwing error
      */
     private final Set<AbsFace> higher = new HashSet<AbsFace>();
-    private Set<AbsFace> oneHigher =  new HashSet<AbsFace>();
+//    private Set<AbsFace> oneHigher =  new HashSet<AbsFace>();
     /**
      * Invariant:
      * for all x in lower x.maxDimension >= this.minDimension-1
      * for all x in lower x.maxDimension < this.maxDimension-1
      *   Maintained by throwing error
      */
-    private final Set<AbsFace> lower = new HashSet<AbsFace>();
-    private Set<AbsFace> oneLower =  new HashSet<AbsFace>();
+//    private final Set<AbsFace> lower = new HashSet<AbsFace>();
+//    private Set<AbsFace> oneLower =  new HashSet<AbsFace>();
 //    private final List<Face> aLittleHigher = new ArrayList<Face>();
 //    private Set<AbsFace> lowerLeft;
     
     AbsFace(DualFaceLattice l, int min, int max) {
         lattice = l;
         dimension = UNKNOWN;
-        maxDimension = l.maxDimension+1;
+//        maxDimension = l.maxDimension+1;
         minDimension = min;
         if (min == UNKNOWN) {
             throw new IllegalArgumentException("We always know the minimum dimension");
         }
-        setMaxDimension(max==UNKNOWN?l.maxDimension:max);
+        if ( min == max) {
+            setDimension(min);
+        }
+//        setMaxDimension(max==UNKNOWN?l.maxDimension:max);
     }
 
-    void setMaxDimension(int max) {
-        if (max != UNKNOWN && (maxDimension == UNKNOWN || max < maxDimension)) {
-            maxDimension = max;
-            if (max < minDimension ) {
-                throw new IllegalStateException("max < min: logic error");
-            }
-            if (max == minDimension) {
-                setDimension(max);
-            } else {
-                for (AbsFace low:getLower()) {
-                    low.setMaxDimension(max-1);
-                }
-            }
-        }
-    }
+//    void setMaxDimension(int max) {
+//        if (max != UNKNOWN && (maxDimension == UNKNOWN || max < maxDimension)) {
+//            maxDimension = max;
+//            if (max < minDimension ) {
+//                throw new IllegalStateException("max < min: logic error");
+//            }
+//            if (max == minDimension) {
+//                setDimension(max);
+//            } else {
+////                for (AbsFace low:getLower()) {
+////                    low.setMaxDimension(max-1);
+////                }
+//            }
+//        }
+//    }
 
     void setMinDimension(int min) {
         if ( min > minDimension) {
             minDimension = min;
-            if (maxDimension != UNKNOWN && min > maxDimension ) {
-                throw new IllegalStateException("max < min: logic error");
-            }
-            if (min == maxDimension) {
-                setDimension(min);
-            } else {
-                for (AbsFace high:getHigher()) {
-                    high.setMinDimension(min+1);
-                }
-            }
+//            if (min > maxDimension ) {
+//                throw new IllegalStateException("max < min: logic error");
+//            }
+//            if (min == maxDimension) {
+//                setDimension(min);
+//            } else {
+////                for (AbsFace high:getHigher()) {
+////                    high.setMinDimension(min+1);
+////                }
+//            }
         }
     }
 
@@ -99,7 +106,7 @@ class AbsFace implements Verify{
         return dimension;
     }
     
-    private void setDimension(int d) {
+    protected void setDimension(int d) {
         if (dimension != UNKNOWN) {
             if (d != dimension) {
                 throw new IllegalArgumentException("Dimension mismatch: "+d+" != "+dimension);
@@ -108,18 +115,18 @@ class AbsFace implements Verify{
         }
         lattice.byDimension[d+1].add(this);
         dimension = d;
-        splitLower(lower,d-1);
-        splitHigher(higher,d+1);
+//        splitLower(lower,d-1);
+//        splitHigher(higher,d+1);
     }
 
 
-    private void splitLower(Set<AbsFace> low, int i) {
-        new MinSplitter(this,i,oneLower).split(low);
-    }
+//    private void splitLower(Set<AbsFace> low, int i) {
+//        new MinSplitter(this,i,oneLower).split(low);
+//    }
 
-    private void splitHigher(Set<AbsFace> general, int expected) {
-        new MaxSplitter(this,expected,oneHigher).split(general);
-    }
+//    private void splitHigher(Set<AbsFace> general, int expected) {
+//        new MaxSplitter(this,expected,oneHigher).split(general);
+//    }
     /**
      * This is articulated in terms of 
      * 
@@ -127,209 +134,217 @@ class AbsFace implements Verify{
      * @author jeremycarroll
      *
      */
-    private static abstract class SetSplitter {
-        enum Comparison {
-            RetainAndNeedsSetting,
-            IsExact,
-            IsExactAndNeedsSetting,
-            Discard,
-            Retain;
-        };
-        abstract int getHigher(AbsFace f);
-        abstract int getLower(AbsFace f);
-        abstract void removeMatching(AbsFace f);
-        abstract void setHigher(AbsFace f);
-        abstract void moveMatching(AbsFace f);
-        final AbsFace outer;
-        final int expected;
-        final Set<AbsFace> exact;
-        SetSplitter(AbsFace parent, int expected, Set<AbsFace> exact) {
-            outer = parent;
-            this.expected = expected;
-            this.exact = exact;
-        }
-        Comparison compare(AbsFace f) {
-            int higher = getHigher(f);
-            if ( higher < expected ) {
-                return Comparison.Discard;
-            }
-            boolean isExact = getLower(f) == expected;
-            if (isExact) {
-                return higher==expected ? Comparison.IsExact : Comparison.IsExactAndNeedsSetting;
-            } else {
-                return higher==expected ? Comparison.Retain : Comparison.RetainAndNeedsSetting;
-            }
-        }
-        void split(Set<AbsFace> general) {
-            Iterator<AbsFace> it = general.iterator();
-            List<AbsFace> toSetMax = new ArrayList<AbsFace>();
-            List<AbsFace> toMove = new ArrayList<AbsFace>();
-            while (it.hasNext()) {
-                AbsFace f = it.next();
-                switch ( compare(f)) {
-                case Discard:
-                    removeMatching(f);
-                    break;
-                case IsExactAndNeedsSetting:
-                    toSetMax.add(f);
-                case IsExact:
-                    exact.add(f);
-                    toMove.add(f);
-                    break;
-                case RetainAndNeedsSetting:
-                    toSetMax.add(f);
-                case Retain:
-                    continue;
-                }
-                it.remove();
-            }
-            for (AbsFace f:toSetMax) {
-                setHigher(f);
-            }
-            for (AbsFace f:toMove) {
-                moveMatching(f);
-            }
-        }
-    }
-    private static final class MinSplitter extends SetSplitter {
+//    private static abstract class SetSplitter {
+//        enum Comparison {
+//            RetainAndNeedsSetting,
+//            IsExact,
+//            IsExactAndNeedsSetting,
+//            Discard,
+//            Retain;
+//        };
+//        abstract int getHigher(AbsFace f);
+//        abstract int getLower(AbsFace f);
+//        abstract void removeMatching(AbsFace f);
+//        abstract void setHigher(AbsFace f);
+//        abstract void moveMatching(AbsFace f);
+//        final AbsFace outer;
+//        final int expected;
+//        final Set<AbsFace> exact;
+//        SetSplitter(AbsFace parent, int expected, Set<AbsFace> exact) {
+//            outer = parent;
+//            this.expected = expected;
+//            this.exact = exact;
+//        }
+//        Comparison compare(AbsFace f) {
+//            int higher = getHigher(f);
+//            if ( higher < expected ) {
+//                return Comparison.Discard;
+//            }
+//            boolean isExact = getLower(f) == expected;
+//            if (isExact) {
+//                return higher==expected ? Comparison.IsExact : Comparison.IsExactAndNeedsSetting;
+//            } else {
+//                return higher==expected ? Comparison.Retain : Comparison.RetainAndNeedsSetting;
+//            }
+//        }
+//        void split(Set<AbsFace> general) {
+//            Iterator<AbsFace> it = general.iterator();
+//            List<AbsFace> toSetMax = new ArrayList<AbsFace>();
+//            List<AbsFace> toMove = new ArrayList<AbsFace>();
+//            while (it.hasNext()) {
+//                AbsFace f = it.next();
+//                switch ( compare(f)) {
+//                case Discard:
+//                    removeMatching(f);
+//                    break;
+//                case IsExactAndNeedsSetting:
+//                    toSetMax.add(f);
+//                case IsExact:
+//                    exact.add(f);
+//                    toMove.add(f);
+//                    break;
+//                case RetainAndNeedsSetting:
+//                    toSetMax.add(f);
+//                case Retain:
+//                    continue;
+//                }
+//                it.remove();
+//            }
+//            for (AbsFace f:toSetMax) {
+//                setHigher(f);
+//            }
+//            for (AbsFace f:toMove) {
+//                moveMatching(f);
+//            }
+//        }
+//    }
+//    private static final class MinSplitter extends SetSplitter {
+//
+//        MinSplitter(AbsFace parent,int expected, Set<AbsFace> exact) {
+//            super(parent, expected, exact);
+//        }
+//        @Override
+//        int getHigher(AbsFace f) {
+//            return 0;
+////            return f.maxDimension;
+//        }
+//        @Override
+//        int getLower(AbsFace f) {
+//            return f.minDimension;
+//        }
+//        @Override
+//        void removeMatching(AbsFace f) {
+//            f.removeHigher(outer);
+//        }
+//        @Override
+//        void setHigher(AbsFace f) {
+////            f.setMaxDimension(expected);
+//        }
+//        @Override
+//        void moveMatching(AbsFace f) {
+////            f.moveHigherToExact(outer);
+//        }
+//    }
+//    private void removeHigher(AbsFace f) {
+//        if (!higher.remove(f) ) {
+//            // unnecessary ?
+////            oneHigher.remove(f);
+//        }
+//    }
+//    public void moveHigherToExact(AbsFace outer) {
+//        if (higher.remove(outer)) {
+//            oneHigher.add(outer);
+//        }
+//    }
+//    private final class MaxSplitter extends SetSplitter {
+//        MaxSplitter(AbsFace parent, int expected, Set<AbsFace> exact) {
+//            super(parent, -expected, exact);
+//        }
+//        @Override
+//        int getHigher(AbsFace f) {
+//            return -f.minDimension;
+//        }
+//        @Override
+//        int getLower(AbsFace f) {
+//            return 0;
+////            return -f.maxDimension;
+//        }
+//        @Override
+//        void removeMatching(AbsFace f) {
+////            f.removeLower(outer);
+//        }
+//        @Override
+//        void setHigher(AbsFace f) {
+//            f.setMinDimension(-expected);
+//        }
+//        @Override
+//        void moveMatching(AbsFace f) {
+////            f.moveLowerToExact(outer);
+//        }
+//        
+//    }
+//
 
-        MinSplitter(AbsFace parent,int expected, Set<AbsFace> exact) {
-            super(parent, expected, exact);
-        }
-        @Override
-        int getHigher(AbsFace f) {
-            return f.maxDimension;
-        }
-        @Override
-        int getLower(AbsFace f) {
-            return f.minDimension;
-        }
-        @Override
-        void removeMatching(AbsFace f) {
-            f.removeHigher(outer);
-        }
-        @Override
-        void setHigher(AbsFace f) {
-            f.setMaxDimension(expected);
-        }
-        @Override
-        void moveMatching(AbsFace f) {
-            f.moveHigherToExact(outer);
-        }
-    }
-    private void removeHigher(AbsFace f) {
-        if (!higher.remove(f) ) {
-            // unnecessary ?
-//            oneHigher.remove(f);
-        }
-    }
-    public void moveHigherToExact(AbsFace outer) {
-        if (higher.remove(outer)) {
-            oneHigher.add(outer);
-        }
-    }
-    private final class MaxSplitter extends SetSplitter {
-        MaxSplitter(AbsFace parent, int expected, Set<AbsFace> exact) {
-            super(parent, -expected, exact);
-        }
-        @Override
-        int getHigher(AbsFace f) {
-            return -f.minDimension;
-        }
-        @Override
-        int getLower(AbsFace f) {
-            return -f.maxDimension;
-        }
-        @Override
-        void removeMatching(AbsFace f) {
-            f.removeLower(outer);
-        }
-        @Override
-        void setHigher(AbsFace f) {
-            f.setMinDimension(-expected);
-        }
-        @Override
-        void moveMatching(AbsFace f) {
-            f.moveLowerToExact(outer);
-        }
-        
-    }
-
-
-    private void removeLower(AbsFace f) {
-        if (!lower.remove(f) ) {
-            // unnecessary?
-//            oneLower.remove(f);
-        }
-    }
-    public void moveLowerToExact(AbsFace outer) {
-        if (lower.remove(outer)) {
-            oneLower.add(outer);
-        }
-    }
+//    private void removeLower(AbsFace f) {
+//        if (!lower.remove(f) ) {
+//            // unnecessary?
+////            oneLower.remove(f);
+//        }
+//    }
+//    public void moveLowerToExact(AbsFace outer) {
+//        if (lower.remove(outer)) {
+//            oneLower.add(outer);
+//        }
+//    }
     
     @Override
     public void verify() throws AxiomViolation {
         if (dimension == UNKNOWN) {
             throw new AxiomViolation(lattice, "dimension was not defined in "+this);
         }
-        Set<AbsFace> seenOnce = new HashSet<AbsFace>();
-        Set<AbsFace> seenTwice = new HashSet<AbsFace>();
+        Map<AbsFace,AbsFace> seenOnce = new HashMap<AbsFace,AbsFace>();
+        Map<AbsFace,List<AbsFace>> seenTwice = new HashMap<AbsFace,List<AbsFace>>();
         for (AbsFace oneUp:getHigher()) {
             for (AbsFace twoUp: oneUp.getHigher()) {
-                if (seenTwice.contains(twoUp)) {
-                    throw new AxiomViolation(lattice, "Interval from "+this+" to "+twoUp+" has more than four members.");
+                if (seenTwice.containsKey(twoUp) //&& twoUp instanceof Face && ((Face)twoUp).vector().plus().size()==2
+                        ) {
+                    throw new AxiomViolation(lattice, "Interval from "+this+" to "+twoUp+" has more than four members: "+seenTwice.get(twoUp)+","+oneUp);
                 }
-                if (seenOnce.remove(twoUp)) {
-                    seenTwice.add(twoUp);
+                AbsFace link = seenOnce.remove(twoUp);
+                if (link != null) {
+                    seenTwice.put(twoUp,Arrays.asList(link,oneUp));
                 } else {
-                    seenOnce.add(twoUp);
+                    seenOnce.put(twoUp,oneUp);
                 }
             }
         }
         if (!seenOnce.isEmpty()) {
-            throw new AxiomViolation(lattice, "Interval from "+this+" to "+seenOnce.iterator().next()+" has only three members.");
+            Entry<AbsFace, AbsFace> entry = seenOnce.entrySet().iterator().next();
+            throw new AxiomViolation(lattice, "Interval from "+this+" to "+entry.getKey() +" has only three members ("+entry.getValue() +")");
         }
     }
 
     private void addHigher(AbsFace b) {
-        if (b.maxDimension != UNKNOWN) {
-            setMaxDimension(b.maxDimension-1);
-            if (b.dimension != UNKNOWN && dimension != UNKNOWN ) {
-                if ( dimension == b.dimension - 1) {
-                    oneHigher.add(b);
-                }
-                return;
-            }
-        }
+//        if (b.maxDimension != UNKNOWN) {
+//            setMaxDimension(b.maxDimension-1);
+////            if (b.dimension != UNKNOWN && dimension != UNKNOWN ) {
+////                if ( dimension == b.dimension - 1) {
+////                    higher.remove(b);
+////                    oneHigher.add(b);
+////                }
+////                return;
+////            }
+//        }
         higher.add(b);
     }
 
-    private void addLower(AbsFace a) {
-        setMinDimension(a.minDimension+1);
-        if (a.dimension != UNKNOWN && dimension != UNKNOWN ) {
-            if ( dimension == a.dimension + 1) {
-                oneLower.add(a);
-            }
-            return;
-        }
-        lower.add(a);
-    }
+//    private void addLower(AbsFace a) {
+//        setMinDimension(a.minDimension+1);
+////        if (a.dimension != UNKNOWN && dimension != UNKNOWN ) {
+////            if ( dimension == a.dimension + 1) {
+////                lower.remove(a);
+////                oneLower.add(a);
+////            }
+////            return;
+////        }
+////        lower.add(a);
+//    }
 
     Iterable<AbsFace> getHigher() {
-        return oneHigher==null?higher:Iterables.concat(higher,oneHigher);
+        return higher;
+//                oneHigher==null?higher:Iterables.concat(higher,oneHigher);
     }
 
-    Iterable<AbsFace> getLower() {
-        return oneLower==null?lower:Iterables.concat(lower,oneLower);
-    }
+//    Iterable<AbsFace> getLower() {
+//        return oneLower==null?lower:Iterables.concat(lower,oneLower);
+//    }
     
     void prune() {
         if (dimension == UNKNOWN) {
             throw new IllegalStateException("pruning too early: "+this);
         }
-        prune(higher,dimension+1);
-        prune(lower,dimension-1);
+        prune(getHigher(),dimension+1);
+//        prune(lower,dimension-1);
     }
     private void prune(Iterable<AbsFace> s, int d) {
         Iterator<AbsFace> it = s.iterator(); 
@@ -345,9 +360,9 @@ class AbsFace implements Verify{
         for (AbsFace f:getHigher()) {
             System.err.println("  < ["+f.dimension+"] "+f);
         }
-        for (AbsFace f:getLower()) {
-            System.err.println("  > ["+f.dimension+"] " +f);
-        }
+//        for (AbsFace f:getLower()) {
+//            System.err.println("  > ["+f.dimension+"] " +f);
+//        }
         
     }
 
@@ -355,16 +370,25 @@ class AbsFace implements Verify{
         return minDimension;
     }
 
-    void setIsLower(AbsFace b) {
-        // not worth it for rank3
-        if (couldSetLower(b)) {
+//    static int cnt = 0;
+//    static int cnt2 = 0;
+    void thisIsBelowThat(AbsFace b) {
+        if (couldAddHigher(b)) {
             addHigher(b);
-            b.addLower(this);
+//            b.addLower(this);
+
+            b.setMinDimension(minDimension+1);
+//            System.err.println("Y"+cnt2++);
+        } else {
+//            System.err.println("X"+cnt++);
         }
     }
 
-    boolean couldSetLower(AbsFace a) {
-        return this.maxDimension == UNKNOWN || maxDimension >= a.minDimension - 1;
+    boolean couldAddHigher(AbsFace a) {
+        return a.minDimension <= dimension + 1;
+//        return dimension != UNKNOWN && dimension != a.dimension + 1;
+//        maxDimension >= a.minDimension - 1;
+//                && (!lower.contains(a)) && (!oneLower.contains(a));
     }
 }
 

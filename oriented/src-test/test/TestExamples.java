@@ -126,7 +126,6 @@ public class TestExamples {
 //        fl.dump();
         fl.verify();
     }
-    @Ignore
     @Test
     public void testCevaDualFL() throws AxiomViolation {
         DualFaceLattice fl = new DualFaceLattice(Examples.ceva());
@@ -149,7 +148,7 @@ public class TestExamples {
 //        new DualFaceLattice(suvorov14);
     }
 
-    @Ignore // This one is very hard - out of memory on 2G, and 13 minutes at the moment
+//    @Ignore // This one is very hard - out of memory on 2G, and 13 minutes at the moment
     @Test
     public void testTsukamoto13_1() throws AxiomViolation {
         OM tsukamoto = Examples.tsukamoto13(1);

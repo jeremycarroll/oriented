@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
@@ -19,14 +21,15 @@ import net.sf.oriented.omi.UnsignedSet;
 
 public class DualFaceLattice extends AbsOM<Face> {
 
-    private static final int TRACE_FREQ = 100000;
+    private static final int TRACE_FREQ = 10000;
     private static final boolean TRACE = true;
     final int maxDimension = n() - rank();
+    int size = 2;
     private final Bottom bottom;
     final Top top;
-    private final SignedSet circuits[];
+    final Face circuits[];
     final Map<SignedSet,Face> ss2faces = new HashMap<SignedSet,Face>();
-    final List<Face> faces = new ArrayList<Face>();
+    final List<Face> faces[]; 
 
     final long start = System.currentTimeMillis();
     final List<AbsFace> byDimension[];
@@ -43,168 +46,90 @@ public class DualFaceLattice extends AbsOM<Face> {
         bottom = new Bottom(this);
         top = new Top(this);
         notCoLoops = ffactory().unsignedSets().empty();
-         circuits = om.getCircuits().toArray();
-         for (SignedSet s:circuits) {
-             notCoLoops = notCoLoops.union(s.support());
-             initCircuit(s);
+        SignedSet cc[] = om.getCircuits().toArray();
+        for (SignedSet s:cc) {
+            notCoLoops = notCoLoops.union(s.support());
+        }
+        circuits = new Face[om.getCircuits().size()];
+        @SuppressWarnings("unchecked")
+        List<Face>[] suppressWarning2 = new List[notCoLoops.size()+1];
+        faces = suppressWarning2;
+        for (int j=0;j<faces.length;j++) {
+            faces[j] = new ArrayList<Face>();
+        }
+        int i = 0;
+         for (SignedSet s:cc) {
+             circuits[i]=initCircuit(s,cc,i);
+             i++;
          }
          
          int pos = 0;
-         while (pos < faces.size()) {
-             trace(pos,"A");
-             Face f = faces.get(pos);
-             SignedSet vector = f.vector();
-             BitSet candidates = (BitSet)f.conformingCircuits().clone();
-             BitSet extend = f.extendsCircuits();
-             candidates.andNot(extend);
-             int ix = 0;
-             while (true) {
-                 ix = candidates.nextSetBit(ix);
-                 if (ix == -1) {
-                     break;
-                 }
-                 SignedSet circuit = circuits[ix];
-                 if (circuit.isRestrictionOf(vector)) {
-                     extend.set(ix);
-                     faces.get(ix).setIsLower(f);
-                 } else {
-                     SignedSet next = circuit.compose(vector);
-                     Face n = ss2faces.get(next);
-                     if (n == null) {
-                         initVector(next,f,ix);
-                     } else {
-                         BitSet exten = n.extendsCircuits();
-                         exten.set(ix);
-                         exten.or(extend);
-                         faces.get(ix).setIsLower(n);
-// need to somehow block some other work
-                     }
-                 }
-                 ix++;
-             }
-             pos++;
+         for (Face f:allFaces()) {
+             trace(pos++,"A",f);
+             f.expand();
          }
-         BitSet circuitConformsWithVector[] = new BitSet[circuits.length];
-         for (int i=0;i<circuits.length;i++) {
-            circuitConformsWithVector[i] = new BitSet();
-         }
-         for (int i=0;i<faces.size();i++) {
-             trace(i,"B");
-             Face a = faces.get(i);
-             int c = 0;
-             while ( true ) {
-                 c = a.conformingCircuits().nextSetBit(c);
-                 if (c == -1) break;
-                 circuitConformsWithVector[c].set(i);
-                 c++;
-             }
-         }
-         for (int i=0;i<faces.size()-1;i++) {
-             trace(i,"C");
-             Face a = faces.get(i);
-             BitSet extend = a.extendsCircuits();
-             int first = extend.nextSetBit(0);
-             BitSet comparable = (BitSet)circuitConformsWithVector[first].clone();
-             int and = first+1;
-             while ( true ) {
-                 and = extend.nextSetBit(and);
-                 if (and == -1) break;
-                 comparable.and( circuitConformsWithVector[and]);
-                 and++;
-             }
-             comparable.clear(i);
-             clearBits(comparable,a.getLower());
-             clearBits(comparable,a.getHigher());
-             int j=i+1;
-             while ( true ) {
-                 j = comparable.nextSetBit(j);
-                 if ( j == -1) break;
-                 Face b = faces.get(j);
-                 computeComparison(a,b);
-                 j++;
-             }
-         }
+//         checkAllComparables();
 
-         int j=0;
-         for (Face f:faces) {
-             trace(j,"D");
-            j++;
+         pos=0;
+         for (Face f:allFaces()) {
+             trace(pos++,"D",f);
              f.prune();
          }
-         System.err.println(toString());
+//         System.err.println(toString());
     }
-    private void trace(int pos, String pref) {
+   
+    private Iterable<Face> allFaces() {
+        return Iterables.concat(faces);
+    }
+
+    private void trace(int pos, String pref, Face f) {
         if (TRACE && pos % TRACE_FREQ == 0) {
-             System.err.println(pref+": "+pos + "/"+faces.size()+ (" "+((System.currentTimeMillis()-start)/1000)));
+             System.err.println(pref+": "+pos + "/"+size+" [" + f.toString() + "] ( "+((System.currentTimeMillis()-start)/1000)+" )");
          }
     }
-    private void clearBits(BitSet comparable,  Iterable<AbsFace> higher) {
-        for (AbsFace f:higher) {
-            if (f instanceof Face) {
-                comparable.clear(((Face)f).id);
-            }
-        }
-    }
     
-    private void computeComparison(Face a, Face b) {
-        boolean aMaybeJustUnderB = a.couldSetLower(b);
-        boolean bMaybeJustUnderA = b.couldSetLower(a);
-        if (!(aMaybeJustUnderB||bMaybeJustUnderA)) {
-            return;
-        }
-        SignedSet av = a.vector();
-        SignedSet bv = b.vector();
-        if (av.conformsWith(bv)) {
-            if (aMaybeJustUnderB && av.isRestrictionOf(bv)) {
-                a.setIsLower(b);
-            } else if (bMaybeJustUnderA && bv.isRestrictionOf(av)) {
-                b.setIsLower(a);
-            } 
-        }
-        
-    }
-    private void initVector(SignedSet vector, Face pVector, int pCircuit) {
-        Face circuit = faces.get(pCircuit);
+    void initVector(SignedSet vector, Face pVector, int pCircuit) {
+        Face circuit = circuits[pCircuit];
         BitSet conform = (BitSet)pVector.conformingCircuits().clone();
         conform.and(circuit.conformingCircuits());
         Face rslt = initFace(vector, pVector, conform);
         rslt.extendsCircuits().set(pCircuit);
-        pVector.setIsLower(rslt);
-        circuit.setIsLower(rslt);
+        pVector.thisIsBelowThat(rslt);
+        circuit.thisIsBelowThat(rslt);
     }
     public Face initFace(SignedSet vector, Face pVector, BitSet conform) {
         BitSet extend = (BitSet)pVector.extendsCircuits().clone();
         if (vector.support().equals(this.notCoLoops)) {
             extend.or(conform);
-            System.err.println("Max > "+extend.cardinality()+" circuits");
+//            System.err.println("Max > "+extend.cardinality()+" circuits");
             return new MaxFace(this,vector,conform,extend);
         } else {
            return new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
         }
     }
-    private void initCircuit(SignedSet circuit) {
-        int ix = faces.size();
+    private Face initCircuit(SignedSet circuit, SignedSet cc[], int ix) {
          Face rslt = new MinFace(this,circuit);
-         bottom.setIsLower(rslt);
+         bottom.thisIsBelowThat(rslt);
         rslt.extendsCircuits().set(ix);
         BitSet conform = rslt.conformingCircuits();
         conform.set(ix);
         for (int i=0;i<ix;i++) {
-            if (faces.get(i).conformingCircuits().get(ix)) {
+            if (circuits[i].conformingCircuits().get(ix)) {
                 conform.set(i);
             }
         }
-        for (int i=ix+1;i<circuits.length;i++) {
-            if (circuit.conformsWith(circuits[i])) {
+        for (int i=ix+1;i<cc.length;i++) {
+            if (circuit.conformsWith(cc[i])) {
                 conform.set(i);
             }
         }
+        return rslt;
     }
     @Override
     public void verify() throws AxiomViolation {
         bottom.verify();
         top.verify();
-        for (Face f:faces) {
+        for (Face f:allFaces()) {
             f.verify();
         }
     }
