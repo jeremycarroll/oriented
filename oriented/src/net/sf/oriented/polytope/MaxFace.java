@@ -7,7 +7,7 @@ import java.util.BitSet;
 
 import net.sf.oriented.omi.SignedSet;
 
-public class MaxFace extends Face {
+final class MaxFace extends Face {
 
     public MaxFace(DualFaceLattice lattice, SignedSet vector, BitSet conform,
             BitSet extend) {

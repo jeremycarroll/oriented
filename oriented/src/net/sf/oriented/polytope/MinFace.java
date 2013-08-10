@@ -7,7 +7,7 @@ import java.util.BitSet;
 
 import net.sf.oriented.omi.SignedSet;
 
-public class MinFace extends Face {
+final class MinFace extends Face {
 
     public MinFace(DualFaceLattice lattice, SignedSet circuit) {
         super(lattice, circuit, 0, new BitSet(),new BitSet());

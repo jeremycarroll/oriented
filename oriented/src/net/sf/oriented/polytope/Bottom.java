@@ -6,7 +6,7 @@ package net.sf.oriented.polytope;
 import net.sf.oriented.omi.AxiomViolation;
 
 
-public class Bottom extends AbsFace {
+final class Bottom extends AbsFace {
 
     public Bottom(DualFaceLattice lattice) {
         super(lattice, -1, -1);

@@ -70,9 +70,6 @@ class Face extends AbsFace  {
         if (!getLower().iterator().hasNext()) {
             throw new AxiomViolation(this,"Should be in the middle");
         }
-//        if (!getLower().iterator().hasNext()) {
-//            throw new AxiomViolation(this,"Should be in the middle");
-//        }
     }
 
     public void expand() {
@@ -87,28 +84,26 @@ class Face extends AbsFace  {
              if (ix == -1) {
                  break;
              }
-             Face circuit = lattice.circuits[ix];
-             SignedSet circ = circuit.vector;
-             if (circ.isRestrictionOf(vector)) {
-                 extend.set(ix);
-                 circuit.thisIsBelowThat(this);
-             } else {
-                 SignedSet next = circ.compose(vector);
-                 Face n = lattice.ss2faces.get(next);
-                 if (n == null) {
-                     lattice.initVector(next,this,ix);
-                 } else {
-                     BitSet exten = n.extendsCircuits();
-                     exten.set(ix);
-                     exten.or(extend);
-                     circuit.thisIsBelowThat(n);
-                     thisIsBelowThat(n);
-    // need to somehow block some other work
-                 }
-             }
+             extendBy(ix,vector, extend);
              ix++;
          }
          prune();
+    }
+    private void extendBy(int ix,SignedSet vector, BitSet extend) {
+        Face circuit = lattice.circuits[ix];
+        SignedSet circ = circuit.vector;
+
+        SignedSet next = circ.compose(vector);
+        Face n = lattice.ss2faces.get(next);
+        if (n == null) {
+            lattice.initVector(next,this,ix);
+        } else {
+            BitSet exten = n.extendsCircuits();
+            exten.set(ix);
+            exten.or(extend);
+            circuit.thisIsBelowThat(n);
+            thisIsBelowThat(n);
+        }
     }
 
 

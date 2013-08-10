@@ -10,14 +10,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Iterables;
-
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+
+import com.google.common.collect.Iterables;
 
 public class DualFaceLattice extends AbsOM<Face> {
 
@@ -68,20 +68,13 @@ public class DualFaceLattice extends AbsOM<Face> {
              trace(pos++,"A",f);
              f.expand();
          }
-//         checkAllComparables();
-
-//         pos=0;
-//         for (Face f:allFaces()) {
-//             trace(pos++,"D",f);
-//             f.prune();
-//         }
-//         System.err.println(toString());
     }
    
     private Iterable<Face> allFaces() {
         return Iterables.concat(faces);
     }
 
+    @SuppressWarnings("unused")
     private void trace(int pos, String pref, Face f) {
         if (TRACE && pos % TRACE_FREQ == 0) {
              System.err.println(pref+": "+pos + "/"+size+" [" + f.toString() + "] ( "+((System.currentTimeMillis()-start)/1000)+" )");
@@ -101,7 +94,6 @@ public class DualFaceLattice extends AbsOM<Face> {
         BitSet extend = (BitSet)pVector.extendsCircuits().clone();
         if (vector.support().equals(this.notCoLoops)) {
             extend.or(conform);
-//            System.err.println("Max > "+extend.cardinality()+" circuits");
             return new MaxFace(this,vector,conform,extend);
         } else {
            return new Face(this,vector,pVector.getMinDimension()+1,conform,extend);
