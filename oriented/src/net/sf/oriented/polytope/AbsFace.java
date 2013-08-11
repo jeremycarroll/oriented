@@ -5,6 +5,7 @@ package net.sf.oriented.polytope;
 
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Verify;
+import net.sf.oriented.polytope.FaceLatticeImpl.AbsFaceImpl;
 
 class AbsFace implements Verify{
 
@@ -25,12 +27,14 @@ class AbsFace implements Verify{
      */
     private int dimension;
     /**
-     * A lower bound on dimension if any
+     * A lower bound on dimension
      */
     private int minDimension;
     /**
      * This is the record of the computation and is faces known to be lower
-     * in the hierarchy, we only keep ones which are exactly one dimension lower.
+     * in the hierarchy, we only keep ones which are exactly one dimension lower,
+     * during the computation we cannot be sure about dimension and so more get added 
+     * and discarded later.
      */
     private final Set<AbsFace> lower = new HashSet<AbsFace>();
     
@@ -99,7 +103,7 @@ class AbsFace implements Verify{
     }
 
 
-    Iterable<AbsFace> getLower() {
+    Collection<AbsFace> getLower() {
         return lower;
     }
 
@@ -138,6 +142,14 @@ class AbsFace implements Verify{
 
     boolean couldAddLower(AbsFace a) {
         return a.minDimension <= dimension + 1;
+    }
+
+    private AbsFaceImpl corresponding;
+    AbsFaceImpl asFace() {
+        return corresponding;
+    }
+    void setFace(AbsFaceImpl f) {
+        corresponding = f;
     }
 }
 

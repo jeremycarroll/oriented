@@ -87,6 +87,8 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
     public int asInt(String label) {
         return asInt(ffactory().labels().parse(label));
     }
+    
+
 }
 
 

@@ -9,6 +9,8 @@ import java.util.List;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.SignedSet;
 
+import net.sf.oriented.omi.Face;
+
 /**
  * Note the P in PFace means nothing, simply to differentiate the
  * word from {@link net.sf.oriented.omi.Face}
@@ -110,6 +112,10 @@ class PFace extends AbsFace  {
             circuit.thisIsBelowThat(n);
             thisIsBelowThat(n);
         }
+    }
+
+    public Face.Type getFaceType() {
+        return Face.Type.Covector;
     }
 
 

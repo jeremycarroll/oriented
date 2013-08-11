@@ -69,6 +69,13 @@ public interface OM extends Verify {
      */
 
 	OMasRealized getRealized();
+	
+	/**
+	 * Note that in some sense this is a property of the dual. The labels
+	 * on the faces of the return face lattice are covectors.
+	 * @return
+	 */
+	OMasFaceLattice getFaceLattice();
 
 	/**
 	 * The dual oriented matroid.

@@ -9,15 +9,15 @@ public interface Face {
     enum Type {
         Bottom,
         Cocircuit,
-        Face,
+        Covector,
         Tope,
         Top;
     }
     Type type();
     SignedSet covector();
     int dimension();
-    Collection<Face> higher();
-    Collection<Face> lower();
+    Collection<? extends Face> higher();
+    Collection<? extends Face> lower();
 }
 
 

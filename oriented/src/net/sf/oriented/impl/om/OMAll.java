@@ -4,16 +4,7 @@
  ************************************************************************/
 package net.sf.oriented.impl.om;
 
-import static net.sf.oriented.impl.om.Cryptomorphisms.CHIROTOPE;
-import static net.sf.oriented.impl.om.Cryptomorphisms.CIRCUITS;
-import static net.sf.oriented.impl.om.Cryptomorphisms.COCIRCUITS;
-import static net.sf.oriented.impl.om.Cryptomorphisms.COVECTORS;
-import static net.sf.oriented.impl.om.Cryptomorphisms.DUALCHIROTOPE;
-import static net.sf.oriented.impl.om.Cryptomorphisms.DUALREALIZED;
-import static net.sf.oriented.impl.om.Cryptomorphisms.MAXVECTORS;
-import static net.sf.oriented.impl.om.Cryptomorphisms.REALIZED;
-import static net.sf.oriented.impl.om.Cryptomorphisms.TOPES;
-import static net.sf.oriented.impl.om.Cryptomorphisms.VECTORS;
+import static net.sf.oriented.impl.om.Cryptomorphisms.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,8 +19,10 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.polytope.DualFaceLattice;
 import net.sf.oriented.util.combinatorics.Permutation;
 
 public class OMAll extends AbsOMAxioms<Object>  {
@@ -151,12 +144,14 @@ public class OMAll extends AbsOMAxioms<Object>  {
 			if (has(DUALREALIZED))
 				return new RealizedImpl(this, ((RealizedImpl)dual().getRealized()).getDualBasis());
 			throw new UnsupportedOperationException("Realization not implemented");
-
+        case FACELATTICE:
+            return new DualFaceLattice(dual().getCircuits()).asFaceLattice(this);
         case COVECTORS:
         case COCIRCUITS:
         case DUALCHIROTOPE:
         case TOPES:
         case DUALREALIZED:
+        case DUALFACELATTICE:
             throw new IllegalArgumentException("Unreachable");
 		}
 		return null;
@@ -369,14 +364,18 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		return (OMasRealized) get(REALIZED);
 	}
 
+    @Override
+    public OMasFaceLattice getFaceLattice() {
+        return (OMasFaceLattice) get(FACELATTICE);
+    }
     private AbsOMAxioms<?> getCircuitsOrChirotope() {
         // we generally prefer to use the circuit
         // implementation, unless we do not have circuits
         // computed, and we have the chirotope.
-        if ( (has(Cryptomorphisms.CHIROTOPE)
-                || has(Cryptomorphisms.DUALCHIROTOPE) )
+        if ( (has(CHIROTOPE)
+                || has(DUALCHIROTOPE) )
              &&
-             ! has(Cryptomorphisms.CIRCUITS) ) {
+             ! has(CIRCUITS) ) {
             return getChirotope();
         }
         return getCircuits();
@@ -426,6 +425,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
     public boolean isUniform() {
         return getChirotope().isUniform();
     }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

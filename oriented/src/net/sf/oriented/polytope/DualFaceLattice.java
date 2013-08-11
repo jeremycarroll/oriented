@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.oriented.impl.om.AbsOM;
+import net.sf.oriented.impl.om.OMAll;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.OM;
@@ -25,7 +26,7 @@ public class DualFaceLattice extends AbsOM<PFace> {
     private static final boolean TRACE = false;
     final int maxDimension = n() - rank();
     int size = 2;
-    private final Bottom bottom;
+    final Bottom bottom;
     final Top top;
     final PFace circuits[];
     final Map<SignedSet,PFace> ss2faces = new HashMap<SignedSet,PFace>();
@@ -155,6 +156,11 @@ public class DualFaceLattice extends AbsOM<PFace> {
         rslt.append(byDimension[maxDimension+1].size());
         rslt.append('}');
         return rslt.toString();
+    }
+
+    public OMInternal asFaceLattice(OMAll omAll) {
+        FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,this);
+        return rslt;
     }
 
 }

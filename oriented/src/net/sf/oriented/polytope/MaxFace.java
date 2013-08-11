@@ -5,6 +5,7 @@ package net.sf.oriented.polytope;
 
 import java.util.BitSet;
 
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SignedSet;
 
 final class MaxFace extends PFace {
@@ -14,6 +15,10 @@ final class MaxFace extends PFace {
         super(lattice, vector, lattice.maxDimension - 1, conform, extend);
         setDimension(lattice.maxDimension - 1);
         thisIsBelowThat(lattice.top);
+    }
+    @Override
+    public Face.Type getFaceType() {
+        return Face.Type.Tope;
     }
 
 }

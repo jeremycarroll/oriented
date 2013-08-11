@@ -5,6 +5,7 @@ package net.sf.oriented.polytope;
 
 import java.util.BitSet;
 
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SignedSet;
 
 final class MinFace extends PFace {
@@ -15,6 +16,11 @@ final class MinFace extends PFace {
         if (lattice.maxDimension==1) {
             this.thisIsBelowThat(lattice.top);
         }
+    }
+
+    @Override
+    public Face.Type getFaceType() {
+        return Face.Type.Cocircuit;
     }
 
 }

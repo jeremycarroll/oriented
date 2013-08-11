@@ -8,6 +8,7 @@ import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
@@ -125,6 +126,12 @@ public abstract class AbsOM<T> extends AbsOMAxioms<T> {
     @Override
     public boolean isUniform() {
         return all.isUniform();
+    }
+    
+
+    @Override
+    public OMasFaceLattice getFaceLattice() {
+        return all.getFaceLattice();
     }
 
 }

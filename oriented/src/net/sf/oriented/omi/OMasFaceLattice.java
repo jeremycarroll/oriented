@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface OMasFaceLattice extends OM {
     Face top();
     Face bottom();
-    Collection<Face> withDimension(int d);
+    Collection<? extends Face> withDimension(int d);
 
 }
 
