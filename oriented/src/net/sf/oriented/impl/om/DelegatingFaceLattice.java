@@ -32,6 +32,7 @@ public class DelegatingFaceLattice extends AbsOM<Face> implements
     public DelegatingFaceLattice(OMInternal a, FaceLattice d) {
         super(a);
         delegate = d;
+        all.set(Cryptomorphisms.FACELATTICE,this);
     }
 
     @Override

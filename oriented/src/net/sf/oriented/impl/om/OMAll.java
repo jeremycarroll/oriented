@@ -121,22 +121,18 @@ public class OMAll extends AbsOMAxioms<Object>  {
             }
 			return new Circuits(getChirotope());
 		case VECTORS:
-//            if (has(DUALFACELATTICE)) {
-                return new Vectors(dual().getFaceLattice(),this);
-//            }
-//			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
-//					|| has(COCIRCUITS) || has(COVECTORS))
-//				return new Vectors(getCircuits());
-//			if (has(MAXVECTORS))
-//				return new Vectors(getMaxVectors());
-//			return new Vectors(getCircuits());
+			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
+					|| has(COCIRCUITS) || has(COVECTORS))
+				return new Vectors(getCircuits());
+			if (has(MAXVECTORS))
+				return new Vectors(getMaxVectors());
+			return new Vectors(getCircuits());
 		case MAXVECTORS:
-            return new MaxVectors(dual().getFaceLattice(),this);
-//			return new MaxVectors(getVectors());
+			return new MaxVectors(getVectors());
 		case CHIROTOPE:
-			if (has(CIRCUITS)||has(DUALFACELATTICE))
+			if (has(CIRCUITS))
 				return new ChirotopeImpl(getCircuits());
-			if (has(DUALCHIROTOPE) || has(COCIRCUITS) || has(FACELATTICE))
+			if (has(DUALCHIROTOPE) || has(COCIRCUITS))
 				return new ChirotopeImpl(dual().getChirotope());
 			if (has(REALIZED))
 				return new ChirotopeImpl(this, getRealized().getMatrix());
@@ -146,6 +142,9 @@ public class OMAll extends AbsOMAxioms<Object>  {
 				return new ChirotopeImpl(dual().getChirotope());
 			if (has(MAXVECTORS))
 				return new ChirotopeImpl(getCircuits());
+			if (has(DUALFACELATTICE)) {
+                return new ChirotopeImpl(getCircuits());
+			}
 			return new ChirotopeImpl(dual().getChirotope());
 		case REALIZED:
 			if (has(DUALREALIZED))
