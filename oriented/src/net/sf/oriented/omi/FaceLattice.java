@@ -3,9 +3,15 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+import java.util.Collection;
+import java.util.Iterator;
 
-public interface OMasFaceLattice extends OM, FaceLattice {
-
+public interface FaceLattice {
+    Face top();
+    Face bottom();
+    Collection<? extends Face> withDimension(int d);
+    Iterator<? extends Face> iterator();
+    Iterable<? extends Face> withDimensions(int i, int j);
 
 }
 

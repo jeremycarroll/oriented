@@ -27,7 +27,7 @@ public interface SetFactory<ITEM, SET> extends Factory<SET> {
 	 * @param c The members of the set.
 	 * @return A new set
 	 */
-	SET copyBackingCollection(Collection<? extends ITEM> c);
+	SET copyBackingCollection(Iterable<? extends ITEM> c);
 
 	/**
 	 * The (immutable) empty set.

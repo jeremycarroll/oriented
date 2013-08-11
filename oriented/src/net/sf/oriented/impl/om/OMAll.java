@@ -116,20 +116,27 @@ public class OMAll extends AbsOMAxioms<Object>  {
 				return new Circuits(getChirotope());
 			if (has(MAXVECTORS))
 				return new Circuits(getVectors());
+            if (has(DUALFACELATTICE)) {
+                return new Circuits(dual().getFaceLattice(),this);
+            }
 			return new Circuits(getChirotope());
 		case VECTORS:
-			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
-					|| has(COCIRCUITS) || has(COVECTORS))
-				return new Vectors(getCircuits());
-			if (has(MAXVECTORS))
-				return new Vectors(getMaxVectors());
-			return new Vectors(getCircuits());
+//            if (has(DUALFACELATTICE)) {
+                return new Vectors(dual().getFaceLattice(),this);
+//            }
+//			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
+//					|| has(COCIRCUITS) || has(COVECTORS))
+//				return new Vectors(getCircuits());
+//			if (has(MAXVECTORS))
+//				return new Vectors(getMaxVectors());
+//			return new Vectors(getCircuits());
 		case MAXVECTORS:
-			return new MaxVectors(getVectors());
+            return new MaxVectors(dual().getFaceLattice(),this);
+//			return new MaxVectors(getVectors());
 		case CHIROTOPE:
-			if (has(CIRCUITS))
+			if (has(CIRCUITS)||has(DUALFACELATTICE))
 				return new ChirotopeImpl(getCircuits());
-			if (has(DUALCHIROTOPE) || has(COCIRCUITS))
+			if (has(DUALCHIROTOPE) || has(COCIRCUITS) || has(FACELATTICE))
 				return new ChirotopeImpl(dual().getChirotope());
 			if (has(REALIZED))
 				return new ChirotopeImpl(this, getRealized().getMatrix());

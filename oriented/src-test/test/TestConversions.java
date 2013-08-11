@@ -13,11 +13,13 @@ import java.util.Collection;
 import java.util.List;
 
 import net.sf.oriented.impl.om.Cryptomorphisms;
+import net.sf.oriented.impl.om.DelegatingFaceLattice;
 import net.sf.oriented.impl.om.OMAll;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Chirotope;
 import net.sf.oriented.omi.ChirotopeFactory;
+import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
@@ -180,7 +182,9 @@ public class TestConversions {
 		case DUALREALIZED:
 			RealizedFactory rf = factory.realized();
 			return rf.parse(rf.toString((OMasRealized) first));
-
+		case FACELATTICE:
+		case DUALFACELATTICE:
+		    return new DelegatingFaceLattice(new OMAll(first.elements(),factory),(FaceLattice)first);
 		default:
 			OMSFactory f = omsFactory();
 			if (factory == special)

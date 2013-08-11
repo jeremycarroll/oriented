@@ -94,7 +94,7 @@ abstract public class SetFactoryImpl<
 	}
 
 	@Override
-	public SET_INTERNAL2 copyBackingCollection(Collection<? extends ITEM> c) {
+	public SET_INTERNAL2 copyBackingCollection(Iterable<? extends ITEM> c) {
 		JavaSet<ITEM_INTERNAL2> r = itemFactory.emptyCollectionOf();
 		Iterator<? extends ITEM> it = c.iterator();
 		while (it.hasNext()) {

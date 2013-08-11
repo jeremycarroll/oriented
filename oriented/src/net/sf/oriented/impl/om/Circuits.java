@@ -12,9 +12,11 @@ import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.AxiomViolation;
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMSFactory;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Group;
@@ -39,7 +41,11 @@ public class Circuits extends AbsVectorsOM {
 		super(chi.circuits(), CIRCUITS, chi);
 	}
 
-	@Override
+	public Circuits(OMasFaceLattice lattice, OMAll a) {
+	    this(LatticeUtil.cocircuits(lattice),a);
+    }
+
+    @Override
 	public void verify() throws AxiomViolation {
 		super.verify();
 		verifyIncomparability();

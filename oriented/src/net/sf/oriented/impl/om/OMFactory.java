@@ -88,7 +88,7 @@ abstract public class OMFactory extends
 	}
 
 	@Override
-	public OMasSignedSet copyBackingCollection(Collection<? extends SignedSet> c) {
+	public OMasSignedSet copyBackingCollection(Iterable<? extends SignedSet> c) {
 		return construct(sets.copyBackingCollection(c));
 	}
 

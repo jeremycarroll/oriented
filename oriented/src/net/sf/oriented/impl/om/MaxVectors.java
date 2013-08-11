@@ -16,6 +16,7 @@ import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.OMSFactory;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
@@ -29,7 +30,11 @@ public class MaxVectors extends AbsVectorsOM {
 		super(vectors.maximal(), MAXVECTORS, vectors);
 	}
 
-	@Override
+	public MaxVectors(OMasFaceLattice lattice, OMAll a) {
+        this(LatticeUtil.topes(lattice),a);
+    }
+
+    @Override
 	public void verify() throws AxiomViolation {
 		verifySupport();
 		super.verify();

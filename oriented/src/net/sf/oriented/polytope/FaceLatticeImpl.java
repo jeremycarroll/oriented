@@ -8,14 +8,17 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
 
 import net.sf.oriented.polytope.FaceLatticeImpl.AbsFaceImpl;
 
@@ -75,9 +78,9 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
             }
         }
     }
-    static final class TopOrBottomImpl extends AbsFaceImpl {
-        TopOrBottomImpl(Type type, int dimension, AbsFaceImpl minOrMax[]) {
-            super(type, null, dimension, type==Type.Bottom ? new AbsFaceImpl[0]: minOrMax);
+    static class TopOrBottomImpl extends AbsFaceImpl {
+        TopOrBottomImpl(Type type, SignedSet covector, int dimension, AbsFaceImpl minOrMax[]) {
+            super(type, covector, dimension, type==Type.Bottom ? new AbsFaceImpl[0]: minOrMax);
             higher = type==Type.Top ? new Face[0]: minOrMax;
         }
 
@@ -90,6 +93,20 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
         @Override
         void allocateArrays() {}
 
+    }
+    static final class TopImpl extends TopOrBottomImpl {
+
+        TopImpl(int dimension, AbsFaceImpl[] minOrMax) {
+            super(Type.Top, null, dimension, minOrMax);
+        }
+        
+    }
+    static final class BottomImpl extends TopOrBottomImpl {
+
+        BottomImpl(SignedSet empty, AbsFaceImpl[] minOrMax) {
+            super(Type.Bottom, empty, -1, minOrMax);
+        }
+        
     }
 
     static final class FaceImpl extends AbsFaceImpl {
@@ -119,6 +136,18 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
     
     private final AbsFaceImpl top, bottom;
     private final AbsFaceImpl grades[][];
+    private static final Function<AbsFaceImpl[], Iterator<AbsFaceImpl>> FUNCTION = new Function<AbsFaceImpl[], Iterator<AbsFaceImpl>>(){
+        @Override
+        public Iterator<AbsFaceImpl> apply(AbsFaceImpl[] input) {
+            return Arrays.asList(input).iterator();
+        }
+    };
+    private static final Function<AbsFaceImpl[], Iterable<AbsFaceImpl>> FUNCTION2 = new Function<AbsFaceImpl[], Iterable<AbsFaceImpl>>(){
+        @Override
+        public Iterable<AbsFaceImpl> apply(AbsFaceImpl[] input) {
+            return Arrays.asList(input);
+        }
+    };
 
 
     public FaceLatticeImpl(OMInternal a, DualFaceLattice lattice) {
@@ -127,11 +156,13 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
         for (int i=0;i<grades.length;i++) {
             grades[i] = new AbsFaceImpl[lattice.byDimension[i].size()];
         }
-        grades[grades.length-1][0]= top = new TopOrBottomImpl(Face.Type.Top, lattice.maxDimension, grades[grades.length-2]);
-        grades[0][0]= bottom =  new TopOrBottomImpl(Face.Type.Bottom, -1, grades[1]);
+        grades[grades.length-1][0]= top = new TopImpl(lattice.maxDimension, grades[grades.length-2]);
+        FactoryFactory ffactory = a.ffactory();
+        UnsignedSet empty = ffactory.unsignedSets().empty();
+        grades[0][0]= bottom =  new BottomImpl(ffactory.signedSets().construct(empty, empty), grades[1]);
         lattice.top.setFace(top);
         lattice.bottom.setFace(bottom);
-        for (int i=1;i<lattice.maxDimension;i++) {
+        for (int i=1;i<=lattice.maxDimension;i++) {
             for (int j=0;j<lattice.byDimension[i].size();j++) {
                 PFace template = (PFace)lattice.byDimension[i].get(j);
                 FaceImpl ours = new FaceImpl(template,this);
@@ -198,14 +229,13 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
 
     @Override
     public Iterator<AbsFaceImpl> iterator() {
-        Function<AbsFaceImpl[], Iterator<AbsFaceImpl>> function = new Function<AbsFaceImpl[], Iterator<AbsFaceImpl>>(){
-            @Override
-            public Iterator<AbsFaceImpl> apply(AbsFaceImpl[] input) {
-                return Arrays.asList(input).iterator();
-            }
-        };
-        Iterator<Iterator<AbsFaceImpl>> transformed = Iterators.transform(Arrays.asList(grades).iterator(), function);
+        Iterator<Iterator<AbsFaceImpl>> transformed = Iterators.transform(Arrays.asList(grades).iterator(), FUNCTION);
         return Iterators.concat(transformed);
+    }
+
+    @Override
+    public Iterable<AbsFaceImpl> withDimensions(int i, int j) {
+        return Iterables.concat(Iterables.transform(Arrays.asList(grades).subList(i+1, j+2), FUNCTION2));
     }
 
 }

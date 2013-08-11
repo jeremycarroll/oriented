@@ -68,7 +68,7 @@ public abstract class MatroidFactoryImpl extends
 	}
 
 	@Override
-	public MatroidAsSet copyBackingCollection(Collection<? extends UnsignedSet> c) {
+	public MatroidAsSet copyBackingCollection(Iterable<? extends UnsignedSet> c) {
 		return construct(sets.copyBackingCollection(c));
 	}
 

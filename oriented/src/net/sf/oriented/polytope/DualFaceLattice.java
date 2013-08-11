@@ -160,6 +160,7 @@ public class DualFaceLattice extends AbsOM<PFace> {
 
     public OMInternal asFaceLattice(OMAll omAll) {
         FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,this);
+        rslt.init();
         return rslt;
     }
 

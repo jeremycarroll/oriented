@@ -35,7 +35,7 @@ public interface SetFactoryInternal<
 	SET_INTERNAL2 fromBackingCollection(JavaSet<ITEM_INTERNAL2> bases);
 
 	@Override
-	SET_INTERNAL2 copyBackingCollection(Collection<? extends ITEM> c);
+	SET_INTERNAL2 copyBackingCollection(Iterable<? extends ITEM> c);
 
 	FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> itemFactory();
 
