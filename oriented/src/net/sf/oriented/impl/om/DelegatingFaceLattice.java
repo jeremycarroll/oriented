@@ -6,23 +6,10 @@ package net.sf.oriented.impl.om;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.google.common.base.Function;
-
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
-import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.Matroid;
-import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.OMasFaceLattice;
-import net.sf.oriented.omi.OMasRealized;
-import net.sf.oriented.omi.OMasSignedSet;
-import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.util.combinatorics.Group;
-import net.sf.oriented.util.combinatorics.Permutation;
 
 public class DelegatingFaceLattice extends AbsOM<Face> implements
         OMasFaceLattice {

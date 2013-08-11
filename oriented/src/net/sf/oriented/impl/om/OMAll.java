@@ -4,7 +4,18 @@
  ************************************************************************/
 package net.sf.oriented.impl.om;
 
-import static net.sf.oriented.impl.om.Cryptomorphisms.*;
+import static net.sf.oriented.impl.om.Cryptomorphisms.CHIROTOPE;
+import static net.sf.oriented.impl.om.Cryptomorphisms.CIRCUITS;
+import static net.sf.oriented.impl.om.Cryptomorphisms.COCIRCUITS;
+import static net.sf.oriented.impl.om.Cryptomorphisms.COVECTORS;
+import static net.sf.oriented.impl.om.Cryptomorphisms.DUALCHIROTOPE;
+import static net.sf.oriented.impl.om.Cryptomorphisms.DUALFACELATTICE;
+import static net.sf.oriented.impl.om.Cryptomorphisms.DUALREALIZED;
+import static net.sf.oriented.impl.om.Cryptomorphisms.FACELATTICE;
+import static net.sf.oriented.impl.om.Cryptomorphisms.MAXVECTORS;
+import static net.sf.oriented.impl.om.Cryptomorphisms.REALIZED;
+import static net.sf.oriented.impl.om.Cryptomorphisms.TOPES;
+import static net.sf.oriented.impl.om.Cryptomorphisms.VECTORS;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -151,7 +162,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 				return new RealizedImpl(this, ((RealizedImpl)dual().getRealized()).getDualBasis());
 			throw new UnsupportedOperationException("Realization not implemented");
         case FACELATTICE:
-            return new DualFaceLattice(dual().getCircuits()).asFaceLattice(this);
+            return DualFaceLattice.asFaceLattice(dual().getCircuits(),this);
         case COVECTORS:
         case COCIRCUITS:
         case DUALCHIROTOPE:

@@ -7,9 +7,8 @@ import java.util.BitSet;
 import java.util.List;
 
 import net.sf.oriented.omi.AxiomViolation;
-import net.sf.oriented.omi.SignedSet;
-
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.SignedSet;
 
 /**
  * Note the P in PFace means nothing, simply to differentiate the

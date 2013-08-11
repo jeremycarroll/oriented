@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.impl.set;
 
-import java.util.Collection;
 import java.util.List;
 
 import net.sf.oriented.impl.items.FactoryInternal;

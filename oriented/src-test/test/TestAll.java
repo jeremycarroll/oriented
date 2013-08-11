@@ -30,6 +30,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestDualRealizedBits32.class, 
     TestDualRealizedHash.class, 
     TestExamples.class,
+    TestExamples2.class,
     TestPermutations.class,
     TestRealization.class,
     TestGrassmannPlucker.class

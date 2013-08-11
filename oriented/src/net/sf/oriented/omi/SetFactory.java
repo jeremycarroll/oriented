@@ -4,7 +4,6 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
-import java.util.Collection;
 
 /**
  * Provides conversion to and from String for some Set class.

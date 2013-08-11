@@ -7,20 +7,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMasFaceLattice;
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-
 import net.sf.oriented.polytope.FaceLatticeImpl.AbsFaceImpl;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 
 class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<AbsFaceImpl> {
     

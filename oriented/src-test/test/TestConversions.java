@@ -83,8 +83,8 @@ public class TestConversions {
 								&& !Cryptomorphisms.DUALREALIZED.equals(from)) {
 							continue;
 						}
-//                        if (Cryptomorphisms.REALIZED.equals(from) && Cryptomorphisms.DUALREALIZED
-//                                .equals(to))
+//                        if (Cryptomorphisms.DUALCHIROTOPE.equals(from) && Cryptomorphisms.FACELATTICE
+//                                .equals(to) && ff == 0 && source == 1 )
 						r.add(new Object[] { name(source, ff, from, to),
 								source, f, from, to, n++ });
 					}

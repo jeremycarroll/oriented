@@ -12,7 +12,6 @@ import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.omi.AxiomViolation;
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OMSFactory;

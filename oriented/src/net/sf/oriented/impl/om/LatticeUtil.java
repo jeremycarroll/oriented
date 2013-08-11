@@ -3,16 +3,14 @@
  ************************************************************************/
 package net.sf.oriented.impl.om;
 
-import java.util.Arrays;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 
 class LatticeUtil {
 

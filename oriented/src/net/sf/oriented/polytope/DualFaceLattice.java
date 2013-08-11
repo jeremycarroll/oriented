@@ -6,25 +6,24 @@ package net.sf.oriented.polytope;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.oriented.impl.om.AbsOM;
-import net.sf.oriented.impl.om.OMAll;
+import net.sf.oriented.impl.om.Circuits;
 import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.omi.Verify;
 
 import com.google.common.collect.Iterables;
 
-public class DualFaceLattice extends AbsOM<PFace> {
+public class DualFaceLattice implements Verify{
 
     private static final int TRACE_FREQ = 10000;
     private static final boolean TRACE = false;
-    final int maxDimension = n() - rank();
+    final int maxDimension;
     int size = 2;
     final Bottom bottom;
     final Top top;
@@ -37,7 +36,7 @@ public class DualFaceLattice extends AbsOM<PFace> {
     private UnsignedSet notCoLoops;
 
     public DualFaceLattice(OM om) {
-        super((OMInternal)om);
+        maxDimension = om.n() - om.rank();
         @SuppressWarnings("unchecked")
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
@@ -46,7 +45,7 @@ public class DualFaceLattice extends AbsOM<PFace> {
         }
         bottom = new Bottom(this);
         top = new Top(this);
-        notCoLoops = ffactory().unsignedSets().empty();
+        notCoLoops = om.ffactory().unsignedSets().empty();
         SignedSet cc[] = om.getCircuits().toArray();
         for (SignedSet s:cc) {
             notCoLoops = notCoLoops.union(s.support());
@@ -127,15 +126,6 @@ public class DualFaceLattice extends AbsOM<PFace> {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return this == o || all.equals(o);
-    }
-
-    @Override
-    public Iterator<? extends PFace> iterator2() {
-        return null;
-    }
     public void dump() {
         for (int i=0;i<byDimension.length;i++) {
             System.err.println("==== "+(i-1));
@@ -158,8 +148,16 @@ public class DualFaceLattice extends AbsOM<PFace> {
         return rslt.toString();
     }
 
-    public OMInternal asFaceLattice(OMAll omAll) {
-        FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,this);
+    static public OMInternal asFaceLattice(Circuits c,OMInternal omAll) {
+        DualFaceLattice lattice = new DualFaceLattice(c);
+//        WeakReference<DualFaceLattice> ref = new WeakReference<DualFaceLattice>(lattice);
+        FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,lattice);
+        lattice = null;
+//        for (int i=0;i<100 && ref.get() != null;i++ )
+//            System.gc();
+//        if (ref.get() != null) {
+//            throw new IllegalStateException("GC did not");
+//        }
         rslt.init();
         return rslt;
     }
