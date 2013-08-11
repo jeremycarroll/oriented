@@ -108,6 +108,9 @@ public class OMAll extends AbsOMAxioms<Object>  {
 
 		switch (which) {
 		case CIRCUITS:
+		    if (has(DUALFACELATTICE)) {
+                return new Circuits(dual().getFaceLattice(),this);
+		    }
 			if (has(CHIROTOPE) || has(DUALCHIROTOPE) || has(COCIRCUITS))
 				return new Circuits(getChirotope());
 			if (has(VECTORS))
@@ -121,14 +124,11 @@ public class OMAll extends AbsOMAxioms<Object>  {
             }
 			return new Circuits(getChirotope());
 		case VECTORS:
-			if (has(CIRCUITS) || has(CHIROTOPE) || has(DUALCHIROTOPE)
-					|| has(COCIRCUITS) || has(COVECTORS))
-				return new Vectors(getCircuits());
-			if (has(MAXVECTORS))
-				return new Vectors(getMaxVectors());
-			return new Vectors(getCircuits());
+		    if (has(MAXVECTORS) && !has(FACELATTICE))
+                return new Vectors(getMaxVectors());
+		    return new Vectors(dual().getFaceLattice(),this);
 		case MAXVECTORS:
-			return new MaxVectors(getVectors());
+		    return new MaxVectors(dual().getFaceLattice(),this);
 		case CHIROTOPE:
 			if (has(CIRCUITS))
 				return new ChirotopeImpl(getCircuits());
