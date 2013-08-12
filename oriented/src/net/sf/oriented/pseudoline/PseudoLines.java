@@ -21,7 +21,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
-public class Realization {
+public class PseudoLines {
     @SuppressWarnings("unused")
     private final OM original;
     private final OMasChirotope modified;
@@ -29,11 +29,11 @@ public class Realization {
     private Permutation permutation;
     
 
-    public Realization(OM om, String infinity, String ... alsoReorient) {
+    public PseudoLines(OM om, String infinity, String ... alsoReorient) {
         this(om,om.asInt(infinity), alsoReorient);
     }
 
-    public Realization(OM om, Label infinity) {
+    public PseudoLines(OM om, Label infinity) {
         this(om,om.asInt(infinity));
     }
 
@@ -41,7 +41,7 @@ public class Realization {
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
     
-    private Realization(final OM om, final int infinity, String ...also  ) {
+    private PseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
             throw new IllegalArgumentException("Bad choice of infinity");
         }

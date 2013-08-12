@@ -16,7 +16,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.pseudoline.Realization;
+import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Assume;
 import org.junit.Test;
@@ -102,7 +102,7 @@ public class TestExamples2 {
         Assume.assumeTrue(om.isUniform());
 //        System.err.print(name+": ");
         for (Label l:om.elements()) {
-            Realization r = new Realization(om,l);
+            PseudoLines r = new PseudoLines(om,l);
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
 //            System.err.print(l.label()+"="+r.getReorientation().length

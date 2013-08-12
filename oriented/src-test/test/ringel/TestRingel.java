@@ -4,7 +4,7 @@
 package test.ringel;
 
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.pseudoline.Realization;
+import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class TestRingel {
     @Test
     public void test7toInfinity() {
         System.err.println(Examples.ringel().dual().getMaxVectors());
-        System.err.println(new Realization(Examples.ringel(),"7").toCrossingsString());
+        System.err.println(new PseudoLines(Examples.ringel(),"7").toCrossingsString());
         
     }
 
