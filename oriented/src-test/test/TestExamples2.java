@@ -16,7 +16,6 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.polytope.DualFaceLattice;
 import net.sf.oriented.pseudoline.Realization;
 
 import org.junit.Assume;
