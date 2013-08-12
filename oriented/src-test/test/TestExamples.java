@@ -155,18 +155,18 @@ public class TestExamples {
         System.err.println(lattice);
         lattice.verify();
     }
-    @Ignore
     @Test
     public void testChap1x() {
         OM om = Examples.chapter1();
 //        Label g[] = om.elements();
 //        for (Label lbl : g) {
 //            System.err.println("Label: "+lbl.label());
-        PseudoLines realization = new PseudoLines(om,"2");
+        PseudoLines realization = new PseudoLines(om,"1");
         String[] crossings = realization.toCrossingsString();
         for (String str:crossings) {
             System.out.println(str);
         }
+        System.out.println("reorient: "+Arrays.asList(realization.getReorientation()));
         System.out.println("Circuits: " + realization.getEquivalentOM().getCircuits());
         System.out.println("CoCircuits: " + realization.getEquivalentOM().dual().getCircuits());
         System.out.println("Topes: " + realization.getEquivalentOM().dual().getMaxVectors());

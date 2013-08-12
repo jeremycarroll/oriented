@@ -21,6 +21,8 @@ public interface Factory<T> {
 	 * @return The new T
 	 */
 	T parse(String s);
+	
+	T[] parse(String ... many);
 
 
 

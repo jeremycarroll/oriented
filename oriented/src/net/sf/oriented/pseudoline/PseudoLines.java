@@ -3,9 +3,11 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.oriented.impl.util.Misc;
@@ -90,50 +92,61 @@ public class PseudoLines {
 //            
 //            
 //        }
-        
-        int newOrder[] = Permutation.from0toN(om.n());
-        newOrder[infinity] = 0;
+
+        UnsignedSet notCoLoops = bestTope.support();
+        SignedSet bestTopeR = reoriented.ffactory().signedSets().construct(notCoLoops, empty);
+        List<Face[]> line = firstLine(infLabel,bestTopeR,reoriented);
+        int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
-        Integer newOrderBoxed[] = Misc.box(newOrder);
-        Arrays.sort(newOrderBoxed,1,newOrder.length,new Comparator<Integer>(){
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                int chi = reoriented.chi(infinity,o1,o2);
-//                if (chi == 0) {
-//                    int ix0 = "875".indexOf(om.elements()[o1].label());
-//                    int ix1 = "875".indexOf(om.elements()[o1].label());
-//                    if ( ix0!=-1
-//                        && ix1!=-1 ) {
-//                        System.err.println("xxx");
-//                        return ix1 - ix0;
-//                    }
-//                }
-                return chi;
-            }});
-        permutation = new Permutation(Misc.unbox(newOrderBoxed));
-        SignedSet bestTopeR = reoriented.ffactory().signedSets().construct(bestTope.support(), empty);
-        System.err.print(om.asInt(followLine(infLabel,bestTopeR,reoriented))+ " = ");
-        System.err.println(newOrder[1]);
+        readLine(line,reoriented,notCoLoops,newOrder,1);
+        
+//        Integer newOrderBoxed[] = Misc.box(newOrder);
+//        Arrays.sort(newOrderBoxed,1,newOrder.length,new Comparator<Integer>(){
+//            @Override
+//            public int compare(Integer o1, Integer o2) {
+//                int chi = reoriented.chi(infinity,o1,o2);
+////                if (chi == 0) {
+////                    int ix0 = "875".indexOf(om.elements()[o1].label());
+////                    int ix1 = "875".indexOf(om.elements()[o1].label());
+////                    if ( ix0!=-1
+////                        && ix1!=-1 ) {
+////                        System.err.println("xxx");
+////                        return ix1 - ix0;
+////                    }
+////                }
+//                return chi;
+//            }});
+        permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
     }
 
-    private Label followLine(Label line, SignedSet startHere, OM om) {
+    private void readLine(List<Face[]> line, OM om, UnsignedSet notCoLoops, int[] newOrder, int i) {
+        for (Face[] pointEdge:line) {
+            newOrder[i++] = lineNumber(om,getLineLabel(notCoLoops,pointEdge[1].covector()));
+        }
+    }
+
+    private int lineNumber(OM om, Label lineLabel) {
+        return om.asInt(lineLabel);
+    }
+
+    private List<Face[]> firstLine(Label line, SignedSet startHere, OM om) {
         FaceLattice fl = om.getFaceLattice();
         Face s = fl.get(startHere);
+        Face xEdge = edgeOnLine(line,s);
+        s = otherFace(xEdge,s);
         Face[] edges = edgesTouchingLine(line, s);
-        Label xline0 = getLine(startHere,edges[0].covector());
-        Label xline1 = getLine(startHere,edges[1].covector());
+        UnsignedSet support = startHere.support();
+        Label xline0 = getLineLabel(support,edges[0].covector());
+        Label xline1 = getLineLabel(support,edges[2].covector());
         int χ = om.getChirotope().chi(om.asInt(line,xline0,xline1));
-        Face firstLine;
         Label xline;
         switch (χ) {
         case -1:
-            firstLine = edges[0];
             xline = xline1;
             break;
         case 1:
-            firstLine = edges[1];
             xline = xline0;
             break;
         case 0:
@@ -141,7 +154,7 @@ public class PseudoLines {
         default:
              throw new IllegalStateException("chi returned "+χ);
         }
-        return xline;
+        return followLine(om, s.covector(), line, xline) ;
     }
 
     /** return the label of one of the elements in the tope, that is not in the edge.
@@ -151,34 +164,46 @@ public class PseudoLines {
      * @param edge
      * @return
      */
-    private Label getLine(SignedSet tope, SignedSet edge) {
-        return tope.support().minus(edge.support()).asCollection().iterator().next();
+    public static Label getLineLabel(UnsignedSet tope, SignedSet edge) {
+        return tope.minus(edge.support()).asCollection().iterator().next();
+    }
+    public static Face edgeOnLine(Label line, Face face) {
+        Face edgePoints[] = new Face[2];
+        edgesWithNPointsOnLine(line, face, edgePoints,2);
+        return edgePoints[0];
+    }
+    public static Face[] edgesTouchingLine(Label line, Face face) {
+        Face edgePoints[] = new Face[4];
+        edgesWithNPointsOnLine(line, face, edgePoints,1);
+        return edgePoints;
     }
 
-    public Face[] edgesTouchingLine(Label line, Face face) {
-        Face edges[] = new Face[2];
+    public static int edgesWithNPointsOnLine(Label line, Face face,
+            Face[] edgePoints, int n) {
         int eCnt = 0;
         for (Face edge : face.lower()) {
             int cnt = 0;
+            Face endPoint = null;
             for (Face point: edge.lower()) {
                 if (point.covector().sign(line)==0) {
                     cnt++;
+                    endPoint = point;
                 }
+            }
+            if (cnt==n) {
+                edgePoints[eCnt++] = edge;
+                edgePoints[eCnt++] = endPoint;
             }
             switch (cnt) {
             case 0:
-                continue;
             case 1:
-                edges[eCnt++] = edge;
-                continue;
             case 2:
-                // edge lies along line
                 continue;
             default:
                 throw new IllegalStateException("unexpected topology");
             }
         }
-        return edges;
+        return eCnt;
     }
 
     public String[] toCrossingsString() {
@@ -275,6 +300,59 @@ public class PseudoLines {
     
     public Permutation getPermutation() {
         return permutation;
+    }
+
+    public static List<Face[]> followLine(OM om, SignedSet start, Label along, Label last) {
+        FaceLattice fl = om.getFaceLattice();
+        Face face = fl.get(start);
+        Face eps[] = edgesTouchingLine(along,face);
+        List<Face[]> rslt = new ArrayList<Face[]>();
+        Face edge;
+        Face point;
+        if (eps[1].covector().sign(last)==0) {
+            edge = eps[0];
+            point = eps[1];
+        } else {
+            if (eps[3].covector().sign(last)!=0) {
+                throw new IllegalArgumentException("xxx");
+            }
+            edge = eps[2];
+            point = eps[3];
+        }
+        Face firstPoint = point;
+        SignedSet lastEdge = edge.covector();
+        do {
+            addToResult(rslt,point,edge);
+            Face next[] = crossEdge(point,edge,face, along);
+            point = next[0];
+            edge = next[1];
+            face = next[2];
+        } while (point.covector().sign(last)!=0 || point==firstPoint);
+        return rslt;
+    }
+
+    private static Face[] crossEdge(Face point, Face edge, Face face, Label along) {
+        Face nextFace = otherFace(edge, face);
+        Face eps[] = edgesTouchingLine(along,nextFace);
+        if (eps[0] == edge) {
+            return new Face[]{eps[3],eps[2],nextFace};
+        } else {
+            return new Face[]{eps[1],eps[0],nextFace};
+        }
+    }
+
+    public static Face otherFace(Face edge, Face face) {
+        Face nextFace = null;
+        for (Face f:edge.higher()) {
+            if (f != face) {
+                nextFace = f;
+            }
+        }
+        return nextFace;
+    }
+
+    private static void addToResult(List<Face[]> rslt, Face point, Face edge) {
+        rslt.add(new Face[]{point,edge});
     }
 
 }
