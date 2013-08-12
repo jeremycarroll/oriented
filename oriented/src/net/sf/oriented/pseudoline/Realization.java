@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.oriented.impl.util.Misc;
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -50,7 +52,8 @@ public class Realization {
         OMasSignedSet topes = om.dual().getMaxVectors();
         Label infLabel = om.elements()[infinity];
         FactoryFactory f = om.ffactory();
-        UnsignedSet infUS = f.unsignedSets().empty().union(infLabel);
+        UnsignedSet empty = f.unsignedSets().empty();
+        UnsignedSet infUS = empty.union(infLabel);
         int bestSize = Integer.MAX_VALUE;
         SignedSet bestTope = null;
         for (SignedSet tope:topes) {
@@ -96,20 +99,86 @@ public class Realization {
             @Override
             public int compare(Integer o1, Integer o2) {
                 int chi = reoriented.chi(infinity,o1,o2);
-                if (chi == 0) {
-                    int ix0 = "875".indexOf(om.elements()[o1].label());
-                    int ix1 = "875".indexOf(om.elements()[o1].label());
-                    if ( ix0!=-1
-                        && ix1!=-1 ) {
-                        System.err.println("xxx");
-                        return ix1 - ix0;
-                    }
-                }
+//                if (chi == 0) {
+//                    int ix0 = "875".indexOf(om.elements()[o1].label());
+//                    int ix1 = "875".indexOf(om.elements()[o1].label());
+//                    if ( ix0!=-1
+//                        && ix1!=-1 ) {
+//                        System.err.println("xxx");
+//                        return ix1 - ix0;
+//                    }
+//                }
                 return chi;
             }});
         permutation = new Permutation(Misc.unbox(newOrderBoxed));
+        SignedSet bestTopeR = reoriented.ffactory().signedSets().construct(bestTope.support(), empty);
+        System.err.print(om.asInt(followLine(infLabel,bestTopeR,reoriented))+ " = ");
+        System.err.println(newOrder[1]);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
+    }
+
+    private Label followLine(Label line, SignedSet startHere, OM om) {
+        FaceLattice fl = om.getFaceLattice();
+        Face s = fl.get(startHere);
+        Face[] edges = edgesTouchingLine(line, s);
+        Label xline0 = getLine(startHere,edges[0].covector());
+        Label xline1 = getLine(startHere,edges[1].covector());
+        int χ = om.getChirotope().chi(om.asInt(line,xline0,xline1));
+        Face firstLine;
+        Label xline;
+        switch (χ) {
+        case -1:
+            firstLine = edges[0];
+            xline = xline1;
+            break;
+        case 1:
+            firstLine = edges[1];
+            xline = xline0;
+            break;
+        case 0:
+            throw new IllegalArgumentException("chi returned 0, so "+startHere+" was not a good starting point");
+        default:
+             throw new IllegalStateException("chi returned "+χ);
+        }
+        return xline;
+    }
+
+    /** return the label of one of the elements in the tope, that is not in the edge.
+     * There is typically exactly one, but there can be more than one when there are parallel
+     * edges.
+     * @param tope
+     * @param edge
+     * @return
+     */
+    private Label getLine(SignedSet tope, SignedSet edge) {
+        return tope.support().minus(edge.support()).asCollection().iterator().next();
+    }
+
+    public Face[] edgesTouchingLine(Label line, Face face) {
+        Face edges[] = new Face[2];
+        int eCnt = 0;
+        for (Face edge : face.lower()) {
+            int cnt = 0;
+            for (Face point: edge.lower()) {
+                if (point.covector().sign(line)==0) {
+                    cnt++;
+                }
+            }
+            switch (cnt) {
+            case 0:
+                continue;
+            case 1:
+                edges[eCnt++] = edge;
+                continue;
+            case 2:
+                // edge lies along line
+                continue;
+            default:
+                throw new IllegalStateException("unexpected topology");
+            }
+        }
+        return edges;
     }
 
     public String[] toCrossingsString() {

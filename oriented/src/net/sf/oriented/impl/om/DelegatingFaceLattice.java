@@ -10,6 +10,7 @@ import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.OMasFaceLattice;
+import net.sf.oriented.omi.SignedSet;
 
 public class DelegatingFaceLattice extends AbsOM<Face> implements
         OMasFaceLattice {
@@ -24,8 +25,7 @@ public class DelegatingFaceLattice extends AbsOM<Face> implements
 
     @Override
     public void verify() throws AxiomViolation {
-        // TODO Auto-generated method stub
-        
+         delegate.verify();
     }
 
     @Override
@@ -54,13 +54,18 @@ public class DelegatingFaceLattice extends AbsOM<Face> implements
     }
 
     @Override
-    public Iterator<? extends Face> iterator() {
+    public Iterator<Face> iterator() {
         return delegate.iterator();
     }
 
     @Override
-    public Iterable<? extends Face> withDimensions(int i, int j) {
+    public Iterable<Face> withDimensions(int i, int j) {
         return delegate.withDimensions(i, j);
+    }
+
+    @Override
+    public Face get(SignedSet covector) {
+        return delegate.get(covector);
     }
 
 }

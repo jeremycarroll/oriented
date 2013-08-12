@@ -23,7 +23,6 @@ import org.junit.Test;
 public class TestExamples {
   
 
-    @Ignore
     @Test
     public void testUniform4() {
         OM fromEuclideanLines = FactoryFactory.fromEuclideanLines(

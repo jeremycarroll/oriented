@@ -4,7 +4,8 @@
 package net.sf.oriented.omi;
 
 
-public interface OMasFaceLattice extends OM, FaceLattice {
+
+public interface OMasFaceLattice extends OM, FaceLattice, Iterable<Face> {
 
 
 }

@@ -5,7 +5,7 @@ package net.sf.oriented.omi;
 
 import java.util.Collection;
 
-public interface Face {
+public interface Face extends Verify {
     enum Type {
         Bottom,
         Cocircuit,

@@ -6,13 +6,13 @@ package net.sf.oriented.omi;
 import java.util.Collection;
 import java.util.Iterator;
 
-public interface FaceLattice {
+public interface FaceLattice extends Verify {
     Face top();
     Face bottom();
     Collection<? extends Face> withDimension(int d);
-    Iterator<? extends Face> iterator();
-    Iterable<? extends Face> withDimensions(int i, int j);
-
+    Iterator<Face> iterator();
+    Iterable<Face> withDimensions(int i, int j);
+    Face get(SignedSet covector);
 }
 
 

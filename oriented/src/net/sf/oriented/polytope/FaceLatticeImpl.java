@@ -5,7 +5,11 @@ package net.sf.oriented.polytope;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.oriented.impl.om.AbsOM;
 import net.sf.oriented.impl.om.OMInternal;
@@ -15,13 +19,12 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.polytope.FaceLatticeImpl.AbsFaceImpl;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
-class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<AbsFaceImpl> {
+class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
     
     static abstract class AbsFaceImpl implements Face {
         
@@ -76,6 +79,43 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
                 f.addOne();
             }
         }
+        
+
+        @Override
+        public void verify() throws AxiomViolation {
+            for (Face f:lower()) {
+                if (f.dimension() != dimension - 1) {
+                    throw new AxiomViolation(this," with respect to "+f);
+                }
+            }
+            for (Face f:higher()) {
+                if (f.dimension() != dimension + 1) {
+                    throw new AxiomViolation(this," with respect to "+f);
+                }
+            }
+            Map<SignedSet,Face> seenOnce = new HashMap<SignedSet,Face>();
+            Map<SignedSet,List<Face>> seenTwice = new HashMap<SignedSet,List<Face>>();
+            for (Face oneDown:lower()) {
+                for (Face twoDown: oneDown.lower()) {
+                    SignedSet key = twoDown.covector();
+                    if (seenTwice.containsKey(key) //&& twoUp instanceof Face && ((Face)twoUp).vector().plus().size()==2
+                            ) {
+                        throw new AxiomViolation(this, "Interval from "+twoDown+" to "+this+" has more than four members: "+seenTwice.get(twoDown)+","+oneDown);
+                    }
+                    Face link = seenOnce.remove(key);
+                    if (link != null) {
+                        seenTwice.put(key,Arrays.asList(link,oneDown));
+                    } else {
+                        seenOnce.put(key,oneDown);
+                    }
+                }
+            }
+            if (!seenOnce.isEmpty()) {
+                Entry<SignedSet, Face> entry = seenOnce.entrySet().iterator().next();
+                throw new AxiomViolation(this, "Interval from "+this+" to "+entry.getKey() +" has only three members ("+entry.getValue() +")");
+            }
+            
+        }
     }
     static class TopOrBottomImpl extends AbsFaceImpl {
         TopOrBottomImpl(Type type, SignedSet covector, int dimension, AbsFaceImpl minOrMax[]) {
@@ -98,6 +138,16 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
         TopImpl(int dimension, AbsFaceImpl[] minOrMax) {
             super(Type.Top, null, dimension, minOrMax);
         }
+        @Override
+        public void verify() throws AxiomViolation {
+            super.verify();
+            if (!higher().isEmpty()) {
+                throw new AxiomViolation(this," is not top");
+            }
+            if (lower().isEmpty()) {
+                throw new AxiomViolation(this," has nothing below it");
+            }
+        }
         
     }
     static final class BottomImpl extends TopOrBottomImpl {
@@ -106,8 +156,19 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
             super(Type.Bottom, empty, -1, minOrMax);
         }
         
-    }
 
+        @Override
+        public void verify() throws AxiomViolation {
+            super.verify();
+            if (!lower().isEmpty()) {
+                throw new AxiomViolation(this," is not bottom");
+            }
+            if (higher().isEmpty()) {
+                throw new AxiomViolation(this," has nothing above it");
+            }
+        }
+        
+    }
     static final class FaceImpl extends AbsFaceImpl {
         int counter = 0;
         FaceImpl(PFace template,  FaceLatticeImpl parent) {
@@ -135,13 +196,15 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
     
     private final AbsFaceImpl top, bottom;
     private final AbsFaceImpl grades[][];
-    private static final Function<AbsFaceImpl[], Iterator<AbsFaceImpl>> FUNCTION = new Function<AbsFaceImpl[], Iterator<AbsFaceImpl>>(){
+    private final Map<SignedSet,Face> ss2face = new HashMap<SignedSet,Face>();
+    
+    private static final Function<AbsFaceImpl[], Iterator<Face>> ARRAY2ITERATOR = new Function<AbsFaceImpl[], Iterator<Face>>(){
         @Override
-        public Iterator<AbsFaceImpl> apply(AbsFaceImpl[] input) {
-            return Arrays.asList(input).iterator();
+        public Iterator<Face> apply(AbsFaceImpl[] input) {
+            return cast(Arrays.asList(input).iterator());
         }
     };
-    private static final Function<AbsFaceImpl[], Iterable<AbsFaceImpl>> FUNCTION2 = new Function<AbsFaceImpl[], Iterable<AbsFaceImpl>>(){
+    private static final Function<AbsFaceImpl[], Iterable<AbsFaceImpl>> ARRAY2ITERABLE = new Function<AbsFaceImpl[], Iterable<AbsFaceImpl>>(){
         @Override
         public Iterable<AbsFaceImpl> apply(AbsFaceImpl[] input) {
             return Arrays.asList(input);
@@ -173,22 +236,24 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
     
     public void init() {
         // count higher items
-        for ( AbsFaceImpl f: this ) {
-            f.countSelfInLowerItems();
+        for ( Face f: this ) {
+            ((AbsFaceImpl)f).countSelfInLowerItems();
         }
         
         // allocate arrays
-        for ( AbsFaceImpl f: this ) {
-            f.allocateArrays();
+        for ( Face f: this ) {
+            ((AbsFaceImpl)f).allocateArrays();
         }
         
         // save higher
-        for ( AbsFaceImpl f: this ) {
-            f.saveSelfInLowerItems();
+        for ( Face f: this ) {
+            ((AbsFaceImpl)f).saveSelfInLowerItems();
+        }
+        
+        for ( Face f: this.withDimensions(-1, top.dimension-1)) {
+            ss2face.put(f.covector(), f);
         }
     }
-    
-    
 
     public AbsFaceImpl corresponding(AbsFace l) {
         return l.asFace();
@@ -196,8 +261,9 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
 
     @Override
     public void verify() throws AxiomViolation {
-        // TODO Auto-generated method stub
-        
+        for (Face f:this) {
+            f.verify();
+        }
     }
 
     @Override
@@ -222,19 +288,32 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, Iterable<A
     }
 
     @Override
-    public Iterator<AbsFaceImpl> iterator2() {
+    public Iterator<Face> iterator2() {
         return iterator();
     }
 
     @Override
-    public Iterator<AbsFaceImpl> iterator() {
-        Iterator<Iterator<AbsFaceImpl>> transformed = Iterators.transform(Arrays.asList(grades).iterator(), FUNCTION);
+    public Iterator<Face> iterator() {
+        Iterator<Iterator<Face>> transformed = Iterators.transform(Arrays.asList(grades).iterator(), ARRAY2ITERATOR);
         return Iterators.concat(transformed);
     }
 
+    @SuppressWarnings("unchecked")
+    static <T, S extends T> Iterable<T> cast(Iterable<S> in) {
+        return (Iterable<T>)in;
+    }
+    @SuppressWarnings("unchecked")
+    static <T, S extends T> Iterator<T> cast(Iterator<S> in) {
+        return (Iterator<T>)in;
+    }
     @Override
-    public Iterable<AbsFaceImpl> withDimensions(int i, int j) {
-        return Iterables.concat(Iterables.transform(Arrays.asList(grades).subList(i+1, j+2), FUNCTION2));
+    public Iterable<Face> withDimensions(int i, int j) {
+        return cast(Iterables.concat(Iterables.transform(Arrays.asList(grades).subList(i+1, j+2), ARRAY2ITERABLE)));
+    }
+
+    @Override
+    public Face get(SignedSet covector) {
+        return ss2face.get(covector);
     }
 
 }

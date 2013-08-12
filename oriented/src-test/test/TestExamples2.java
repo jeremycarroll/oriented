@@ -87,7 +87,7 @@ public class TestExamples2 {
     }
 
     public void testFaceLattice(OM om2) throws AxiomViolation {
-        new DualFaceLattice(om2.dual()).verify();
+        om2.getFaceLattice().verify();
     }
     @Test
     public void testDualFaceLattice() throws AxiomViolation {
