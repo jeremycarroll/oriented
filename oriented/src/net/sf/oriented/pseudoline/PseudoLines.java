@@ -5,12 +5,10 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
@@ -18,14 +16,12 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
-import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
 public class PseudoLines {
-    @SuppressWarnings("unused")
     private final OM original;
     private final OMasChirotope modified;
     private Label[] reorientation;
@@ -95,7 +91,6 @@ public class PseudoLines {
 //        }
 
         UnsignedSet notCoLoops = bestTope.support();
-        SignedSet bestTopeR = reoriented.ffactory().signedSets().construct(notCoLoops, empty);
         List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
@@ -311,7 +306,6 @@ public class PseudoLines {
             point = eps[3];
         }
         Face firstPoint = point;
-        SignedSet lastEdge = edge.covector();
         do {
             addToResult(rslt,point,edge);
             Face next[] = crossEdge(point,edge,face, along);

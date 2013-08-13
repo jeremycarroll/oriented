@@ -4,11 +4,7 @@
 package test;
 
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.omi.Face;
-import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.SignedSet;
-import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Ignore;
 import org.junit.Test;

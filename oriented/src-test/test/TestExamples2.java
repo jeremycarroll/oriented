@@ -19,14 +19,13 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.math.IntMath;
-
 import test.BetterParameterized.TestName;
+
+import com.google.common.math.IntMath;
 
 @RunWith(BetterParameterized.class)
 public class TestExamples2 {
