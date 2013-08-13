@@ -155,6 +155,7 @@ public class TestExamples {
         System.err.println(lattice);
         lattice.verify();
     }
+    @Ignore
     @Test
     public void testChap1x() {
         OM om = Examples.chapter1();

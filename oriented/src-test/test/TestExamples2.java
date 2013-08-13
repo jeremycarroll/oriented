@@ -98,32 +98,19 @@ public class TestExamples2 {
     }
     
     @Test
-    public void testRealizationA() {
+    public void testPseudolines() {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
-//        Assume.assumeTrue(om.n()<11);
-//        System.err.print(name+": ");
-//        long start = System.currentTimeMillis();
         for (Label l:om.elements()) {
-//            System.err.println(l.label() + " " +(System.currentTimeMillis() - start));
             PseudoLines r = new PseudoLines(om,l);
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
-//            System.err.print(l.label()+"="+r.getReorientation().length
-//                       //+" "+lex
-//                           +", ");
             Assert.assertTrue(r.getEquivalentOM().isAcyclic());
             Assert.assertEquals(-1, lex.indexOf('-') );
             Assert.assertTrue(r.getReorientation().length<n/2);
             Assert.assertEquals(FactoryFactory.fromCrossings(r.toCrossingsString()),r.getEquivalentOM());
-            
         }
-
-//        System.err.println( +(System.currentTimeMillis() - start));
-//        System.err.println();
     }
-    
-
 }
 
 
