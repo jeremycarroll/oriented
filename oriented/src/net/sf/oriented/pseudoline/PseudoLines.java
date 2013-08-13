@@ -18,6 +18,7 @@ import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -209,47 +210,23 @@ public class PseudoLines {
     public String[] toCrossingsString() {
         final Label ground[] = modified.elements();
         int n = ground.length;
-        Integer result[][] = new Integer[n][];
+        @SuppressWarnings({ "unchecked" })
+        List<Face[]> result[] = new List[n];
         boolean oneChar = allOneChar(ground);
-        
-/* for i < j < k we have
-        int sA = sign(i,j,k);
-        int sB = sign(j,i,k);
-        int sC = sign(k,i,j);
-   are all the same, where the sign(i,j,k) is the j.compare(k) in the i-th crossings
-   moreover this is chi(i,j,k)
-   
-   3, 4, 5    +
-   3, 5, 4    +
-   5, 3, 4    +
-   5, 4, 3    +
-   4, 3, 5    -
-   4, 5, 3    -
-   
-   
- */
-        result[0] = Misc.box(Permutation.from0toN(n));
-        for (int cnt=1;cnt<n;cnt++) {
-            final int i = cnt;
-//            Label lbl = ground[i];
-//            System.err.println(lbl.label());
-            result[i] = Misc.box(Permutation.from0toN(n));
-            result[i][0] = i;
-            result[i][i] = 1;
-            result[i][1] = 0;
-            Arrays.sort(result[i],2,n,new Comparator<Integer>(){
-                @Override
-                public int compare(Integer o1, Integer o2) {
-//                    String l1 = ground[o1].label();
-//                    String l2 = ground[o2].label();
-//                    System.err.println(l1 + " <> " + l2);
-                    int sign = (o1 - i)*(o2 - i) < 0 ? -1: 1;
-                    return -sign*modified.chi(i,o1,o2);
-                }});
+        UnsignedSet noCoLoops = modified.dual().getMaxVectors().iterator().next().support();
+        UnsignedSet empty = noCoLoops.minus(noCoLoops);
+        SignedSet positiveTope = modified.ffactory().signedSets().construct(noCoLoops, empty );
+        OMasFaceLattice faces = modified.getFaceLattice();
+        Face positiveFace = faces.get(positiveTope);
+        Face startTope = positiveFace;
+        for (int i=0;i<n;i++) {
+            startTope = otherFace(edgeOnLine(ground[i], startTope),startTope);
+            result[i] = followLine(modified, startTope.covector(), ground[i], ground[i==0?1:0]) ;
         }
+        
         String crossings[] = new String[result.length];
         for (int cnt=0;cnt<result.length;cnt++) {
-            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar);
+            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar, noCoLoops);
         }
         return crossings;
     }
@@ -263,17 +240,17 @@ public class PseudoLines {
         return true;
     }
 
-    private String toString(int line, Integer[] lines, Label[] ground, boolean useCommas) {
+    private String toString(int line, List<Face[]> result, Label[] ground, boolean useCommas, UnsignedSet tope) {
         StringBuffer rslt = new StringBuffer();
         rslt.append(ground[line].label());
         rslt.append(':');
         boolean insideBracket = false;
-        for (int i=1;i<lines.length-1;i++) {
-            boolean nextInsideBracket = modified.chi(line,lines[i],lines[i+1])==0;
+        for (int i=0;i<result.size()-1;i++) {
+            boolean nextInsideBracket = result.get(i)[0] == result.get(i+1)[0];
             if (nextInsideBracket && !insideBracket) {
                 rslt.append('(');
             }
-            rslt.append(ground[lines[i]].label());
+            rslt.append(getLineLabel(tope, result.get(i)[1].covector()));
             if (insideBracket && !nextInsideBracket) {
                 rslt.append(')');
             }
@@ -283,7 +260,7 @@ public class PseudoLines {
             }
             
         }
-        rslt.append(ground[lines[lines.length-1]].label());
+        rslt.append(getLineLabel(tope, result.get(result.size()-1)[1].covector()));
         if (insideBracket) {
             rslt.append(')');
         }

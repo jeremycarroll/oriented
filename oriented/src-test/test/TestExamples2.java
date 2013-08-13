@@ -19,6 +19,7 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -35,6 +36,7 @@ public class TestExamples2 {
         List<Object[]> rslt = new ArrayList<Object[]>();
         Class<?> ex = Examples.class;
         for (Method m:ex.getMethods()) {
+//            if (m.getName().contains("suv"))
              if (Modifier.isStatic(m.getModifiers())
                       && OM.class.isAssignableFrom( m.getReturnType() )  
                         ) {
@@ -88,6 +90,7 @@ public class TestExamples2 {
     public void testFaceLattice(OM om2) throws AxiomViolation {
         om2.getFaceLattice().verify();
     }
+
     @Test
     public void testDualFaceLattice() throws AxiomViolation {
         if (om.dual().rank()<10) {
@@ -99,9 +102,11 @@ public class TestExamples2 {
     public void testRealizationA() {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
-        Assume.assumeTrue(om.isUniform());
+//        Assume.assumeTrue(om.n()<11);
 //        System.err.print(name+": ");
+//        long start = System.currentTimeMillis();
         for (Label l:om.elements()) {
+//            System.err.println(l.label() + " " +(System.currentTimeMillis() - start));
             PseudoLines r = new PseudoLines(om,l);
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
@@ -114,6 +119,8 @@ public class TestExamples2 {
             Assert.assertEquals(FactoryFactory.fromCrossings(r.toCrossingsString()),r.getEquivalentOM());
             
         }
+
+//        System.err.println( +(System.currentTimeMillis() - start));
 //        System.err.println();
     }
     

@@ -64,9 +64,9 @@ final public class FactoryFactory {
                 if (!stripped[0].equals(ground[i])) {
                     throw new IllegalArgumentException("The line at infinity must be in same order as remaining crossings (2): "+crossings[i]);
                 }
-                if (!stripped[1].equals(ground[0])) {
-                    throw new IllegalArgumentException("First of each crossing must be the line at infinity: "+crossings[i]);
-                }
+//                if (!stripped[1].equals(ground[0])) {
+//                    throw new IllegalArgumentException("First of each crossing must be the line at infinity: "+crossings[i]);
+//                }
                 Arrays.sort(stripped);
                 if (!Arrays.equals(sortedG, stripped)) {
                     throw new IllegalArgumentException("Each line should cross every other line exactly once: "+crossings[i]);
@@ -74,6 +74,9 @@ final public class FactoryFactory {
             }
             for (int i=0;i<crossings.length;i++) {
                 positions[i] = analyze(opt.getSingleChar(),crossings[i]);
+                if (positions[i][0]>1) {
+                    throw new IllegalArgumentException("First of each crossing must be the line at infinity: "+crossings[i]);
+                }
             }
             factory = new FactoryFactory(opt);
             verify();
