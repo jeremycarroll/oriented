@@ -96,7 +96,7 @@ public class PseudoLines {
 
         UnsignedSet notCoLoops = bestTope.support();
         SignedSet bestTopeR = reoriented.ffactory().signedSets().construct(notCoLoops, empty);
-        List<Face[]> line = firstLine(infLabel,bestTopeR,reoriented);
+        List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
         readLine(line,reoriented,notCoLoops,newOrder,1);
@@ -133,8 +133,7 @@ public class PseudoLines {
     }
 
     private List<Face[]> firstLine(Label line, SignedSet startHere, OM om) {
-        FaceLattice fl = om.getFaceLattice();
-        Face s = fl.get(startHere);
+        Face s = get(startHere);
         Face xEdge = edgeOnLine(line,s);
         s = otherFace(xEdge,s);
         Face[] edges = edgesTouchingLine(line, s);
@@ -155,7 +154,15 @@ public class PseudoLines {
         default:
              throw new IllegalStateException("chi returned "+χ);
         }
-        return followLine(om, s.covector(), line, xline) ;
+        return followLine(s.covector(), line, xline) ;
+    }
+
+    private Face get(FaceLattice fl, SignedSet startHere) {
+        Face s = fl.get(startHere);
+        if (s == null) {
+            throw new IllegalArgumentException(startHere+" is not a face of the original OM");
+        }
+        return s;
     }
 
     /** return the label of one of the elements in the tope, that is not in the edge.
@@ -170,12 +177,17 @@ public class PseudoLines {
     }
     public static Face edgeOnLine(Label line, Face face) {
         Face edgePoints[] = new Face[2];
-        edgesWithNPointsOnLine(line, face, edgePoints,2);
+        if (1 != edgesWithNPointsOnLine(line, face, edgePoints,2)) {
+            throw new IllegalArgumentException(line+" is not an edge of "+face);
+        }
         return edgePoints[0];
     }
     public static Face[] edgesTouchingLine(Label line, Face face) {
         Face edgePoints[] = new Face[4];
-        edgesWithNPointsOnLine(line, face, edgePoints,1);
+        if (2 != edgesWithNPointsOnLine(line, face, edgePoints,1) ) {
+            throw new IllegalArgumentException(line+" is not touching "+face);
+        }
+            
         return edgePoints;
     }
 
@@ -204,7 +216,7 @@ public class PseudoLines {
                 throw new IllegalStateException("unexpected topology");
             }
         }
-        return eCnt;
+        return eCnt/2;
     }
 
     public String[] toCrossingsString() {
@@ -213,15 +225,14 @@ public class PseudoLines {
         @SuppressWarnings({ "unchecked" })
         List<Face[]> result[] = new List[n];
         boolean oneChar = allOneChar(ground);
-        UnsignedSet noCoLoops = modified.dual().getMaxVectors().iterator().next().support();
-        UnsignedSet empty = noCoLoops.minus(noCoLoops);
-        SignedSet positiveTope = modified.ffactory().signedSets().construct(noCoLoops, empty );
-        OMasFaceLattice faces = modified.getFaceLattice();
-        Face positiveFace = faces.get(positiveTope);
+        UnsignedSet noCoLoops = original.dual().getMaxVectors().iterator().next().support();
+        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
+        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
+        Face positiveFace = get(positiveTope);
         Face startTope = positiveFace;
         for (int i=0;i<n;i++) {
             startTope = otherFace(edgeOnLine(ground[i], startTope),startTope);
-            result[i] = followLine(modified, startTope.covector(), ground[i], ground[i==0?1:0]) ;
+            result[i] = followLine(startTope.covector(), ground[i], ground[i==0?1:0]) ;
         }
         
         String crossings[] = new String[result.length];
@@ -229,6 +240,10 @@ public class PseudoLines {
             crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar, noCoLoops);
         }
         return crossings;
+    }
+
+    private Face get(SignedSet positiveTope) {
+        return get(original.getFaceLattice(),positiveTope);
     }
 
     private boolean allOneChar(Label[] ground) {
@@ -279,9 +294,8 @@ public class PseudoLines {
         return permutation;
     }
 
-    public static List<Face[]> followLine(OM om, SignedSet start, Label along, Label last) {
-        FaceLattice fl = om.getFaceLattice();
-        Face face = fl.get(start);
+    public List<Face[]> followLine(SignedSet start, Label along, Label last) {
+        Face face = get(start);
         Face eps[] = edgesTouchingLine(along,face);
         List<Face[]> rslt = new ArrayList<Face[]>();
         Face edge;
@@ -319,13 +333,12 @@ public class PseudoLines {
     }
 
     public static Face otherFace(Face edge, Face face) {
-        Face nextFace = null;
         for (Face f:edge.higher()) {
             if (f != face) {
-                nextFace = f;
+                return  f;
             }
         }
-        return nextFace;
+        throw new IllegalArgumentException(edge + " is not a subtope of "+ face);
     }
 
     private static void addToResult(List<Face[]> rslt, Face point, Face edge) {

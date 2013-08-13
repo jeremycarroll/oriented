@@ -10,6 +10,7 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.pseudoline.PseudoLines;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestPseudolines {
@@ -27,6 +28,7 @@ public class TestPseudolines {
     Topes: ( 163524, {1'6'3'5'2'4',1'6'3'5'2'4,1'6'3'5'24,16'3'5'2'4',16'3'5'24',16'3'5'24,1'6'3'52'4,1'6'3'524,16'35'24',16'35'24,1'6'3524,16'3524,1'63'5'2'4',163'5'2'4',1'63'52'4',1'63'52'4,1635'2'4',1635'24',1'6352'4',1'6352'4,1'63524,16352'4',163524',163524} )
     */
     
+    @Ignore
     @Test
     public void testFollowLine() {
 //        1:6,5,3,4,2,6,3,5,2,4,
@@ -48,16 +50,16 @@ public class TestPseudolines {
     }
 
     private void follow(String tope, String line, String first) {
-        OM om = Examples.chapter1();
-        SignedSet start = om.ffactory().signedSets().parse(tope);
-        Label  along = om.ffactory().labels().parse(line);
-        Label cross = om.ffactory().labels().parse(first);
-        System.err.print(line+":");
-        for (Face pe[]: PseudoLines.followLine(om,start,along,cross)) {
-            System.err.print(PseudoLines.getLineLabel(start.support(), pe[1].covector()).label()+",");
-        }
-        System.err.println();
-        
+//        OM om = Examples.chapter1();
+//        SignedSet start = om.ffactory().signedSets().parse(tope);
+//        Label  along = om.ffactory().labels().parse(line);
+//        Label cross = om.ffactory().labels().parse(first);
+//        System.err.print(line+":");
+//        for (Face pe[]: PseudoLines.followLine(om,start,along,cross)) {
+//            System.err.print(PseudoLines.getLineLabel(start.support(), pe[1].covector()).label()+",");
+//        }
+//        System.err.println();
+//        
     }
     
 }

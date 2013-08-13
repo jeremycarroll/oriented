@@ -131,6 +131,11 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
 
         @Override
         void allocateArrays() {}
+        
+        @Override
+        public String toString() {
+            return type().toString();
+        }
 
     }
     static final class TopImpl extends TopOrBottomImpl {
@@ -191,6 +196,10 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
         void allocateArrays() {
             higher = new AbsFaceImpl[counter];
             counter = 0;
+        }
+        @Override
+        public String toString() {
+            return type().toString()+": "+covector().toString();
         }
     }
     
