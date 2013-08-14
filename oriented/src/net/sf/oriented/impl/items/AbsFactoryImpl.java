@@ -8,12 +8,10 @@ import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.reflect.TypeToken;
-
-import net.sf.oriented.impl.set.AbsSetImpl;
 import net.sf.oriented.impl.util.RuntimeClass;
-import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.Factory;
+
+import com.google.common.reflect.TypeToken;
 
 public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 
@@ -83,16 +81,6 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
     protected <T extends ITEM> T fallbackRemake(ITEM t) {
         return (T)parse(toString(t));
     }
-    
-//    @Override
-//    public ITEM[] parse(String ... many) {
-//        @SuppressWarnings("unchecked")
-//        ITEM rslt[] = (ITEM[]) Array.newInstance(TypeChecker.runtimeClass(this, AbsFactoryImpl.class, "ITEM"), many.length );
-//        for (int i=0;i<many.length;i++) {
-//            rslt[i] = parse(many[i]);
-//        }
-//        return rslt;
-//    }
 
 
     @Override
@@ -100,10 +88,10 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
         @SuppressWarnings("unchecked")
         ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
             @Override
-            protected TypeToken<ITEM> getRawType() {
-               return new TypeToken<ITEM>(AbsFactoryImpl.this.getClass()){};
+            protected TypeToken<ITEM> getTypeToken(Class<?> x) {
+               return new TypeToken<ITEM>(x){};
            }
-        }.find(), many.length );
+        }.getRuntimeClass(AbsFactoryImpl.this.getClass()), many.length );
         for (int i=0;i<many.length;i++) {
             rslt[i] = parse(many[i]);
         }

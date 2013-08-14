@@ -6,52 +6,37 @@ package test;
 import java.math.BigInteger;
 
 import junit.framework.Assert;
-import net.sf.oriented.impl.items.HasFactory;
-import net.sf.oriented.impl.set.AbsSetImpl;
-import net.sf.oriented.impl.set.SignedSetInternal;
 import net.sf.oriented.impl.util.RuntimeClass;
-import net.sf.oriented.impl.util.TypeChecker;
-import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.UnsignedSet;
 
 import org.junit.Test;
 
 import com.google.common.reflect.TypeToken;
 
 public class TestGetRuntimeClass {
-    @Test
-    public void testUnsignedSet() {
-        FactoryFactory f = new FactoryFactory();
-        Assert.assertEquals(Label.class, TypeChecker.runtimeClass(f.unsignedSets().empty(), Iterable.class, "T"));
-    }
     private static abstract class A<T> {
         Class<?> clazz = new RuntimeClass<T>(){
             @Override
-            protected TypeToken<T> getRawType() {
-               return new TypeToken<T>(A.this.getClass()){};
-           }}.find();
+            protected TypeToken<T> getTypeToken(Class<?> c) {
+               return new TypeToken<T>(c){};
+           }}.getRuntimeClass(A.this.getClass());
     }
     private static class B<U> extends A<U> {
     }
     private static class C extends B<BigInteger> {
     }
-    @Test(expected=IllegalArgumentException.class)
-    public void testAbstract() {
-        C c = new C();
-        Assert.assertEquals(BigInteger.class, TypeChecker.runtimeClass(c, A.class, "T"));
-        Assert.assertEquals(BigInteger.class,c.clazz);
-    }
-    @SuppressWarnings("rawtypes")
-    @Test(expected=IllegalArgumentException.class)
-    public void testGeneric() {
-        Assert.assertEquals(BigInteger.class, TypeChecker.runtimeClass(new A(){}, A.class, "T"));
+
+    private static class D extends B<String> {
     }
     @Test
-    public void testSignedSet() {
-        FactoryFactory f = new FactoryFactory();
-        UnsignedSet empty = f.unsignedSets().empty();
-        Assert.assertEquals(SignedSetInternal.class, TypeChecker.runtimeClass(f.signedSets().construct(empty,empty), HasFactory.class, "ITEM_INTERNAL"));
+    public void testAbstract() {
+        C c = new C();
+        Assert.assertEquals(BigInteger.class,c.clazz);
+    }
+
+    @Test
+    public void testAbstract2() {
+        D c = new D();
+        Assert.assertEquals(String.class,c.clazz);
     }
     
 

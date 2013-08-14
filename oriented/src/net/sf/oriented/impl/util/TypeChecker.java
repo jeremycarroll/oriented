@@ -3,15 +3,11 @@
  ************************************************************************/
 package net.sf.oriented.impl.util;
 
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,93 +21,6 @@ import java.util.Set;
  */
 public class TypeChecker {
     
-    /**
-     * Find the runtime class associated with a particular type parameter.
-     * @param o An instance of some subclass of clazz
-     * @param clazz A class or interface with a type parameter
-     * @param PARAM The name of the type parameter
-     * @return The class corresponding to PARAM in the class hierarchy corresponding to o
-     */
-    @SuppressWarnings("unchecked")
-    public static  <PARAM> Class<PARAM> runtimeClass(Object o, Class<?> clazz, String PARAM) {
-        // TODO: I should have used a guava class ... better coded and someone else's code :(
-        return (Class<PARAM>) getRuntimeClass(o.getClass(),clazz,PARAM);
-    }
-    
-    private static Map<String,Class<?>> runtimeClass = new HashMap<String,Class<?>>();
-    
-    private static Class<?> getRuntimeClass(Class<?> actualClass,
-            Class<?> declaringClass, String typeParameter) {
-        String key = actualClass.getCanonicalName() + "^^" + declaringClass.getCanonicalName() + "^^" + typeParameter;
-        if (!runtimeClass.containsKey(key)) {
-            runtimeClass.put(key, computeRuntimeClass(actualClass,declaringClass,typeParameter));
-        }
-        return runtimeClass.get(key);
-    }
-
-    private static Class<?> computeRuntimeClass(
-            Class<?> actualClass, Class<?> declaringClass,
-            String typeParameter) {
-        List<Type> superClasses = new ArrayList<Type>();
-        superClasses.add(actualClass);
-        if (!findSuper(declaringClass,0,superClasses)) {
-            throw new IllegalArgumentException(declaringClass.getName() + 
-                    " is not a superclass of " 
-                    + actualClass.getName());
-        }
-        int last = superClasses.size() - 1;
-outer:  while (true) {
-            Type sup = superClasses.get(last);
-            if (!(sup instanceof ParameterizedType)) {
-                String msg = ((Class<?>)sup).getName()+" is not parameterized";
-                if ( last > 0 ) {
-                    msg += " extending "+getName(superClasses.get(last-1));
-                }
-                throw new IllegalArgumentException(msg);
-            }
-            ParameterizedType superType = (ParameterizedType)sup;
-            Class<?> superClazz = (Class<?>)superType.getRawType();
-            if (!Modifier.isAbstract(superClazz.getModifiers())) {
-                throw new IllegalArgumentException(superClazz.getName()+ " should be abstract");
-            }
-            TypeVariable<?>[] params = superClazz.getTypeParameters();
-            Type args[] = superType.getActualTypeArguments();
-            if (args.length != params.length) {
-                throw new IllegalStateException("Mismatch in array length");
-            }
-            for (int i=0;i<params.length;i++) {
-                if (params[i].getName().equals(typeParameter)) {
-                    if (args[i] instanceof Class<?>) {
-                        return (Class<?>)args[i];
-                    }
-                    if (args[i] instanceof TypeVariable) {
-                        // System.err.print(superClazz.getName()+"<"+typeParameter+">  --> ");
-                        typeParameter = ((TypeVariable<?>)args[i]).getName();
-                        // System.err.println(((Class<?>)((ParameterizedType)superClasses.get(last - 1)).getRawType()).getName()+"<"+typeParameter+">");
-                        last --;
-                        continue outer;
-                    } else {
-                        throw new UnsupportedOperationException("Unimplemented");
-                    }
-                }
-            }
-            throw new IllegalArgumentException("Type paramter "+ typeParameter + " not found in "+ superClazz.getName());
-            
-        }
-        
-        
-    }
-
-    private static String getName(Type type) {
-        if (type instanceof Class) {
-            return ((Class<?>)type).getName();
-        }
-        if (type instanceof ParameterizedType) {
-            return getName(((ParameterizedType)type).getRawType());
-        }
-        return "??";
-    }
-
     private static boolean findSuper(Class<?> target, int ix, List<Type> superClasses) {
         Type current = superClasses.get(ix);
         if (current instanceof Class) {
@@ -123,9 +32,7 @@ outer:  while (true) {
         } else {
             throw new RuntimeException("Probably a coding problem");
         }
-        
     }
-
 
     private static boolean findSuper(Class<?> current, Class<?> target, int ix,
             List<Type> superClasses) {

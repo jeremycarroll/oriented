@@ -7,15 +7,14 @@ import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 
-import com.google.common.reflect.TypeToken;
-
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
 import net.sf.oriented.impl.util.RuntimeClass;
-import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.SetOf;
+
+import com.google.common.reflect.TypeToken;
 
 /**
  * Sets built around java hash sets
@@ -239,10 +238,10 @@ abstract public class AbsSetImpl<
         @SuppressWarnings("unchecked")
         ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
             @Override
-            protected TypeToken<ITEM> getRawType() {
-               return new TypeToken<ITEM>(AbsSetImpl.this.getClass()){};
+            protected TypeToken<ITEM> getTypeToken(Class<?> x) {
+               return new TypeToken<ITEM>(x){};
            }
-        }.find(), this.size() );
+        }.getRuntimeClass(AbsSetImpl.this.getClass()), this.size() );
         int i = 0;
         for (ITEM x:this) {
             rslt[i++] = x;

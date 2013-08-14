@@ -10,18 +10,14 @@ import com.google.common.reflect.TypeToken;
 
 public abstract class RuntimeClass<ITEM> {
 
-    private static Map<Class<?>,Class<?>> runtimeClass = new HashMap<Class<?>,Class<?>>();
-    abstract protected TypeToken<ITEM> getRawType();
-    
-//    private Class<? super ITEM> getRawType() {
-//        return new TypeToken<ITEM>(getClass()){}.getRawType();
-//    }
-//    
+    private static Map<String,Class<?>> runtimeClass = new HashMap<String,Class<?>>();
+    abstract protected TypeToken<ITEM> getTypeToken(Class<?> c);
+
     @SuppressWarnings("unchecked")
-    public Class<? super ITEM> find() {
-        Class<?> key = getClass();
+    public Class<? super ITEM> getRuntimeClass(Class<?> c) {
+        String key = getClass().getCanonicalName()+"^^"+c.getCanonicalName();
         if (!runtimeClass.containsKey(key)) {
-            runtimeClass.put(key, getRawType().getRawType());
+            runtimeClass.put(key, getTypeToken(c).getRawType());
         }
         return (Class<? super ITEM>) runtimeClass.get(key);
     }
