@@ -5,9 +5,12 @@
 
 package net.sf.oriented.impl.set;
 
+import com.google.common.reflect.TypeToken;
+
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
 import net.sf.oriented.impl.items.HasFactoryImpl;
+import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.SetOf;
 
 /**
@@ -34,6 +37,16 @@ public class HasSetFactoryImpl<
 //@formatter:on
 	protected HasSetFactoryImpl(FactoryInternal<SET_INTERNAL, SET, SET_INTERNAL2> f) {
 		super(f);
+        new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
+            @Override
+            protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
+               return new TypeToken<ITEM_INTERNAL>(x){};
+           }
+            @Override
+            protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
+               return new TypeToken<ITEM_INTERNAL2>(x){};
+           }
+        }.check(getClass());
 	}
 
 	@SuppressWarnings("unchecked")

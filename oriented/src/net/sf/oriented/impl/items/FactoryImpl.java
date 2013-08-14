@@ -7,6 +7,9 @@ package net.sf.oriented.impl.items;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import com.google.common.reflect.TypeToken;
+
+
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -24,10 +27,18 @@ public abstract class FactoryImpl<
 
     @SuppressWarnings("unchecked")
     protected FactoryImpl(Options o) {
-        TypeChecker.check(this);
         options = o;
-        // System.err.println(++cnt+": building: "+getClass().getSimpleName());
         constructor = (Constructor<ITEM_INTERNAL2>) ((OptionsInternal)o).constructorFor(getClass());
+        new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
+            @Override
+            protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
+               return new TypeToken<ITEM_INTERNAL>(x){};
+           }
+            @Override
+            protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
+               return new TypeToken<ITEM_INTERNAL2>(x){};
+           }
+        }.check(getClass());
     }
 
     final private Options options;

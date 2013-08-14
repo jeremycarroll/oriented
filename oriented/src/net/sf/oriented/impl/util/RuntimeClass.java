@@ -15,11 +15,15 @@ public abstract class RuntimeClass<ITEM> {
 
     @SuppressWarnings("unchecked")
     public Class<? super ITEM> getRuntimeClass(Class<?> c) {
-        String key = getClass().getCanonicalName()+"^^"+c.getCanonicalName();
+        String key = key(getClass(), c);
         if (!runtimeClass.containsKey(key)) {
             runtimeClass.put(key, getTypeToken(c).getRawType());
         }
         return (Class<? super ITEM>) runtimeClass.get(key);
+    }
+
+    static String key(Class<?> clazz1, Class<?> clazz2) {
+        return clazz1.getName()+"^^"+clazz2.getName();
     }
 
 }

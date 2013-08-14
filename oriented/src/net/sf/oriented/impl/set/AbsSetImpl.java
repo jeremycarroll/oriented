@@ -229,10 +229,7 @@ abstract public class AbsSetImpl<
     public Iterator<ITEM> iterator() {
         return (Iterator<ITEM>) this.iterator2();
     }
-    
-//    private final TypeToken<ITEM> type = new TypeToken<ITEM>(getClass()) {};
-//    private final Class<? super ITEM> rtClazz = type.getRawType();
-    
+        
     @Override
     public ITEM[] toArray(){
         @SuppressWarnings("unchecked")
@@ -241,7 +238,7 @@ abstract public class AbsSetImpl<
             protected TypeToken<ITEM> getTypeToken(Class<?> x) {
                return new TypeToken<ITEM>(x){};
            }
-        }.getRuntimeClass(AbsSetImpl.this.getClass()), this.size() );
+        }.getRuntimeClass(getClass()), this.size() );
         int i = 0;
         for (ITEM x:this) {
             rslt[i++] = x;

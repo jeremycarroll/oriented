@@ -91,7 +91,7 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
             protected TypeToken<ITEM> getTypeToken(Class<?> x) {
                return new TypeToken<ITEM>(x){};
            }
-        }.getRuntimeClass(AbsFactoryImpl.this.getClass()), many.length );
+        }.getRuntimeClass(getClass()), many.length );
         for (int i=0;i<many.length;i++) {
             rslt[i] = parse(many[i]);
         }
