@@ -79,39 +79,12 @@ public class PseudoLines {
         reorientation = r.toArray();
         
         final OMasChirotope reoriented = om.reorient(reorientation).getChirotope();
-        
-//        UnsignedSet ground = bestTope.support();
-        
-//        for (SignedSet cc:reoriented.dual().getCircuits()) {
-//            for (Label l: ground.minus(cc.support())) {
-//                line2cocircuit.get(l).add(cc);
-//            }
-//            
-//            
-//        }
 
         UnsignedSet notCoLoops = bestTope.support();
         List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
         readLine(line,reoriented,notCoLoops,newOrder,1);
-        
-//        Integer newOrderBoxed[] = Misc.box(newOrder);
-//        Arrays.sort(newOrderBoxed,1,newOrder.length,new Comparator<Integer>(){
-//            @Override
-//            public int compare(Integer o1, Integer o2) {
-//                int chi = reoriented.chi(infinity,o1,o2);
-////                if (chi == 0) {
-////                    int ix0 = "875".indexOf(om.elements()[o1].label());
-////                    int ix1 = "875".indexOf(om.elements()[o1].label());
-////                    if ( ix0!=-1
-////                        && ix1!=-1 ) {
-////                        System.err.println("xxx");
-////                        return ix1 - ix0;
-////                    }
-////                }
-//                return chi;
-//            }});
         permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         

@@ -7,8 +7,11 @@ import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 
+import com.google.common.reflect.TypeToken;
+
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
+import net.sf.oriented.impl.util.RuntimeClass;
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.JavaSet;
@@ -228,10 +231,18 @@ abstract public class AbsSetImpl<
         return (Iterator<ITEM>) this.iterator2();
     }
     
+//    private final TypeToken<ITEM> type = new TypeToken<ITEM>(getClass()) {};
+//    private final Class<? super ITEM> rtClazz = type.getRawType();
+    
     @Override
     public ITEM[] toArray(){
         @SuppressWarnings("unchecked")
-        ITEM rslt[] = (ITEM[]) Array.newInstance(TypeChecker.runtimeClass(this, AbsSetImpl.class, "ITEM"), this.size() );
+        ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
+            @Override
+            protected TypeToken<ITEM> getRawType() {
+               return new TypeToken<ITEM>(AbsSetImpl.this.getClass()){};
+           }
+        }.find(), this.size() );
         int i = 0;
         for (ITEM x:this) {
             rslt[i++] = x;

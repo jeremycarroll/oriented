@@ -8,6 +8,10 @@ import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.reflect.TypeToken;
+
+import net.sf.oriented.impl.set.AbsSetImpl;
+import net.sf.oriented.impl.util.RuntimeClass;
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.Factory;
 
@@ -80,10 +84,26 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
         return (T)parse(toString(t));
     }
     
+//    @Override
+//    public ITEM[] parse(String ... many) {
+//        @SuppressWarnings("unchecked")
+//        ITEM rslt[] = (ITEM[]) Array.newInstance(TypeChecker.runtimeClass(this, AbsFactoryImpl.class, "ITEM"), many.length );
+//        for (int i=0;i<many.length;i++) {
+//            rslt[i] = parse(many[i]);
+//        }
+//        return rslt;
+//    }
+
+
     @Override
     public ITEM[] parse(String ... many) {
         @SuppressWarnings("unchecked")
-        ITEM rslt[] = (ITEM[]) Array.newInstance(TypeChecker.runtimeClass(this, AbsFactoryImpl.class, "ITEM"), many.length );
+        ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
+            @Override
+            protected TypeToken<ITEM> getRawType() {
+               return new TypeToken<ITEM>(AbsFactoryImpl.this.getClass()){};
+           }
+        }.find(), many.length );
         for (int i=0;i<many.length;i++) {
             rslt[i] = parse(many[i]);
         }
