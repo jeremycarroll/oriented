@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
-import java.util.Arrays;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
@@ -11,37 +10,34 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-/**
- * This subclass uses the original face lattice for its computations
- * which avoids the need to recompute the face lattice which is fairly expensive,
- * particularly if you are trying various lines at infinity, and/or reorientations
- * @author jeremycarroll
- *
- */
-public class FasterPseudoLines extends AbsPseudoLines {
+public class GraphicsPseudoLines extends AbsPseudoLines {
 
-    public FasterPseudoLines(OM om, String infinity, String ... alsoReorient) {
+    public GraphicsPseudoLines(OM om, String infinity, String ... alsoReorient) {
         super(om, infinity, alsoReorient);
+        setNoCoLoops(modified);
     }
-    public FasterPseudoLines(OM om, Label infinity) {
-        super(om,infinity);
+
+    public GraphicsPseudoLines(OM om, Label infinity) {
+        super(om, infinity);
+        setNoCoLoops(modified);
     }
 
     @Override
     Face getPositiveFace() {
-        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
-        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
+        UnsignedSet empty = modified.ffactory().unsignedSets().empty();
+        SignedSet positiveTope = modified.ffactory().signedSets().construct(noCoLoops, empty );
         return getFace(positiveTope);
     }
 
     @Override
     Face getFace(SignedSet covector) {
-        Face s = original.getFaceLattice().get(covector);
+        Face s = modified.getFaceLattice().get(covector);
         if (s == null) {
-            throw new IllegalArgumentException(covector+" is not a face of the original OM");
+            throw new IllegalArgumentException(covector+" is not a face of the modified OM");
         }
         return s;
     }
+
 }
 
 
