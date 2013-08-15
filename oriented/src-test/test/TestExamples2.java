@@ -103,6 +103,10 @@ public class TestExamples2 {
         int p = IntMath.binomial(n-1,2);
         for (Label l:om.elements()) {
             PseudoLines r = new PseudoLines(om,l);
+            if ( n < 10 ) {
+                // this is entirely optional, but with it things go slower!
+               r.switchFaceLattice();
+            }
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
             Assert.assertTrue(r.getEquivalentOM().isAcyclic());

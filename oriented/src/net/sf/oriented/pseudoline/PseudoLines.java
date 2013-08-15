@@ -26,6 +26,7 @@ public class PseudoLines {
     private final OMasChirotope modified;
     private Label[] reorientation;
     private Permutation permutation;
+    private FLHelper flHelper;
     
 
     public PseudoLines(OM om, String infinity, String ... alsoReorient) {
@@ -39,7 +40,7 @@ public class PseudoLines {
     final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
-    private final UnsignedSet noCoLoops;
+    private UnsignedSet noCoLoops;
     
     private PseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
@@ -49,8 +50,7 @@ public class PseudoLines {
             throw new IllegalArgumentException("Psuedoline stretching algorithm only applies to rank 3 oriented matroids");
         }
         original = om;
-        OMasSignedSet topes = om.dual().getMaxVectors();
-        noCoLoops = topes.iterator().next().support();
+        OMasSignedSet topes = setNoCoLoops(om);
         Label infLabel = om.elements()[infinity];
         FactoryFactory f = om.ffactory();
         UnsignedSet empty = f.unsignedSets().empty();
@@ -81,7 +81,9 @@ public class PseudoLines {
         reorientation = r.toArray();
         
         final OMasChirotope reoriented = om.reorient(reorientation).getChirotope();
-
+        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
+        
+        flHelper = new FLHelper(original, noCoLoops, minus);
         List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
@@ -89,6 +91,17 @@ public class PseudoLines {
         permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
+    }
+
+    private OMasSignedSet setNoCoLoops(final OM om) {
+        OMasSignedSet topes = om.dual().getMaxVectors();
+        noCoLoops = topes.iterator().next().support();
+        return topes;
+    }
+    
+    public void switchFaceLattice() {
+        setNoCoLoops(modified);
+        flHelper = new FLHelper(modified, noCoLoops, modified.ffactory().unsignedSets().empty());
     }
 
     private void readLine(List<Face[]> line, OM om, UnsignedSet notCoLoops, int[] newOrder, int i) {
@@ -125,13 +138,6 @@ public class PseudoLines {
         return followLine(s.covector(), line, xline) ;
     }
 
-    private Face get(FaceLattice fl, SignedSet startHere) {
-        Face s = fl.get(startHere);
-        if (s == null) {
-            throw new IllegalArgumentException(startHere+" is not a face of the original OM");
-        }
-        return s;
-    }
 
     /** return the label of one of the elements in the om, that is not in the edge.
      * There is typically exactly one, but there can be more than one when there are parallel
@@ -207,13 +213,11 @@ public class PseudoLines {
     }
 
     private Face getPositiveFace() {
-        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
-        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
-        return getFace(positiveTope);
+        return flHelper.getPositiveFace();
     }
 
     private Face getFace(SignedSet covector) {
-        return get(original.getFaceLattice(),covector);
+        return flHelper.getFace(covector);
     }
 
     private boolean allOneChar(Label[] ground) {
