@@ -16,8 +16,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.pseudoline.AbsPseudoLines;
-import net.sf.oriented.pseudoline.FasterPseudoLines;
+import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Assume;
 import org.junit.Test;
@@ -103,7 +102,7 @@ public class TestExamples2 {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
         for (Label l:om.elements()) {
-            AbsPseudoLines r = new FasterPseudoLines(om,l);
+            PseudoLines r = new PseudoLines(om,l);
             Assert.assertEquals(om, r.getEquivalentOM().reorient(r.getReorientation()));
             String lex = r.getEquivalentOM().getChirotope().toLexicographicString().substring(0,p);
             Assert.assertTrue(r.getEquivalentOM().isAcyclic());

@@ -4,11 +4,13 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
@@ -19,27 +21,27 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
-public abstract class AbsPseudoLines {
-    final OM original;
+public class PseudoLines {
+    private final OM original;
     private final OMasChirotope modified;
-    Label[] reorientation;
+    private Label[] reorientation;
     private Permutation permutation;
     
 
-    public AbsPseudoLines(OM om, String infinity, String ... alsoReorient) {
+    public PseudoLines(OM om, String infinity, String ... alsoReorient) {
         this(om,om.asInt(infinity), alsoReorient);
     }
 
-    public AbsPseudoLines(OM om, Label infinity) {
+    public PseudoLines(OM om, Label infinity) {
         this(om,om.asInt(infinity));
     }
 
     final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
-    final UnsignedSet noCoLoops;
+    private final UnsignedSet noCoLoops;
     
-    private AbsPseudoLines(final OM om, final int infinity, String ...also  ) {
+    private PseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
             throw new IllegalArgumentException("Bad choice of infinity");
         }
@@ -123,8 +125,13 @@ public abstract class AbsPseudoLines {
         return followLine(s.covector(), line, xline) ;
     }
 
-
-    abstract Face getFace(SignedSet covector) ;
+    private Face get(FaceLattice fl, SignedSet startHere) {
+        Face s = fl.get(startHere);
+        if (s == null) {
+            throw new IllegalArgumentException(startHere+" is not a face of the original OM");
+        }
+        return s;
+    }
 
     /** return the label of one of the elements in the om, that is not in the edge.
      * There is typically exactly one, but there can be more than one when there are parallel
@@ -199,7 +206,15 @@ public abstract class AbsPseudoLines {
         return crossings;
     }
 
-    abstract Face getPositiveFace();
+    private Face getPositiveFace() {
+        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
+        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
+        return getFace(positiveTope);
+    }
+
+    private Face getFace(SignedSet covector) {
+        return get(original.getFaceLattice(),covector);
+    }
 
     private boolean allOneChar(Label[] ground) {
         for (Label l:ground) {

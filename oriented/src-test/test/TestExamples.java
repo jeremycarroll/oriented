@@ -15,8 +15,7 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.polytope.DualFaceLattice;
-import net.sf.oriented.pseudoline.AbsPseudoLines;
-import net.sf.oriented.pseudoline.FasterPseudoLines;
+import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -81,7 +80,7 @@ public class TestExamples {
     @Ignore
     @Test
     public void testRingelAt7() {
-        AbsPseudoLines realization = new FasterPseudoLines(Examples.ringel(),"7");
+        PseudoLines realization = new PseudoLines(Examples.ringel(),"7");
         String[] crossings = realization.toCrossingsString();
         OM expected = Examples.ringel()
                 .reorient(realization.getReorientation()).permuteGround(realization.getPermutation());
@@ -97,7 +96,7 @@ public class TestExamples {
 //        Label g[] = om.elements();
 //        for (Label lbl : g) {
 //            System.err.println("Label: "+lbl.label());
-        AbsPseudoLines realization = new FasterPseudoLines(om,"1","4","6","5","8","7");
+        PseudoLines realization = new PseudoLines(om,"1","4","6","5","8","7");
         Label one = om.ffactory().labels().parse("1");
         String[] crossings = realization.toCrossingsString();
         for (String str:crossings) {
@@ -163,7 +162,7 @@ public class TestExamples {
 //        Label g[] = om.elements();
 //        for (Label lbl : g) {
 //            System.err.println("Label: "+lbl.label());
-        AbsPseudoLines realization = new FasterPseudoLines(om,"1");
+        PseudoLines realization = new PseudoLines(om,"1");
         String[] crossings = realization.toCrossingsString();
         for (String str:crossings) {
             System.out.println(str);
