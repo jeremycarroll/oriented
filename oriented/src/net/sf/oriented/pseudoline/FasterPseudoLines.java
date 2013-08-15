@@ -11,13 +11,6 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
-/**
- * This subclass uses the original face lattice for its computations
- * which avoids the need to recompute the face lattice which is fairly expensive,
- * particularly if you are trying various lines at infinity, and/or reorientations
- * @author jeremycarroll
- *
- */
 public class FasterPseudoLines extends AbsPseudoLines {
 
     public FasterPseudoLines(OM om, String infinity, String ... alsoReorient) {

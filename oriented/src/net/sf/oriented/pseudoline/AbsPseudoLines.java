@@ -21,7 +21,7 @@ import net.sf.oriented.util.combinatorics.Permutation;
 
 public abstract class AbsPseudoLines {
     final OM original;
-    final OMasChirotope modified;
+    private final OMasChirotope modified;
     Label[] reorientation;
     private Permutation permutation;
     
@@ -37,7 +37,7 @@ public abstract class AbsPseudoLines {
     final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
-    UnsignedSet noCoLoops;
+    final UnsignedSet noCoLoops;
     
     private AbsPseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
@@ -47,8 +47,8 @@ public abstract class AbsPseudoLines {
             throw new IllegalArgumentException("Psuedoline stretching algorithm only applies to rank 3 oriented matroids");
         }
         original = om;
-        setNoCoLoops(original);
         OMasSignedSet topes = om.dual().getMaxVectors();
+        noCoLoops = topes.iterator().next().support();
         Label infLabel = om.elements()[infinity];
         FactoryFactory f = om.ffactory();
         UnsignedSet empty = f.unsignedSets().empty();
@@ -87,10 +87,6 @@ public abstract class AbsPseudoLines {
         permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
-    }
-
-    void setNoCoLoops(final OM om) {
-        noCoLoops = om.dual().getMaxVectors().iterator().next().support();
     }
 
     private void readLine(List<Face[]> line, OM om, UnsignedSet notCoLoops, int[] newOrder, int i) {
