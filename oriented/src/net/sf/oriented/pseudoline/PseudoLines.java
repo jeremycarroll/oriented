@@ -39,6 +39,7 @@ public class PseudoLines {
     final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
+    private final UnsignedSet noCoLoops;
     
     private PseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
@@ -49,6 +50,7 @@ public class PseudoLines {
         }
         original = om;
         OMasSignedSet topes = om.dual().getMaxVectors();
+        noCoLoops = topes.iterator().next().support();
         Label infLabel = om.elements()[infinity];
         FactoryFactory f = om.ffactory();
         UnsignedSet empty = f.unsignedSets().empty();
@@ -80,11 +82,10 @@ public class PseudoLines {
         
         final OMasChirotope reoriented = om.reorient(reorientation).getChirotope();
 
-        UnsignedSet notCoLoops = bestTope.support();
         List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
-        readLine(line,reoriented,notCoLoops,newOrder,1);
+        readLine(line,reoriented,noCoLoops,newOrder,1);
         permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
@@ -92,7 +93,7 @@ public class PseudoLines {
 
     private void readLine(List<Face[]> line, OM om, UnsignedSet notCoLoops, int[] newOrder, int i) {
         for (Face[] pointEdge:line) {
-            newOrder[i++] = lineNumber(om,getLineLabel(notCoLoops,pointEdge[1].covector()));
+            newOrder[i++] = lineNumber(om,getLineLabel(pointEdge[1].covector()));
         }
     }
 
@@ -101,13 +102,12 @@ public class PseudoLines {
     }
 
     private List<Face[]> firstLine(Label line, SignedSet startHere, OM om) {
-        Face s = get(startHere);
+        Face s = getFace(startHere);
         Face xEdge = edgeOnLine(line,s);
         s = otherFace(xEdge,s);
         Face[] edges = edgesTouchingLine(line, s);
-        UnsignedSet support = startHere.support();
-        Label xline0 = getLineLabel(support,edges[0].covector());
-        Label xline1 = getLineLabel(support,edges[2].covector());
+        Label xline0 = getLineLabel(edges[0].covector());
+        Label xline1 = getLineLabel(edges[2].covector());
         int χ = om.getChirotope().chi(om.asInt(line,xline0,xline1));
         Label xline;
         switch (χ) {
@@ -133,15 +133,15 @@ public class PseudoLines {
         return s;
     }
 
-    /** return the label of one of the elements in the tope, that is not in the edge.
+    /** return the label of one of the elements in the om, that is not in the edge.
      * There is typically exactly one, but there can be more than one when there are parallel
      * edges.
-     * @param tope
      * @param edge
+     * @param tope
      * @return
      */
-    public static Label getLineLabel(UnsignedSet tope, SignedSet edge) {
-        return tope.minus(edge.support()).asCollection().iterator().next();
+    private Label getLineLabel(SignedSet edge) {
+        return noCoLoops.minus(edge.support()).asCollection().iterator().next();
     }
     public static Face edgeOnLine(Label line, Face face) {
         Face edgePoints[] = new Face[2];
@@ -193,11 +193,7 @@ public class PseudoLines {
         @SuppressWarnings({ "unchecked" })
         List<Face[]> result[] = new List[n];
         boolean oneChar = allOneChar(ground);
-        UnsignedSet noCoLoops = original.dual().getMaxVectors().iterator().next().support();
-        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
-        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
-        Face positiveFace = get(positiveTope);
-        Face startTope = positiveFace;
+        Face startTope = getPositiveFace();
         for (int i=0;i<n;i++) {
             startTope = otherFace(edgeOnLine(ground[i], startTope),startTope);
             result[i] = followLine(startTope.covector(), ground[i], ground[i==0?1:0]) ;
@@ -210,8 +206,14 @@ public class PseudoLines {
         return crossings;
     }
 
-    private Face get(SignedSet positiveTope) {
-        return get(original.getFaceLattice(),positiveTope);
+    private Face getPositiveFace() {
+        UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
+        SignedSet positiveTope = original.ffactory().signedSets().construct(noCoLoops.minus(minus), minus );
+        return getFace(positiveTope);
+    }
+
+    private Face getFace(SignedSet covector) {
+        return get(original.getFaceLattice(),covector);
     }
 
     private boolean allOneChar(Label[] ground) {
@@ -233,7 +235,7 @@ public class PseudoLines {
             if (nextInsideBracket && !insideBracket) {
                 rslt.append('(');
             }
-            rslt.append(getLineLabel(tope, result.get(i)[1].covector()));
+            rslt.append(getLineLabel(result.get(i)[1].covector()));
             if (insideBracket && !nextInsideBracket) {
                 rslt.append(')');
             }
@@ -243,7 +245,7 @@ public class PseudoLines {
             }
             
         }
-        rslt.append(getLineLabel(tope, result.get(result.size()-1)[1].covector()));
+        rslt.append(getLineLabel(result.get(result.size()-1)[1].covector()));
         if (insideBracket) {
             rslt.append(')');
         }
@@ -262,8 +264,8 @@ public class PseudoLines {
         return permutation;
     }
 
-    public List<Face[]> followLine(SignedSet start, Label along, Label last) {
-        Face face = get(start);
+    private List<Face[]> followLine(SignedSet start, Label along, Label last) {
+        Face face = getFace(start);
         Face eps[] = edgesTouchingLine(along,face);
         List<Face[]> rslt = new ArrayList<Face[]>();
         Face edge;
