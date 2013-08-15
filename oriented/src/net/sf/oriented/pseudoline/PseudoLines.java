@@ -92,6 +92,11 @@ public class PseudoLines {
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
     }
+    
+    public EuclideanPseudoLines asEuclideanPseudoLines() {
+        this.switchFaceLattice();
+        return new EuclideanPseudoLines(this);
+    }
 
     private OMasSignedSet setNoCoLoops(final OM om) {
         OMasSignedSet topes = om.dual().getMaxVectors();
@@ -316,6 +321,14 @@ public class PseudoLines {
 
     private static void addToResult(List<Face[]> rslt, Face point, Face edge) {
         rslt.add(new Face[]{point,edge});
+    }
+
+    public FaceLattice getFaceLattice() {
+        return flHelper.modified.getFaceLattice();
+    }
+
+    public Label getInfinity() {
+        return modified.elements()[0];
     }
 
 }
