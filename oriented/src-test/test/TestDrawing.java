@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package test.ringel;
+package test;
 
 import java.io.File;
 import java.io.IOException;
