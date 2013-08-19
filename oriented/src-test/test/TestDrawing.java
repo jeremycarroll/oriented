@@ -16,10 +16,12 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDrawing {
 
+    @Ignore
     @Test
     public void testRingel() throws IOException {
         testDrawing(Examples.ringel(),"ringel");
@@ -27,13 +29,14 @@ public class TestDrawing {
 
     @Test
     public void testT1() throws IOException {
-        testDrawing(Examples.tsukamoto13(1),"tsukamoto(1)");
+        testDrawing(Examples.tsukamoto13(1),"H","tsukamoto(1)");
     }
 
     @Test
     public void testSuv() throws IOException {
-        testDrawing(Examples.suvorov14(),"suvorov");
+        testDrawing(Examples.suvorov14(),"N","suvorov");
     }
+    @Ignore
     @Test
     public void testSaw() throws IOException {
         testDrawing(Examples.circularsaw3(),"saw");
@@ -41,17 +44,21 @@ public class TestDrawing {
     private void testDrawing(OM om,String name) throws IOException {
         System.err.println(om.dual().getMaxVectors());
         for (Label lbl: om.elements()){
-        		System.err.print(lbl.label()+" ");
-        PseudoLines pseudoLines = new PseudoLines(om,lbl);
-//        System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
-          EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
+            testDrawing(om, lbl.label(), name);
+        }
+    }
+
+    private void testDrawing(OM om, String label, String name)
+            throws IOException {
+        System.err.print(label+" ");
+        PseudoLines pseudoLines = new PseudoLines(om,label);
+        EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         System.err.println(euclid.toString());
         euclid.arrangePoints();
-          System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
-          ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-          iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + lbl+".jpeg")));
-          iw.write(euclid.image());
-        }
+        System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
+        ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
+        iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));
+        iw.write(euclid.image());
     }
 
 }
