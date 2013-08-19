@@ -3,18 +3,56 @@
  ************************************************************************/
 package test.ringel;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestRingel {
-    
+
     @Test
-    public void test7toInfinity() {
-        System.err.println(Examples.ringel().dual().getMaxVectors());
-        System.err.println(new PseudoLines(Examples.ringel(),"7").toCrossingsString());
-        
+    public void testRingel() throws IOException {
+        testXX(Examples.ringel(),"ringel");
+    }
+
+    @Test
+    public void testT1() throws IOException {
+        testXX(Examples.tsukamoto13(1),"tsukamoto(1)");
+    }
+
+    @Test
+    public void testSuv() throws IOException {
+        testXX(Examples.suvorov14(),"suvorov");
+    }
+    @Test
+    public void testSaw() throws IOException {
+        testXX(Examples.circularsaw3(),"saw");
+    }
+    private void testXX(OM om,String name) throws IOException {
+        System.err.println(om.dual().getMaxVectors());
+        for (Label lbl: om.elements()){
+        		System.err.print(lbl.label()+" ");
+        PseudoLines pseudoLines = new PseudoLines(om,lbl);
+//        System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
+          EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
+        System.err.println(euclid.toString());
+        euclid.arrangePoints();
+          System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
+          ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
+          iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + lbl+".jpeg")));
+          iw.write(euclid.image());
+        }
     }
 
 }

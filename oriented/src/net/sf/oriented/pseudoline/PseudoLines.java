@@ -42,6 +42,8 @@ public class PseudoLines {
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
     private UnsignedSet noCoLoops;
     
+    
+    
     private PseudoLines(final OM om, final int infinity, String ...also  ) {
         if (infinity == -1){
             throw new IllegalArgumentException("Bad choice of infinity");
@@ -98,6 +100,9 @@ public class PseudoLines {
         return new EuclideanPseudoLines(this);
     }
 
+    public UnsignedSet noCoLoops() {
+        return this.noCoLoops;
+    }
     private OMasSignedSet setNoCoLoops(final OM om) {
         OMasSignedSet topes = om.dual().getMaxVectors();
         noCoLoops = topes.iterator().next().support();
@@ -330,6 +335,33 @@ public class PseudoLines {
     public Label getInfinity() {
         return modified.elements()[0];
     }
+
+//    public SignedSet[] getFirstTwoPointsOnLineAtInfinity() {
+//
+//
+//        // hmm abstract out the other method as a class and subclass this
+//        final Label ground[] = modified.elements();
+//        Label along = ground[0];
+//        Label last = ground[1];
+//        Face start = getPositiveFace();
+//        start = otherFace(edgeOnLine(ground[0], start),start);
+//        Face eps[] = edgesTouchingLine(along,start);
+//        Face edge;
+//        Face point;
+//        if (eps[1].covector().sign(last)==0) {
+//            edge = eps[0];
+//            point = eps[1];
+//        } else {
+//            edge = eps[2];
+//            point = eps[3];
+//        }
+//        Face firstPoint = point;
+//        Face next[] = crossEdge(point,edge,start, along);
+//        // need to keeo going if point hasn't changed
+//        point = next[0];
+//        edge = next[1];
+//        return null;
+//    }
 
 }
 
