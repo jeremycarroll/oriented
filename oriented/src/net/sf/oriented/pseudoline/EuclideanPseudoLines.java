@@ -56,6 +56,7 @@ public class EuclideanPseudoLines {
         @SuppressWarnings("unused")
         private double radius;
         private double x, y;
+        private int countToOuter = 0;
 
 //        public Point(Face f, int i) {
 //            this(f);
@@ -64,12 +65,15 @@ public class EuclideanPseudoLines {
 
         public Point(Face f) {
             ss2point.put(f.covector(),this);
+            unclassified.add(this);
+            points.add(this);
             face = f;
             ring = Integer.MAX_VALUE;
         }
         protected void setLevel(int i) {
             ring = i;
             getRing(i).add(this);
+            unclassified.remove(this);
         }
 
         void findAdjacents() {
@@ -97,37 +101,35 @@ public class EuclideanPseudoLines {
             }
         }
 
-//        public boolean findLevel(int target) {
-//            int min = Integer.MAX_VALUE;
-//            for (Point p:adjacent) {
-//                if (min>p.ring) {
-//                    min = p.ring+1;
-//                }
-//            }
-//            if (min != Integer.MAX_VALUE && min < ring && min == target) {
-//                setLevel(min);
-//                return true;
-//            }
-//            return false;
-//        }
-
         void maybeSaveEdge(Face e) {
             // maybe not
         }
         public void classifyAdjacents() {
             int sizes[] = new int[3];
             for (Point p:adjacent) {
-                if (p.ring == Integer.MAX_VALUE) {
-                    p.setLevel(ring+1);
+                int pRing = p.ring;
+                if (pRing == Integer.MAX_VALUE) {
+                    p.countToOuter++;
+                    pRing = ring+1;
                 }
-                sizes[p.ring - ring+1]++;
+                if (pRing < ring) {
+                    pRing = ring-1;
+                }
+                sizes[pRing - ring+1]++;
             }
             for (int i=0;i<3;i++) {
                 adjacentByLevel[i] = new Point[sizes[i]];
             }
             int ix[] = new int[3];
             for (Point p:adjacent) {
-                int lvl = p.ring - ring+1;
+                int pRing = p.ring;
+                if (pRing == Integer.MAX_VALUE) {
+                    pRing = ring+1;
+                }
+                if (pRing < ring) {
+                    pRing = ring-1;
+                }
+                int lvl = pRing - ring+1;
                 adjacentByLevel[lvl][ix[lvl]++]= p;
             }
         }
@@ -205,6 +207,7 @@ public class EuclideanPseudoLines {
     }
     final PseudoLines projective;
     final Set<Point> points = new HashSet<Point>();
+    final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private boolean arranged = false;
@@ -217,37 +220,42 @@ public class EuclideanPseudoLines {
             case -1:
                 continue;
             case 0:
-                points.add(new PointAtInfinity(f));
+                @SuppressWarnings("unused")
+                PointAtInfinity p1 = new PointAtInfinity(f);
                 break;
             case 1:
-                points.add(new Point(f));
+                @SuppressWarnings("unused")
+                Point p2 = new Point(f);
                 break;
             }
         }
         for (Point p:points) {
             p.findAdjacents();
         }
+        createRings();
+    }
+
+    private void createRings() {
         for (int level = 0; level < rings.size(); level++) {
+            int maxCountToOuterRing = 0;
             for (Point p:rings.get(level)) {
                 p.classifyAdjacents();
             }
+            for (Point p:unclassified) {
+                if (p.countToOuter > maxCountToOuterRing) {
+                    maxCountToOuterRing = p.countToOuter;
+                }
+            }
+            List<Point> toSet = new ArrayList<Point>();
+            for (Point p:unclassified) {
+                if (p.countToOuter == maxCountToOuterRing) {
+                    toSet.add(p);
+                }
+            }
+            for (Point p:toSet) {
+                p.setLevel(level+1);
+            }
         }
-//        int target = 1;
-//        while (!todo.isEmpty()) {
-//            Iterator<Point> it = todo.iterator();
-//            boolean found = false;
-//            while (it.hasNext()) {
-//                Point p = it.next();
-//                if (p.findLevel(target)) {
-//                    points.add(p);
-//                    it.remove();
-//                    found = true;
-//                }
-//            }
-//            if (!found) {
-//                target++;
-//            }
-//        }
     }
 
     public static <T> T[] resize(T[] old, int newLength) {
