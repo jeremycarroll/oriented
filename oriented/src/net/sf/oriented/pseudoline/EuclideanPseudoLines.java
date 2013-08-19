@@ -5,10 +5,8 @@ package net.sf.oriented.pseudoline;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -18,7 +16,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +53,7 @@ public class EuclideanPseudoLines {
         final Face face;
         private final Point[][] adjacentByLevel = new Point[3][];
         private double degrees;
+        @SuppressWarnings("unused")
         private double radius;
         private double x, y;
 

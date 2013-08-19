@@ -16,30 +16,29 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-public class TestRingel {
+public class TestDrawing {
 
     @Test
     public void testRingel() throws IOException {
-        testXX(Examples.ringel(),"ringel");
+        testDrawing(Examples.ringel(),"ringel");
     }
 
     @Test
     public void testT1() throws IOException {
-        testXX(Examples.tsukamoto13(1),"tsukamoto(1)");
+        testDrawing(Examples.tsukamoto13(1),"tsukamoto(1)");
     }
 
     @Test
     public void testSuv() throws IOException {
-        testXX(Examples.suvorov14(),"suvorov");
+        testDrawing(Examples.suvorov14(),"suvorov");
     }
     @Test
     public void testSaw() throws IOException {
-        testXX(Examples.circularsaw3(),"saw");
+        testDrawing(Examples.circularsaw3(),"saw");
     }
-    private void testXX(OM om,String name) throws IOException {
+    private void testDrawing(OM om,String name) throws IOException {
         System.err.println(om.dual().getMaxVectors());
         for (Label lbl: om.elements()){
         		System.err.print(lbl.label()+" ");
