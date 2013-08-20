@@ -55,6 +55,7 @@ public class TestDrawing {
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         System.err.println(euclid.toString());
         euclid.arrangePoints();
+//        euclid.checkForOverlappingEdge();
         System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));

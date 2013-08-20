@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Line;
+import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
 import com.google.common.collect.Iterables;
 
 import net.sf.oriented.omi.Face;
@@ -27,6 +31,22 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 
 public class EuclideanPseudoLines {
+    
+    private static final double RADIUS = 1400.0;
+    private final static int WIDTH = 3000;
+    private static class XLine extends SubLine {
+        
+        final Point p, q;
+
+        public XLine(Point p, Point q) {
+            super(new Vector2D(p.x, p.y), new Vector2D(q.x, q.y)); 
+            this.p = p;
+            this.q = q;
+                
+        }
+
+    }
+
     private class Edge {
         
         final Face face;
@@ -166,17 +186,34 @@ public class EuclideanPseudoLines {
             }
             double threshold = highest - 180;
             double sum = 0.0;
+            double total_weight = 0.0;
             for (Point p:getOuterRing()) {
-                sum += p.degrees;
+                double weight = //1.0; // /
+                              Math.sqrt(ring - p.ring); //*(ring - p.ring);
+                sum += p.degrees * weight;
+                total_weight += weight;
                 if (p.degrees < threshold) {
-                    sum += 360.0;
+                    sum += 360.0 * weight;
                 }
             }
-            double pos =  sum / getOuterRing().length;
+            double pos =  sum / total_weight;
             if (pos > 360) {
                 pos -= 360;
             }
             setPosition(pos);
+        }
+        public List<XLine> getLines() {
+            Vector2D me = new Vector2D(x,y);
+            List<XLine> rslt = new ArrayList<XLine>();
+            for (Point p:this.getInnerRing()) {
+                rslt.add(new XLine(this, p));
+            }
+            for (Point p:this.getSameRing()) {
+                if (p.degrees< degrees) {
+                    rslt.add(new XLine(this, p));
+                }
+            }
+            return rslt;
         }
     }
     
@@ -297,7 +334,7 @@ public class EuclideanPseudoLines {
         int pos = 0;
         do {
             current.setPosition(separation*pos);
-            current.setRadius(400.0);
+            current.setRadius(RADIUS);
             PointAtInfinity current1 = current;
             current = current.next(previous);
             previous = current1;
@@ -308,11 +345,11 @@ public class EuclideanPseudoLines {
         double step;
         boolean deadCenter = rings.get(innerRing).size()==1;
         if (deadCenter) {
-            step = 400.0 / innerRing;
+            step = RADIUS / innerRing;
         } else {
-            step = 400.0 / (0.5 + innerRing);
+            step = RADIUS / (0.5 + innerRing);
         }
-        double radius = 400;
+        double radius = RADIUS;
         if (deadCenter) {
             rings.get(innerRing).get(0).setPosition(0.0);
             rings.get(innerRing).get(0).setRadius(0.0);
@@ -320,9 +357,19 @@ public class EuclideanPseudoLines {
         }
         for (int i=1;i<=innerRing;i++) {
             radius -= step;
+            double degrees[] = new double[rings.get(i).size()];
+            int pix = 0;
             for (Point p: rings.get(i)) {
                 p.computePosition();
+                degrees[pix++] = p.degrees;
                 p.setRadius(radius);
+            }
+            Arrays.sort(degrees);
+            for (int ii=1;ii<degrees.length;ii++) {
+                System.err.println(degrees[ii] - degrees[ii-1]);
+                if (degrees[ii] - degrees[ii-1] < 0.01) {
+                    throw new IllegalStateException("Drawing failed.");
+                }
             }
         }
         
@@ -369,18 +416,36 @@ public class EuclideanPseudoLines {
             }});
     }
     
+    public void checkForOverlappingEdge() {
+        Set<SubLine> allLines = new HashSet<SubLine>();
+        for (Point p:points) {
+            List<XLine> ee = p.getLines();
+            for (SubLine ll:ee) {
+                for (SubLine l:allLines) {
+                    try {
+                    if (ll.intersection(l, false) != null) {
+                        throw new IllegalStateException("overlapping lines");
+                    }
+                    }
+                    catch (NullPointerException parallelLinesBug) {}
+                }
+                allLines.add(ll);
+            }
+        }
+    }
+    
     public RenderedImage image() {
         this.arrangePoints();
-        BufferedImage image = new BufferedImage(1000,1000,BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(WIDTH,WIDTH,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
        graphics.setBackground(Color.WHITE);
        graphics.setColor(Color.WHITE);
        graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
        
-       Shape circ = new Ellipse2D.Double(-400, -400, 800, 800);
+       Shape circ = new Ellipse2D.Double(-RADIUS, -RADIUS, 2*RADIUS, 2*RADIUS);
        graphics.setColor( new Color(255, 255, 204));
-       graphics.translate(500, 500);
+       graphics.translate(WIDTH/2, WIDTH/2);
        graphics.fill(circ);
        graphics.setStroke(new BasicStroke(2.0f));
        graphics.setColor(Color.BLACK);
@@ -396,6 +461,11 @@ public class EuclideanPseudoLines {
                graphics.setColor(c);
                graphics.drawLine((int)p.x, (int)p.y, (int)q.x, (int)q.y);
            }
+       }
+
+       graphics.setColor(Color.BLACK);
+       for (Point p:points) {
+           graphics.fillRect((int)p.x-1,(int) p.y-1, 3, 3);
        }
        
        return image;
