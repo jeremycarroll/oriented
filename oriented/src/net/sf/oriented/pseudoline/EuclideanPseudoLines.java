@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -36,6 +35,7 @@ public class EuclideanPseudoLines {
     private final static int WIDTH = 3000;
     private static class XLine extends SubLine {
         
+        @SuppressWarnings("unused")
         final Point p, q;
 
         public XLine(Point p, Point q) {
@@ -203,7 +203,6 @@ public class EuclideanPseudoLines {
             setPosition(pos);
         }
         public List<XLine> getLines() {
-            Vector2D me = new Vector2D(x,y);
             List<XLine> rslt = new ArrayList<XLine>();
             for (Point p:this.getInnerRing()) {
                 rslt.add(new XLine(this, p));
