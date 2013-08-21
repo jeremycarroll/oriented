@@ -21,7 +21,6 @@ import org.junit.Test;
 
 public class TestDrawing {
 
-    @Ignore
     @Test
     public void testRingel() throws IOException {
         testDrawing(Examples.ringel(),"ringel");
@@ -29,14 +28,16 @@ public class TestDrawing {
 
     @Test
     public void testT1() throws IOException {
-        testDrawing(Examples.tsukamoto13(1),"H","tsukamoto(1)");
+        testDrawing(Examples.tsukamoto13(1),  //"H",
+                "tsukamoto(1)");
     }
 
     @Test
     public void testSuv() throws IOException {
-        testDrawing(Examples.suvorov14(),"N","suvorov");
+        testDrawing(Examples.suvorov14(),//"N",
+                "suvorov");
     }
-    @Ignore
+    
     @Test
     public void testSaw() throws IOException {
         testDrawing(Examples.circularsaw3(),"saw");
@@ -55,9 +56,9 @@ public class TestDrawing {
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         System.err.println(euclid.toString());
         euclid.arrangePoints();
-//        euclid.checkForOverlappingEdge();
         System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
         euclid.jung();
+        euclid.checkForOverlappingEdge();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));
         iw.write(euclid.image());

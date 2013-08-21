@@ -16,7 +16,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,12 +28,10 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import com.google.common.collect.Iterables;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
@@ -408,13 +405,13 @@ public class EuclideanPseudoLines {
                 degrees[pix++] = p.degrees;
                 p.setRadius(radius);
             }
-            Arrays.sort(degrees);
-            for (int ii=1;ii<degrees.length;ii++) {
-                System.err.println(degrees[ii] - degrees[ii-1]);
-                if (degrees[ii] - degrees[ii-1] < 0.01) {
-                    throw new IllegalStateException("Drawing failed.");
-                }
-            }
+//            Arrays.sort(degrees);
+//            for (int ii=1;ii<degrees.length;ii++) {
+//                System.err.println(degrees[ii] - degrees[ii-1]);
+//                if (degrees[ii] - degrees[ii-1] < 0.01) {
+//                    throw new IllegalStateException("Drawing failed.");
+//                }
+//            }
         }
         
     }
@@ -501,7 +498,7 @@ public class EuclideanPseudoLines {
 //            fruchtermanReingold.lock(dp,true);
 //        }
         long time = System.currentTimeMillis();
-        for (int i=0;i<700;i++) {
+        for (int i=0;i<300;i++) {
             fruchtermanReingold.step();
         }
         System.err.println(System.currentTimeMillis()-time);
