@@ -5,7 +5,6 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -16,26 +15,27 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * @author jeremycarroll
+ *
+ */
 public class TestDrawing {
 
     @Test
     public void testRingel() throws IOException {
-        testDrawing(Examples.ringel(),"ringel");
+        testDrawing(Examples.ringel(),"3", "ringel");
     }
 
     @Test
-    public void testT1() throws IOException {
-        testDrawing(Examples.tsukamoto13(1),  //"H",
-                "tsukamoto(1)");
+    public void testTsukamoto13_1() throws IOException {
+        testDrawing(Examples.tsukamoto13(1),  "H", "tsukamoto(1)");
     }
 
     @Test
     public void testSuv() throws IOException {
-        testDrawing(Examples.suvorov14(),//"N",
-                "suvorov");
+        testDrawing(Examples.suvorov14(),"N",  "suvorov");
     }
     
     @Test
@@ -43,7 +43,6 @@ public class TestDrawing {
         testDrawing(Examples.circularsaw3(),"saw");
     }
     private void testDrawing(OM om,String name) throws IOException {
-        System.err.println(om.dual().getMaxVectors());
         for (Label lbl: om.elements()){
             testDrawing(om, lbl.label(), name);
         }
@@ -51,17 +50,12 @@ public class TestDrawing {
 
     private void testDrawing(OM om, String label, String name)
             throws IOException {
-        System.err.print(label+" ");
         PseudoLines pseudoLines = new PseudoLines(om,label);
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
-        System.err.println(euclid.toString());
-        euclid.arrangePoints();
-        System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
-        euclid.jung();
-        euclid.checkForOverlappingEdge();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));
         iw.write(euclid.image());
+        euclid.checkForOverlappingEdge();
     }
 
 }

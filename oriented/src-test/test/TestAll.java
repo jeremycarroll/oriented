@@ -33,7 +33,8 @@ import org.junit.runners.Suite.SuiteClasses;
     TestExamples2.class,
     TestPermutations.class,
     TestRealization.class,
-    TestGrassmannPlucker.class
+    TestGrassmannPlucker.class,
+    TestDrawing.class,
 })
 @RunWith(Suite.class)
 public class TestAll {

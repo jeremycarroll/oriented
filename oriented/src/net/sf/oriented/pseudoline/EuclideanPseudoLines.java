@@ -288,6 +288,7 @@ public class EuclideanPseudoLines {
     final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
+    private boolean approxArranged = false;
     private boolean arranged = false;
     
     public EuclideanPseudoLines(PseudoLines pseudoLines) {
@@ -363,10 +364,10 @@ public class EuclideanPseudoLines {
     }
     
     
-    public void arrangePoints() {
-        if (arranged)
+    private void approximatelyArrange() {
+        if (approxArranged)
             return;
-        arranged = true;
+        approxArranged = true;
         PointAtInfinity first = firstPointAtInfinity();
         PointAtInfinity last = lastPointAtInfinity();
         PointAtInfinity current = first;
@@ -398,20 +399,10 @@ public class EuclideanPseudoLines {
         }
         for (int i=1;i<=innerRing;i++) {
             radius -= step;
-            double degrees[] = new double[rings.get(i).size()];
-            int pix = 0;
             for (Point p: rings.get(i)) {
                 p.computePosition();
-                degrees[pix++] = p.degrees;
                 p.setRadius(radius);
             }
-//            Arrays.sort(degrees);
-//            for (int ii=1;ii<degrees.length;ii++) {
-//                System.err.println(degrees[ii] - degrees[ii-1]);
-//                if (degrees[ii] - degrees[ii-1] < 0.01) {
-//                    throw new IllegalStateException("Drawing failed.");
-//                }
-//            }
         }
         
     }
@@ -475,7 +466,12 @@ public class EuclideanPseudoLines {
         }
     }
     
-    public void jung() {
+    
+    public void arrange() {
+        if (arranged)
+            return;
+        arranged = true;
+        approximatelyArrange();
         Dimension dim = new Dimension();
         dim.setSize( 2*RADIUS, 2*RADIUS);
         Graph<IPoint, SignedSet> graph = new SparseGraph<IPoint, SignedSet>();
@@ -485,31 +481,23 @@ public class EuclideanPseudoLines {
         }
         
         // set initial locations ...
-        SpringLayout<IPoint, SignedSet> fruchtermanReingold = new SpringLayout<IPoint, SignedSet>(graph);
-        fruchtermanReingold.setSize(dim);
-        fruchtermanReingold.initialize();
+        SpringLayout<IPoint, SignedSet> spring = new SpringLayout<IPoint, SignedSet>(graph);
+        spring.setSize(dim);
+        spring.initialize();
         for (Point p:points) {
-            p.setLocation(fruchtermanReingold);
+            p.setLocation(spring);
         }
-//        for (int i=0;i<360;i++) {
-//            DummyPoint dp = new DummyPoint();
-//            double angle = i*Math.PI/180;
-//            fruchtermanReingold.setLocation(dp, Math.cos(angle)*RADIUS+RADIUS, Math.sin(angle)*RADIUS+RADIUS);
-//            fruchtermanReingold.lock(dp,true);
-//        }
-        long time = System.currentTimeMillis();
         for (int i=0;i<300;i++) {
-            fruchtermanReingold.step();
+            spring.step();
         }
-        System.err.println(System.currentTimeMillis()-time);
         for (Point p:points) {
-            p.getLocationFromLayout(fruchtermanReingold);
+            p.getLocationFromLayout(spring);
         }
         
     }
     
     public RenderedImage image() {
-        this.arrangePoints();
+        this.arrange();
         BufferedImage image = new BufferedImage(WIDTH,WIDTH,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
