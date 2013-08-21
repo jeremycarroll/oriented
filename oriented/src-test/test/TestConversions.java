@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotSame;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import net.sf.oriented.impl.om.Cryptomorphisms;
 import net.sf.oriented.impl.om.DelegatingFaceLattice;
@@ -38,6 +39,12 @@ import test.BetterParameterized.TestName;
 
 @RunWith(value = BetterParameterized.class)
 public class TestConversions {
+    
+    static  final int skipPerCent;
+    static {
+        String percent = System.getenv("SKIP_TEST_PERCENT");
+        skipPerCent = percent==null?0:Integer.parseInt(percent);
+    }
 
 	static FactoryFactory special;
 
@@ -45,6 +52,8 @@ public class TestConversions {
 
 	@Parameters
 	public static Collection<Object[]> data() {
+	    
+	    Random rand = new Random();
 
 		FactoryFactory factories[] = new FactoryFactory[5];
 		int n = 0;
@@ -83,10 +92,10 @@ public class TestConversions {
 								&& !Cryptomorphisms.DUALREALIZED.equals(from)) {
 							continue;
 						}
-//                        if (Cryptomorphisms.DUALCHIROTOPE.equals(from) && Cryptomorphisms.FACELATTICE
-//                                .equals(to) && ff == 0 && source == 1 )
-						r.add(new Object[] { name(source, ff, from, to),
-								source, f, from, to, n++ });
+						if (rand.nextInt(100)>=skipPerCent) {
+						    r.add(new Object[] { name(source, ff, from, to),
+						            source, f, from, to, n++ });
+						}
 					}
 				}
 				ff++;
