@@ -13,7 +13,5 @@
 	<classpathentry kind="lib" path="jung/jung-algorithms-2.0.1.jar" sourcepath="jung/jung-algorithms-2.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="jung/jung-api-2.0.1.jar" sourcepath="jung/jung-api-2.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="jung/collections-generic-4.01.jar"/>
-	<classpathentry kind="lib" path="jung/jung-samples-2.0.1.jar" sourcepath="jung/jung-samples-2.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="jung/jung-visualization-2.0.1.jar" sourcepath="jung/jung-visualization-2.0.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
