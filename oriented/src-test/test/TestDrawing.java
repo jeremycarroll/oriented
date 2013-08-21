@@ -57,6 +57,7 @@ public class TestDrawing {
         euclid.arrangePoints();
 //        euclid.checkForOverlappingEdge();
         System.err.println(Arrays.asList(pseudoLines.toCrossingsString()));
+        euclid.jung();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));
         iw.write(euclid.image());

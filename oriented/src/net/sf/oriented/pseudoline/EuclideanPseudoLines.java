@@ -5,15 +5,18 @@ package net.sf.oriented.pseudoline;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +27,14 @@ import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import com.google.common.collect.Iterables;
+
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
@@ -65,8 +76,10 @@ public class EuclideanPseudoLines {
         }
 
     }
+    interface IPoint {}
+    class DummyPoint implements IPoint {}
 
-    class Point {
+    class Point implements IPoint {
         
         int ring;
         Point adjacent[];
@@ -214,6 +227,25 @@ public class EuclideanPseudoLines {
             }
             return rslt;
         }
+        public void addToJung(Graph<IPoint, SignedSet> graph) {
+            for (Point p:this.getInnerRing()) {
+                graph.addEdge(p.covector().compose(covector()), this, p);
+            }
+            for (Point p:this.getSameRing()) {
+                if (p.degrees< degrees) {
+                    graph.addEdge(p.covector().compose(covector()), this, p);
+                }
+            }
+            
+        }
+        public void setLocation(Layout<IPoint, SignedSet> layout) {
+            layout.setLocation(this,new Point2D.Double(x+RADIUS,y+RADIUS));
+        }
+        public void getLocationFromLayout(
+                AbstractLayout<IPoint, SignedSet> layout) {
+            x =  layout.getX(this)-RADIUS;
+            y = layout.getY(this)-RADIUS;
+        }
     }
     
     private class PointAtInfinity extends Point {
@@ -238,6 +270,19 @@ public class EuclideanPseudoLines {
         public PointAtInfinity next(PointAtInfinity previous) {
             Point p[] = getSameRing();
             return (PointAtInfinity) p[p[0]==previous?1:0];
+        }
+        
+
+        @Override
+        public void setLocation(Layout<IPoint, SignedSet> layout) {
+            super.setLocation(layout);
+            layout.lock(this, true);
+        }
+        
+        @Override
+        public void getLocationFromLayout(
+                AbstractLayout<IPoint, SignedSet> layout) {
+            
         }
 
     }
@@ -431,6 +476,39 @@ public class EuclideanPseudoLines {
                 allLines.add(ll);
             }
         }
+    }
+    
+    public void jung() {
+        Dimension dim = new Dimension();
+        dim.setSize( 2*RADIUS, 2*RADIUS);
+        Graph<IPoint, SignedSet> graph = new SparseGraph<IPoint, SignedSet>();
+        // load up all points
+        for (Point p:points) {
+            p.addToJung(graph);
+        }
+        
+        // set initial locations ...
+        SpringLayout<IPoint, SignedSet> fruchtermanReingold = new SpringLayout<IPoint, SignedSet>(graph);
+        fruchtermanReingold.setSize(dim);
+        fruchtermanReingold.initialize();
+        for (Point p:points) {
+            p.setLocation(fruchtermanReingold);
+        }
+//        for (int i=0;i<360;i++) {
+//            DummyPoint dp = new DummyPoint();
+//            double angle = i*Math.PI/180;
+//            fruchtermanReingold.setLocation(dp, Math.cos(angle)*RADIUS+RADIUS, Math.sin(angle)*RADIUS+RADIUS);
+//            fruchtermanReingold.lock(dp,true);
+//        }
+        long time = System.currentTimeMillis();
+        for (int i=0;i<700;i++) {
+            fruchtermanReingold.step();
+        }
+        System.err.println(System.currentTimeMillis()-time);
+        for (Point p:points) {
+            p.getLocationFromLayout(fruchtermanReingold);
+        }
+        
     }
     
     public RenderedImage image() {
