@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -39,6 +40,84 @@ import net.sf.oriented.omi.SignedSet;
 
 public class EuclideanPseudoLines {
     
+    private class Path {
+
+        private final Label label;
+        private final Point[] points;
+        public Path(Point first, Point second) {
+            label = projective.noCoLoops().minus(first.covector().support().union(second.covector().support())).iterator().next();
+            this.points = followLine(first, second);
+        }
+        private Point[] followLine(Point first, Point second) {
+            List<Point> points = new ArrayList<Point>();
+            points.add(first);
+            Point prev = first;
+            Point current = second;
+   extendingLine:
+            while ( true ) {
+                points.add(current);
+                for (Point p:current.adjacent) {
+                    if (p == prev) {
+                        continue;
+                    }
+                    if (p.covector().sign(label)==0) {
+                        // this is on the same line.
+                        prev = current;
+                        current = p;
+                        continue extendingLine;
+                    }
+                }
+                // no more points, we crossed the Euclidean plane
+                return points.toArray(new Point[points.size()]);
+            }
+            
+        }
+/*
+ * 
+ * 
+       for (Point p:points) {
+           if (p.ring==0) {
+               continue;
+           }
+           for (Point q:Iterables.concat(Arrays.asList(p.getSameRing()),Arrays.asList(p.getOuterRing()))) {
+               Label line = projective.noCoLoops().minus(p.covector().support().union(q.covector().support())).iterator().next();
+               Color c = colors[projective.getEquivalentOM().asInt(line)%colors.length];
+               graphics.setColor(c);
+               graphics.drawLine((int)p.x, (int)p.y, (int)q.x, (int)q.y);
+           }
+       }
+ * 
+ */
+        public Path2D getPath2D() {
+            Path2D result = new Path2D.Double();
+            
+            result.moveTo(points[0].x, points[0].y);
+            Point2D control[] = controlPoints(points[0], points[1], points[2]);
+            result.quadTo(control[0].getX(), control[0].getY(), points[1].x, points[1].y);
+            for (int i=2;i<points.length-1;i++) {
+                Point2D lastControl = control[1];
+                control = controlPoints(points[i-1], points[i], points[i+1]);
+                result.curveTo(lastControl.getX(),lastControl.getY(),control[0].getX(),control[0].getY(),
+                        points[i].x, points[i].y);
+            }
+            
+            Point last = points[points.length-1];
+            result.quadTo(control[1].getX(), control[1].getY(), last.x, last.y );
+            
+            return result;
+        }
+        private Point2D[] controlPoints(Point point1, Point point2, Point point3) {
+            double xDiff = (point3.x - point1.x)/8;
+            double yDiff = (point3.y - point1.y)/8;
+            double x1 = point2.x - xDiff,y1 = point2.y - yDiff, x2 = point2.x + xDiff, y2 = point2.y + yDiff;
+            
+            return new Point2D[]{new Point2D.Double(x1,y1),new Point2D.Double(x2,y2)};
+        }
+        public Label label() {
+            return label;
+        }
+
+    }
     private static final double RADIUS = 1400.0;
     private final static int WIDTH = 3000;
     private static class XLine extends SubLine {
@@ -512,16 +591,18 @@ public class EuclideanPseudoLines {
        graphics.setStroke(new BasicStroke(2.0f));
        graphics.setColor(Color.BLACK);
        graphics.draw(circ);
-
-       for (Point p:points) {
-           if (p.ring==0) {
+       
+       Set<SignedSet> done = new HashSet<SignedSet>();
+       for (Point p:getRing(0)) {
+           if (done.contains(p.covector().opposite())) {
                continue;
            }
-           for (Point q:Iterables.concat(Arrays.asList(p.getSameRing()),Arrays.asList(p.getOuterRing()))) {
-               Label line = projective.noCoLoops().minus(p.covector().support().union(q.covector().support())).iterator().next();
-               Color c = colors[projective.getEquivalentOM().asInt(line)%colors.length];
+           done.add(p.covector());
+           for (Point q:p.getInnerRing()) {
+               Path path = new Path(p, q);
+               Color c = colors[projective.getEquivalentOM().asInt(path.label())%colors.length];
                graphics.setColor(c);
-               graphics.drawLine((int)p.x, (int)p.y, (int)q.x, (int)q.y);
+               graphics.draw(path.getPath2D());
            }
        }
 
