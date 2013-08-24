@@ -95,6 +95,7 @@ public class TestExamples2 {
 
     @Test
     public void testDualIndependentSets() throws AxiomViolation {
+        Assume.assumeTrue(om.dual().rank()<8);  // otherwise it takes a long time! (well about a minute for tsukamoto
         om.getMatroid().dual().getIndependentSets().verify();
     }
     @Test
@@ -113,12 +114,14 @@ public class TestExamples2 {
         }
     }
     
-    @Ignore
     @Test
     public void testMathsOverflow129698() {
         if (om.rank() * 2 < om.n()) {
             final OM dual = om.dual();
             final Matroid dualMatroid = dual.getMatroid();
+            int notBasis = 0;
+            int basisAndIndependent = 0;
+            int basisAndDependent = 0;
             for (int args[] : new CoLexicographic(dual.n(), dual.rank() ) ) {
                 if (dual.getChirotope().chi(args) != 0 ) { 
                     // linearly independent
@@ -133,8 +136,16 @@ public class TestExamples2 {
                             }));
                     UnsignedSet other = dual.setOfElements().minus(basis);
                     boolean independent = dualMatroid.getIndependentSets().contains(other);
+                    if (independent) {
+                        basisAndIndependent++;
+                    } else {
+                        basisAndDependent++;
+                    }
+                } else {
+                    notBasis++;
                 }
             }
+            System.err.println(name+": good = "+ basisAndIndependent + "; not basis = "+notBasis +"; bad = " + basisAndDependent);
         }
     }
     
