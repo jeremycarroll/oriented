@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -35,6 +36,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 
@@ -740,6 +742,22 @@ public class EuclideanPseudoLines {
         double x = (RADIUS - 40) * Math.cos(radians);
         double y = -(RADIUS - 40) * Math.sin(radians);
         writeCenteredString(graphics,lineLabel(before,after).label(),x,y,null);
+        IPoint p = centerOfPositiveFace();
+        drawArrow(graphics,p.getX(),p.getY(),p.getX()+50,p.getY());
+    }
+
+    private IPoint centerOfPositiveFace() {
+        int count = 0;
+        double sumx = 0.0;
+        double sumy = 0.0;
+        for (Point p:points) {
+            if (p.covector().minus().isEmpty()) {
+                count++;
+                sumx += p.getX();
+                sumy += p.getY();
+            }
+        }
+        return new Point2DDouble(sumx/count,sumy/count);
     }
 
     private void computeLabelPositions() {
@@ -766,6 +784,25 @@ public class EuclideanPseudoLines {
         graphics.setColor(Color.BLACK);
         graphics.drawString(lbl, (float) x, (float)y);
     }
+    
+    private void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
+        Graphics2D g =  (Graphics2D) g1.create();
+
+        double dx = x2 - x1, dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int ARR_SIZE = 15;
+        int len = (int) Math.sqrt(dx*dx + dy*dy);
+        AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
+        at.concatenate(AffineTransform.getRotateInstance(angle));
+        g.transform(at);
+
+        // Draw horizontal arrow starting in (0, 0)
+        g.drawLine(0, 0, len, 0);
+        g.fillOval(0-ARR_SIZE/2, 0-ARR_SIZE/2, ARR_SIZE, ARR_SIZE);
+        g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
+                      new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
+    }
+
 }
 
 
