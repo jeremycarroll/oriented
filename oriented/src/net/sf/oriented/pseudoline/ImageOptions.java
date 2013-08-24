@@ -4,10 +4,6 @@
 package net.sf.oriented.pseudoline;
 
 import java.awt.Color;
-import java.util.Map;
-
-import com.google.common.base.Function;
-
 import net.sf.oriented.omi.Label;
 
 public class ImageOptions {
@@ -26,8 +22,8 @@ public class ImageOptions {
     public Color background;
     public Color fill;
     
-    public double arrowLength;
-    public double arrowSize;
+    public double originArrowLength;
+    public double originArrowSize;
 
     
 

@@ -6,6 +6,7 @@ package test;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,16 +16,22 @@ import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.Matroid;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.PseudoLines;
+import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 
 import test.BetterParameterized.TestName;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.google.common.math.IntMath;
 
 @RunWith(BetterParameterized.class)
@@ -82,6 +89,15 @@ public class TestExamples2 {
     }
     
     @Test
+    public void testIndependentSets() throws AxiomViolation {
+        om.getMatroid().getIndependentSets().verify();
+    }
+
+    @Test
+    public void testDualIndependentSets() throws AxiomViolation {
+        om.getMatroid().dual().getIndependentSets().verify();
+    }
+    @Test
     public void testFaceLattice() throws AxiomViolation {
         testFaceLattice(om);
     }
@@ -94,6 +110,31 @@ public class TestExamples2 {
     public void testDualFaceLattice() throws AxiomViolation {
         if (om.dual().rank()<10) {
             testFaceLattice(om.dual());
+        }
+    }
+    
+    @Ignore
+    @Test
+    public void testMathsOverflow129698() {
+        if (om.rank() * 2 < om.n()) {
+            final OM dual = om.dual();
+            final Matroid dualMatroid = dual.getMatroid();
+            for (int args[] : new CoLexicographic(dual.n(), dual.rank() ) ) {
+                if (dual.getChirotope().chi(args) != 0 ) { 
+                    // linearly independent
+                    UnsignedSet basis = dual.ffactory().unsignedSets()
+                            .copyBackingCollection(
+                            Lists.transform(Arrays.asList(Misc.box(args)),
+                                    new Function<Integer,Label>(){
+                                @Override
+                                public Label apply(Integer i) {
+                                    return dual.elements()[i];
+                                }
+                            }));
+                    UnsignedSet other = dual.setOfElements().minus(basis);
+                    boolean independent = dualMatroid.getIndependentSets().contains(other);
+                }
+            }
         }
     }
     

@@ -5,8 +5,11 @@
 package net.sf.oriented.impl.om;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.impl.set.SetOfUnsignedSetInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.UnsignedSet;
@@ -31,6 +34,8 @@ public class MatroidAll implements MatroidInternal {
 	final private boolean older;
 
 	final private FactoryFactory factory;
+
+    private Independent independent;
 
 	MatroidAll(LabelImpl[] g, OMInternal om) {
 		this(g, om, om.ffactory());
@@ -98,8 +103,25 @@ public class MatroidAll implements MatroidInternal {
 		initBases();
 		return bases;
 	}
+	
+	@Override
+	public Independent getIndependentSets() {
+	    initIndependentSets();
+	    return independent;
+	}
 
-	private void initBases() {
+	private void initIndependentSets() {
+	    if (independent == null) {
+	        Set<UnsignedSet> independentSets = new HashSet<UnsignedSet>();
+	        for ( UnsignedSet basis: getBases() ) {
+	            independentSets.addAll(basis.powerSet());
+	        }
+	        independent = new Independent((SetOfUnsignedSetInternal)ffactory().setsOfUnsignedSet()
+	                .copyBackingCollection(independentSets),this);
+	    }
+	}
+
+    private void initBases() {
 		if (bases == null) {
 			if (dual.bases != null) {
 				bases = new Bases(dual.bases, this);
@@ -148,6 +170,7 @@ public class MatroidAll implements MatroidInternal {
     public UnsignedSet setOfElements() {
         return ffactory().unsignedSets().copyBackingCollection(Arrays.asList(elements()));
     }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

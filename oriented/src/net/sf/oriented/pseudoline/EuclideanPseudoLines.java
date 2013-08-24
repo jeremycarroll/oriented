@@ -25,20 +25,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SignedSet;
+
 import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
-
-import net.sf.oriented.omi.Face;
-import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.SignedSet;
 
 public class EuclideanPseudoLines {
     private static final double RADIUS = 1400.0;

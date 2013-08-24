@@ -15,7 +15,6 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,6 +24,15 @@ import org.junit.Test;
 public class TestDrawing {
     
 
+    @Test
+    public void testPappus() throws IOException {
+        testDrawing(Examples.πάππος(),"pappus");
+    }
+    @Test
+    public void testCeva() throws IOException {
+        testDrawing(Examples.ceva(),"ceva");
+    }
+    
     @Test
     public void testRingel() throws IOException {
         testDrawing(Examples.ringel(),"3", "ringel");

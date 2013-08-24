@@ -159,6 +159,7 @@ public class MatroidCircuits extends AbsMatroid {
             
         };
     }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

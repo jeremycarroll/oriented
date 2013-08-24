@@ -302,6 +302,7 @@ outer:
 	private ChirotopeFactory chirotope;
 	private Factory<MatroidAsSet> bases;
 	private Factory<MatroidAsSet> unsignedCircuits;
+    private Factory<MatroidAsSet> independentSets;
 	private RealizedFactory realized;
 
 	private final Options options;
@@ -326,6 +327,7 @@ outer:
 
 		bases = MatroidFactoryImpl.bases(this);
 		unsignedCircuits = MatroidFactoryImpl.circuits(this);
+		independentSets = MatroidFactoryImpl.independentSets(this);
 		realized = new OMRealizedFactory(this);
 	}
 
@@ -375,6 +377,16 @@ outer:
 		return unsignedCircuits;
 	}
 
+
+    /**
+     * A factory for matroids from independent sets.
+     * 
+     * @return A factory for matroids.
+     */
+    public Factory<MatroidAsSet> independentSets() {
+        return independentSets;
+    }
+    
 	/**
 	 * A factory for oriented matroids which uses the circuit representation.
 	 * 

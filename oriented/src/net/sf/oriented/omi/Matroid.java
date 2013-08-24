@@ -30,6 +30,9 @@ public interface Matroid extends Verify {
      * @return  A view of the matroid as a set of bases.
      */
 	public MatroidAsSet getBases();
+	
+
+    public MatroidAsSet  getIndependentSets();
 
 	/**
 	 *  The dual of the matroid.
@@ -62,6 +65,7 @@ public interface Matroid extends Verify {
      * @return The automorphism group for this matroid.
      */
     Group automorphisms();
+
 
 }
 /************************************************************************

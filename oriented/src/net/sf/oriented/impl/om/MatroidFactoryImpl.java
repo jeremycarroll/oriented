@@ -39,6 +39,21 @@ public abstract class MatroidFactoryImpl extends
 		}
 	}
 
+    private static final class IndependentFactory extends MatroidFactoryImpl {
+        private IndependentFactory(FactoryFactory f) {
+            super(f);
+        }
+
+        @Override
+        MatroidAsSet construct(SetOfUnsignedSetInternal signedSets, MatroidAll all) {
+            return new Independent(signedSets, all);
+        }
+
+        @Override
+        public String toString(MatroidAsSet s) {
+            return formatString(s, s.getIndependentSets());
+        }
+    }
 	private static final class BFactory extends MatroidFactoryImpl {
 		private BFactory(FactoryFactory f) {
 			super(f);
@@ -67,6 +82,9 @@ public abstract class MatroidFactoryImpl extends
 		return new BFactory(f);
 	}
 
+    static public MatroidFactoryImpl independentSets(FactoryFactory f) {
+        return new IndependentFactory(f);
+    }
 	@Override
 	public MatroidAsSet copyBackingCollection(Iterable<? extends UnsignedSet> c) {
 		return construct(sets.copyBackingCollection(c));

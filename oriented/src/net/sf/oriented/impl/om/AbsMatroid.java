@@ -204,6 +204,12 @@ abstract class AbsMatroid extends AbsAxioms<UnsignedSet> implements
     public UnsignedSet[] toArray() {
         return this.set.toArray();
     }
+    
+
+    @Override
+    public Independent getIndependentSets() {
+        return all.getIndependentSets();
+    }
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
