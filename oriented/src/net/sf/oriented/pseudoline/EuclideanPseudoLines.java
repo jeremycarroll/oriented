@@ -11,6 +11,7 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.lang.reflect.Array;
@@ -100,11 +101,11 @@ public class EuclideanPseudoLines {
             double diffNorm = Math.sqrt(xDiff*xDiff+yDiff*yDiff);
             double p1dx = point2.getX() - point1.getX();
             double p1dy = point2.getY() - point1.getY();
-            double p1dnorm = Math.sqrt(p1dx*p1dx+p1dy*p1dy);
+//            double p1dnorm = Math.sqrt(p1dx*p1dx+p1dy*p1dy);
             double p1DotDiff = p1dx * xDiff + p1dy * yDiff;
             double p3dx = point3.getX() - point2.getX();
             double p3dy = point3.getY() - point2.getY();
-            double p3dnorm = Math.sqrt(p3dx*p3dx+p3dy*p3dy);
+//            double p3dnorm = Math.sqrt(p3dx*p3dx+p3dy*p3dy);
             double p3DotDiff = p3dx * xDiff + p3dy * yDiff;
             double x1 = point2.getX() -  xDiff*p1DotDiff/diffNorm/3/diffNorm,
                     y1 = point2.getY() - yDiff*p1DotDiff/diffNorm/3/diffNorm, 
@@ -273,7 +274,7 @@ public class EuclideanPseudoLines {
         public void setRadius(double r) {
             radius = r;
             x = r * Math.cos(degrees*Math.PI/180.0);
-            y = r * Math.sin(degrees*Math.PI/180.0);
+            y = -r * Math.sin(degrees*Math.PI/180.0);
         }
         public void computePosition() {
             double highest = 0.0;
@@ -326,10 +327,9 @@ public class EuclideanPseudoLines {
         public void setLocation(Layout<IPoint, SignedSet> layout) {
             layout.setLocation(this,new Point2D.Double(x+RADIUS,y+RADIUS));
         }
-        public void getLocationFromLayout(
-                AbstractLayout<IPoint, SignedSet> layout) {
+        public void getLocationFromLayout(AbstractLayout<IPoint, SignedSet> layout) {
             x =  layout.getX(this)-RADIUS;
-            y = layout.getY(this)-RADIUS;
+            y =  layout.getY(this)-RADIUS;
         }
         @Override
         public double getX() {
@@ -338,6 +338,10 @@ public class EuclideanPseudoLines {
         @Override
         public double getY() {
             return y;
+        }
+        
+        double getDegrees() {
+            return degrees;
         }
     }
     
@@ -375,8 +379,7 @@ public class EuclideanPseudoLines {
         }
         
         @Override
-        public void getLocationFromLayout(
-                AbstractLayout<IPoint, SignedSet> layout) {
+        public void getLocationFromLayout(AbstractLayout<IPoint, SignedSet> layout) {
             
         }
 
@@ -408,7 +411,8 @@ public class EuclideanPseudoLines {
            double degrees = labelPositions[ix];
            double radians = Math.PI* degrees/180.0;
            double r = RADIUS + 50;
-           return new Point2DDouble(r*Math.cos(radians), r*Math.sin(radians));
+//           System.err.println(lbl.label()+ " "+ degrees);
+           return new Point2DDouble(r*Math.cos(radians), -r*Math.sin(radians));
         }
 
         private void setLabelPositions(Point first, Point last) {
@@ -445,6 +449,14 @@ public class EuclideanPseudoLines {
                 }
             }
         }
+
+        public void writeLineLabels(Graphics2D graphics) {
+            for (int i=0;i<lineLabels.length;i++) {
+                IPoint pos = getLabelPosition(lineLabels[i]);
+                writeCenteredString(graphics, lineLabels[i].label(), pos.getX(), pos.getY(), Color.WHITE);
+            }
+        }
+
 
     }
     final PseudoLines projective;
@@ -670,6 +682,7 @@ public class EuclideanPseudoLines {
         BufferedImage image = new BufferedImage(WIDTH,WIDTH,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
+       graphics.setFont(graphics.getFont().deriveFont(4*graphics.getFont().getSize2D()));
        graphics.setBackground(Color.WHITE);
        graphics.setColor(Color.WHITE);
        graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
@@ -684,16 +697,17 @@ public class EuclideanPseudoLines {
        
        Set<SignedSet> done = new HashSet<SignedSet>();
        for (PointAtInfinity p:getOuterRing()) {
-           if (done.contains(p.covector().opposite())) {
-               continue;
+           if (!done.contains(p.covector().opposite())) {
+               done.add(p.covector());
+               for (Point q:p.getInnerRing()) {
+                   Path path = new Path(p, q);
+                   Color c = colors[projective.getEquivalentOM().asInt(path.label())%colors.length];
+                   graphics.setColor(c);
+                   graphics.draw(path.getPath2D());
+               }
            }
-           done.add(p.covector());
-           for (Point q:p.getInnerRing()) {
-               Path path = new Path(p, q);
-               Color c = colors[projective.getEquivalentOM().asInt(path.label())%colors.length];
-               graphics.setColor(c);
-               graphics.draw(path.getPath2D());
-           }
+           graphics.setColor(Color.BLACK);
+           p.writeLineLabels(graphics);
        }
 
        graphics.setColor(Color.BLACK);
@@ -701,7 +715,31 @@ public class EuclideanPseudoLines {
            graphics.fillRect((int)p.x-1,(int) p.y-1, 3, 3);
        }
        
+       labelLineAtInfinity(graphics);
+       
        return image;
+    }
+
+    private void labelLineAtInfinity(Graphics2D graphics) {
+        PointAtInfinity before = null, after = null;
+        for (PointAtInfinity p:getOuterRing()) {
+            double d = p.getDegrees();
+            if (d>135) {
+                if (after == null || d<after.getDegrees()) {
+                    after = p;
+                }
+            } else {
+                if (before == null || d>before.getDegrees()) {
+                    before = p;
+                }
+            }
+        }
+        @SuppressWarnings("null")
+        double degrees = (after.getDegrees() + before.getDegrees()) / 2;
+        double radians = Math.PI * degrees / 180;
+        double x = (RADIUS - 40) * Math.cos(radians);
+        double y = -(RADIUS - 40) * Math.sin(radians);
+        writeCenteredString(graphics,lineLabel(before,after).label(),x,y,null);
     }
 
     private void computeLabelPositions() {
@@ -712,6 +750,21 @@ public class EuclideanPseudoLines {
 
     private Label lineLabel(Point first, Point second) {
         return projective.noCoLoops().minus(first.covector().support().union(second.covector().support())).iterator().next();
+    }
+
+    private void writeCenteredString(Graphics2D graphics, String lbl,
+            double xx, double yy, Color bgColor) {
+        Rectangle2D bounds = graphics.getFont().getStringBounds(lbl, graphics.getFontRenderContext());
+        double x = xx - bounds.getWidth()/2;
+        double y = yy + bounds.getHeight()/2;
+        if (bgColor != null) {
+            graphics.setColor(bgColor);
+            graphics.fillRect(
+                    (int)x-5, (int)y+5-(int)bounds.getHeight(), 
+                    (int)bounds.getWidth()+10, (int)bounds.getHeight()+10);
+        }
+        graphics.setColor(Color.BLACK);
+        graphics.drawString(lbl, (float) x, (float)y);
     }
 }
 

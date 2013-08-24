@@ -15,6 +15,7 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PseudoLines;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -22,6 +23,7 @@ import org.junit.Test;
  *
  */
 public class TestDrawing {
+    
 
     @Test
     public void testRingel() throws IOException {
@@ -30,7 +32,7 @@ public class TestDrawing {
 
     @Test
     public void testTsukamoto13_1() throws IOException {
-        testDrawing(Examples.tsukamoto13(1),  "H", "tsukamoto(1)");
+        testDrawing(Examples.tsukamoto13(1),  "tsukamoto(1)");
     }
 
     @Test
@@ -40,7 +42,7 @@ public class TestDrawing {
     
     @Test
     public void testSaw() throws IOException {
-        testDrawing(Examples.circularsaw3(),"saw");
+        testDrawing(Examples.circularsaw3(),"A","saw");
     }
     private void testDrawing(OM om,String name) throws IOException {
         for (Label lbl: om.elements()){
