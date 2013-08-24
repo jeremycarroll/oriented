@@ -26,7 +26,6 @@ import java.util.Set;
 import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
-import com.google.common.collect.Iterables;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -39,17 +38,20 @@ import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 
 public class EuclideanPseudoLines {
+    private static final double RADIUS = 1400.0;
+    private final static int WIDTH = 3000;
     
     private class Path {
 
         private final Label label;
-        private final Point[] points;
-        public Path(Point first, Point second) {
-            label = projective.noCoLoops().minus(first.covector().support().union(second.covector().support())).iterator().next();
+        private final IPoint[] points;
+        public Path(PointAtInfinity first, Point second) {
+            label = lineLabel(first, second);
             this.points = followLine(first, second);
         }
-        private Point[] followLine(Point first, Point second) {
-            List<Point> points = new ArrayList<Point>();
+        private IPoint[] followLine(PointAtInfinity first, Point second) {
+            List<IPoint> points = new ArrayList<IPoint>();
+            points.add(first.getLabelPosition(label));
             points.add(first);
             Point prev = first;
             Point current = second;
@@ -67,59 +69,55 @@ public class EuclideanPseudoLines {
                         continue extendingLine;
                     }
                 }
+                points.add(((PointAtInfinity)current).getLabelPosition(label));
                 // no more points, we crossed the Euclidean plane
-                return points.toArray(new Point[points.size()]);
+                return points.toArray(new IPoint[points.size()]);
             }
             
         }
-/*
- * 
- * 
-       for (Point p:points) {
-           if (p.ring==0) {
-               continue;
-           }
-           for (Point q:Iterables.concat(Arrays.asList(p.getSameRing()),Arrays.asList(p.getOuterRing()))) {
-               Label line = projective.noCoLoops().minus(p.covector().support().union(q.covector().support())).iterator().next();
-               Color c = colors[projective.getEquivalentOM().asInt(line)%colors.length];
-               graphics.setColor(c);
-               graphics.drawLine((int)p.x, (int)p.y, (int)q.x, (int)q.y);
-           }
-       }
- * 
- */
+        
         public Path2D getPath2D() {
             Path2D result = new Path2D.Double();
             
-            result.moveTo(points[0].x, points[0].y);
-            Point2D control[] = controlPoints(points[0], points[1], points[2]);
-            result.quadTo(control[0].getX(), control[0].getY(), points[1].x, points[1].y);
+            result.moveTo(points[0].getX(), points[0].getY());
+            IPoint control[] = controlPoints(points[0], points[1], points[2]);
+            result.quadTo(control[0].getX(), control[0].getY(), points[1].getX(), points[1].getY());
             for (int i=2;i<points.length-1;i++) {
-                Point2D lastControl = control[1];
+                IPoint lastControl = control[1];
                 control = controlPoints(points[i-1], points[i], points[i+1]);
                 result.curveTo(lastControl.getX(),lastControl.getY(),control[0].getX(),control[0].getY(),
-                        points[i].x, points[i].y);
+                        points[i].getX(), points[i].getY());
             }
             
-            Point last = points[points.length-1];
-            result.quadTo(control[1].getX(), control[1].getY(), last.x, last.y );
+            IPoint last = points[points.length-1];
+            result.quadTo(control[1].getX(), control[1].getY(), last.getX(), last.getY());
             
             return result;
         }
-        private Point2D[] controlPoints(Point point1, Point point2, Point point3) {
-            double xDiff = (point3.x - point1.x)/8;
-            double yDiff = (point3.y - point1.y)/8;
-            double x1 = point2.x - xDiff,y1 = point2.y - yDiff, x2 = point2.x + xDiff, y2 = point2.y + yDiff;
+        private IPoint[] controlPoints(IPoint point1, IPoint point2, IPoint point3) {
+            double xDiff = (point3.getX() - point1.getX());
+            double yDiff = (point3.getY() - point1.getY());
+            double diffNorm = Math.sqrt(xDiff*xDiff+yDiff*yDiff);
+            double p1dx = point2.getX() - point1.getX();
+            double p1dy = point2.getY() - point1.getY();
+            double p1dnorm = Math.sqrt(p1dx*p1dx+p1dy*p1dy);
+            double p1DotDiff = p1dx * xDiff + p1dy * yDiff;
+            double p3dx = point3.getX() - point2.getX();
+            double p3dy = point3.getY() - point2.getY();
+            double p3dnorm = Math.sqrt(p3dx*p3dx+p3dy*p3dy);
+            double p3DotDiff = p3dx * xDiff + p3dy * yDiff;
+            double x1 = point2.getX() -  xDiff*p1DotDiff/diffNorm/3/diffNorm,
+                    y1 = point2.getY() - yDiff*p1DotDiff/diffNorm/3/diffNorm, 
+                    x2 = point2.getX()  + xDiff*p3DotDiff/diffNorm/3/diffNorm, 
+                    y2 = point2.getY() + yDiff*p3DotDiff/diffNorm/3/diffNorm;
             
-            return new Point2D[]{new Point2D.Double(x1,y1),new Point2D.Double(x2,y2)};
+            return new IPoint[]{new Point2DDouble(x1,y1),new Point2DDouble(x2,y2)};
         }
         public Label label() {
             return label;
         }
 
     }
-    private static final double RADIUS = 1400.0;
-    private final static int WIDTH = 3000;
     private static class XLine extends SubLine {
         
         @SuppressWarnings("unused")
@@ -152,9 +150,19 @@ public class EuclideanPseudoLines {
         }
 
     }
-    interface IPoint {}
-    class DummyPoint implements IPoint {}
+    interface IPoint {
+        double getX();
+        double getY();
+    }
 
+    static class Point2DDouble extends Point2D.Double implements IPoint {
+
+        public Point2DDouble(double x, double y) {
+            super(x,y);
+        }
+        
+    }
+    
     class Point implements IPoint {
         
         int ring;
@@ -164,8 +172,9 @@ public class EuclideanPseudoLines {
         private double degrees;
         @SuppressWarnings("unused")
         private double radius;
-        private double x, y;
         private int countToOuter = 0;
+        double x;
+        double y;
 
 //        public Point(Face f, int i) {
 //            this(f);
@@ -322,10 +331,20 @@ public class EuclideanPseudoLines {
             x =  layout.getX(this)-RADIUS;
             y = layout.getY(this)-RADIUS;
         }
+        @Override
+        public double getX() {
+            return x;
+        }
+        @Override
+        public double getY() {
+            return y;
+        }
     }
     
     private class PointAtInfinity extends Point {
         Edge  edge[] = new Edge[2];
+        double labelPositions[];
+        Label lineLabels[];
 
         public PointAtInfinity(Face f) {
             super(f);
@@ -359,6 +378,72 @@ public class EuclideanPseudoLines {
         public void getLocationFromLayout(
                 AbstractLayout<IPoint, SignedSet> layout) {
             
+        }
+
+        public void computeLabelPositions() {
+            Point first = this.getSameRing()[0];
+            Point last = this.getSameRing()[1];
+            setLabelPositions(first, last);
+            computeLabelOrder(last);
+        }
+
+        private void computeLabelOrder(Point last) {
+            lineLabels = new Label[getInnerRing().length];
+            Set<Point> remaining = new HashSet<Point>(Arrays.asList(getInnerRing()));
+            int ix = 0;
+            while (!remaining.isEmpty()) {
+                for (Point p:remaining) {
+                    if (p.covector().conformsWith(last.covector())) {
+                        lineLabels[ix++] = lineLabel(this,p);
+                        last = p;
+                        remaining.remove(p);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        IPoint getLabelPosition(Label lbl) {
+           int ix = Arrays.asList(lineLabels).indexOf(lbl);
+           double degrees = labelPositions[ix];
+           double radians = Math.PI* degrees/180.0;
+           double r = RADIUS + 50;
+           return new Point2DDouble(r*Math.cos(radians), r*Math.sin(radians));
+        }
+
+        private void setLabelPositions(Point first, Point last) {
+            labelPositions = new double[getInnerRing().length];
+            double ratio;
+            switch ( getInnerRing().length) {
+            case 1:
+                ratio = 0.0;
+                break;
+            case 2:
+                ratio = 0.25;
+                break;
+            case 3:
+                ratio = 0.30;
+                break;
+            default:
+                ratio = 0.35;
+                break;
+            }
+            double start = first.degrees;
+            double end = last.degrees;
+            if ( start + 180 < end) {
+                start += 360;
+            } else if ( end + 180 < start ) {
+                end += 360;
+            }
+            double diff = end - start;
+            double skip = (1.0 - ratio) / 2;
+            labelPositions[0] = start + skip*diff;
+            if ( getInnerRing().length > 1 ) {
+                double step = ratio * diff / (getInnerRing().length - 1);
+                for (int i=1; i< getInnerRing().length; i++) {
+                    labelPositions[i] = labelPositions[i-1] + step;
+                }
+            }
         }
 
     }
@@ -451,7 +536,7 @@ public class EuclideanPseudoLines {
         PointAtInfinity last = lastPointAtInfinity();
         PointAtInfinity current = first;
         PointAtInfinity previous = last;
-        double separation = 360.0 / getRing(0).size();
+        double separation = 360.0 / getOuterRing().size();
         int pos = 0;
         do {
             current.setPosition(separation*pos);
@@ -497,14 +582,18 @@ public class EuclideanPseudoLines {
         return pointOnPositiveFaceAndLine(first);
     }
     
-    @SuppressWarnings("unchecked")
     private PointAtInfinity pointOnPositiveFaceAndLine(Label first) {
-        for (PointAtInfinity p:(List<PointAtInfinity>)(List<?>)getRing(0)) {
+        for (PointAtInfinity p:getOuterRing()) {
             if (p.isOnPositiveFace() && p.covector().sign(first) == 0 ) {
                 return p;
             }
         }
         throw new IllegalStateException("Failed to find first point.");
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<PointAtInfinity> getOuterRing() {
+        return (List<PointAtInfinity>)(List<?>)getRing(0);
     }
 
     static Color colors[] = new Color[23];
@@ -577,6 +666,7 @@ public class EuclideanPseudoLines {
     
     public RenderedImage image() {
         this.arrange();
+        computeLabelPositions();
         BufferedImage image = new BufferedImage(WIDTH,WIDTH,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
@@ -593,7 +683,7 @@ public class EuclideanPseudoLines {
        graphics.draw(circ);
        
        Set<SignedSet> done = new HashSet<SignedSet>();
-       for (Point p:getRing(0)) {
+       for (PointAtInfinity p:getOuterRing()) {
            if (done.contains(p.covector().opposite())) {
                continue;
            }
@@ -612,6 +702,16 @@ public class EuclideanPseudoLines {
        }
        
        return image;
+    }
+
+    private void computeLabelPositions() {
+        for (PointAtInfinity p: getOuterRing()) {
+            p.computeLabelPositions();
+        }
+    }
+
+    private Label lineLabel(Point first, Point second) {
+        return projective.noCoLoops().minus(first.covector().support().union(second.covector().support())).iterator().next();
     }
 }
 
