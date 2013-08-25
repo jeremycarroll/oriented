@@ -24,7 +24,7 @@ public class ImageOptions {
     
     public double lineThickness;
     
-    public double vertexSize;
+    public int vertexSize;
     
     public Color background;
     public Color fill;
@@ -115,7 +115,7 @@ public class ImageOptions {
         rslt.fill = new Color(255, 255, 204);
         rslt.background = Color.WHITE;
         rslt.foreground = Color.BLACK;
-        rslt.vertexSize = 4.0;
+        rslt.vertexSize = 3;
         rslt.fontSizeRatio = 1.0;
         rslt.lineThickness = 2.0;
         rslt.originArrowLength = 50;
