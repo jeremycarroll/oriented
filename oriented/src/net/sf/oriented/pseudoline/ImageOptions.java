@@ -13,6 +13,8 @@ public class ImageOptions {
     
     public double border;
     
+    public double labelPosition;
+    
     public double fontSizeRatio;
     
     public double lineThickness;
@@ -21,11 +23,12 @@ public class ImageOptions {
     
     public Color background;
     public Color fill;
+    public Color foreground;
     
     public double originArrowLength;
     public double originArrowSize;
 
-    
+    private double internalFontSizeRatio = 5;
 
     public void setColorOfInfinity(Color c) {
         
@@ -44,8 +47,37 @@ public class ImageOptions {
         return null;
     }
     
+    Color someColors[];
+    double someDashes[][] = new double[][]{
+            { 10, 3 },
+            { 3, 3 },
+            { 5, 3, 2, 3, 2, 3 },
+            { 7, 3, 2, 3 },
+            { 5, 3, 5, 3, 2, 3},
+            { 5, 3, 5, 3, 2, 3, 2, 3 },
+            { 10, 3, 2, 3 },
+            { 10, 3, 2, 3 , 2, 3 },
+            { 10, 3, 2, 3 , 5, 3, 2, 3 },
+            { 10, 3, 5, 3, 2, 3 },
+            { 10, 3, 2, 3, 2, 3, 2, 3 },      
+    };
+    
     public static ImageOptions defaultColor() {
-        return null;
+        ImageOptions rslt = new ImageOptions();
+        rslt.showOrigin = true;
+        rslt.showLabels = true;
+        rslt.height = rslt.width = 3000;
+        rslt.border = 100;
+        rslt.labelPosition = 50;
+        rslt.fill = new Color(255, 255, 204);
+        rslt.background = Color.WHITE;
+        rslt.foreground = Color.BLACK;
+        rslt.vertexSize = 4.0;
+        rslt.fontSizeRatio = 1.0;
+        rslt.lineThickness = 2.0;
+        rslt.originArrowLength = 50;
+        rslt.originArrowSize = 15;
+        return rslt;
     }
     
     private Label infinity;

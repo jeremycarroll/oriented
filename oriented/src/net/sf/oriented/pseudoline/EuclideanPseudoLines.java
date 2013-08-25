@@ -608,7 +608,7 @@ public class EuclideanPseudoLines {
         return (List<PointAtInfinity>)(List<?>)getRing(0);
     }
 
-    static Color colors[] = new Color[23];
+    static Color colors[] = new Color[22];
     static {
         int ix = 0;
         for (int i=0;i<3;i++)
@@ -617,6 +617,8 @@ public class EuclideanPseudoLines {
                     if (i==j && j==k)
                         continue;
                     if (i==2 && j==2 && k == 1) // too close to our background color
+                        continue;
+                    if (i==2 && j==1 && k == 2) // too close to our background color
                         continue;
                     colors[ix++] = new Color((3+6*i)*17,(3+6*j)*17,(3+6*k)*17);
                 }
@@ -667,7 +669,7 @@ public class EuclideanPseudoLines {
         for (Point p:points) {
             p.setLocation(spring);
         }
-        for (int i=0;i<300;i++) {
+        for (int i=0;i<150;i++) {
             spring.step();
         }
         for (Point p:points) {
@@ -716,6 +718,8 @@ public class EuclideanPseudoLines {
        }
        
        labelLineAtInfinity(graphics);
+       IPoint p = centerOfPositiveFace();
+       drawArrow(graphics,p.getX(),p.getY(),p.getX()+50,p.getY());
        
        return image;
     }
@@ -740,8 +744,6 @@ public class EuclideanPseudoLines {
         double x = (RADIUS - 40) * Math.cos(radians);
         double y = -(RADIUS - 40) * Math.sin(radians);
         writeCenteredString(graphics,lineLabel(before,after).label(),x,y,null);
-        IPoint p = centerOfPositiveFace();
-        drawArrow(graphics,p.getX(),p.getY(),p.getX()+50,p.getY());
     }
 
     private IPoint centerOfPositiveFace() {
