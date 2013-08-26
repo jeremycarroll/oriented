@@ -35,7 +35,7 @@ public class ImageOptions {
     public int labelBorder;
     public float lineWidth;
 
-    private double internalFontSizeRatio = 5;
+    private double internalFontSizeRatio = 2;
     
     private Color infinityColor;
     private float infinityStroke[];
@@ -117,19 +117,19 @@ public class ImageOptions {
         rslt.showLabels = true;
         rslt.infinityColor = Color.BLACK;
         rslt.infinityStroke = new float[]{ 100 , 0};
-        rslt.height = rslt.width = 3000;
-        rslt.border = 100;
-        rslt.labelPosition = 50;
+        rslt.height = rslt.width = 1000;
+        rslt.border = 30;
+        rslt.labelPosition = 15;
         rslt.fill = new Color(255, 255, 204);
         rslt.background = Color.WHITE;
         rslt.foreground = Color.BLACK;
-        rslt.vertexSize = 3;
+        rslt.vertexSize = 2;
         rslt.fontSizeRatio = 1.0;
-        rslt.lineThickness = 3.0;
-        rslt.originArrowLength = 50;
-        rslt.originArrowSize = 15;
-        rslt.labelBorder = 4;
-        rslt.lineWidth = 2;
+        rslt.lineThickness = 1.0;
+        rslt.originArrowLength = 15;
+        rslt.originArrowSize = 5;
+        rslt.labelBorder = 1;
+        rslt.lineWidth = 1.5f;
         return rslt;
     }
     
