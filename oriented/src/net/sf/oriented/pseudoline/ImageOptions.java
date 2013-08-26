@@ -32,6 +32,7 @@ public class ImageOptions {
     
     public int originArrowLength;
     public int originArrowSize;
+    public int labelBorder;
 
     private double internalFontSizeRatio = 5;
     
@@ -119,11 +120,12 @@ public class ImageOptions {
         rslt.lineThickness = 2.0;
         rslt.originArrowLength = 50;
         rslt.originArrowSize = 15;
+        rslt.labelBorder = 4;
         return rslt;
     }
     
-    double fontSizeRatio() {
-        return this.fontSizeRatio * this.internalFontSizeRatio;
+    float fontSizeRatio() {
+        return (float)(fontSizeRatio * internalFontSizeRatio);
     }
     
     void setInfinity(Label inf) {

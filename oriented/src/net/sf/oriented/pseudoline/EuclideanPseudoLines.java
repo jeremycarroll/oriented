@@ -39,8 +39,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
 public class EuclideanPseudoLines {
-    private static final double RADIUS = 1400.0;
-    private final static int WIDTH = 3000;
     
     private class Path {
 
@@ -661,7 +659,7 @@ public class EuclideanPseudoLines {
         BufferedImage image = new BufferedImage(options.width,options.height,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
-       graphics.setFont(graphics.getFont().deriveFont(4*graphics.getFont().getSize2D()));
+       graphics.setFont(graphics.getFont().deriveFont(options.fontSizeRatio()*graphics.getFont().getSize2D()));
        graphics.setBackground(getBackgroundColor());
        graphics.setColor(getBackgroundColor());
        graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
@@ -761,8 +759,8 @@ public class EuclideanPseudoLines {
         if (bgColor != null) {
             graphics.setColor(bgColor);
             graphics.fillRect(
-                    (int)x-5, (int)y+5-(int)bounds.getHeight(), 
-                    (int)bounds.getWidth()+10, (int)bounds.getHeight()+10);
+                    (int)x-options.labelBorder, (int)y+options.labelBorder-(int)bounds.getHeight(), 
+                    (int)bounds.getWidth()+options.labelBorder*2, (int)bounds.getHeight()+options.labelBorder*2);
         }
         graphics.setColor(Color.BLACK);
         graphics.drawString(lbl, (float) x, (float)y);
