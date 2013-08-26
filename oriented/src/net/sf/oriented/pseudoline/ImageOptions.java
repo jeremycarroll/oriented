@@ -33,19 +33,20 @@ public class ImageOptions {
     public int originArrowLength;
     public int originArrowSize;
     public int labelBorder;
+    public float lineWidth;
 
     private double internalFontSizeRatio = 5;
     
     private Color infinityColor;
-    private double infinityStroke[];
+    private float infinityStroke[];
     
     private Map<Label,Color> colors = new HashMap<Label,Color>();
-    private Map<Label,double[]> strokes = new HashMap<Label,double[]>();
+    private Map<Label,float[]> strokes = new HashMap<Label,float[]>();
     private Label infinity;
     private int nextColor = 0;
     private int nextStroke = 0;
     
-    private static Color someColors[] = new Color[22];
+    private static Color someColors[] = new Color[18];
 
     /**
      * Can be null
@@ -58,14 +59,14 @@ public class ImageOptions {
      * Can be null
      * @param dashes
      */
-    public void setStrokeOfInfinity(double ... dashes) {
+    public void setStrokeOfInfinity(float ... dashes) {
         infinityStroke = dashes;
     }
     public void setColor(Label lbl, Color c) {
         colors.put(lbl,c);
         
     }
-    public void setStroke(Label lbl, double ...dashes ) {
+    public void setStroke(Label lbl, float ...dashes ) {
         strokes.put(lbl,dashes);
     }
 
@@ -81,6 +82,12 @@ public class ImageOptions {
                         continue;
                     if (i==2 && j==2) // too close to our background color
                         continue;
+                    if (i+j+k==5) {
+                        continue;
+                    }
+                    if (i+j+k==4 && i*j*k==2 && k != 2) {
+                        continue;
+                    }
                     someColors[ix++] = new Color((3+6*i)*17,(3+6*j)*17,(3+6*k)*17);
                 }
         Arrays.sort(someColors,new Comparator<Color>(){
@@ -90,18 +97,18 @@ public class ImageOptions {
                 return System.identityHashCode(o1) - System.identityHashCode(o2);
             }});
     }
-    private static double someStrokes[][] = new double[][]{
-            { 10, 3 },
-            { 3, 3 },
-            { 5, 3, 2, 3, 2, 3 },
-            { 7, 3, 2, 3 },
-            { 5, 3, 5, 3, 2, 3},
-            { 5, 3, 5, 3, 2, 3, 2, 3 },
-            { 10, 3, 2, 3 },
-            { 10, 3, 2, 3 , 2, 3 },
-            { 10, 3, 2, 3 , 5, 3, 2, 3 },
-            { 10, 3, 5, 3, 2, 3 },
-            { 10, 3, 2, 3, 2, 3, 2, 3 },      
+    private static float someStrokes[][] = new float[][]{
+            { 100, 30 },
+            { 30, 30 },
+            { 50, 30, 20, 30, 20, 30 },
+            { 70, 30, 20, 30 },
+            { 50, 30, 50, 30, 20, 30},
+            { 50, 30, 50, 30, 20, 30, 20, 30 },
+            { 100, 30, 20, 30 },
+            { 100, 30, 20, 30 , 20, 30 },
+            { 100, 30, 20, 30 , 50, 30, 20, 30 },
+            { 100, 30, 50, 30, 20, 30 },
+            { 100, 30, 20, 30, 20, 30, 20, 30 },      
     };
     
     public static ImageOptions defaultColor() {
@@ -109,6 +116,7 @@ public class ImageOptions {
         rslt.showOrigin = true;
         rslt.showLabels = true;
         rslt.infinityColor = Color.BLACK;
+        rslt.infinityStroke = new float[]{ 100 , 0};
         rslt.height = rslt.width = 3000;
         rslt.border = 100;
         rslt.labelPosition = 50;
@@ -117,10 +125,11 @@ public class ImageOptions {
         rslt.foreground = Color.BLACK;
         rslt.vertexSize = 3;
         rslt.fontSizeRatio = 1.0;
-        rslt.lineThickness = 2.0;
+        rslt.lineThickness = 3.0;
         rslt.originArrowLength = 50;
         rslt.originArrowSize = 15;
         rslt.labelBorder = 4;
+        rslt.lineWidth = 2;
         return rslt;
     }
     
@@ -137,17 +146,23 @@ public class ImageOptions {
         }
         if (colors.get(lbl)==null) {
             Color color = someColors[nextColor++];
-            System.err.println(lbl+" "+color);
+            if (nextColor == someColors.length) {
+                nextColor = 0;
+            }
+//            System.err.println(lbl+" "+color);
             colors.put(lbl, color);
         }
         return colors.get(lbl);
     }
-    double[] getStroke(Label lbl){ 
+    float[] getStroke(Label lbl){ 
         if ( lbl == infinity && infinityStroke != null) {
             return infinityStroke;
         }
         if (strokes.get(lbl)==null) {
             strokes.put(lbl, someStrokes[nextStroke++]);
+            if (nextStroke == someStrokes.length) {
+                nextStroke = 0;
+            }
         }
         return strokes.get(lbl);
     }

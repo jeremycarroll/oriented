@@ -701,7 +701,7 @@ public class EuclideanPseudoLines {
     }
 
     private void setLineColorAndStroke(Graphics2D graphics, Label lbl) {
-      graphics.setStroke(new BasicStroke(2.0f));
+      graphics.setStroke(new BasicStroke(options.lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, options.getStroke(lbl), 0.0f));
       graphics.setColor(options.getColor(lbl));
     }
 
