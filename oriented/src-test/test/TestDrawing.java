@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.Label;
@@ -60,12 +61,22 @@ public class TestDrawing {
 
     private void testDrawing(OM om, String label, String name)
             throws IOException {
+//        long usedMemory = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+//        if (usedMemory> 400000000 ) {
+//            System.err.println("Attach");
+//            System.in.read();
+//        }
+//        System.err.println(usedMemory);
+        System.err.println("=== "+name+" === "+label);
         PseudoLines pseudoLines = new PseudoLines(om,label);
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-        iw.setOutput(ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg")));
+        ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg"));
+        iw.setOutput(imageOutput);
         iw.write(euclid.image());
         euclid.checkForOverlappingEdge();
+        imageOutput.close();
+        iw.dispose();
     }
 
 }
