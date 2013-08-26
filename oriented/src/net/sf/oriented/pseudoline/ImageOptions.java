@@ -119,7 +119,7 @@ public class ImageOptions {
         rslt.infinityStroke = new float[]{ 100 , 0};
         rslt.height = rslt.width = 1000;
         rslt.border = 30;
-        rslt.labelPosition = 15;
+        rslt.labelPosition = 18;
         rslt.fill = new Color(255, 255, 204);
         rslt.background = Color.WHITE;
         rslt.foreground = Color.BLACK;

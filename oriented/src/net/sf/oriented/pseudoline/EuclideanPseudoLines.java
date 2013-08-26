@@ -408,7 +408,7 @@ public class EuclideanPseudoLines {
            int ix = Arrays.asList(lineLabels).indexOf(lbl);
            double degrees = labelPositions[ix];
            double radians = Math.PI* degrees/180.0;
-           double r = getRadius() + options.border/2;
+           double r = getRadius() + options.labelPosition;
 //           System.err.println(lbl.label()+ " "+ degrees);
            return new Point2DDouble(r*Math.cos(radians), -r*Math.sin(radians));
         }
@@ -722,8 +722,8 @@ public class EuclideanPseudoLines {
         @SuppressWarnings("null")
         double degrees = (after.getDegrees() + before.getDegrees()) / 2;
         double radians = Math.PI * degrees / 180;
-        double x = (getRadius() - options.border/3) * Math.cos(radians);
-        double y = -(getRadius() - options.border/3) * Math.sin(radians);
+        double x = (getRadius() - options.labelPosition*0.8) * Math.cos(radians);
+        double y = -(getRadius() - options.labelPosition*0.8) * Math.sin(radians);
         writeCenteredString(graphics,lineLabel(before,after).label(),x,y,null);
     }
 
@@ -755,7 +755,7 @@ public class EuclideanPseudoLines {
             double xx, double yy, Color bgColor) {
         Rectangle2D bounds = graphics.getFont().getStringBounds(lbl, graphics.getFontRenderContext());
         double x = xx - bounds.getWidth()/2;
-        double y = yy + bounds.getHeight()/2;
+        double y = yy + (bounds.getHeight()-1)/2 - 2;
         if (bgColor != null) {
             graphics.setColor(bgColor);
             graphics.fillRect(
