@@ -410,7 +410,7 @@ public class EuclideanPseudoLines {
            int ix = Arrays.asList(lineLabels).indexOf(lbl);
            double degrees = labelPositions[ix];
            double radians = Math.PI* degrees/180.0;
-           double r = getRadius() + 50;
+           double r = getRadius() + options.border/2;
 //           System.err.println(lbl.label()+ " "+ degrees);
            return new Point2DDouble(r*Math.cos(radians), -r*Math.sin(radians));
         }
@@ -464,8 +464,6 @@ public class EuclideanPseudoLines {
     final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
-    private boolean approxArranged = false;
-    private boolean arranged = false;
     private ImageOptions options;
     
     public EuclideanPseudoLines(PseudoLines pseudoLines) {
@@ -542,9 +540,6 @@ public class EuclideanPseudoLines {
     
     
     private void approximatelyArrange() {
-        if (approxArranged)
-            return;
-        approxArranged = true;
         PointAtInfinity first = firstPointAtInfinity();
         PointAtInfinity last = lastPointAtInfinity();
         PointAtInfinity current = first;
@@ -609,30 +604,7 @@ public class EuclideanPseudoLines {
         return (List<PointAtInfinity>)(List<?>)getRing(0);
     }
 
-    static Color colors[] = new Color[22];
-    private final Color backgroundColor = Color.WHITE;
-    private final Color fillColor = new Color(255, 255, 204);
-    private final Color foregroundColor = Color.BLACK;
-    static {
-        int ix = 0;
-        for (int i=0;i<3;i++)
-            for (int j=0;j<3;j++)
-                for (int k=0;k<3;k++) {
-                    if (i==j && j==k)
-                        continue;
-                    if (i==2 && j==2 && k == 1) // too close to our background color
-                        continue;
-                    if (i==2 && j==1 && k == 2) // too close to our background color
-                        continue;
-                    colors[ix++] = new Color((3+6*i)*17,(3+6*j)*17,(3+6*k)*17);
-                }
-        Arrays.sort(colors,new Comparator<Color>(){
-            @Override
-            public int compare(Color o1, Color o2) {
-                // pseudorandom order
-                return System.identityHashCode(o1) - System.identityHashCode(o2);
-            }});
-    }
+    
     
     public void checkForOverlappingEdge() {
         Set<SubLine> allLines = new HashSet<SubLine>();
@@ -653,10 +625,7 @@ public class EuclideanPseudoLines {
     }
     
     
-    public void arrange() {
-        if (arranged)
-            return;
-        arranged = true;
+    private void arrange() {
         approximatelyArrange();
         Dimension dim = new Dimension();
         dim.setSize( 2*getRadius(), 2*getRadius());
@@ -687,9 +656,9 @@ public class EuclideanPseudoLines {
     }
     public RenderedImage image(ImageOptions opt) {
         options = opt;
-        this.arrange();
+        arrange();
         computeLabelPositions();
-        BufferedImage image = new BufferedImage(getWidth(),getWidth(),BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(options.width,options.height,BufferedImage.TYPE_INT_RGB);
        
        Graphics2D graphics = image.createGraphics();
        graphics.setFont(graphics.getFont().deriveFont(4*graphics.getFont().getSize2D()));
@@ -699,7 +668,7 @@ public class EuclideanPseudoLines {
        
        Shape circ = new Ellipse2D.Double(-getRadius(), -getRadius(), 2*getRadius(), 2*getRadius());
        graphics.setColor( getFillColor());
-       graphics.translate(getWidth()/2, getWidth()/2);
+       graphics.translate(options.width/2, options.height/2);
        graphics.fill(circ);
        options.setInfinity(projective.getInfinity());
        setLineColorAndStroke(graphics, projective.getInfinity());
@@ -727,8 +696,7 @@ public class EuclideanPseudoLines {
        
        labelLineAtInfinity(graphics);
        IPoint p = centerOfPositiveFace();
-       int arrowLength = 50;
-       drawArrow(graphics,p.getX(),p.getY(),p.getX()+arrowLength,p.getY());
+       drawArrow(graphics,p.getX(),p.getY(),p.getX()+options.originArrowLength,p.getY());
        
        options = null;
        return image;
@@ -756,8 +724,8 @@ public class EuclideanPseudoLines {
         @SuppressWarnings("null")
         double degrees = (after.getDegrees() + before.getDegrees()) / 2;
         double radians = Math.PI * degrees / 180;
-        double x = (getRadius() - 40) * Math.cos(radians);
-        double y = -(getRadius() - 40) * Math.sin(radians);
+        double x = (getRadius() - options.border/3) * Math.cos(radians);
+        double y = -(getRadius() - options.border/3) * Math.sin(radians);
         writeCenteredString(graphics,lineLabel(before,after).label(),x,y,null);
     }
 
@@ -801,11 +769,14 @@ public class EuclideanPseudoLines {
     }
     
     private void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
+        if (!options.showOrigin) {
+            return;
+        }
         Graphics2D g =  (Graphics2D) g1.create();
 
         double dx = x2 - x1, dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
-        int ARR_SIZE = 15;
+        int arr_size = options.originArrowSize;
         int len = (int) Math.sqrt(dx*dx + dy*dy);
         AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
         at.concatenate(AffineTransform.getRotateInstance(angle));
@@ -813,30 +784,24 @@ public class EuclideanPseudoLines {
 
         // Draw horizontal arrow starting in (0, 0)
         g.drawLine(0, 0, len, 0);
-        g.fillOval(0-ARR_SIZE/2, 0-ARR_SIZE/2, ARR_SIZE, ARR_SIZE);
-        g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
-                      new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
+        g.fillOval(0-arr_size/2, 0-arr_size/2, arr_size, arr_size);
+        g.fillPolygon(new int[] {len, len-arr_size, len-arr_size, len},
+                      new int[] {0, -arr_size, arr_size, 0}, 4);
     }
 
-    private static int getWidth() {
-        return WIDTH;
-    }
-
-    private static double getRadius() {
-        return RADIUS;
+    private double getRadius() {
+        return options.width/2 - options.border;
     }
 
     private Color getBackgroundColor() {
-        return backgroundColor;
+        return options.background;
     }
 
     private Color getFillColor() {
-        return fillColor;
+        return options.fill;
     }
-
-
     private Color getForegroundColor() {
-        return foregroundColor;
+        return options.foreground;
     }
 
 }

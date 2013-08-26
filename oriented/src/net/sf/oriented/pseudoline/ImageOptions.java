@@ -14,7 +14,7 @@ import net.sf.oriented.omi.Label;
 public class ImageOptions {
     public boolean showLabels;
     public boolean showOrigin;
-    public double height, width;
+    public int height, width;
     
     public double border;
     
@@ -30,8 +30,8 @@ public class ImageOptions {
     public Color fill;
     public Color foreground;
     
-    public double originArrowLength;
-    public double originArrowSize;
+    public int originArrowLength;
+    public int originArrowSize;
 
     private double internalFontSizeRatio = 5;
     
@@ -78,9 +78,7 @@ public class ImageOptions {
                 for (int k=0;k<3;k++) {
                     if (i==j && j==k)
                         continue;
-                    if (i==2 && j==2 && k == 1) // too close to our background color
-                        continue;
-                    if (i==2 && j==1 && k == 2) // too close to our background color
+                    if (i==2 && j==2) // too close to our background color
                         continue;
                     someColors[ix++] = new Color((3+6*i)*17,(3+6*j)*17,(3+6*k)*17);
                 }
@@ -109,6 +107,7 @@ public class ImageOptions {
         ImageOptions rslt = new ImageOptions();
         rslt.showOrigin = true;
         rslt.showLabels = true;
+        rslt.infinityColor = Color.BLACK;
         rslt.height = rslt.width = 3000;
         rslt.border = 100;
         rslt.labelPosition = 50;
@@ -135,7 +134,9 @@ public class ImageOptions {
             return infinityColor;
         }
         if (colors.get(lbl)==null) {
-            colors.put(lbl, someColors[nextColor++]);
+            Color color = someColors[nextColor++];
+            System.err.println(lbl+" "+color);
+            colors.put(lbl, color);
         }
         return colors.get(lbl);
     }
