@@ -4,7 +4,13 @@
 
 package net.sf.oriented.omi;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.oriented.impl.om.ExamplesHelper;
+import net.sf.oriented.impl.util.Misc;
 
 
 
@@ -244,6 +250,32 @@ public class Examples {
      */
     public static OM Ω14(int i) {
         return omega14(i);
+    }
+
+    public static Map<String,OM> all() {
+        Map<String,OM> rslt = new HashMap<String,OM>();
+
+        Class<?> ex = Examples.class;
+        for (Method m:ex.getMethods()) {
+//            if (m.getName().contains("suv"))
+             if (Modifier.isStatic(m.getModifiers())
+                      && OM.class.isAssignableFrom( m.getReturnType() )  
+                        ) {
+                 switch (m.getParameterTypes().length) {
+                 case 0:
+                     rslt.put(m.getName(),(OM) Misc.invoke(m, null));
+                     break;
+                 case 1:
+                     rslt.put(m.getName()+"[+1]",(OM) Misc.invoke(m, null,1));
+                     rslt.put(m.getName()+"[0]",(OM) Misc.invoke(m, null,0));
+                     rslt.put(m.getName()+"[+1]",(OM) Misc.invoke(m, null,-1));
+                     break;
+                  default:
+                     throw new IllegalStateException("Problem with method: "+m.getName());
+                 }
+             }
+        }
+        return rslt;
     }
 }
 

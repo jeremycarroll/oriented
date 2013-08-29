@@ -3,35 +3,26 @@
  ************************************************************************/
 package test;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
-import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.Matroid;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.PseudoLines;
-import net.sf.oriented.util.combinatorics.CoLexicographic;
 
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 
 import test.BetterParameterized.TestName;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.common.math.IntMath;
 
 @RunWith(BetterParameterized.class)
@@ -40,25 +31,8 @@ public class TestExamples2 {
     @Parameters
     public static Collection<Object[]> data() {
         List<Object[]> rslt = new ArrayList<Object[]>();
-        Class<?> ex = Examples.class;
-        for (Method m:ex.getMethods()) {
-//            if (m.getName().contains("suv"))
-             if (Modifier.isStatic(m.getModifiers())
-                      && OM.class.isAssignableFrom( m.getReturnType() )  
-                        ) {
-                 switch (m.getParameterTypes().length) {
-                 case 0:
-                     rslt.add(new Object[]{m.getName(),Misc.invoke(m, null)});
-                     break;
-                 case 1:
-                     rslt.add(new Object[]{m.getName()+"[+1]",Misc.invoke(m, null,1)});
-                     rslt.add(new Object[]{m.getName()+"[0]",Misc.invoke(m, null,0)});
-                     rslt.add(new Object[]{m.getName()+"[-1]",Misc.invoke(m, null,-1)});
-                     break;
-                  default:
-                         throw new IllegalStateException("Problem with method: "+m.getName());
-                 }
-             }
+        for (Map.Entry<String,OM> entry:Examples.all().entrySet() ) {
+            rslt.add(new Object[]{entry.getKey(),entry.getValue()});
         }
         return rslt;
     }
@@ -111,41 +85,6 @@ public class TestExamples2 {
     public void testDualFaceLattice() throws AxiomViolation {
         if (om.dual().rank()<10) {
             testFaceLattice(om.dual());
-        }
-    }
-    
-    @Test
-    public void testMathsOverflow129698() {
-        if (om.rank() * 2 < om.n()) {
-            final OM dual = om.dual();
-            final Matroid dualMatroid = dual.getMatroid();
-            int notBasis = 0;
-            int basisAndIndependent = 0;
-            int basisAndDependent = 0;
-            for (int args[] : new CoLexicographic(dual.n(), dual.rank() ) ) {
-                if (dual.getChirotope().chi(args) != 0 ) { 
-                    // linearly independent
-                    UnsignedSet basis = dual.ffactory().unsignedSets()
-                            .copyBackingCollection(
-                            Lists.transform(Arrays.asList(Misc.box(args)),
-                                    new Function<Integer,Label>(){
-                                @Override
-                                public Label apply(Integer i) {
-                                    return dual.elements()[i];
-                                }
-                            }));
-                    UnsignedSet other = dual.setOfElements().minus(basis);
-                    boolean independent = dualMatroid.getIndependentSets().contains(other);
-                    if (independent) {
-                        basisAndIndependent++;
-                    } else {
-                        basisAndDependent++;
-                    }
-                } else {
-                    notBasis++;
-                }
-            }
-            System.err.println(name+": good = "+ basisAndIndependent + "; not basis = "+notBasis +"; bad = " + basisAndDependent);
         }
     }
     
