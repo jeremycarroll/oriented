@@ -36,6 +36,28 @@ public class ImageOptions {
     public int labelBorder;
     public float lineWidth;
 
+    private ImageOptions() {
+
+        showOrigin = true;
+        showLabels = true;
+        showVertices = true;
+        infinityColor = Color.BLACK;
+        infinityStroke = new float[]{ 100 , 0};
+        height = width = 1000;
+        border = 30;
+        labelPosition = 18;
+        fill = new Color(255, 255, 204);
+        background = Color.WHITE;
+        foreground = Color.BLACK;
+        vertexSize = 10;
+        fontSizeRatio = 1.0;
+        lineThickness = 1.0;
+        originArrowLength = 35;
+        originArrowSize = 8;
+        labelBorder = 1;
+        lineWidth = 1.5f;
+    }
+    
     private double internalFontSizeRatio = 2;
     
     private Color infinityColor;
@@ -72,7 +94,14 @@ public class ImageOptions {
     }
 
     public static ImageOptions defaultBlackAndWhite() {
-        return null;
+        ImageOptions rslt = new ImageOptions(){
+            @Override
+            Color getColor(Label lbl) { 
+                return Color.BLACK;
+            }
+        };
+        rslt.background = rslt.fill = Color.white;
+        return  rslt;
     }
     static {
         int ix = 0;
@@ -120,26 +149,7 @@ public class ImageOptions {
     }
     
     public static ImageOptions defaultColor() {
-        ImageOptions rslt = new ImageOptions();
-        rslt.showOrigin = true;
-        rslt.showLabels = true;
-        rslt.showVertices = true;
-        rslt.infinityColor = Color.BLACK;
-        rslt.infinityStroke = new float[]{ 100 , 0};
-        rslt.height = rslt.width = 1000;
-        rslt.border = 30;
-        rslt.labelPosition = 18;
-        rslt.fill = new Color(255, 255, 204);
-        rslt.background = Color.WHITE;
-        rslt.foreground = Color.BLACK;
-        rslt.vertexSize = 10;
-        rslt.fontSizeRatio = 1.0;
-        rslt.lineThickness = 1.0;
-        rslt.originArrowLength = 15;
-        rslt.originArrowSize = 5;
-        rslt.labelBorder = 1;
-        rslt.lineWidth = 1.5f;
-        return rslt;
+        return  new ImageOptions();
     }
     
     float fontSizeRatio() {
