@@ -14,6 +14,7 @@ import net.sf.oriented.omi.Label;
 public class ImageOptions {
     public boolean showLabels;
     public boolean showOrigin;
+    public boolean showVertices;
     public int height, width;
     
     public double border;
@@ -98,23 +99,31 @@ public class ImageOptions {
             }});
     }
     private static float someStrokes[][] = new float[][]{
-            { 100, 30 },
-            { 30, 30 },
-            { 50, 30, 20, 30, 20, 30 },
-            { 70, 30, 20, 30 },
-            { 50, 30, 50, 30, 20, 30},
-            { 50, 30, 50, 30, 20, 30, 20, 30 },
-            { 100, 30, 20, 30 },
-            { 100, 30, 20, 30 , 20, 30 },
-            { 100, 30, 20, 30 , 50, 30, 20, 30 },
-            { 100, 30, 50, 30, 20, 30 },
-            { 100, 30, 20, 30, 20, 30, 20, 30 },      
+            { 100, 10 },
+            { 30, 10 },
+            { 50, 10, 20, 10, 20, 10 },
+            { 70, 10, 20, 10 },
+            { 50, 10, 50, 10, 20, 10},
+            { 50, 10, 50, 10, 20, 10, 20, 10 },
+            { 100, 10, 20, 10 },
+            { 100, 10, 20, 10 , 20, 10 },
+            { 100, 10, 20, 10 , 50, 10, 20, 10 },
+            { 100, 10, 50, 10, 20, 10 },
+            { 100, 10, 20, 10, 20, 10, 20, 10 },      
     };
+    static {
+        for (float [] stroke:someStrokes) {
+            for (int i=0;i<stroke.length;i++) {
+                stroke[i] /= 2;
+            }
+        }
+    }
     
     public static ImageOptions defaultColor() {
         ImageOptions rslt = new ImageOptions();
         rslt.showOrigin = true;
         rslt.showLabels = true;
+        rslt.showVertices = true;
         rslt.infinityColor = Color.BLACK;
         rslt.infinityStroke = new float[]{ 100 , 0};
         rslt.height = rslt.width = 1000;
@@ -123,7 +132,7 @@ public class ImageOptions {
         rslt.fill = new Color(255, 255, 204);
         rslt.background = Color.WHITE;
         rslt.foreground = Color.BLACK;
-        rslt.vertexSize = 2;
+        rslt.vertexSize = 10;
         rslt.fontSizeRatio = 1.0;
         rslt.lineThickness = 1.0;
         rslt.originArrowLength = 15;

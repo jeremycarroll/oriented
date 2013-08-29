@@ -14,6 +14,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.PseudoLines;
 
 import org.junit.Test;
@@ -23,7 +24,11 @@ import org.junit.Test;
  *
  */
 public class TestDrawing {
-    
+
+    @Test
+    public void testWheel() throws IOException {
+        testDrawing(Examples.wheel12(),"wheel");
+    }
 
     @Test
     public void testPappus() throws IOException {
@@ -53,6 +58,53 @@ public class TestDrawing {
     public void testSaw() throws IOException {
         testDrawing(Examples.circularsaw3(),"A","saw");
     }
+    
+    @Test
+    public void testTTT() throws IOException {
+        testCeva(true,true,true);
+    }
+    
+    @Test
+    public void testTTF() throws IOException {
+        testCeva(true,true,false);
+    }
+    
+    @Test
+    public void testTFT() throws IOException {
+        testCeva(true,false,true);
+    }
+    
+    @Test
+    public void testTFF() throws IOException {
+        testCeva(true,false,false);
+    }
+
+    @Test
+    public void testFTT() throws IOException {
+        testCeva(false,true,true);
+    }
+    
+    @Test
+    public void testFTF() throws IOException {
+        testCeva(false,true,false);
+    }
+    
+    @Test
+    public void testFFT() throws IOException {
+        testCeva(false,false,true);
+    }
+    
+    @Test
+    public void testFFF() throws IOException {
+        testCeva(false,false,false);
+    }
+    private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException {
+        ImageOptions opts = ImageOptions.defaultColor();
+        opts.showOrigin = showOrigin;
+        opts.showLabels = showLabels;
+        opts.showVertices = showVertices;
+        testDrawing(Examples.ceva(), "0", "CEVA"+(showOrigin?"-origin":"")+(showLabels?"-labels":"")+(showVertices?"-vertices":""), opts);
+    }
     private void testDrawing(OM om,String name) throws IOException {
         for (Label lbl: om.elements()){
             testDrawing(om, lbl.label(), name);
@@ -67,13 +119,18 @@ public class TestDrawing {
 //            System.in.read();
 //        }
 //        System.err.println(usedMemory);
+        ImageOptions options = ImageOptions.defaultColor();
+        testDrawing(om, label, name, options);
+    }
+    private void testDrawing(OM om, String label, String name,
+            ImageOptions options) throws IOException {
         System.err.println("=== "+name+" === "+label);
         PseudoLines pseudoLines = new PseudoLines(om,label);
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg"));
         iw.setOutput(imageOutput);
-        iw.write(euclid.image());
+        iw.write(euclid.image(options));
         euclid.checkForOverlappingEdge();
         imageOutput.close();
         iw.dispose();

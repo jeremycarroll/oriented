@@ -44,6 +44,8 @@ public class Examples {
    
     private static boolean FreshEachTime = true;
 
+    private static OM wheel12;
+
     /**
      * This is from the Oriented Matroid book {@link Bibliography#björnerEtAl1999}
      */
@@ -74,6 +76,28 @@ public class Examples {
         return uniform4;
     }
 
+    
+
+    /**
+     * This is from the Oriented Matroid book {@link Bibliography#björnerEtAl1999}
+     */
+    public static OM wheel12() {
+        if (wheel12 == null || FreshEachTime) {
+            wheel12 = FactoryFactory.fromCrossings("0:ABCDEFGHIJK",
+                    "A:0(BCDEFGHIJK)",
+                    "B:0(ACDEFGHIJK)",
+                    "C:0(ABDEFGHIJK)",
+                    "D:0(ABCEFGHIJK)",
+                    "E:0(ABCDFGHIJK)",
+                    "F:0(ABCDEGHIJK)",
+                    "G:0(ABCDEFHIJK)",
+                    "H:0(ABCDEFGIJK)",
+                    "I:0(ABCDEFGHJK)",
+                    "J:0(ABCDEFGHIK)",
+                    "K:0(ABCDEFGHIJ)");
+        }
+        return wheel12;
+    }
     /**
      * An oriented matroid representing Ceva's theorem.
      * See {@link Bibliography#ceva1678}

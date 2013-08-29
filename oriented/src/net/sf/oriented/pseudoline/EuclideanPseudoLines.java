@@ -50,7 +50,9 @@ public class EuclideanPseudoLines {
         }
         private IPoint[] followLine(PointAtInfinity first, Point second) {
             List<IPoint> points = new ArrayList<IPoint>();
-            points.add(first.getLabelPosition(label));
+            if (options.showLabels) {
+                points.add(first.getLabelPosition(label));
+            }
             points.add(first);
             Point prev = first;
             Point current = second;
@@ -68,7 +70,9 @@ public class EuclideanPseudoLines {
                         continue extendingLine;
                     }
                 }
-                points.add(((PointAtInfinity)current).getLabelPosition(label));
+                if (options.showLabels) {
+                    points.add(((PointAtInfinity)current).getLabelPosition(label));
+                }
                 // no more points, we crossed the Euclidean plane
                 return points.toArray(new IPoint[points.size()]);
             }
@@ -682,17 +686,24 @@ public class EuclideanPseudoLines {
                    graphics.draw(path.getPath2D());
                }
            }
-           graphics.setColor(getForegroundColor());
-           p.writeLineLabels(graphics);
+           if (options.showLabels) {
+               graphics.setColor(getForegroundColor());
+               p.writeLineLabels(graphics);
+           }
        }
 
        graphics.setColor(getForegroundColor());
-       for (Point p:points) {
-           int vertexSize = options.vertexSize;
-           graphics.fillOval((int)p.x-vertexSize/2-1,(int) p.y-vertexSize/2-1, vertexSize, vertexSize);
+       graphics.setStroke(new BasicStroke(1));
+       if (options.showVertices) {
+           for (Point p:points) {
+               int vertexSize = options.vertexSize;
+               graphics.drawOval((int)p.x-vertexSize/2,(int) p.y-vertexSize/2, vertexSize, vertexSize);
+           }
        }
-       
-       labelLineAtInfinity(graphics);
+
+       if (options.showLabels) {
+           labelLineAtInfinity(graphics);
+       }
        IPoint p = centerOfPositiveFace();
        drawArrow(graphics,p.getX(),p.getY(),p.getX()+options.originArrowLength,p.getY());
        
@@ -779,10 +790,11 @@ public class EuclideanPseudoLines {
         AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
         at.concatenate(AffineTransform.getRotateInstance(angle));
         g.transform(at);
+        g.setStroke(new BasicStroke(1));
 
         // Draw horizontal arrow starting in (0, 0)
         g.drawLine(0, 0, len, 0);
-        g.fillOval(0-arr_size/2, 0-arr_size/2, arr_size, arr_size);
+        g.fillOval((int)(-arr_size*0.6), (int)(0-arr_size*0.6), (int)(arr_size*1.2), (int)(arr_size*1.2));
         g.fillPolygon(new int[] {len, len-arr_size, len-arr_size, len},
                       new int[] {0, -arr_size, arr_size, 0}, 4);
     }
