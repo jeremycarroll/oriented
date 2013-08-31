@@ -13,10 +13,13 @@ import javax.imageio.stream.ImageOutputStream;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.pseudoline.CoLoopUnrepresentableException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.PseudoLines;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -24,95 +27,120 @@ import org.junit.Test;
  *
  */
 public class TestDrawing {
-
-    @Test
-    public void testWheel() throws IOException {
-        testDrawing(Examples.wheel12(),"wheel");
+    
+    private static String tmp;
+    
+    @BeforeClass
+    public static void createTmpDir() throws IOException {
+        File tFile = File.createTempFile("oriented", ".d");
+        tmp = tFile.getAbsolutePath();
+        tFile.delete();
+        tFile.mkdir();
+    }
+    
+    @AfterClass
+    public static void deleteTmpDir() {
+        File dir = new File(tmp);
+        for (File f : dir.listFiles() ) {
+            f.delete();
+        }
+        dir.delete();
     }
 
     @Test
-    public void testPappus() throws IOException {
-        testDrawing(Examples.πάππος(),"pappus");
+    public void testWheel0() throws IOException, CoLoopUnrepresentableException {
+        testDrawing(Examples.wheel12(),"0","wheel");
+    }
+    
+
+    @Test(expected=CoLoopUnrepresentableException.class)
+    public void testWheelA() throws IOException, CoLoopUnrepresentableException {
+        testDrawing(Examples.wheel12(), "A", "wheel");
+    }
+
+    @Test
+    public void testPappus() throws IOException, CoLoopUnrepresentableException {
+        testDrawing(Examples.πάππος(), "pappus");
     }
     @Test
-    public void testCeva() throws IOException {
-        testDrawing(Examples.ceva(),"ceva");
+    public void testCeva() throws IOException, CoLoopUnrepresentableException {
+        testDrawing(Examples.ceva(), "ceva");
     }
     
     @Test
-    public void testRingel() throws IOException {
+    public void testRingel() throws IOException, CoLoopUnrepresentableException {
         testDrawing(Examples.ringel(),"3", "ringel");
     }
 
     @Test
-    public void testTsukamoto13_1() throws IOException {
-        testDrawing(Examples.tsukamoto13(1),  "tsukamoto(1)");
+    public void testTsukamoto13_1() throws IOException, CoLoopUnrepresentableException {
+        testDrawing(Examples.tsukamoto13(1),  "K", "tsukamoto(1)");
     }
 
     @Test
-    public void testSuv() throws IOException {
+    public void testSuv() throws IOException, CoLoopUnrepresentableException {
         testDrawing(Examples.suvorov14(),"N",  "suvorov");
     }
     
     @Test
-    public void testSaw() throws IOException {
+    public void testSaw() throws IOException, CoLoopUnrepresentableException {
         testDrawing(Examples.circularsaw3(),"A","saw");
     }
     
     @Test
-    public void testTTT() throws IOException {
+    public void testTTT() throws IOException, CoLoopUnrepresentableException {
         testCeva(true,true,true);
     }
     
     @Test
-    public void testTTF() throws IOException {
+    public void testTTF() throws IOException, CoLoopUnrepresentableException {
         testCeva(true,true,false);
     }
     
     @Test
-    public void testTFT() throws IOException {
+    public void testTFT() throws IOException, CoLoopUnrepresentableException {
         testCeva(true,false,true);
     }
     
     @Test
-    public void testTFF() throws IOException {
+    public void testTFF() throws IOException, CoLoopUnrepresentableException {
         testCeva(true,false,false);
     }
 
     @Test
-    public void testFTT() throws IOException {
+    public void testFTT() throws IOException, CoLoopUnrepresentableException {
         testCeva(false,true,true);
     }
     
     @Test
-    public void testFTF() throws IOException {
+    public void testFTF() throws IOException, CoLoopUnrepresentableException {
         testCeva(false,true,false);
     }
     
     @Test
-    public void testFFT() throws IOException {
+    public void testFFT() throws IOException, CoLoopUnrepresentableException {
         testCeva(false,false,true);
     }
     
     @Test
-    public void testFFF() throws IOException {
+    public void testFFF() throws IOException, CoLoopUnrepresentableException {
         testCeva(false,false,false);
     }
-    private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException {
+    private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException, CoLoopUnrepresentableException {
         ImageOptions opts = ImageOptions.defaultColor();
         opts.showOrigin = showOrigin;
         opts.showLabels = showLabels;
         opts.showVertices = showVertices;
         testDrawing(Examples.ceva(), "0", "CEVA"+(showOrigin?"-origin":"")+(showLabels?"-labels":"")+(showVertices?"-vertices":""), opts);
     }
-    private void testDrawing(OM om,String name) throws IOException {
+    private void testDrawing(OM om,String name) throws IOException, CoLoopUnrepresentableException {
         for (Label lbl: om.elements()){
             testDrawing(om, lbl.label(), name);
         }
     }
 
     private void testDrawing(OM om, String label, String name)
-            throws IOException {
+            throws IOException, CoLoopUnrepresentableException {
 //        long usedMemory = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 //        if (usedMemory> 400000000 ) {
 //            System.err.println("Attach");
@@ -123,12 +151,12 @@ public class TestDrawing {
         testDrawing(om, label, name, options);
     }
     private void testDrawing(OM om, String label, String name,
-            ImageOptions options) throws IOException {
-        System.err.println("=== "+name+" === "+label);
+            ImageOptions options) throws IOException, CoLoopUnrepresentableException {
+//        System.err.println("=== "+name+" === "+label);
         PseudoLines pseudoLines = new PseudoLines(om,label);
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-        ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File("/Users/jeremycarroll/tmp/" + name + "-" + label+".jpeg"));
+        ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + name + "-" + label+".jpeg"));
         iw.setOutput(imageOutput);
         iw.write(euclid.image(options));
         euclid.checkForOverlappingEdge();

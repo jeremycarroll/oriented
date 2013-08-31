@@ -467,9 +467,16 @@ public class EuclideanPseudoLines {
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private ImageOptions options;
     
-    public EuclideanPseudoLines(PseudoLines pseudoLines) {
+    public EuclideanPseudoLines(PseudoLines pseudoLines) throws CoLoopUnrepresentableException {
         projective = pseudoLines;
         Label inf = projective.getInfinity();
+        for (SignedSet ss:projective.getEquivalentOM().dual().getCircuits()) {
+            if (ss.minus().isEmpty() && ss.plus().size()==1) {
+                if (!ss.plus().minus(inf).isEmpty()) {
+                    throw new CoLoopUnrepresentableException("CAGGGH");
+                }
+            }
+        }
         for (Face f: projective.getFaceLattice().withDimension(0)) {
             switch (f.covector().sign(inf)) {
             case -1:

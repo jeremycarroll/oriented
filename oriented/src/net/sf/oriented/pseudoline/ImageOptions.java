@@ -44,7 +44,7 @@ public class ImageOptions {
         infinityColor = Color.BLACK;
         infinityStroke = new float[]{ 100 , 0};
         height = 1000;
-        width = 1500;
+        width = 1618;
         border = 30;
         labelPosition = 18;
         fill = new Color(255, 255, 204);
