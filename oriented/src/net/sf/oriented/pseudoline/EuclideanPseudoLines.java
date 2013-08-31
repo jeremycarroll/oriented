@@ -764,9 +764,18 @@ public class EuclideanPseudoLines {
 
     private void writeCenteredString(Graphics2D graphics, String lbl,
             double xx, double yy, Color bgColor) {
+        graphics = (Graphics2D) graphics.create();
+        graphics.translate(xx,yy);
+        if (options.width != options.height) {
+            if (options.height>options.width) {
+                graphics.scale(1.0, 1.0*options.width/options.height);
+            } else {
+                graphics.scale(1.0/options.width*options.height,1.0);
+            }
+        }
         Rectangle2D bounds = graphics.getFont().getStringBounds(lbl, graphics.getFontRenderContext());
-        double x = xx - bounds.getWidth()/2;
-        double y = yy + (bounds.getHeight()-1)/2 - 2;
+        double x =  - bounds.getWidth()/2;
+        double y = + (bounds.getHeight()-1)/2 - 2;
         if (bgColor != null) {
             graphics.setColor(bgColor);
             graphics.fillRect(

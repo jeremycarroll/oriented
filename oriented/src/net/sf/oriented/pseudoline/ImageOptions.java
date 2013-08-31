@@ -43,7 +43,8 @@ public class ImageOptions {
         showVertices = true;
         infinityColor = Color.BLACK;
         infinityStroke = new float[]{ 100 , 0};
-        height = width = 1000;
+        height = 1000;
+        width = 1500;
         border = 30;
         labelPosition = 18;
         fill = new Color(255, 255, 204);
