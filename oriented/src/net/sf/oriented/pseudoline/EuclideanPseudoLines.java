@@ -670,6 +670,7 @@ public class EuclideanPseudoLines {
        Shape circ = new Ellipse2D.Double(-getRadius(), -getRadius(), 2*getRadius(), 2*getRadius());
        graphics.setColor( getFillColor());
        graphics.translate(options.width/2, options.height/2);
+       graphics.scale(options.width/1000.0, options.height/1000.0);
        graphics.fill(circ);
        options.setInfinity(projective.getInfinity());
        setLineColorAndStroke(graphics, projective.getInfinity());
@@ -799,7 +800,7 @@ public class EuclideanPseudoLines {
     }
 
     private double getRadius() {
-        return options.width/2 - options.border;
+        return 500 - options.border;
     }
 
     private Color getBackgroundColor() {
