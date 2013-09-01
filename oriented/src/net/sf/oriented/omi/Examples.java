@@ -257,7 +257,6 @@ public class Examples {
 
         Class<?> ex = Examples.class;
         for (Method m:ex.getMethods()) {
-//            if (m.getName().contains("suv"))
              if (Modifier.isStatic(m.getModifiers())
                       && OM.class.isAssignableFrom( m.getReturnType() )  
                         ) {
@@ -266,9 +265,9 @@ public class Examples {
                      rslt.put(m.getName(),(OM) Misc.invoke(m, null));
                      break;
                  case 1:
-                     rslt.put(m.getName()+"[+1]",(OM) Misc.invoke(m, null,1));
-                     rslt.put(m.getName()+"[0]",(OM) Misc.invoke(m, null,0));
-                     rslt.put(m.getName()+"[+1]",(OM) Misc.invoke(m, null,-1));
+                     rslt.put(m.getName()+".+1",(OM) Misc.invoke(m, null,1));
+                     rslt.put(m.getName()+".0",(OM) Misc.invoke(m, null,0));
+                     rslt.put(m.getName()+".-1",(OM) Misc.invoke(m, null,-1));
                      break;
                   default:
                      throw new IllegalStateException("Problem with method: "+m.getName());

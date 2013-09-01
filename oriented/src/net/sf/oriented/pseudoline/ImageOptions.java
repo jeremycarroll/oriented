@@ -12,7 +12,7 @@ import java.util.Map;
 import net.sf.oriented.omi.Label;
 
 public class ImageOptions {
-    public boolean showLabels;
+    boolean showLabels;
     public boolean showOrigin;
     public boolean showVertices;
     public int height, width;
@@ -185,6 +185,16 @@ public class ImageOptions {
             }
         }
         return strokes.get(lbl);
+    }
+    public void setShowLabels(boolean val) {
+        showLabels = val;
+        if (!showLabels) {
+            border = 1;
+        } else {
+            if (border == 1) {
+                border = 30;
+            }
+        }
     }
     
 }

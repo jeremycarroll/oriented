@@ -29,22 +29,30 @@ import org.junit.Test;
 public class TestDrawing {
     
     private static String tmp;
+    private static boolean fixedDir = false;
     
     @BeforeClass
     public static void createTmpDir() throws IOException {
         File tFile = File.createTempFile("oriented", ".d");
-        tmp = tFile.getAbsolutePath();
-        tFile.delete();
-        tFile.mkdir();
+        if (fixedDir) {
+            // change this directory as appropriate
+            tmp = "/Users/jeremycarroll/tmp";
+        } else {
+            tmp = tFile.getAbsolutePath();
+            tFile.delete();
+            tFile.mkdir();
+        }
     }
     
     @AfterClass
     public static void deleteTmpDir() {
-        File dir = new File(tmp);
-        for (File f : dir.listFiles() ) {
-            f.delete();
+        if (!fixedDir) {
+            File dir = new File(tmp);
+            for (File f : dir.listFiles() ) {
+                f.delete();
+            }
+            dir.delete();
         }
-        dir.delete();
     }
 
     @Test
@@ -127,9 +135,9 @@ public class TestDrawing {
         testCeva(false,false,false);
     }
     private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException, CoLoopUnrepresentableException {
-        ImageOptions opts = ImageOptions.defaultColor();
+        ImageOptions opts = ImageOptions.defaultBlackAndWhite();
         opts.showOrigin = showOrigin;
-        opts.showLabels = showLabels;
+        opts.setShowLabels(showLabels);
         opts.showVertices = showVertices;
         testDrawing(Examples.ceva(), "0", "CEVA"+(showOrigin?"-origin":"")+(showLabels?"-labels":"")+(showVertices?"-vertices":""), opts);
     }
@@ -141,18 +149,11 @@ public class TestDrawing {
 
     private void testDrawing(OM om, String label, String name)
             throws IOException, CoLoopUnrepresentableException {
-//        long usedMemory = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-//        if (usedMemory> 400000000 ) {
-//            System.err.println("Attach");
-//            System.in.read();
-//        }
-//        System.err.println(usedMemory);
         ImageOptions options = ImageOptions.defaultColor();
         testDrawing(om, label, name, options);
     }
     private void testDrawing(OM om, String label, String name,
             ImageOptions options) throws IOException, CoLoopUnrepresentableException {
-//        System.err.println("=== "+name+" === "+label);
         PseudoLines pseudoLines = new PseudoLines(om,label);
         EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
