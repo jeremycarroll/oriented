@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# SCRIPT = $0 might work 
+ME=$(readlink -f $0 2> /dev/null)
+if [[ $ME == "" ]]
+then
+   # MacOS doesn't support -f for readlink
+   ME=$0
+fi
+# Absolute path this script is in, thus /home/user/bin
+DIR=$(dirname $ME)
+$DIR/pseudolines --png --tsukamoto13.+1 -m --nolabels --noorigin --novertex -o $DIR/../web/site/logo.png
