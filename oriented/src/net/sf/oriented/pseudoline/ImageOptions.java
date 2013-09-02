@@ -11,27 +11,83 @@ import java.util.Map;
 
 import net.sf.oriented.omi.Label;
 
+/**
+ * Settings for drawing pseudoline diagrams.
+ * Many of the settings are public fields,
+ * this should just be set to the desired values.
+ * Some of the settings are hidden and should be set with the public methods.
+ * To construct a new settings object use either {@link #defaultColor()}
+ * or {@link #defaultBlackAndWhite()} and then modify.
+ * Most of the numeric fields will scale with the width and the height, and do not need
+ * to be independently modified.
+ * @author jeremycarroll
+ *
+ */
 public class ImageOptions {
     boolean showLabels;
+    /**
+     * Whether to show the origin or not.
+     */
     public boolean showOrigin;
+    /**
+     * Whether to high light vertices with a circle around them
+     */
     public boolean showVertices;
+    /**
+     * The width and height of the intended image. Values of around 1000 are suggested.
+     */
     public int height, width;
     
+    /**
+     * The width of the border in which line labels are shown.
+     * Note this may be modified as a side effect of {@link #setShowLabels(boolean)}
+     */
     public double border;
     
+    /**
+     * The position of the labels within the border.
+     * This value should be less than, and approxiamtely half of, {@link #border}
+     */
     public double labelPosition;
     
+    /**
+     * Any scaling that should be applied to the font size.
+     */
     public double fontSizeRatio;
     
+    /**
+     * The size of the vertex circle if shown.
+     */
     public int vertexSize;
     
+    /**
+     * The color of the background to the rectangle, outside the picture
+     */
     public Color background;
+    /**
+     * The color of the faces inside the picture
+     */
     public Color fill;
+    /**
+     * The foregound color that is used for text, vertices, and the origin.
+     */
     public Color foreground;
     
+    /**
+     * The length of the arrow used to show the origin.
+     */
     public int originArrowLength;
+    /**
+     * The size of the arrowhead used to show the origin.
+     */
     public int originArrowSize;
+    /**
+     * An additional border around labels.
+     */
     public int labelBorder;
+    /**
+     * The width of lines in the diagram.
+     */
     public float lineWidth;
 
     private ImageOptions() {
@@ -70,27 +126,48 @@ public class ImageOptions {
     private static Color someColors[] = new Color[18];
 
     /**
-     * Can be null
-     * @param c
+     * Provides the color for the line at infinity, if null then
+     * the color is chosen like any other line.
+     * @param c The color or null.
      */
     public void setColorOfInfinity(Color c) {
         infinityColor = c;
     }
     /**
-     * Can be null
-     * @param dashes
+     * Provides the dashes for the line at infinity, if null then
+     * the dashes are chosen like any other line.
+     * @param dashes The dashes or null.
+     * @see java.awt.BasicStroke#getDashArray()
      */
     public void setStrokeOfInfinity(float ... dashes) {
         infinityStroke = dashes;
     }
+    /**
+     * Provides the color for a line.
+     * This has no effect for black and white images.
+     * For color images there are 18 default colors which are used.
+     * 
+     * @param lbl The line label
+     * @param c A color, non-null.
+     */
     public void setColor(Label lbl, Color c) {
         colors.put(lbl,c);
-        
     }
+    /**
+     * Provides the dash array for a line.
+     * 
+     * @param lbl The line label
+     * @param dashes The dash array, non-null.
+     * @see java.awt.BasicStroke#getDashArray()
+     */
     public void setStroke(Label lbl, float ...dashes ) {
         strokes.put(lbl,dashes);
     }
 
+    /**
+     * Get image options that generate a black and white image.
+     * @return A fresh instance of suggested image options
+     */
     public static ImageOptions defaultBlackAndWhite() {
         ImageOptions rslt = new ImageOptions(){
             @Override
@@ -145,7 +222,11 @@ public class ImageOptions {
             }
         }
     }
-    
+
+    /**
+     * Get image options that generate a color image.
+     * @return A fresh instance of suggested image options
+     */
     public static ImageOptions defaultColor() {
         return  new ImageOptions();
     }
@@ -183,6 +264,10 @@ public class ImageOptions {
         }
         return strokes.get(lbl);
     }
+    /**
+     * Either show labels or not.
+     * @param val true for showing labels,
+     */
     public void setShowLabels(boolean val) {
         showLabels = val;
         if (!showLabels) {
