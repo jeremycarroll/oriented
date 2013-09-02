@@ -9,4 +9,4 @@ then
 fi
 # Absolute path this script is in, thus /home/user/bin
 DIR=$(dirname $ME)
-$DIR/pseudolines --png --tsukamoto13.+1 -m --nolabels --noorigin --novertex -o $DIR/../web/site/logo.png
+$DIR/pseudolines --png --tsukamoto13.+1 -m --nolabels --noorigin --novertex --line-width 5 -o $DIR/../web/site/logo.png

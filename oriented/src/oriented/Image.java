@@ -45,6 +45,7 @@ public class Image {
             }
         }
         parser.addArgument("-W","--width").action(store()).dest("width").type(Integer.class).setDefault(1618).help("set the width of the output.");
+        parser.addArgument("-L","--line-width").action(store()).dest("line-width").type(Float.class).setDefault(1.0).help("set the width of the lines.");
         parser.addArgument("-H","--height").action(store()).dest("height").type(Integer.class).setDefault(1000).help("set the height of the output.");
         parser.addArgument("-o","--output").action(store()).dest("output").help("sets the output file.");
         parser.addArgument("-m","--monochrome").action(storeTrue()).dest("monochrome").setDefault(false).help("black and white."); 
@@ -67,6 +68,7 @@ public class Image {
         options.height = settings.getInt("height");
         options.showOrigin = settings.getBoolean("origin");
         options.showVertices = settings.getBoolean("vertices");
+        options.lineWidth = settings.getFloat("line-width");
         options.setShowLabels(settings.getBoolean("labels"));
         String infinity = om.elements()[0].label();
         if ( settings.get("infinity") != null) {

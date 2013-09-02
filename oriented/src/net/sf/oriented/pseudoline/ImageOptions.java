@@ -23,8 +23,6 @@ public class ImageOptions {
     
     public double fontSizeRatio;
     
-    public double lineThickness;
-    
     public int vertexSize;
     
     public Color background;
@@ -52,7 +50,6 @@ public class ImageOptions {
         foreground = Color.BLACK;
         vertexSize = 10;
         fontSizeRatio = 1.0;
-        lineThickness = 1.0;
         originArrowLength = 35;
         originArrowSize = 8;
         labelBorder = 1;
