@@ -16,15 +16,20 @@ import net.sf.oriented.util.combinatorics.CoLexicographic;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+/**
+ * Run the main method to get some of the workings of my answer to the
+ * <a href="http://mathoverflow.net/questions/129698/realizability-of-extensions-of-a-free-oriented-matroid-by-an-independent-set">
+ * Realizability of extensions of a free oriented matroid by an independent set</a>
+ * @author jeremycarroll
+ */
 public class MathOverflow129698 {
-    
     private int notBasis;
     private int basisAndDependent;
     private int basisAndIndependent;
     private final String name;
     private final OM om;
 
-    public MathOverflow129698(String name, OM om) {
+    private MathOverflow129698(String name, OM om) {
         notBasis = 0;
         basisAndDependent = 0;
         basisAndIndependent = 0;

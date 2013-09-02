@@ -25,6 +25,8 @@ import net.sourceforge.argparse4j.inf.MutuallyExclusiveGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 public class Image {
+    
+    private Image(){}
 
     public static void main(String args[]) throws IOException, CoLoopUnrepresentableException {
         ArgumentParser parser = ArgumentParsers.newArgumentParser("Image")
