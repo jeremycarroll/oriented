@@ -147,6 +147,12 @@ public interface OM extends Verify {
 	 */
 	int asInt(Label e);
     /**
+     * The integer corresponding to this element (counting from 0).
+     * @param label The label of the element
+     * @return The index of <code>e</code> in {@link #elements()}, where <code>e.label() = label</code>
+     */
+    int asInt(String label);
+    /**
      * The integers corresponding to these elements (counting from 0).
      * @param e  Elements in {@link #elements()}
      * @return The corresponding indexes of <code>e</code> in {@link #elements()}
@@ -208,10 +214,17 @@ public interface OM extends Verify {
      */
     Function<SignedSet, SignedSet> signedSetPermuter(Permutation p);
 
-    int asInt(String label);
 
+    /**
+     * The factory for making this oriented matroid and its various parts.
+     * @return The underlying factory.
+     */
     FactoryFactory ffactory();
 
+    /**
+     * True if every set of {@link #rank()} elements is a basis for the underlying matroid.
+     * @return true if this oriented matroid is uniform
+     */
     boolean isUniform();
 
 

@@ -32,6 +32,10 @@ public interface Matroid extends Verify {
 	public MatroidAsSet getBases();
 	
 
+    /**
+     * A view of the matroid as a set of independent sets.
+     * @return  A view of the matroid as a set of independent sets.
+     */
     public MatroidAsSet  getIndependentSets();
 
 	/**

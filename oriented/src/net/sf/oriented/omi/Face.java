@@ -8,7 +8,6 @@ import java.util.Collection;
 /**
  * A face in a {@link FaceLattice}
  * @author jeremycarroll
- *
  */
 public interface Face extends Verify {
     /**
@@ -41,8 +40,8 @@ public interface Face extends Verify {
         Top;
     }
     /**
-     * 
-     * @return The type, i.e. the position of the face in the lattice.ß
+     * The type, ie the position of the face in the lattice.
+     * @return The type, i.e. the position of the face in the lattice.
      */
     Type type();
     /**
@@ -51,17 +50,17 @@ public interface Face extends Verify {
      */
     SignedSet covector();
     /**
-     * 
-     * @return The dimension of this face, -1 for {@link Type#Bottom}, 0 for points, etc.
+     * The dimension of this face, -1 for {@link Type#Bottom}, 0 for points, etc.
+     * @return The dimension of this face.
      */
     int dimension();
     /**
-     * 
+     *  The faces one dimension higher than this face.
      * @return The faces one dimension higher than this face.
      */
     Collection<? extends Face> higher();
     /**
-     * 
+     * The faces one dimension lower than this face.
      * @return The faces one dimension lower than this face.
      */
     Collection<? extends Face> lower();
