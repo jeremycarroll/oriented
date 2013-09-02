@@ -29,10 +29,23 @@ public class EuclideanPseudoLines {
     private FLHelper flHelper;
     
 
+    /**
+     * 
+     * @param om
+     * @param infinity
+     * @param alsoReorient
+     * @throws NotRank3Exception
+     */
     public EuclideanPseudoLines(OM om, String infinity, String ... alsoReorient) {
         this(om,om.asInt(infinity), alsoReorient);
     }
 
+    /**
+     * 
+     * @param om
+     * @param infinity
+     * @throws NotRank3Exception
+     */
     public EuclideanPseudoLines(OM om, Label infinity) {
         this(om,om.asInt(infinity));
     }
@@ -49,7 +62,7 @@ public class EuclideanPseudoLines {
             throw new IllegalArgumentException("Bad choice of infinity");
         }
         if (om.rank() != 3) {
-            throw new IllegalArgumentException("Psuedoline stretching algorithm only applies to rank 3 oriented matroids");
+            throw new NotRank3Exception("Psuedoline stretching algorithm only applies to rank 3 oriented matroids");
         }
         original = om;
         OMasSignedSet topes = setNoCoLoops(om);
