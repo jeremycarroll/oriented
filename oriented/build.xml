@@ -28,7 +28,7 @@
 		<!-- Use cp to copy script files in order to preserve execute permission -->
 		<exec executable="bash" >
 		    <arg value="-c"/>
-		    <arg value="mkdir  ${dist.dir}/scripts ; cp ${scripts.dir}/* ${dist.dir}/scripts"/>
+		    <arg value="mkdir  ${dist.dir}/scripts ; echo Copying `ls ${scripts.dir} | wc -l` files to ${dist.dir}/scripts ; cp ${scripts.dir}/* ${dist.dir}/scripts"/>
 		</exec>
     	<copy todir="${dist.dir}/src-test">
             <fileset dir="${src-test.dir}" includes="**"/>
