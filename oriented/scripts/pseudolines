@@ -14,10 +14,11 @@ DIR=$(dirname $ME)
 #  $DIR/../oriented*.jar
 #  $DIR/../lib/*.jar
 
-CP=$DIR/../oriented*.jar:$DIR/../bin
+CP=`echo $DIR/../oriented*.jar`
+CP=$CP:$DIR/../bin
 
 CP=$CP`(cd $DIR/../lib ;
    ls -1 | awk '{ printf ":'"$DIR"'/../lib/%s", $0 }' )`
 
-# echo $CP
+echo $CP
 java -classpath $CP oriented.Image $*
