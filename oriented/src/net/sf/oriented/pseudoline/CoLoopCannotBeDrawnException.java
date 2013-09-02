@@ -3,27 +3,20 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
-public class CoLoopUnrepresentableException extends Exception {
+/**
+ * The representation of rank 3 oriented matroids as pseudoline drawings
+ * in the Euclidean plane can only draw co-loops as the line at infinity.
+ * This exception indicates that a co-loop was not the line at infinity.
+ * @author jeremycarroll
+ *
+ */
+public class CoLoopCannotBeDrawnException extends Exception {
 
-    public CoLoopUnrepresentableException() {
-    }
 
-    public CoLoopUnrepresentableException(String message) {
+    CoLoopCannotBeDrawnException(String message) {
         super(message);
     }
 
-    public CoLoopUnrepresentableException(Throwable cause) {
-        super(cause);
-    }
-
-    public CoLoopUnrepresentableException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public CoLoopUnrepresentableException(String message, Throwable cause,
-            boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 
 }
 

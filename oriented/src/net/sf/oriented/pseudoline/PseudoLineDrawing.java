@@ -39,6 +39,22 @@ import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
+/**
+ * This class is for generating images of pseudolines
+ * as Euclidean pictures of the projective plane.
+ * Each image shows one of the lines, the line at infinity 
+ * as an oval or circle. The other lines meet the line at infinity
+ * at either edge of the image: conceptually the two opposite points
+ * in the Euclidean picture are a single projective point.
+ * Pairs of lines that meet at the line at infinity are parallel. 
+ * This concept of Euclidean parallelness should not be confused
+ * with the oriented matroid concept of parallel (or anti-parallel) elements.
+ * The specific options for the image are controlled by the {@link ImageOptions} class,
+ * 
+ * 
+ * @author jeremycarroll
+ *
+ */
 public class PseudoLineDrawing implements Verify {
     
     private class Path {
@@ -469,13 +485,13 @@ public class PseudoLineDrawing implements Verify {
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private ImageOptions options;
     
-    public PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopUnrepresentableException {
+    PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopCannotBeDrawnException {
         projective = pseudoLines;
         Label inf = projective.getInfinity();
         for (SignedSet ss:projective.getEquivalentOM().dual().getCircuits()) {
             if (ss.minus().isEmpty() && ss.plus().size()==1) {
                 if (!ss.plus().minus(inf).isEmpty()) {
-                    throw new CoLoopUnrepresentableException("CAGGGH");
+                    throw new CoLoopCannotBeDrawnException(ss.plus().minus(inf).iterator().next().label()+" is a co-loop that cannot be drawn in a pseudoline picture");
                 }
             }
         }
@@ -655,9 +671,20 @@ public class PseudoLineDrawing implements Verify {
         
     }
 
+    /**
+     * Returns an image of the oriented matroid with default options.
+     * @see #image(ImageOptions)
+     * @see ImageOptions#defaultColor()
+     * @return An image of the oriented matroid.
+     */
     public RenderedImage image() {
         return image(ImageOptions.defaultColor());
     }
+    /**
+     * Returns an image of the oriented matroid with the specified options.
+     * @return An image of the oriented matroid.
+     * @param opt The options controlling the image generation
+     */
     public RenderedImage image(ImageOptions opt) {
         options = opt;
         arrange();

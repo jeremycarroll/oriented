@@ -14,7 +14,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.pseudoline.CoLoopUnrepresentableException;
+import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
@@ -108,7 +108,7 @@ public class Image {
     
     private Image(){}
 
-    public static void main(String args[]) throws IOException, CoLoopUnrepresentableException {
+    public static void main(String args[]) throws IOException, CoLoopCannotBeDrawnException {
         ArgumentParser parser = ArgumentParsers.newArgumentParser("Image")
                 .description("Create jpeg of oriented matrorid.");
         MutuallyExclusiveGroup omGroup = parser.addMutuallyExclusiveGroup("Oriented Matroid");
