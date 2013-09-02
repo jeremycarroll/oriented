@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.impl.util;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,6 +55,13 @@ public class Misc {
             unboxed[i] = boxed[i];
         }
         return unboxed;
+    }
+
+    public static <T> T[] resize(T[] old, int newLength) {
+        @SuppressWarnings("unchecked")
+        T rslt[] = (T[]) Array.newInstance(old.getClass().getComponentType(), newLength);
+        System.arraycopy(old, 0, rslt, 0, newLength<old.length?newLength:old.length);
+        return rslt;
     }
 
 }

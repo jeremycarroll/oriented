@@ -14,7 +14,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.pseudoline.PseudoLines;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 import org.junit.Assume;
 import org.junit.Test;
@@ -93,7 +93,7 @@ public class TestExamples2 {
         int n = om.n();
         int p = IntMath.binomial(n-1,2);
         for (Label l:om.elements()) {
-            PseudoLines r = new PseudoLines(om,l);
+            EuclideanPseudoLines r = new EuclideanPseudoLines(om,l);
             if ( n < 10 ) {
                 // this is entirely optional, but with it things go slower!
                r.switchFaceLattice();

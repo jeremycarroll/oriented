@@ -15,7 +15,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,9 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.oriented.impl.util.Misc;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.Verify;
 
 import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -37,7 +39,7 @@ import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
-public class PseudoLineDrawing {
+public class PseudoLineDrawing implements Verify {
     
     private class Path {
 
@@ -213,7 +215,7 @@ public class PseudoLineDrawing {
                 }
             }
             if (allowMisses) {
-                adjacent = resize(adjacent,found);
+                adjacent = Misc.resize(adjacent,found);
 //                edge = resize(edge,found);
             }
             if (found != adjacent.length) {
@@ -460,14 +462,14 @@ public class PseudoLineDrawing {
 
 
     }
-    final PseudoLines projective;
+    final EuclideanPseudoLines projective;
     final Set<Point> points = new HashSet<Point>();
     final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private ImageOptions options;
     
-    public PseudoLineDrawing(PseudoLines pseudoLines) throws CoLoopUnrepresentableException {
+    public PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopUnrepresentableException {
         projective = pseudoLines;
         Label inf = projective.getInfinity();
         for (SignedSet ss:projective.getEquivalentOM().dual().getCircuits()) {
@@ -520,14 +522,7 @@ public class PseudoLineDrawing {
         }
     }
 
-    public static <T> T[] resize(T[] old, int newLength) {
-        @SuppressWarnings("unchecked")
-        T rslt[] = (T[]) Array.newInstance(old.getClass().getComponentType(), newLength);
-        System.arraycopy(old, 0, rslt, 0, newLength<old.length?newLength:old.length);
-        return rslt;
-    }
-
-    public List<Point> getRing(int i) {
+    private List<Point> getRing(int i) {
         if (i >= rings.size()) {
             rings.add(new ArrayList<Point>());
         }
@@ -614,7 +609,8 @@ public class PseudoLineDrawing {
 
     
     
-    public void checkForOverlappingEdge() {
+    @Override
+    public void verify() throws AxiomViolation {
         Set<SubLine> allLines = new HashSet<SubLine>();
         for (Point p:points) {
             List<XLine> ee = p.getLines();
@@ -622,7 +618,7 @@ public class PseudoLineDrawing {
                 for (SubLine l:allLines) {
                     try {
                     if (ll.intersection(l, false) != null) {
-                        throw new IllegalStateException("overlapping lines");
+                        throw new AxiomViolation(this,"overlapping lines");
                     }
                     }
                     catch (NullPointerException parallelLinesBug) {}

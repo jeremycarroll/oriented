@@ -10,13 +10,14 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopUnrepresentableException;
 import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sf.oriented.pseudoline.ImageOptions;
-import net.sf.oriented.pseudoline.PseudoLines;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -56,111 +57,111 @@ public class TestDrawing {
     }
 
     @Test
-    public void testWheel0() throws IOException, CoLoopUnrepresentableException {
+    public void testWheel0() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.wheel12(),"0","wheel");
     }
     
 
     @Test(expected=CoLoopUnrepresentableException.class)
-    public void testWheelA() throws IOException, CoLoopUnrepresentableException {
+    public void testWheelA() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.wheel12(), "A", "wheel");
     }
 
     @Test
-    public void testPappus() throws IOException, CoLoopUnrepresentableException {
+    public void testPappus() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.πάππος(), "pappus");
     }
     @Test
-    public void testCeva() throws IOException, CoLoopUnrepresentableException {
+    public void testCeva() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.ceva(), "ceva");
     }
     
     @Test
-    public void testRingel() throws IOException, CoLoopUnrepresentableException {
+    public void testRingel() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.ringel(),"3", "ringel");
     }
 
     @Test
-    public void testTsukamoto13_1() throws IOException, CoLoopUnrepresentableException {
+    public void testTsukamoto13_1() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.tsukamoto13(1),  "K", "tsukamoto(1)");
     }
 
     @Test
-    public void testSuv() throws IOException, CoLoopUnrepresentableException {
+    public void testSuv() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.suvorov14(),"N",  "suvorov");
     }
     
     @Test
-    public void testSaw() throws IOException, CoLoopUnrepresentableException {
+    public void testSaw() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testDrawing(Examples.circularsaw3(),"A","saw");
     }
     
     @Test
-    public void testTTT() throws IOException, CoLoopUnrepresentableException {
+    public void testTTT() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(true,true,true);
     }
     
     @Test
-    public void testTTF() throws IOException, CoLoopUnrepresentableException {
+    public void testTTF() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(true,true,false);
     }
     
     @Test
-    public void testTFT() throws IOException, CoLoopUnrepresentableException {
+    public void testTFT() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(true,false,true);
     }
     
     @Test
-    public void testTFF() throws IOException, CoLoopUnrepresentableException {
+    public void testTFF() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(true,false,false);
     }
 
     @Test
-    public void testFTT() throws IOException, CoLoopUnrepresentableException {
+    public void testFTT() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(false,true,true);
     }
     
     @Test
-    public void testFTF() throws IOException, CoLoopUnrepresentableException {
+    public void testFTF() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(false,true,false);
     }
     
     @Test
-    public void testFFT() throws IOException, CoLoopUnrepresentableException {
+    public void testFFT() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(false,false,true);
     }
     
     @Test
-    public void testFFF() throws IOException, CoLoopUnrepresentableException {
+    public void testFFF() throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         testCeva(false,false,false);
     }
-    private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException, CoLoopUnrepresentableException {
+    private void testCeva(boolean showOrigin, boolean showLabels, boolean showVertices) throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         ImageOptions opts = ImageOptions.defaultBlackAndWhite();
         opts.showOrigin = showOrigin;
         opts.setShowLabels(showLabels);
         opts.showVertices = showVertices;
         testDrawing(Examples.ceva(), "0", "CEVA"+(showOrigin?"-origin":"")+(showLabels?"-labels":"")+(showVertices?"-vertices":""), opts);
     }
-    private void testDrawing(OM om,String name) throws IOException, CoLoopUnrepresentableException {
+    private void testDrawing(OM om,String name) throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         for (Label lbl: om.elements()){
             testDrawing(om, lbl.label(), name);
         }
     }
 
     private void testDrawing(OM om, String label, String name)
-            throws IOException, CoLoopUnrepresentableException {
+            throws IOException, CoLoopUnrepresentableException, AxiomViolation {
         ImageOptions options = ImageOptions.defaultColor();
         testDrawing(om, label, name, options);
     }
     private void testDrawing(OM om, String label, String name,
-            ImageOptions options) throws IOException, CoLoopUnrepresentableException {
-        PseudoLines pseudoLines = new PseudoLines(om,label);
+            ImageOptions options) throws IOException, CoLoopUnrepresentableException, AxiomViolation {
+        EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,label);
         PseudoLineDrawing euclid = pseudoLines.asDrawing();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + name + "-" + label+".jpeg"));
         iw.setOutput(imageOutput);
         iw.write(euclid.image(options));
-        euclid.checkForOverlappingEdge();
+        euclid.verify();
         imageOutput.close();
         iw.dispose();
     }
