@@ -789,7 +789,7 @@ public class PseudoLineDrawing implements Verify {
     }
 
     private Label lineLabel(Point first, Point second) {
-        return projective.noCoLoops().minus(first.covector().support().union(second.covector().support())).iterator().next();
+        return projective.incorrectlyNamed().minus(first.covector().support().union(second.covector().support())).iterator().next();
     }
 
     private void writeCenteredString(Graphics2D graphics, String lbl,

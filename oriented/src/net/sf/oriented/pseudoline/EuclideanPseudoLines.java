@@ -21,6 +21,16 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
 
+/**
+ * This class takes a rank 3 oriented matroid and prepares it for 
+ * processing from a Euclidean perspective. The origin
+ * is forced to be near the line at infinity (i.e. in an unbounded face).
+ * One of the lines is chosen  as the line at infinity, and a face lying on that line is chosen
+ * as the positive face, and the oriented matroid may need reorienting to make that face
+ * actually be the positive face.
+ * @author jeremycarroll
+ *
+ */
 public class EuclideanPseudoLines {
     private final OM original;
     private final OMasChirotope modified;
@@ -29,22 +39,26 @@ public class EuclideanPseudoLines {
     private FLHelper flHelper;
     
 
+
     /**
-     * 
-     * @param om
-     * @param infinity
-     * @param alsoReorient
-     * @throws NotRank3Exception
+     * Prepare the given oriented matroid for Euclidean processing, with
+     * the given line at infinity, and a hint, which may or may not be followed, concerning
+     * which lines to re-orient.
+     * @param om The oriented matroid to process
+     * @param infinity Project this element to be the line at infinity
+     * @throws NotRank3Exception If om is not of rank 3.
+     * @param alsoReorient reorient these elements too, before processing. To find which elements are actually reoriented you must call {@link #getReorientation()}
      */
     public EuclideanPseudoLines(OM om, String infinity, String ... alsoReorient) {
         this(om,om.asInt(infinity), alsoReorient);
     }
 
     /**
-     * 
-     * @param om
-     * @param infinity
-     * @throws NotRank3Exception
+     * Prepare the given oriented matroid for Euclidean processing, with
+     * the given line at infinity.
+     * @param om The oriented matroid to process
+     * @param infinity Project this element to be the line at infinity
+     * @throws NotRank3Exception If om is not of rank 3.
      */
     public EuclideanPseudoLines(OM om, Label infinity) {
         this(om,om.asInt(infinity));
@@ -53,6 +67,9 @@ public class EuclideanPseudoLines {
     final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
     final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
+    /**
+     * TODO: this field is incorrectly named
+     */
     private UnsignedSet noCoLoops;
     
     
@@ -108,12 +125,20 @@ public class EuclideanPseudoLines {
         
     }
     
+    /**
+     * Prepare to draw this arrangement of pseudolines.
+     * @return A drawing from which an image can be constructed.
+     * @throws CoLoopCannotBeDrawnException If one of the elements other than infinity is a co-loop.
+     */
     public PseudoLineDrawing asDrawing() throws CoLoopCannotBeDrawnException {
         this.switchFaceLattice();
         return new PseudoLineDrawing(this);
     }
 
-    public UnsignedSet noCoLoops() {
+    /*
+     * TODO: this method is incorrectly named.
+     */
+    UnsignedSet incorrectlyNamed() {
         return this.noCoLoops;
     }
     private OMasSignedSet setNoCoLoops(final OM om) {
@@ -122,6 +147,13 @@ public class EuclideanPseudoLines {
         return topes;
     }
     
+    /**
+     * This method impacts performance. Calling it may make your program faster, or it may make it slower.
+     * It is unlikely to leave the performance unchanged.
+     * Computing the face lattice is expensive. The algorithms need to compute the face lattice of the original
+     * oriented matroid; it may be more efficient to recompute the face lattice for the modified oriented matroid too, or it may not.
+     * Invoking this method does that recomputation.
+     */
     public void switchFaceLattice() {
         setNoCoLoops(modified);
         flHelper = new FLHelper(modified, noCoLoops, modified.ffactory().unsignedSets().empty());
@@ -172,14 +204,14 @@ public class EuclideanPseudoLines {
     private Label getLineLabel(SignedSet edge) {
         return noCoLoops.minus(edge.support()).asCollection().iterator().next();
     }
-    public static Face edgeOnLine(Label line, Face face) {
+    private static Face edgeOnLine(Label line, Face face) {
         Face edgePoints[] = new Face[2];
         if (1 != edgesWithNPointsOnLine(line, face, edgePoints,2)) {
             throw new IllegalArgumentException(line+" is not an edge of "+face);
         }
         return edgePoints[0];
     }
-    public static Face[] edgesTouchingLine(Label line, Face face) {
+    private static Face[] edgesTouchingLine(Label line, Face face) {
         Face edgePoints[] = new Face[4];
         if (2 != edgesWithNPointsOnLine(line, face, edgePoints,1) ) {
             throw new IllegalArgumentException(line+" is not touching "+face);
@@ -188,7 +220,7 @@ public class EuclideanPseudoLines {
         return edgePoints;
     }
 
-    public static int edgesWithNPointsOnLine(Label line, Face face,
+    private static int edgesWithNPointsOnLine(Label line, Face face,
             Face[] edgePoints, int n) {
         int eCnt = 0;
         for (Face edge : face.lower()) {
@@ -216,6 +248,13 @@ public class EuclideanPseudoLines {
         return eCnt/2;
     }
 
+    /**
+     * Gives a representation of the modified oriented matroid
+     * as a list of crossings strings that can be used in
+     * {@link FactoryFactory#fromCrossings(String...)}
+     * @see #getEquivalentOM()
+     * @return A list of crossing strings.
+     */
     public String[] toCrossingsString() {
         final Label ground[] = modified.elements();
         int n = ground.length;
@@ -279,14 +318,34 @@ public class EuclideanPseudoLines {
         return rslt.toString();
     }
 
+    /**
+     * This is the oriented matroid which is actually being processed.
+     * This is a reorientaiton of the oriented matroid passed to the constructor.
+     * @return An equivalent oriented matroid
+     * @see #EuclideanPseudoLines(OM, String, String...)
+     * @see #EuclideanPseudoLines(OM, Label)
+     * @see #getReorientation()
+     */
     public OM getEquivalentOM() {
         return modified;
     }
 
+    /**
+     * This is the set of elements which were reoriented in the processing of this class.
+     * @return A list of elements reoriented for processing as a Euclidean arrangement of Psuedolines
+     * @see #EuclideanPseudoLines(OM, String, String...)
+     * @see #EuclideanPseudoLines(OM, Label)
+     * @see #getEquivalentOM()
+     */
     public Label[] getReorientation() {
         return this.reorientation;
     }
     
+    /**
+     * The elements of the original oriented matroid are permuted in the equivalent oriented
+     * matroid. This method gives access to the permutation.
+     * @return The permutation of the elements between the original oriented matroid, and the one used for processing as a Euclidean arrangement of Psuedolines
+     */
     public Permutation getPermutation() {
         return permutation;
     }
@@ -328,7 +387,7 @@ public class EuclideanPseudoLines {
         }
     }
 
-    public static Face otherFace(Face edge, Face face) {
+    private static Face otherFace(Face edge, Face face) {
         for (Face f:edge.higher()) {
             if (f != face) {
                 return  f;
@@ -341,10 +400,16 @@ public class EuclideanPseudoLines {
         rslt.add(new Face[]{point,edge});
     }
 
-    public FaceLattice getFaceLattice() {
+    FaceLattice getFaceLattice() {
         return flHelper.modified.getFaceLattice();
     }
 
+    /**
+     * This is the element at infinity as from the constructor.
+     * @return The element at infinity.
+     * @see #EuclideanPseudoLines(OM, String, String...)
+     * @see #EuclideanPseudoLines(OM, Label)
+     */
     public Label getInfinity() {
         return modified.elements()[0];
     }
