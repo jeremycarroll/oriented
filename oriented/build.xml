@@ -45,7 +45,7 @@
     <target name="javadoc">
         <javadoc   access="public" 
         	       author="true" 
-        	      classpath="lib/junit-4.8.2.jar:lib/commons-math3-3.0.jar:lib/guava-14.0.1.jar:lib/perisicRingAllv3.jar" 
+        	      classpath="lib/junit-4.8.2.jar:lib/commons-math3-3.0.jar:lib/guava-14.0.1.jar:lib/perisicRingAllv3.jar:lib/argparse4j-0.4.1.jar:lib/jung-graph-impl-2.0.1.jar:lib/jung-algorithms-2.0.1.jar:lib/jung-api-2.0.1.jar" 
         	      destdir="doc/javadoc" 
             encoding="UTF-8"
             charset="UTF-8"
@@ -57,7 +57,9 @@
         	       notree="false" 
         	  packagenames="net.sf.oriented.util.combinatorics,
                             net.sf.oriented.util.matrix,
-        	                net.sf.oriented.omi" 
+        	                net.sf.oriented.omi,
+        	                net.sf.oriented.pseudoline,
+                            oriented" 
         	      overview="src/overview.html"
         	        source="1.7" 
         	    sourcepath="src" 

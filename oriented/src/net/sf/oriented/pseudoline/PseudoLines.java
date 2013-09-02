@@ -154,7 +154,7 @@ public class PseudoLines {
      * edges.
      * @param edge
      * @param tope
-     * @return
+     * @return label
      */
     private Label getLineLabel(SignedSet edge) {
         return noCoLoops.minus(edge.support()).asCollection().iterator().next();
