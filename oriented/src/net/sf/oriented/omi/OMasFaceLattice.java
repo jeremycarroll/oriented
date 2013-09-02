@@ -4,7 +4,14 @@
 package net.sf.oriented.omi;
 
 
-
+/**
+ * The face lattice view of an oriented matroid.
+ * Note, that from a computational view point this is really a view of the dual.
+ * However, this is presented, as in the literature, as a cryptomorphim of the (non-dual)
+ * oriented matroid.
+ * @author jeremycarroll
+ *
+ */
 public interface OMasFaceLattice extends OM, FaceLattice, Iterable<Face> {
 
 

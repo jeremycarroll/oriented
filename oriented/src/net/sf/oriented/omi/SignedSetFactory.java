@@ -3,8 +3,22 @@
  ************************************************************************/
 package net.sf.oriented.omi;
 
+/**
+ * A factory for producing signed sets.
+ * As well as the usual methods for to and from a string
+ * representation, we can also build a signed set from two disjoint
+ * unsigned sets.
+ * @author jeremycarroll
+ *
+ */
 public interface SignedSetFactory extends Factory<SignedSet> {
 
+    /**
+     * Build a signed set from two disjoint unsigned sets.
+     * @param plus The positively signed elements
+     * @param minus The negatively signed elements
+     * @return The corresponding signed set.
+     */
     SignedSet construct(UnsignedSet plus, UnsignedSet minus);
 
 }
