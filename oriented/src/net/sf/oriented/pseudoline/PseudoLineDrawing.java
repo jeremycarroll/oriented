@@ -37,7 +37,7 @@ import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
-public class EuclideanPseudoLines {
+public class PseudoLineDrawing {
     
     private class Path {
 
@@ -467,7 +467,7 @@ public class EuclideanPseudoLines {
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private ImageOptions options;
     
-    public EuclideanPseudoLines(PseudoLines pseudoLines) throws CoLoopUnrepresentableException {
+    public PseudoLineDrawing(PseudoLines pseudoLines) throws CoLoopUnrepresentableException {
         projective = pseudoLines;
         Label inf = projective.getInfinity();
         for (SignedSet ss:projective.getEquivalentOM().dual().getCircuits()) {

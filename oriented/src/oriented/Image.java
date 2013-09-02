@@ -15,7 +15,7 @@ import javax.imageio.stream.ImageOutputStream;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopUnrepresentableException;
-import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.PseudoLines;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -157,7 +157,7 @@ public class Image {
             infinity = settings.getString("infinity");
         }
         PseudoLines pseudoLines = new PseudoLines(om, infinity);
-        EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
+        PseudoLineDrawing euclid = pseudoLines.asDrawing();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType(settings.getString("mimeType")).next();
         String fname = settings.getString("output");
         Object output;

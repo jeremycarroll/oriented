@@ -14,7 +14,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopUnrepresentableException;
-import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.PseudoLines;
 
@@ -155,7 +155,7 @@ public class TestDrawing {
     private void testDrawing(OM om, String label, String name,
             ImageOptions options) throws IOException, CoLoopUnrepresentableException {
         PseudoLines pseudoLines = new PseudoLines(om,label);
-        EuclideanPseudoLines euclid = pseudoLines.asEuclideanPseudoLines();
+        PseudoLineDrawing euclid = pseudoLines.asDrawing();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + name + "-" + label+".jpeg"));
         iw.setOutput(imageOutput);

@@ -95,9 +95,9 @@ public class PseudoLines {
         
     }
     
-    public EuclideanPseudoLines asEuclideanPseudoLines() throws CoLoopUnrepresentableException {
+    public PseudoLineDrawing asDrawing() throws CoLoopUnrepresentableException {
         this.switchFaceLattice();
-        return new EuclideanPseudoLines(this);
+        return new PseudoLineDrawing(this);
     }
 
     public UnsignedSet noCoLoops() {
