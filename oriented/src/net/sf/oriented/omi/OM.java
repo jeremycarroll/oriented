@@ -158,11 +158,22 @@ public interface OM extends Verify {
      * @return The corresponding indexes of <code>e</code> in {@link #elements()}
      */
 	<T extends Label> int[] asInt(T ... e);
+	
+
+	/**
+	 * Concerts integer indices of {@link #elements()}
+	 * into an UnsignedSet.
+	 * @param ix The indices
+	 * @return The set of elements corresponding to the indices ix
+	 * @see #asInt(UnsignedSet)
+	 */
+    UnsignedSet asSet(int ...ix);
 
 	/**
 	 * Gets the indexes of each element in <code>u</code>
 	 * @param u a subset of {@link #setOfElements()}
 	 * @return The increasing corresponding indexes
+	 * @see #asSet(int...)
 	 */
 	int[] asInt(UnsignedSet u);
 
@@ -226,6 +237,7 @@ public interface OM extends Verify {
      * @return true if this oriented matroid is uniform
      */
     boolean isUniform();
+
 
 
 }

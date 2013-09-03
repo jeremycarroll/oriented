@@ -93,12 +93,10 @@ public class PseudoLineDrawing implements Verify {
                 // no more points, we crossed the Euclidean plane
                 return points.toArray(new IPoint[points.size()]);
             }
-            
         }
         
         public Path2D getPath2D() {
             Path2D result = new Path2D.Double();
-            
             result.moveTo(points[0].getX(), points[0].getY());
             IPoint control[] = controlPoints(points[0], points[1], points[2]);
             result.quadTo(control[0].getX(), control[0].getY(), points[1].getX(), points[1].getY());
@@ -139,7 +137,6 @@ public class PseudoLineDrawing implements Verify {
 
     }
     private static class XLine extends SubLine {
-        
         @SuppressWarnings("unused")
         final Point p, q;
 
@@ -147,9 +144,7 @@ public class PseudoLineDrawing implements Verify {
             super(new Vector2D(p.x, p.y), new Vector2D(q.x, q.y)); 
             this.p = p;
             this.q = q;
-                
         }
-
     }
 
     private class Edge {
@@ -287,6 +282,9 @@ public class PseudoLineDrawing implements Verify {
         }
 
         public void setPosition(double d) {
+            if (d < 0.0) {
+                d += 360.0;
+            }
             degrees = d;
         }
 
@@ -566,7 +564,7 @@ public class PseudoLineDrawing implements Verify {
         double separation = 360.0 / getOuterRing().size();
         int pos = 0;
         do {
-            current.setPosition(separation*pos);
+            current.setPosition(separation*pos-90.0);
             current.setRadius(getRadius());
             PointAtInfinity current1 = current;
             current = current.next(previous);

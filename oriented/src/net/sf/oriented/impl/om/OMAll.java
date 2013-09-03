@@ -22,9 +22,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
+import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
@@ -296,6 +300,17 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		Arrays.sort(ix);
 		return ix;
 	}
+	
+
+    @Override
+    public UnsignedSet asSet(int ... ix) {
+        return ffactory().unsignedSets().copyBackingCollection(Lists.transform(Arrays.asList(Misc.box(ix)), new Function<Integer,Label>(){
+            @Override
+            public Label apply(Integer i) {
+                return elements()[i];
+            }
+        }));
+    }
 
 	UnsignedSetFactory unsignedSets(FactoryFactory factory) {
 		return (UnsignedSetFactory) factory.unsignedSets();
@@ -442,6 +457,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
     public boolean isUniform() {
         return getChirotope().isUniform();
     }
+
 
 }
 /************************************************************************

@@ -109,7 +109,7 @@ public class ImageOptions {
         originArrowLength = 35;
         originArrowSize = 8;
         labelBorder = 1;
-        lineWidth = 1.5f;
+        lineWidth = 2.5f;
     }
     
     private double internalFontSizeRatio = 2;

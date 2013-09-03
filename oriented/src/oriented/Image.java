@@ -110,7 +110,7 @@ public class Image {
 
     public static void main(String args[]) throws IOException, CoLoopCannotBeDrawnException {
         ArgumentParser parser = ArgumentParsers.newArgumentParser("Image")
-                .description("Create jpeg of oriented matrorid.");
+                .description("Create picture of oriented matrorid.");
         MutuallyExclusiveGroup omGroup = parser.addMutuallyExclusiveGroup("Oriented Matroid");
         omGroup.required(true);
         for (String name : Examples.all().keySet()) {

@@ -76,6 +76,11 @@ public abstract class AbsOM<T> extends AbsOMAxioms<T> {
 		return all.asInt(l);
 	}
 
+    @Override
+    public UnsignedSet asSet(int ... l) {
+        return all.asSet(l);
+    }
+
 	@Override
 	public int[] asInt(UnsignedSet u) {
 		return all.asInt(u);

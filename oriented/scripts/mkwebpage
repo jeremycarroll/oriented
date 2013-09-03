@@ -20,4 +20,4 @@ CP=$CP:$DIR/../bin
 CP=$CP`(cd $DIR/../lib ;
    ls -1 | awk '{ printf ":'"$DIR"'/../lib/%s", $0 }' )`
 
-java -classpath $CP oriented.Image $*
+java -classpath $CP oriented.WebPage $*
