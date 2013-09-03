@@ -163,10 +163,10 @@ public class TestPermutations {
     @Test
     public void testRingel() {
         OM ringel = Examples.ringel();
-        checkCentralFaceBoundary(ringel,"1","6","7","0","9");
+        checkCentralFaceBoundary(ringel,"8","4","3","0","1");
         FactoryFactory ffactory = ((OMInternal)ringel).ffactory();
-        OM reoriented = ringel.reorient(strings2labels(ffactory,"1","6","3","5"));
-        checkCentralFaceBoundary(reoriented,"2","5","7");
+        OM reoriented = ringel.reorient(strings2labels(ffactory,"8","4","6","5"));
+        checkCentralFaceBoundary(reoriented,"7","5","3");
     }
 
     private void checkCentralFaceBoundary(OM om, String ... boundary) {
