@@ -72,7 +72,7 @@ public class OMRealizedFactory extends
 		final int n = mat.width();
 		Collection<Label> labels = factory.labels().getUniverse();
 		if (labels.size()!=n) {
-		    labels = new SimpleLabels(n);
+		    labels = simpleLabels(n);
 		}
         return construct(labels, mat);
 	}

@@ -27,13 +27,16 @@ import net.sf.oriented.omi.Label;
  */
 public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryImpl<MATROID> {
 
-    final class SimpleLabels extends AbstractCollection<Label> {
+    
+    abstract class SimpleLabels extends AbstractCollection<Label> {
         private final int n;
 
-        SimpleLabels(int n) {
+        private SimpleLabels(int n) {
             this.n = n;
         }
 
+
+        abstract String label(int j);
         @Override
         public Iterator<Label> iterator() {
             return new Iterator<Label>() {
@@ -46,8 +49,10 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryIm
 
                 @Override
                 public Label next() {
-                    return factory.labels().parse("" + ++i);
+                    int j = ++i;
+                    return factory.labels().parse(label(j));
                 }
+
 
                 @Override
                 public void remove() {
@@ -59,6 +64,25 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryIm
         @Override
         public int size() {
             return n;
+        }
+    }
+    
+    Collection<Label> simpleLabels(int n) {
+        if (n>26) {
+            return new SimpleLabels(n){
+                @Override
+                String label(int j) {
+                    return "" + j;
+                }
+            };
+        } else {
+            return new SimpleLabels(n){
+                @Override
+                String label(int j) {
+                    return new String(new char[]{(char)('A'+j)});
+                }
+            };
+
         }
     }
 

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -185,7 +186,7 @@ public class TestConversions {
 		case DUALCHIROTOPE:
 			ChirotopeFactory chi = factory.chirotope();
 			if (factory == special)
-				return chi.construct((Chirotope) first);
+				return chi.construct(Arrays.asList(first.elements()),(Chirotope) first);
 			return chi.parse(chi.toString((OMasChirotope) first));
 		case REALIZED:
 		case DUALREALIZED:

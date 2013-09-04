@@ -27,7 +27,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMasChirotope, RankAnd
 	@Override
 	public OMasChirotope construct(Chirotope chi) {
 		final int n = chi.n();
-		return construct(new SimpleLabels(n), chi);
+		return construct(simpleLabels(n), chi);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class OMChirotopeFactory extends AbsMatroidFactory<OMasChirotope, RankAnd
 
 	@Override
 	OMasChirotope construct(RankAndChirotope p) {
-	    return construct(new SimpleLabels(howManyElements(p.rank, p.chirotope.length())), p);
+	    return construct(simpleLabels(howManyElements(p.rank, p.chirotope.length())), p);
 	}
 
     private int howManyElements(int rank, int l) {

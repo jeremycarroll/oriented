@@ -53,6 +53,7 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 		pc.index++;
 		skip(pc);
 	}
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends ITEM> T remake(ITEM t) {
         if (t instanceof HasFactory) {

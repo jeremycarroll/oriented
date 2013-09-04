@@ -23,6 +23,9 @@ public interface Factory<T> {
 	T parse(String s);
 	
 	T[] parse(String ... many);
+	
+
+    <U extends T> U remake(T t);
 
 
 

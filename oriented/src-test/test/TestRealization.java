@@ -5,6 +5,7 @@
 
 package test;
 
+
 import junit.framework.Assert;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
@@ -49,7 +50,9 @@ public class TestRealization {
     static FactoryFactory getFactory(Options.Impl impl) {
         Options options = new Options(impl);
         options.setShortLabels();
-        return new FactoryFactory(options);
+        FactoryFactory f = new FactoryFactory(options);
+        options.setUniverse(new String[]{"1","2","3","4","5","6"});
+        return f;
     }
 
 }
