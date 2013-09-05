@@ -22,8 +22,13 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import java.net.URL;
+
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
@@ -49,13 +54,15 @@ public class WebPage {
     static String prefix = "doc/";
     private final OM om;
     private final String infinity;
+    private final String extName;
     private final String name;
     private final String htmlName;
     private FactoryFactory factory;
     private static ImageOptions colors = ImageOptions.defaultColor();
 
-    private WebPage(OM om, String htmlName, String name, String in) {
+    private WebPage(OM om, String htmlName, String extName, String name, String in) {
         this.om = om;
+        this.extName = extName;
         this.name = name;
         this.infinity = in;
         this.htmlName = htmlName;
@@ -78,8 +85,37 @@ public class WebPage {
                 });
     }
 
-    static Writer indexPage;
+    static PageWriter indexPage;
     private static int entryCount = 0;
+    private static String preamble;
+    private static int signInt;
+    
+    static String sign( String minus, String zero, String plus) {
+        switch (signInt) {
+        case -1:
+            return minus;
+        case 0:
+            return zero;
+        case 1:
+            return plus;
+        default:
+                throw new IllegalArgumentException();
+        }
+    }
+    static String sign(String minus, String zero, String plus, String other) {
+        switch (signInt) {
+        case -1:
+            return minus;
+        case 0:
+            return zero;
+        case 1:
+            return plus;
+        case -2:
+            return other;
+        default:
+                throw new IllegalArgumentException();
+        }
+    }
 
     public static void main(String args[]) throws IOException,
             CoLoopCannotBeDrawnException {
@@ -122,10 +158,10 @@ public class WebPage {
             return;
         }
         String name = settings.getString("om");
-        int signInt = settings.getInt("sign");
-        String sign = new String[]{"",".-1",".0",".+1"}[signInt+2];
+        signInt = settings.getInt("sign");
+        String sign = sign(".-1",".0",".+1","");
         String extName = name + sign;
-        String htmlName = name + (signInt == -2 ? "" : ("<sup>" + new String[]{"&minus;",".0","&plus;"}[signInt+1] + "</sup>") );
+        String htmlName = name + (signInt == -2 ? "" : ("<sup>" + sign("&minus;","0","&plus;") + "</sup>") );
         
         OM om = Examples.all().get(extName);
         if (om == null) {
@@ -133,8 +169,8 @@ public class WebPage {
                     + settings.getString("om")+ " oriented matroid.");
             System.exit(1);
         }
-        indexPage = startHtmlPage(extName+".html");
-        indexPage.write("<h2>The "+htmlName+" oriented matroid</h2>\n");
+        preamble = loadPagePart(name) + loadPagePart(name,sign("minus","zero","plus","NONE"));
+        indexPage = startHtmlPage(extName+".html", "The "+htmlName+" oriented matroid");
         indexPage.write("<table border='0'>\n");
         List<String> inf;
         if (settings.get("infinity") != null) {
@@ -143,9 +179,18 @@ public class WebPage {
             inf = getElements(om);
         }
         for (String in : inf) {
-            new WebPage(om, htmlName, extName, in).preparePage();
+            new WebPage(om, htmlName, extName, name, in).preparePage();
         }
-        endHtmlPage(indexPage);
+        indexPage.close();
+    }
+
+    private static String loadPagePart(String ... name) throws IOException {
+        URL u = WebPage.class.getClassLoader().getResource("oriented/data/"+Joiner.on("-").join(name)+".html");
+        if (u != null) {
+            return Resources.asCharSource(u, Charsets.UTF_8).read();
+        } else {
+            return "";
+        }
     }
 
     private void preparePage() throws IOException, CoLoopCannotBeDrawnException {
@@ -161,9 +206,9 @@ public class WebPage {
         setFactory(eOM);
         PseudoLineDrawing euclid = pseudoLines.asDrawing();
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-        String smallImage = "images/small-" + name + "-" + infinity + ".jpg";
-        String largeImage = "images/" + name + "-" + infinity + ".jpg";
-        String detailPage = "detail/" + name + "-" + infinity + ".html";
+        String smallImage = "images/small-" + extName + "-" + infinity + ".jpg";
+        String largeImage = "images/" + extName + "-" + infinity + ".jpg";
+        String detailPage = "detail/" + extName + "-" + infinity + ".html";
         ImageOutputStream imageOutput = ImageIO
                 .createImageOutputStream(new File(prefix + smallImage));
         maybeStartTableRow();
@@ -180,9 +225,9 @@ public class WebPage {
         iw.write(euclid.image(colors));
         imageOutput.close();
         iw.dispose();
-        Writer out = startHtmlPage(detailPage);
-        out.write("<h2>" + htmlName + " with line " + infinity
-                + " projected to infinity</h2>\n");
+        PageWriter out = startHtmlPage(detailPage,  htmlName + " with line " + infinity+ " projected to infinity");
+        out.write(loadPagePart(name, infinity));
+        out.write(loadPagePart(extName,sign("minus","zero","plus","NONE"), infinity));
         if (pseudoLines.getReorientation().length != 0) {
             out.write("<h3>Reoriented</h3>\n");
             out.write("<p>" + pseudoLines.getReorientation()[0].label());
@@ -217,7 +262,7 @@ public class WebPage {
 
         out.write("<h2>The Pseudolines</h2>\n");
         out.write("<img src=\"../" + largeImage + "\" width=\"100%\"/>\n");
-        endHtmlPage(out);
+        out.close();
     }
 
     private static void maybeEndTableRow() throws IOException {
@@ -232,27 +277,55 @@ public class WebPage {
         }
     }
 
-    private static void endHtmlPage(Writer out) throws IOException {
-        if ( entryCount % 3 != 0) {
-            out.write("</tr>");
+    private static class PageWriter {
+        final String dots;
+        final Writer out;
+
+        PageWriter(String pageName, String title) throws IOException {
+            dots = pageName.contains("/") ? "../" : "";
+            File description = new File(prefix + pageName);
+            out = new OutputStreamWriter(new FileOutputStream(description), "utf-8");
+            write("<html>\n<head>\n"
+                    + "<title>" + title + "</title>\n"
+                    + "<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"UTF-8\"/>\n"
+                    + "<link type=\"text/css\" rel=\"stylesheet\" href="+url("jjc.css")
+                    + "/>\n</head>\n<body>\n"
+                    + "<h2>"+ title +"</h2>\n" 
+                    + preamble + "\n");
+            
         }
-        out.write("</table></body>\n</html>");
-        out.close();
+        
+        String url(String rel) {
+            return "\""+dots+rel+"\"";
+        }
+
+        public void close() throws IOException {
+            out.write("</table></body>\n</html>");
+            out.close();
+        }
+
+        private void write(String string) throws IOException {
+            out.write(string);
+        }
+
     }
 
-    private static Writer startHtmlPage(String pageName)
+    private static PageWriter startHtmlPage(String pageName, String title)
             throws UnsupportedEncodingException, FileNotFoundException,
             IOException {
-        String dots = pageName.contains("/") ? "../" : "";
-        File description = new File(prefix + pageName);
-        Writer out = new OutputStreamWriter(new FileOutputStream(description),
-                "utf-8");
-        out.write("<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"UTF-8\"/>\n<link type=\"text/css\" rel=\"stylesheet\" href=\""
-                + dots + "jjc.css\"/>\n</head>\n<body>\n");
-        return out;
+        return new PageWriter(pageName, title) {
+
+            @Override
+            public void close() throws IOException {
+                if ( entryCount % 3 != 0) {
+                    out.write("</tr>");
+                }
+                super.close();
+            }
+        };
     }
 
-    private void writeBases(Writer out, String heading, int orientation, OM om)
+    private void writeBases(PageWriter out, String heading, int orientation, OM om)
             throws IOException {
         SetFactory<Label, UnsignedSet> f = factory.unsignedSets();
         out.write("<h3>" + heading + "</h3>\n");
