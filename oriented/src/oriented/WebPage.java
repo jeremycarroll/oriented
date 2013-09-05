@@ -13,7 +13,10 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -47,13 +50,15 @@ public class WebPage {
     private final OM om;
     private final String infinity;
     private final String name;
+    private final String htmlName;
     private FactoryFactory factory;
     private static ImageOptions colors = ImageOptions.defaultColor();
 
-    private WebPage(OM om, String name, String in) {
+    private WebPage(OM om, String htmlName, String name, String in) {
         this.om = om;
         this.name = name;
         this.infinity = in;
+        this.htmlName = htmlName;
     }
 
     private void setFactory(OM om) {
@@ -83,10 +88,28 @@ public class WebPage {
         MutuallyExclusiveGroup omGroup = parser
                 .addMutuallyExclusiveGroup("Oriented Matroid");
         omGroup.required(true);
+        Set<String> done = new HashSet<String>();
         for (String name : Examples.all().keySet()) {
+            if (name.contains(".")) {
+                name = name.substring(0,name.indexOf('.'));
+                if (!done.add(name)) {
+                    continue;
+                }
+            }
             omGroup.addArgument("--" + name).dest("om").setConst(name)
                     .action(storeConst()).help("select oriented matroid.");
         }
+        String plusGroupTitle = "Sign for ";
+        Iterator<String> it = done.iterator();
+        while (it.hasNext()) {
+            plusGroupTitle = plusGroupTitle + " " + it.next() + (it.hasNext()?",":"");
+        }
+        MutuallyExclusiveGroup plusGroup = parser
+                .addMutuallyExclusiveGroup(plusGroupTitle);
+        plusGroup.required(false);
+        plusGroup.addArgument("-0","--zero").dest("sign").action(storeConst()).setConst(0).setDefault(-2).type(Integer.class).help("Set variable value to 0");
+        plusGroup.addArgument("--plus").dest("sign").action(storeConst()).setConst(1).setDefault(-2).type(Integer.class).help("Set variable value to +1");
+        plusGroup.addArgument("--minus").dest("sign").action(storeConst()).setConst(-1).setDefault(-2).type(Integer.class).help("Set variable value to -1");
         parser.addArgument("-∞", "-8", "--infinity").action(append())
                 .help("The label of the line at infinity");
         Namespace settings;
@@ -99,9 +122,19 @@ public class WebPage {
             return;
         }
         String name = settings.getString("om");
-        OM om = Examples.all().get(name);
-        indexPage = startHtmlPage(name+".html");
-        indexPage.write("<h2>The "+name+" oriented matroid</h2>\n");
+        int signInt = settings.getInt("sign");
+        String sign = new String[]{"",".-1",".0",".+1"}[signInt+2];
+        String extName = name + sign;
+        String htmlName = name + (signInt == -2 ? "" : ("<sup>" + new String[]{"&minus;",".0","&plus;"}[signInt+1] + "</sup>") );
+        
+        OM om = Examples.all().get(extName);
+        if (om == null) {
+            System.err.println("Must"+(signInt == -2?"":" not")+" give the (--plus|--zero|--minus) option with the "
+                    + settings.getString("om")+ " oriented matroid.");
+            System.exit(1);
+        }
+        indexPage = startHtmlPage(extName+".html");
+        indexPage.write("<h2>The "+htmlName+" oriented matroid</h2>\n");
         indexPage.write("<table border='0'>\n");
         List<String> inf;
         if (settings.get("infinity") != null) {
@@ -110,7 +143,7 @@ public class WebPage {
             inf = getElements(om);
         }
         for (String in : inf) {
-            new WebPage(om, name, in).preparePage();
+            new WebPage(om, htmlName, extName, in).preparePage();
         }
         endHtmlPage(indexPage);
     }
@@ -134,9 +167,9 @@ public class WebPage {
         ImageOutputStream imageOutput = ImageIO
                 .createImageOutputStream(new File(prefix + smallImage));
         maybeStartTableRow();
-        indexPage.write("<td ><a href=\"" +detailPage + "\"><img width=\"80%\" src=\""+ smallImage + "\"/></a>\n" );
+        indexPage.write("<td ><a href=\"" +detailPage + "\"><center><img width=\"80%\" src=\""+ smallImage + "\"/>\n" );
         indexPage.write("<br/>\n");
-        indexPage.write("With line "+infinity+" projected to infinity.");
+        indexPage.write("With line "+infinity+" projected to infinity.</center></a>");
         indexPage.write("</td>\n");
         maybeEndTableRow();
         iw.setOutput(imageOutput);
@@ -148,7 +181,7 @@ public class WebPage {
         imageOutput.close();
         iw.dispose();
         Writer out = startHtmlPage(detailPage);
-        out.write("<h2>" + name + " with line " + infinity
+        out.write("<h2>" + htmlName + " with line " + infinity
                 + " projected to infinity</h2>\n");
         if (pseudoLines.getReorientation().length != 0) {
             out.write("<h3>Reoriented</h3>\n");
