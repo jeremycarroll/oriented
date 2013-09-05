@@ -210,11 +210,11 @@ public class WebPage {
         ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
         String smallImage = "images/small-" + extName + "-" + infinity + ".jpg";
         String largeImage = "images/" + extName + "-" + infinity + ".jpg";
-        String detailPage = "detail/" + extName + "-" + infinity + ".html";
+        String detailPage = extName + "-" + infinity + ".html";
         ImageOutputStream imageOutput = ImageIO
                 .createImageOutputStream(new File(prefix + smallImage));
         maybeStartTableRow();
-        indexPage.write("<td ><a href=\"" +detailPage + "\"><center><img width=\"80%\" src=\""+ smallImage + "\"/>\n" );
+        indexPage.write("<td ><a href=\"" +detailPage + "\"><center><img width=\"80%\" src=\"../"+ smallImage + "\"/>\n" );
         indexPage.write("<br/>\n");
         indexPage.write("With line "+infinity+" projected to infinity.</center></a>");
         indexPage.write("</td>\n");
@@ -283,11 +283,9 @@ public class WebPage {
     }
 
     private static class PageWriter {
-        final String dots;
         final Writer out;
 
         PageWriter(String pageName, String title) throws IOException {
-            dots = pageName.contains("/") ? "../" : "";
             File description = new File(prefix + pageName);
             if (verbose) {
                 System.out.println("Creating "+prefix+pageName);
@@ -296,16 +294,12 @@ public class WebPage {
             write("<html>\n<head>\n"
                     + "<title>" + title + "</title>\n"
                     + "<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"UTF-8\"/>\n"
-                    + "<link type=\"text/css\" rel=\"stylesheet\" href="+url("jjc.css")
-                    + "/>\n</head>\n<body>\n"
+                    + "<link type=\"text/css\" rel=\"stylesheet\" href=\"../jjc.css\"/>\n</head>\n<body>\n"
                     + "<h2>"+ title +"</h2>\n" 
                     + preamble + "\n");
             
         }
         
-        String url(String rel) {
-            return "\""+dots+rel+"\"";
-        }
 
         public void close() throws IOException {
             out.write("</table></body>\n</html>");
@@ -321,7 +315,7 @@ public class WebPage {
     private static PageWriter startHtmlPage(String pageName, String title)
             throws UnsupportedEncodingException, FileNotFoundException,
             IOException {
-        return new PageWriter(pageName, title) {
+        return new PageWriter("examples/"+pageName, title) {
 
             @Override
             public void close() throws IOException {
