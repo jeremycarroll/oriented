@@ -16,10 +16,38 @@
         <delete file="${dist.dir}.zip"/>
 	</target>
 
-	<target name="copy-all">
+	<target name="doc" depends="javadoc">
 		<copy todir="${doc.dir}">
             <fileset dir="${website.dir}" includes="**"/>
 		</copy>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--chapter1"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--ringel"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--ceva"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--circular"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--tsukamoto13"/>
+		    <arg value="--plus"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--omega14"/>
+		    <arg value="--plus"/>
+		    <arg value="-v"/>
+		</exec>
+	</target>
+	<target name="copy-all" depends="doc">
     	<copy todir="${dist.dir}" file="COPYING"/>
     	<copy todir="${dist.dir}" file="README"/>
     	<copy todir="${dist.dir}/src">
@@ -80,6 +108,6 @@
     	 <zip destfile="${dist.dir}.zip" 
 			  basedir="${dist.dir}"/>
     </target>
-    <target name="dist"  depends="clean,javadoc,copy-all,zip">
+    <target name="dist"  depends="clean,copy-all,zip">
     </target>
 </project>

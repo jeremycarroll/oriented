@@ -89,6 +89,7 @@ public class WebPage {
     private static int entryCount = 0;
     private static String preamble;
     private static int signInt;
+    private static Boolean verbose;
     
     static String sign( String minus, String zero, String plus) {
         switch (signInt) {
@@ -146,8 +147,8 @@ public class WebPage {
         plusGroup.addArgument("-0","--zero").dest("sign").action(storeConst()).setConst(0).setDefault(-2).type(Integer.class).help("Set variable value to 0");
         plusGroup.addArgument("--plus").dest("sign").action(storeConst()).setConst(1).setDefault(-2).type(Integer.class).help("Set variable value to +1");
         plusGroup.addArgument("--minus").dest("sign").action(storeConst()).setConst(-1).setDefault(-2).type(Integer.class).help("Set variable value to -1");
-        parser.addArgument("-∞", "-8", "--infinity").action(append())
-                .help("The label of the line at infinity");
+        parser.addArgument("-∞", "-8", "--infinity").action(append()).help("The label of the line at infinity");
+        parser.addArgument("-v",  "--verbose").action(storeTrue()).setDefault(false).type(Boolean.class).help("Echo to stdout");
         Namespace settings;
         try {
             settings = parser.parseArgs(args);
@@ -158,6 +159,7 @@ public class WebPage {
             return;
         }
         String name = settings.getString("om");
+        verbose = settings.getBoolean("verbose");
         signInt = settings.getInt("sign");
         String sign = sign(".-1",".0",".+1","");
         String extName = name + sign;
@@ -221,13 +223,16 @@ public class WebPage {
         iw.write(euclid.image(options));
         imageOutput.close();
         imageOutput = ImageIO.createImageOutputStream(new File(prefix + largeImage));
+        if (verbose) {
+            System.out.println("Creating "+prefix+smallImage+" and " + prefix+largeImage);
+        }
         iw.setOutput(imageOutput);
         iw.write(euclid.image(colors));
         imageOutput.close();
         iw.dispose();
         PageWriter out = startHtmlPage(detailPage,  htmlName + " with line " + infinity+ " projected to infinity");
         out.write(loadPagePart(name, infinity));
-        out.write(loadPagePart(extName,sign("minus","zero","plus","NONE"), infinity));
+        out.write(loadPagePart(name,sign("minus","zero","plus","NONE"), infinity));
         if (pseudoLines.getReorientation().length != 0) {
             out.write("<h3>Reoriented</h3>\n");
             out.write("<p>" + pseudoLines.getReorientation()[0].label());
@@ -284,6 +289,9 @@ public class WebPage {
         PageWriter(String pageName, String title) throws IOException {
             dots = pageName.contains("/") ? "../" : "";
             File description = new File(prefix + pageName);
+            if (verbose) {
+                System.out.println("Creating "+prefix+pageName);
+            }
             out = new OutputStreamWriter(new FileOutputStream(description), "utf-8");
             write("<html>\n<head>\n"
                     + "<title>" + title + "</title>\n"
