@@ -25,16 +25,42 @@
 		    <arg value="-v"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
+		    <arg value="--pappus"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
+		    <arg value="1"/>
+		    <arg value="--infinity"/>
+		    <arg value="2"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
 		    <arg value="--ringel"/>
 		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
+		    <arg value="7"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
 		    <arg value="--ceva"/>
 		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
+		    <arg value="A"/>
+		    <arg value="--infinity"/>
+		    <arg value="B"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
 		    <arg value="--circular"/>
 		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="A"/>
+		    <arg value="--infinity"/>
+		    <arg value="B"/>
+		    <arg value="--infinity"/>
+		    <arg value="C"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
 		    <arg value="--tsukamoto13"/>
@@ -42,8 +68,32 @@
 		    <arg value="-v"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
+		    <arg value="--tsukamoto13"/>
+		    <arg value="--minus"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--tsukamoto13"/>
+		    <arg value="--zero"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
 		    <arg value="--omega14"/>
 		    <arg value="--plus"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--omega14"/>
+		    <arg value="--minus"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--omega14"/>
+		    <arg value="--zero"/>
+		    <arg value="-v"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--suvorov14"/>
 		    <arg value="-v"/>
 		</exec>
 	</target>

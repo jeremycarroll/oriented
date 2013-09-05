@@ -1,5 +1,6 @@
 <html>
 <head>
+<title>Java Oriented Matroids</title>
 <link type="text/css" rel="stylesheet" href="jjc.css"/>
 </head>
 <body>
@@ -25,7 +26,8 @@
 <h2>Summary</h2>
 <p>
 This open source library allows for the creation and manipulation of oriented matroids
-with high quality code.
+with high quality code; extensive support for pseudolines, and pseudolines diagrams
+is provided.
 </p>
 <p>
 It principally covers the cryptomorphic representations
@@ -36,7 +38,55 @@ Please <a href="mailto:jjc1729@gmail.com">contact me</a>
 if you are using this library. 
 </p>
 
-<h2>Documentation</h2>
+<h2>Pseudoline Diagrams</h2>
+
+<p>
+The code comes with several <a href="javadoc/net/sf/oriented/omi/Examples.html">examples</a> built-in.
+We include pseudoline diagrams of most of them here.
+</p>
+<p>
+A good place to start is <a href="detail/chapter1-6.html">this one</a>, the first example from the TODO Oriented Matroid book.
+That page explains how to read the diagrams, in particular, to understand what 'oriented' means in terms
+of these diagrams, and the meaning of the origin in this pictures. 
+Each picture is a projection of a pseudoline arrangement in the projective plane onto the Euclidean plane,
+with the line at infinity turned into an oval around the picture. 
+If you are interested, there are a further, somewhat boring, <a href="chapter1.html">five projections</a> of the chapter 1 arrangement.
+</p>
+<p>
+The other examples are more interesting, and are as follows:
+</p>
+<table border="0" >
+<tr>
+<th>Classical Line Arrangements:</th>
+<td><a href="pappus.html">Pappus (c340CE)</a></td>
+<td><a href="ceva.html">Ceva (1678)</a></td>
+</tr>
+<tr>
+<th>Uniform Variations of Above:</th>
+<td><a href="ringel.html">Ringel (1956)</a></td>
+<td><a href="circularsaw3.html">Carroll (2000)</a></td>
+</tr>
+<tr>
+<th>Non-isotopic arrangements:</th><td></td>
+<td><a href="suvorov14.html">Suvorov (1988)</a></td>
+</tr>
+<tr>
+<td></td>
+<td><em>Tuskamoto (2012)</em></td>
+<td><a href="tsukamoto13.+1.html">Plus</a></td>
+<td><a href="tsukamoto13.0.html">Zero</a></td>
+<td><a href="tsukamoto13.-1.html">Minus</a></td>
+</tr>
+<tr>
+<td></td>
+<td><em>Richter-Gebert (1996)</em></td>
+<td><a href="omega14.+1.html">Plus (non-isotopic)</a></td>
+<td><a href="omega14.0.html">Zero</a></td>
+<td><a href="omega14.-1.html">Minus (non-realizable)</a></td>
+</tr>
+</table>
+
+<h2>Developer Documentation</h2>
 <p>The <a href="javadoc/index.html">on-line javadoc</a> is the guide to the API</p>
 
 <h2>Sourceforge Links</h2>
