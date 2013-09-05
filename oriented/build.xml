@@ -56,11 +56,11 @@
 		    <arg value="--circular"/>
 		    <arg value="-v"/>
 		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
 		    <arg value="A"/>
 		    <arg value="--infinity"/>
 		    <arg value="B"/>
-		    <arg value="--infinity"/>
-		    <arg value="C"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
 		    <arg value="--tsukamoto13"/>

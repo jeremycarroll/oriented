@@ -532,11 +532,15 @@ outer:
             return new FactoryFactory(options).circuits().parse(circuits);
     }
 
-    private static String createUniverse(int n, Options opt) {
+    private static String createUniverse(int n, Options opt, String ... labels ) {
         String universe[] = new String[n];
         char u[] = new char[n];
-        for (int i = 0; i < n; i++) {
-            char c = (char) ('A' + i);
+        for (int i=0;i<labels.length;i++) {
+            universe[i] = labels[i];
+            u[i] = labels[i].charAt(0);
+        }
+        for (int i = labels.length; i < n; i++) {
+            char c = (char) ('A' + (i-labels.length));
             universe[i] = new String(new char[] { c });
             u[i] = c;
         }
@@ -555,7 +559,7 @@ outer:
     public static OM fromEuclideanLines(int[][] ... lines) {
         int n = lines.length+1;
         Options opt = new Options();
-        createUniverse(n, opt);
+        createUniverse(n, opt, "0");
         int projective[][] = new int[3][n];
         set(projective,0,1,1,0);
         int ix=1;
