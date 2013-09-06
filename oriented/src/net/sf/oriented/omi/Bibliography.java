@@ -27,20 +27,28 @@ public class Bibliography {
 */
     public static final String björnerEtAl1999 = "Oriented matroids";
 /**
-    [Carroll, 2000a] Carroll, J. J. (2000a). Betweenness in polar coordinates. Tech. Report HPL-2000-
-    71, HP Labs.
+    [Carroll, 2000a] Carroll, J. J. (2000a). Betweenness in polar coordinates. 
+    <a href="http://www.hpl.hp.com/techreports/2000/HPL-2000-71.html">
+    Tech. Report HPL-2000-71</a>,  HP Labs.
 */
     public static final String carroll2000a = "Betweenness in polar coordinates";
 /**
-    [Carroll, 2000b] — (2000b). Drawing straight lines. Tech. Report HPL-2000-72, HP Labs.
+    [Carroll, 2000b] — (2000b). Drawing straight lines. 
+    <a href="http://www.hpl.hp.com/techreports/2000/HPL-2000-72.html">
+    Tech. Report HPL-2000-72</a>, HP Labs.
 */
     public static final String carroll2000b = "Drawing straight lines";
 /**
-    [Carroll, 2000c] — (2000c). Drawing venn triangles. Tech. Report HPL-2000-73, HP Labs.
+    [Carroll, 2000c] — (2000c). Drawing venn triangles. 
+    <a href="http://www.hpl.hp.com/techreports/2000/HPL-2000-73.html">
+    Tech. Report HPL-2000-73</a>,  HP Labs.
 */
     public static final String carroll2000c = "Drawing venn triangles";
 /**
-    [Carroll, 2000d] — (2000d). The sharpness of circular saws. Tech. Report HPL-2000-74, HP Labs.
+    [Carroll, 2000d] — (2000d). The sharpness of circular saws. 
+    <a href="http://www.hpl.hp.com/techreports/2000/HPL-2000-74.html">
+    Tech. Report HPL-2000-74</a>, HP Labs.
+    
 */
     public static final String carroll2000d = "The sharpness of circular saws";
 /**
