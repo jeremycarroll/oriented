@@ -90,6 +90,8 @@ public class WebPage {
     private static String preamble;
     private static int signInt;
     private static Boolean verbose;
+    private static String topHtmlName;
+    private static String topPage;
     
     static String sign( String minus, String zero, String plus) {
         switch (signInt) {
@@ -163,7 +165,7 @@ public class WebPage {
         signInt = settings.getInt("sign");
         String sign = sign(".-1",".0",".+1","");
         String extName = name + sign;
-        String htmlName = name + (signInt == -2 ? "" : ("<sup>" + sign("&minus;","0","&plus;") + "</sup>") );
+        topHtmlName = name + (signInt == -2 ? "" : ("<sup>" + sign("&minus;","0","&plus;") + "</sup>") );
         
         OM om = Examples.all().get(extName);
         if (om == null) {
@@ -172,7 +174,9 @@ public class WebPage {
             System.exit(1);
         }
         preamble = loadPagePart(name) + loadPagePart(name,sign("minus","zero","plus","NONE"));
-        indexPage = startHtmlPage(extName+".html", "The "+htmlName+" oriented matroid");
+        topPage = extName+".html";
+        indexPage = startHtmlPage(topPage, "The "+topHtmlName+" oriented matroid");
+        indexPage.write(preamble);
         indexPage.write("<table border='0'>\n");
         List<String> inf;
         if (settings.get("infinity") != null) {
@@ -181,7 +185,7 @@ public class WebPage {
             inf = getElements(om);
         }
         for (String in : inf) {
-            new WebPage(om, htmlName, extName, name, in).preparePage();
+            new WebPage(om, topHtmlName, extName, name, in).preparePage();
         }
         indexPage.close();
     }
@@ -231,6 +235,7 @@ public class WebPage {
         imageOutput.close();
         iw.dispose();
         PageWriter out = startHtmlPage(detailPage,  htmlName + " with line " + infinity+ " projected to infinity");
+        out.write("<font size='-1'><em>"+preamble+"</em></font>\n");
         out.write(loadPagePart(name, infinity));
         out.write(loadPagePart(name,sign("minus","zero","plus","NONE"), infinity));
         if (pseudoLines.getReorientation().length != 0) {
@@ -294,9 +299,17 @@ public class WebPage {
             write("<html>\n<head>\n"
                     + "<title>" + title + "</title>\n"
                     + "<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"UTF-8\"/>\n"
-                    + "<link type=\"text/css\" rel=\"stylesheet\" href=\"../jjc.css\"/>\n</head>\n<body>\n"
-                    + "<h2>"+ title +"</h2>\n" 
-                    + preamble + "\n");
+                    + "<link type=\"text/css\" rel=\"stylesheet\" href=\"../jjc.css\"/>\n</head>\n<body>\n");
+            
+            if (pageName.endsWith(WebPage.topPage)) {
+                write("<font size=\"-2\"><a href=\"..\">Home</a>\u21e8</font>");
+                
+            } else {
+                write("<font size=\"-2\"><a href=\"..\">Home</a>\u21e8<a href=\""+WebPage.topPage+"\">" 
+                       +WebPage.topHtmlName +  "</a>\u21e8</font>");
+            }
+            
+            write("<h2>"+ title +"</h2>\n"); 
             
         }
         
