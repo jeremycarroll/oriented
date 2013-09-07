@@ -49,7 +49,7 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryIm
 
                 @Override
                 public Label next() {
-                    int j = ++i;
+                    int j = i++;
                     return factory.labels().parse(label(j));
                 }
 

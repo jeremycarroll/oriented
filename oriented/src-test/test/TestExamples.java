@@ -37,8 +37,8 @@ public class TestExamples {
          * [2]=(7071,7071,21213)      θ = 45
          * [3]=(10000,0,10000)        θ = 90
          */
-        Assert.assertEquals(Examples.uniform4(), 
-                fromEuclideanLines);
+        Assert.assertEquals(Examples.uniform4().getChirotope().toCoLexicographicString(), 
+                fromEuclideanLines.getChirotope().toCoLexicographicString());
     }
     
     @Test
