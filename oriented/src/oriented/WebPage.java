@@ -165,7 +165,7 @@ public class WebPage {
         signInt = settings.getInt("sign");
         String sign = sign(".-1",".0",".+1","");
         String extName = name + sign;
-        topHtmlName = name + (signInt == -2 ? "" : ("<sup>" + sign("&minus;","0","&plus;") + "</sup>") );
+        topHtmlName = name + sign("\u207b","\u2070","\u207a","") ;
         
         OM om = Examples.all().get(extName);
         if (om == null) {
