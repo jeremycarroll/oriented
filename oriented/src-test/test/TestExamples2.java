@@ -32,6 +32,7 @@ public class TestExamples2 {
     public static Collection<Object[]> data() {
         List<Object[]> rslt = new ArrayList<Object[]>();
         for (Map.Entry<String,OM> entry:Examples.all().entrySet() ) {
+//            if (entry.getKey().startsWith("wheel"))
             rslt.add(new Object[]{entry.getKey(),entry.getValue()});
         }
         return rslt;
@@ -83,7 +84,7 @@ public class TestExamples2 {
 
     @Test
     public void testDualFaceLattice() throws AxiomViolation {
-        if (om.dual().rank()<10) {
+        if (om.dual().rank()<9) {
             testFaceLattice(om.dual());
         }
     }
