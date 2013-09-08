@@ -90,10 +90,15 @@ public class SignedSetImpl extends
 		return make(minus);
 	}
 
+
+    private int hashCode = 0;
 	@Override
 	public int hashCode() {
-		return labelFactory().hashCode(plus) + 35
-				* labelFactory().hashCode(minus);
+        if (hashCode == 0) {
+            hashCode = labelFactory().hashCode(plus) + 35
+                    * labelFactory().hashCode(minus);
+        }
+        return hashCode;
 	}
 
 	private LabelFactoryImpl labelFactory() {

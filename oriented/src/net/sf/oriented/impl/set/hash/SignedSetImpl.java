@@ -84,9 +84,13 @@ public class SignedSetImpl extends
 	// return EMPTY;
 	// }
 
+	private int hashCode = 0;
 	@Override
 	public int hashCode() {
-		return plus.hashCode() + 35 * minus.hashCode();
+	    if (hashCode == 0) {
+	        hashCode = plus.hashCode() + 35 * minus.hashCode();
+	    }
+	    return hashCode;
 	}
 
 	@Override
