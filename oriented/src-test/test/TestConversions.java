@@ -49,6 +49,7 @@ public class TestConversions {
 
 	static FactoryFactory special;
 
+	static String onlyThisTest = null; //"{loop,special,MAXVECTORS,TOPES}";
 	static String names[] = { "chapter1", "loop" };
 
 	@Parameters
@@ -93,10 +94,10 @@ public class TestConversions {
 								&& !Cryptomorphisms.DUALREALIZED.equals(from)) {
 							continue;
 						}
-						if (rand.nextInt(100)>=skipPerCent) {
-						    r.add(new Object[] { name(source, ff, from, to),
-						            source, f, from, to, n++ });
-						}
+						if (includeTest(rand, source, ff, from, to)) {
+						        r.add(new Object[] { name(source, ff, from, to),
+						                source, f, from, to, n++ });
+						} 
 					}
 				}
 				ff++;
@@ -104,6 +105,11 @@ public class TestConversions {
 		}
 		return r;
 	}
+
+    private static boolean includeTest(Random rand, int source, int ff,
+            Cryptomorphisms from, Cryptomorphisms to) {
+        return onlyThisTest == null?rand.nextInt(100)>=skipPerCent:onlyThisTest.equals(name(source,ff,from,to));
+    }
 
 	public static String name(int source, int ff, Cryptomorphisms from,
 			Cryptomorphisms to) {

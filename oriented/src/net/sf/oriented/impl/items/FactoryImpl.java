@@ -11,6 +11,7 @@ import com.google.common.reflect.TypeToken;
 
 
 import net.sf.oriented.impl.util.TypeChecker;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
@@ -29,16 +30,18 @@ public abstract class FactoryImpl<
     protected FactoryImpl(Options o) {
         options = o;
         constructor = (Constructor<ITEM_INTERNAL2>) ((OptionsInternal)o).constructorFor(getClass());
-        new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
-            @Override
-            protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL>(x){};
-           }
-            @Override
-            protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL2>(x){};
-           }
-        }.check(getClass());
+        if (FactoryFactory.additionalRuntimeChecking) {
+            new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
+                @Override
+                protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
+                    return new TypeToken<ITEM_INTERNAL>(x){};
+                }
+                @Override
+                protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
+                    return new TypeToken<ITEM_INTERNAL2>(x){};
+                }
+            }.check(getClass());
+        }
     }
 
     final private Options options;

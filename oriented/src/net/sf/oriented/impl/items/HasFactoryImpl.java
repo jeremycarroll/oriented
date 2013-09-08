@@ -8,6 +8,7 @@ import com.google.common.reflect.TypeToken;
 
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.Factory;
+import net.sf.oriented.omi.FactoryFactory;
 
 /**
  * 
@@ -30,16 +31,18 @@ public abstract class HasFactoryImpl<
 
 	protected HasFactoryImpl(FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> f) {
 		factory = f;
-        new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
-            @Override
-            protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL>(x){};
-           }
-            @Override
-            protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL2>(x){};
-           }
-        }.check(getClass());
+		if (FactoryFactory.additionalRuntimeChecking) {
+		    new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
+		        @Override
+		        protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
+		            return new TypeToken<ITEM_INTERNAL>(x){};
+		        }
+		        @Override
+		        protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
+		            return new TypeToken<ITEM_INTERNAL2>(x){};
+		        }
+		    }.check(getClass());
+		}
 	}
 
 	@Override

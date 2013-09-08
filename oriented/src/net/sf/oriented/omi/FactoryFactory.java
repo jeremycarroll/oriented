@@ -306,6 +306,13 @@ outer:
 	private RealizedFactory realized;
 
 	private final Options options;
+	/**
+	 * This constant can be set to true to enable additional checks
+	 * which have proved somewhat expensive in runtime overhead.
+	 * These checks are for programming errors in the library
+	 * and generally should not be needed.
+	 */
+    public static boolean additionalRuntimeChecking = false;
     private final static double epsilon = 0.00000000001d;
 
 	private void init() {

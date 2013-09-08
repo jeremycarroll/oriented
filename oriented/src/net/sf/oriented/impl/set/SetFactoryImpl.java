@@ -17,6 +17,7 @@ import net.sf.oriented.impl.items.HasFactory;
 import net.sf.oriented.impl.items.ParseContext;
 import net.sf.oriented.impl.util.Misc;
 import net.sf.oriented.impl.util.TypeChecker;
+import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOf;
@@ -34,16 +35,18 @@ abstract public class SetFactoryImpl<
 //@formatter:on
 	protected SetFactoryImpl(FactoryInternal<ITEM_INTERNAL, ITEM, ITEM_INTERNAL2> f) {
 		super(f.getOptions());
-        new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
-            @Override
-            protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL>(x){};
-           }
-            @Override
-            protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
-               return new TypeToken<ITEM_INTERNAL2>(x){};
-           }
-        }.check(getClass());
+		if (FactoryFactory.additionalRuntimeChecking) {
+		    new TypeChecker<ITEM_INTERNAL,ITEM_INTERNAL2>(){ 
+		        @Override
+		        protected TypeToken<ITEM_INTERNAL> getTypeToken(Class<?> x) {
+		            return new TypeToken<ITEM_INTERNAL>(x){};
+		        }
+		        @Override
+		        protected TypeToken<ITEM_INTERNAL2> getTypeToken2(Class<?> x) {
+		            return new TypeToken<ITEM_INTERNAL2>(x){};
+		        }
+		    }.check(getClass());
+		}
 		itemFactory = f;
 		e = fromBackingCollection(itemFactory.emptyCollectionOf());
 	}
