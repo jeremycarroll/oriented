@@ -5,9 +5,13 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
@@ -70,7 +74,7 @@ public class EuclideanPseudoLines {
     /**
      * TODO: this field is incorrectly named
      */
-    private UnsignedSet noCoLoops;
+    private UnsignedSet notLoops;
     
     
     
@@ -115,11 +119,11 @@ public class EuclideanPseudoLines {
         final OMasChirotope reoriented = om.reorient(reorientation).getChirotope();
         UnsignedSet minus = original.ffactory().unsignedSets().copyBackingCollection(Arrays.asList(reorientation));
         
-        flHelper = new FLHelper(original, noCoLoops, minus);
+        flHelper = new FLHelper(original, notLoops, minus);
         List<Face[]> line = firstLine(infLabel,bestTope,reoriented);
         int newOrder[] = new int[om.n()];
         newOrder[0] = infinity;
-        readLine(line,reoriented,noCoLoops,newOrder,1);
+        readLine(line,reoriented,notLoops,newOrder,1);
         permutation = new Permutation(newOrder);
         this.modified = reoriented.permuteGround(permutation).getChirotope();
         
@@ -139,11 +143,11 @@ public class EuclideanPseudoLines {
      * TODO: this method is incorrectly named.
      */
     UnsignedSet incorrectlyNamed() {
-        return this.noCoLoops;
+        return this.notLoops;
     }
     private OMasSignedSet setNoCoLoops(final OM om) {
         OMasSignedSet topes = om.dual().getMaxVectors();
-        noCoLoops = topes.iterator().next().support();
+        notLoops = topes.iterator().next().support();
         return topes;
     }
     
@@ -156,7 +160,7 @@ public class EuclideanPseudoLines {
      */
     public void switchFaceLattice() {
         setNoCoLoops(modified);
-        flHelper = new FLHelper(modified, noCoLoops, modified.ffactory().unsignedSets().empty());
+        flHelper = new FLHelper(modified, notLoops, modified.ffactory().unsignedSets().empty());
     }
 
     private void readLine(List<Face[]> line, OM om, UnsignedSet notCoLoops, int[] newOrder, int i) {
@@ -202,7 +206,7 @@ public class EuclideanPseudoLines {
      * @return label
      */
     private Label getLineLabel(SignedSet edge) {
-        return noCoLoops.minus(edge.support()).asCollection().iterator().next();
+        return notLoops.minus(edge.support()).asCollection().iterator().next();
     }
     private static Face edgeOnLine(Label line, Face face) {
         Face edgePoints[] = new Face[2];
@@ -269,7 +273,7 @@ public class EuclideanPseudoLines {
         
         String crossings[] = new String[result.length];
         for (int cnt=0;cnt<result.length;cnt++) {
-            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar, noCoLoops);
+            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar, notLoops);
         }
         return crossings;
     }
@@ -414,32 +418,49 @@ public class EuclideanPseudoLines {
         return modified.elements()[0];
     }
 
-//    public SignedSet[] getFirstTwoPointsOnLineAtInfinity() {
-//
-//
-//        // hmm abstract out the other method as a class and subclass this
-//        final Label ground[] = modified.elements();
-//        Label along = ground[0];
-//        Label last = ground[1];
-//        Face start = getPositiveFace();
-//        start = otherFace(edgeOnLine(ground[0], start),start);
-//        Face eps[] = edgesTouchingLine(along,start);
-//        Face edge;
-//        Face point;
-//        if (eps[1].covector().sign(last)==0) {
-//            edge = eps[0];
-//            point = eps[1];
-//        } else {
-//            edge = eps[2];
-//            point = eps[3];
-//        }
-//        Face firstPoint = point;
-//        Face next[] = crossEdge(point,edge,start, along);
-//        // need to keeo going if point hasn't changed
-//        point = next[0];
-//        edge = next[1];
-//        return null;
-//    }
+    public Collection<Difficulty> getDifficulties() {
+        DirectedGraph<Face,Tension> tensions = getTensions();
+        
+        return null;
+    }
+
+    public TensionGraph getTensions() {
+        TensionGraph rslt = new TensionGraph();
+        switchFaceLattice();
+        for (Face f:getFaceLattice().withDimension(0)) {
+            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)
+               rslt.addVertex(f);
+        }
+        for (Face f:getFaceLattice().withDimension(2)) {
+            if (f.covector().sign(getInfinity())==1 && !touchesInfinity(f)) {
+                rslt.addVertex(f);
+            }
+        }
+        for (Face from:rslt.getVertices()) {
+            for (Face to:rslt.getVertices()) {
+                if (from == to) {
+                    continue;
+                }
+                UnsignedSet tension = notLoops.minus(from.covector().minus()).minus(to.covector().plus());
+                for (Label l:tension) {
+                    rslt.addEdge(new Tension(l, this.modified.asInt(l)), from, to);
+                }
+            }
+        }
+        return rslt;
+    }
+
+    private boolean touchesInfinity(Face f) {
+        for (Face e:f.lower()) {
+            for (Face v:e.lower()) {
+                if (v.covector().sign(getInfinity())==0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
 }
 
