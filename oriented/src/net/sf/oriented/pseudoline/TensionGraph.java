@@ -11,29 +11,7 @@ import java.util.Set;
 import net.sf.oriented.omi.Face;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
-public class TensionGraph extends DirectedSparseMultigraph<Face, Tension> {
-    public void dumpEdges() {
-        System.err.println("====");
-        for (Tension t:getEdges()) {
-            Face from = this.getSource(t);
-            Face to = this.getDest(t);
-            System.err.println(t.label()+": "+from.covector()+" ==> "+to.covector());
-        }
-    }
-    public void dumpVertices() {
-        System.err.println("********");
-        for (Face f:getVertices()) {
-            System.err.print(f.covector()+": ");
-            for (Tension t:getInEdges(f)) {
-                System.err.print(t.label()+", ");
-            }
-            System.err.print(" /// ");
-            for (Tension t:getOutEdges(f)) {
-                System.err.print(t.label()+", ");
-            }
-            System.err.println();
-        }
-    }
+public class TensionGraph extends AbstractTGraph {
     public void prune() {
         boolean pruned = true;
         while (pruned) {
@@ -48,44 +26,44 @@ public class TensionGraph extends DirectedSparseMultigraph<Face, Tension> {
                     Set<Tension> ok = new HashSet<Tension>();
                     findPlusMinusPlus(f, in, out, ok);
                     findPlusMinusPlus(f, out, in, ok);
-                    boolean keptSome = false;
-                    for (Tension e:out) {
-                        if (ok.contains(e)) {
-                            keptSome = true;
-                        } else {
-                            this.removeEdge(e);
-                            pruned = true;
-                        }
-                    }
-                    if (!keptSome) {
+                    int removedInfo = removeIfNotOk(out, ok)|removeIfNotOk(in, ok);
+                    switch (removedInfo) {
+                    case 0:
+                        throw new IllegalArgumentException("Cannot happen (vertex logic)");
+                    case 2:
                         removeVertex(f);
+                        pruned = true;
+                        break;
+                    case 1:
+                        break;
+                    case 3:
+                        pruned = true;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Cannot happen");
                     }
                 }
             }
         }
     }
-    private void findPlusMinusPlus(Face vertex, Collection<Tension> in,
-            Collection<Tension> out, Set<Tension> ok) {
-        for (Tension first:out) {
-            Face firstV = getOpposite(vertex, first);
-            for (Tension second:in) {
-                if (second.ordinal > first.ordinal) {
-                    Face secondV = getOpposite(vertex,second);
-                    if (firstV != secondV) {
-                        for (Tension third: out) {
-                            if (third.ordinal > second.ordinal) {
-                                Face thirdV = getOpposite(vertex,third);
-                                if (firstV != thirdV && secondV != thirdV) {
-                                    ok.add(first);
-                                    ok.add(second);
-                                    ok.add(third);
-                                }
-                            }
-                        }
-                    }
-                }
+
+    /**
+     * 
+     * @param out
+     * @param ok
+     * @return 0 if out is empty, 1 if no edges were removed, 2 if all edges were removed, 3 if some edges were removed.
+     */
+    private int removeIfNotOk(Collection<Tension> out, Set<Tension> ok) {
+        int rslt = 0;
+        for (Tension e:out) {
+            if (ok.contains(e)) {
+                rslt |= 1;
+            } else {
+                this.removeEdge(e);
+                rslt |= 2;
             }
         }
+        return rslt;
     }
 
 }
