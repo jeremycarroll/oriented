@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
