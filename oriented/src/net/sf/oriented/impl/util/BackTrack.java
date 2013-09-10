@@ -11,29 +11,84 @@ import java.util.List;
 import java.util.Stack;
 
 public abstract class BackTrack {
-    public abstract static class State implements Iterable<State> {
-        Iterator<State> pos;     
-        private void init() {
-            pos = iterator();
-        }
-        abstract void fail();
+    private static enum State {
+        Moot,
+        New,
+        True,
+        False;
+    };
+    public abstract static class Choice  {
+        State state;
+        int trail;
+        
+        abstract boolean moot();
+        abstract boolean chooseTrue();
+        abstract boolean chooseFalse();
     }
-    Deque<State> stack = new ArrayDeque<State>();
+    public abstract static class Undoable {
+       abstract void doIt();
+       abstract void unDoIt();
+    }
+    List<Choice> choices = new ArrayList<Choice>();
+    Deque<Undoable> trail = new ArrayDeque<Undoable>();
     
-    public void go(State start) {
-        stack.push(start);
-        start.init();
-        while (!stack.isEmpty()) {
-           State top = stack.peek();
-           if (top.pos.hasNext()) {
-               State next = top.pos.next();
-               stack.push(next);
-               next.init();
-           } else {
-               stack.pop().fail();
-           }
+    public void doIt(Undoable task) {
+        trail.push(task);
+        task.doIt();
+    }
+    
+    public void go() {
+        int pos = 0;
+        while (pos>=0) {
+            if (pos < choices.size()) {
+                Choice choice = choices.get(pos);
+                choice.trail = trail.size();
+                switch (choice.state) {
+                case New:
+                    if (choice.moot()) {
+                        pos++;
+                        choice.state = State.Moot;
+                        continue;
+                    }
+                    if (choice.chooseTrue()) {
+                        pos++;
+                        choice.state = State.True;
+                        continue;
+                    }
+                case True:
+                    if (choice.chooseFalse()) {
+                        pos++;
+                        choice.state = State.False;
+                        continue;
+                    }
+                case False:
+                    // need to back track.
+                    break;
+                case Moot:
+                    // ignore while backtracking
+                    break;
+                }
+                // backtrack below
+                choice.state = State.New;
+            } else {
+                // success - all choices have been made
+                // we want to exclude the case where unnecessary False choices have been made.
+                success(); 
+            }
+            // back track
+            pos--;
+            if (pos<0) {
+                break;
+            }
+            int trailMarker = choices.get(pos).trail;
+            while (trail.size() > trailMarker) {
+                trail.pop().unDoIt();
+            }
+            
         }
     }
+
+    abstract void success();
     
 }
 
