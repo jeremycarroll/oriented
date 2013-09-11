@@ -5,13 +5,39 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import net.sf.oriented.omi.Face;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 public class TensionGraph extends AbstractTGraph {
+    final class EdgePruner extends TwistedFace {
+        private EdgePruner(Face f) {
+            super(f);
+        }
+
+        private void removeIfNotOk(Collection<Tension> out, Collection<Tension> toBeRemoved) {
+            for (Tension e:out) {
+                if (!ok.contains(e)) {
+                    toBeRemoved.add(e);
+                }
+            }
+        }
+
+        /**
+         * 
+         * @return true if an edge or vertex was removed
+         */
+        boolean prune() {
+            List<Tension> toBeRemoved = new ArrayList<Tension>();
+            removeIfNotOk(out, toBeRemoved);
+            removeIfNotOk(in, toBeRemoved);
+            for (Tension e:toBeRemoved) {
+                removeEdge(e);
+            }
+            return !toBeRemoved.isEmpty();
+        }
+    }
+
     public void prune() {
         boolean pruned = true;
         while (pruned) {
@@ -21,49 +47,10 @@ public class TensionGraph extends AbstractTGraph {
                     removeVertex(f);
                     pruned = true;
                 } else {
-                    Collection<Tension> out = new ArrayList<Tension>(getOutEdges(f));
-                    Collection<Tension> in = new ArrayList<Tension>(getInEdges(f));
-                    Set<Tension> ok = new HashSet<Tension>();
-                    findPlusMinusPlus(f, in, out, ok);
-                    findPlusMinusPlus(f, out, in, ok);
-                    int removedInfo = removeIfNotOk(out, ok)|removeIfNotOk(in, ok);
-                    switch (removedInfo) {
-                    case 0:
-                        throw new IllegalArgumentException("Cannot happen (vertex logic)");
-                    case 2:
-                        removeVertex(f);
-                        pruned = true;
-                        break;
-                    case 1:
-                        break;
-                    case 3:
-                        pruned = true;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Cannot happen");
-                    }
+                    pruned = new EdgePruner(f).prune() || pruned;
                 }
             }
         }
-    }
-
-    /**
-     * 
-     * @param out
-     * @param ok
-     * @return 0 if out is empty, 1 if no edges were removed, 2 if all edges were removed, 3 if some edges were removed.
-     */
-    private int removeIfNotOk(Collection<Tension> out, Set<Tension> ok) {
-        int rslt = 0;
-        for (Tension e:out) {
-            if (ok.contains(e)) {
-                rslt |= 1;
-            } else {
-                this.removeEdge(e);
-                rslt |= 2;
-            }
-        }
-        return rslt;
     }
 
 }
