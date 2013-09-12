@@ -46,7 +46,7 @@ import java.util.Stack;
  * @author jeremycarroll
  *
  */
-public class TGSearch {
+public class WAM {
     
     private final class Failure extends Frame {
         @Override
