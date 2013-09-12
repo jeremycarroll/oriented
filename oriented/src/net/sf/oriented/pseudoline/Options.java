@@ -13,6 +13,31 @@ class Options {
         // TODO Auto-generated constructor stub
     }
 
+    public Tension fixedChoice() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void orderChoices(TwistedGraph tg) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public boolean impossible() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public Tension[] singleChoices() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Tension[] doubleChoices() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 
 

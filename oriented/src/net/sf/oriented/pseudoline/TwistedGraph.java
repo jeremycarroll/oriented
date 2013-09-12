@@ -65,6 +65,12 @@ public class TwistedGraph extends AbstractTGraph {
     public boolean hasOptions() {
         return !options.isEmpty();
     }
+
+
+    public boolean addWithTrail(Tension t) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
 
 

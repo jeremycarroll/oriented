@@ -48,6 +48,13 @@ import java.util.Stack;
  */
 public class TGSearch {
     
+    private final class Failure extends Frame {
+        @Override
+        boolean call(int counter) {
+            fail();
+            return false;
+        }
+    }
     private enum Port {
         Call, Retry, Fail
     }
@@ -56,32 +63,33 @@ public class TGSearch {
 
         Port port = Port.Call;
         int trailPtr;
+        int retryCount = 0;
 
         final boolean call() {
             trailPtr = trail.size();
             port = Port.Retry;
-            init();
             return retry();
         }
 
-        public abstract boolean retry();
+        final boolean retry() {
+            return call(retryCount++);
+        }
         
-        public abstract void init();
-
+        abstract boolean call(int counter);
+  
+        protected void fail() {
+            port = Port.Fail;
+        }
     }
     
     private abstract class Undoable {
-
         public abstract void undo() ;
-        
     }
 
     private TensionGraph base;
     private TwistedGraph tg;
     private Deque<Frame> stack = new ArrayDeque<Frame>();
     private Deque<Undoable> trail = new ArrayDeque<Undoable>();
-    
-    
     
     public void search() {
         extend();
@@ -124,10 +132,74 @@ public class TGSearch {
 
     private void extend() {
         if ( tg.hasOptions() ) {
-            pushOption();
+            final Options opt = tg.options.pop();
+            trail.push(new Undoable(){
+                @Override
+                public void undo() {
+                    tg.options.push(opt);
+                }});
+            opt.orderChoices(tg);
+            if (opt.impossible()) {
+                stack.push(new Failure());
+            } else {
+                final Tension choice = opt.fixedChoice();
+                if (choice!=null) {
+                    stack.push(new Frame(){
+                        @Override
+                        boolean call(int counter) {
+                            fail();
+                            return addWithTrail(choice);
+                        }});
+                } else {
+                    final Tension singleChoices[] = opt.singleChoices();
+                    final Tension doubleChoices[] = opt.doubleChoices();
+                    stack.push(new Frame(){
+                        @Override
+                        boolean call(int ix) {
+                            if (ix < singleChoices.length) {
+                                return addWithTrail(singleChoices[ix]);
+                            } else {
+                                ix -= singleChoices.length;
+                                if (ix == doubleChoices.length) {
+                                    fail();
+                                    return false;
+                                }
+                                return addWithTrail(doubleChoices[ix]) && addWithTrail(doubleChoices[ix+1]);
+                            }
+                        }});
+                }
+            }
         } else {
-            pushAny();
+            final Tension t = findPossibleEdge();
+            if (t==null) {
+                stack.push(new Failure());
+            } else {
+            stack.push(new Frame(){
+                @Override
+                boolean call(int ix) {
+                    switch(ix) {
+                    case 0:
+                        return addWithTrail(t);
+                    case 1:
+                        fail();
+                        removeWithTrail(t);
+                        return true;
+                    default:
+                        throw new IllegalArgumentException("WAM call logic error");
+                    }
+                }
+            });
+            }
         }
+    }
+
+    protected void removeWithTrail(Tension t) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    protected boolean addWithTrail(Tension tension) {
+        return tg.addWithTrail(tension);
     }
 
     private void backTrack() {
@@ -135,35 +207,19 @@ public class TGSearch {
             trail.pop().undo();
         }
     }
-    
-    private boolean forwardByOption() {
-        List<List<Tension>> opt = tg.getNextOption();
-        if (opt == null) {
-            return false;
-        }
-        
-    }
 
-    private boolean forwardByAny() {
+    private Tension findPossibleEdge() {
         Iterator<Tension> it = base.getEdges().iterator();
         Tension t;
         while (true) {
             if (!it.hasNext()) {
-                return false;
+                return null;
             }
             t = it.next();
             if (!tg.containsEdge(t)) {
-                // found appropriate edge
-                break;
+                return t;
             }
         }
-        stack.push(new Frame(t,tg.trailPosition()));
-        // choose to include t, on back-track choose to exclude t
-        if (!tg.addWithConsequences(t)) {
-            // failure back-track
-            return false;
-        }
-        return true;
     }
 
 }

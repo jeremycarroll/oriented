@@ -142,16 +142,16 @@ public class TensionGraph extends AbstractTGraph {
         }
         selector.search();
         if (selector.justDoIt) {
-            tg.add(t);
+            tg.addWithTrail(t);
             return true;
         }
         if (selector.options.isEmpty()) {
             return false;
         }
-        tg.add(t);
+        tg.addWithTrail(t);
         if (selector.options.size() == 1) {
             for (Tension tt:selector.options.get(0)) {
-                tg.add(tt);
+                tg.addWithTrail(tt);
             }
         } else {
            tg.addOptions(face,selector.options);
