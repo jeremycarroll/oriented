@@ -18,10 +18,10 @@ import net.sf.oriented.omi.Face;
  * @author jeremycarroll
  *
  */
-public class TwistedGraph extends AbstractTGraph {
+public class GrowingGraph extends AbstractTGraph {
     
     private final TensionGraph parent;
-    public TwistedGraph(TensionGraph parent) {
+    public GrowingGraph(TensionGraph parent) {
        this.parent = parent; 
     }
 
@@ -49,21 +49,21 @@ public class TwistedGraph extends AbstractTGraph {
         return f;
     }
 
-    Deque<Options> options = new ArrayDeque<Options>();
+    Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
     
-    public void addOptions(Face face, List<List<Tension>> choices) {
-        Options opt = new Options(face,choices);
-        addOption(opt);
+    public void addChoices(Face face, List<List<Tension>> choices) {
+        EdgeChoices opt = new EdgeChoices(face,choices);
+        addChoice(opt);
     }
 
 
-    private void addOption(Options opt) {
-        options.push(opt);
+    private void addChoice(EdgeChoices opt) {
+        choices.push(opt);
     }
 
 
     public boolean hasOptions() {
-        return !options.isEmpty();
+        return !choices.isEmpty();
     }
 
 

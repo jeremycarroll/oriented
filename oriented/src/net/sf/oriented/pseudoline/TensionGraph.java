@@ -4,7 +4,6 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -60,13 +59,13 @@ public class TensionGraph extends AbstractTGraph {
     class EdgeSelector extends FaceAnalyzer {
 
         final Tension wanted;
-        final TwistedGraph child;
+        final GrowingGraph child;
         final int size;
         final List<List<Tension>> options = new ArrayList<List<Tension>>();
         final Collection<Tension> already;
         final int space;
         boolean justDoIt = false;
-        EdgeSelector(Face f, Tension wanted, TwistedGraph child) {
+        EdgeSelector(Face f, Tension wanted, GrowingGraph child) {
             super(f);
             this.wanted = wanted;
             this.child = child;
@@ -132,7 +131,7 @@ public class TensionGraph extends AbstractTGraph {
      * @param tg
      * @return true if added, false if it cannot be added.
      */
-    public boolean consequences(Face face, Tension t, TwistedGraph tg) {
+    public boolean consequences(Face face, Tension t, GrowingGraph tg) {
         EdgeSelector selector = new EdgeSelector(face,t,tg);
         if (selector.alreadyDone()) {
             return true;
@@ -154,7 +153,7 @@ public class TensionGraph extends AbstractTGraph {
                 tg.addWithTrail(tt);
             }
         } else {
-           tg.addOptions(face,selector.options);
+           tg.addChoices(face,selector.options);
         }
         return true;
     }

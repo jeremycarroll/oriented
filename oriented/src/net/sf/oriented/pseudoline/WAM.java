@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.Stack;
 
 /**
  * General back tracking design notes:
@@ -87,7 +86,7 @@ public class WAM {
     }
 
     private TensionGraph base;
-    private TwistedGraph tg;
+    private GrowingGraph tg;
     private Deque<Frame> stack = new ArrayDeque<Frame>();
     private Deque<Undoable> trail = new ArrayDeque<Undoable>();
     
@@ -132,11 +131,11 @@ public class WAM {
 
     private void extend() {
         if ( tg.hasOptions() ) {
-            final Options opt = tg.options.pop();
+            final EdgeChoices opt = tg.choices.pop();
             trail.push(new Undoable(){
                 @Override
                 public void undo() {
-                    tg.options.push(opt);
+                    tg.choices.push(opt);
                 }});
             opt.orderChoices(tg);
             if (opt.impossible()) {

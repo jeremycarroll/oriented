@@ -7,9 +7,9 @@ import java.util.List;
 
 import net.sf.oriented.omi.Face;
 
-class Options {
+class EdgeChoices {
 
-    public Options(Face face, List<List<Tension>> choices) {
+    public EdgeChoices(Face face, List<List<Tension>> choices) {
         // TODO Auto-generated constructor stub
     }
 
@@ -18,7 +18,7 @@ class Options {
         return null;
     }
 
-    public void orderChoices(TwistedGraph tg) {
+    public void orderChoices(GrowingGraph tg) {
         // TODO Auto-generated method stub
         
     }
