@@ -3,6 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.oriented.omi.Face;
@@ -23,35 +25,18 @@ public class TwistedGraph extends AbstractTGraph {
        this.parent = parent; 
     }
 
-    /**
-     * During initialization, add an edge to the TensionGraph, and inherit edges
-     * that must be included
-     * @param t
-     * @return null on failure, the empty list on success, or a list of choices: one of which must be added.
-     */
-    public List<Tension> add(Tension t) {
-        rawAdd(t);
-        return null;
-    }
-    
-    private boolean addWithConsequences(Tension t) {
-        rawAdd(t);
-        boolean rslt = consequences(getSource(t), t) &&
-               consequences(getDest(t), t);
-        return rslt;
-    }
     
     /**
      * 
-     * @param dest
      * @param t
-     * @return true if the consequences are satisfiable, false if unsatisfiable.
+     * @return true if added, false if it cannot be added.
      */
-    private boolean consequences(Face vertex, Tension t) {
-//        this.findPlusMinusPlusX(vertex, in, out, ok);
-        
-        return true;
+    public boolean addWithConsequences(Tension t) {
+        rawAdd(t);
+        boolean rslt = parent.consequences(getSource(t), t, this) && parent.consequences(getDest(t), t, this);
+        return rslt;
     }
+    
 
     private void rawAdd(Tension t) {
         addEdge(t, notNull(parent.getSource(t)), notNull(parent.getDest(t)));
@@ -62,6 +47,23 @@ public class TwistedGraph extends AbstractTGraph {
             throw new NullPointerException("Face not found");
         }
         return f;
+    }
+
+    Deque<Options> options = new ArrayDeque<Options>();
+    
+    public void addOptions(Face face, List<List<Tension>> choices) {
+        Options opt = new Options(face,choices);
+        addOption(opt);
+    }
+
+
+    private void addOption(Options opt) {
+        options.push(opt);
+    }
+
+
+    public boolean hasOptions() {
+        return !options.isEmpty();
     }
 }
 

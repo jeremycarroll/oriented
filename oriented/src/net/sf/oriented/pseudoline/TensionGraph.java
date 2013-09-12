@@ -4,8 +4,12 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 
 import net.sf.oriented.omi.Face;
 
@@ -51,6 +55,108 @@ public class TensionGraph extends AbstractTGraph {
                 }
             }
         }
+    }
+    
+    class EdgeSelector extends FaceAnalyzer {
+
+        final Tension wanted;
+        final TwistedGraph child;
+        final int size;
+        final List<List<Tension>> options = new ArrayList<List<Tension>>();
+        final Collection<Tension> already;
+        final int space;
+        boolean justDoIt = false;
+        EdgeSelector(Face f, Tension wanted, TwistedGraph child) {
+            super(f);
+            this.wanted = wanted;
+            this.child = child;
+            // how may edges are involved at this face?
+            if (f.type() == Face.Type.Cocircuit ) {
+                size = f.higher().size() / 2;
+            } else {
+                size = f.lower().size();
+            }
+            // what is already at this face concerning the child
+            already = child.getIncidentEdges(f);
+            space = size - already.size();
+        }
+
+        @Override
+        boolean add(Tension f, Tension s, Tension t) {
+            if (f==wanted) {
+                add(s,t);
+            } else  if (s==wanted) {
+                add(f,t);
+            } else if (t==wanted) {
+                add(f,s);
+            }
+            return !justDoIt;
+        }
+
+        private void add(Tension s, Tension t) {
+            if (already.contains(s)) {
+                add(t);
+            } else if (already.contains(t)) {
+                add(s);
+            } else {
+                options.add(ImmutableList.of(s,t));
+            }
+        }
+
+        private void add(Tension t) {
+            if (already.contains(t)) {
+                justDoIt = true;
+            } else {
+                options.add(ImmutableList.of(t));
+            }
+        }
+
+        public boolean alreadyDone() {
+            return already.contains(child);
+        }
+
+        public boolean impossible() {
+            return space <= 0;
+        }
+
+        public void search() {
+            this.findPlusMinusPlus();
+        }
+        
+    }
+
+    /**
+     * 
+     * @param face
+     * @param t
+     * @param tg
+     * @return true if added, false if it cannot be added.
+     */
+    public boolean consequences(Face face, Tension t, TwistedGraph tg) {
+        EdgeSelector selector = new EdgeSelector(face,t,tg);
+        if (selector.alreadyDone()) {
+            return true;
+        }
+        if (selector.impossible()) {
+            return false;
+        }
+        selector.search();
+        if (selector.justDoIt) {
+            tg.add(t);
+            return true;
+        }
+        if (selector.options.isEmpty()) {
+            return false;
+        }
+        tg.add(t);
+        if (selector.options.size() == 1) {
+            for (Tension tt:selector.options.get(0)) {
+                tg.add(tt);
+            }
+        } else {
+           tg.addOptions(face,selector.options);
+        }
+        return true;
     }
 
 }

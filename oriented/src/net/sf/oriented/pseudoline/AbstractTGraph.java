@@ -48,7 +48,14 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
             out = getOutEdges(face);
             in = getInEdges(face);
         }
-        abstract void add(Tension f, Tension s, Tension t);
+        /**
+         * 
+         * @param f
+         * @param s
+         * @param t
+         * @return True to keep looking, false to finish the search
+         */
+        abstract boolean add(Tension f, Tension s, Tension t);
         void findPlusMinusPlus(Collection<Tension> in, Collection<Tension> out) {
             for (Tension first:out) {
                 Face firstV = getOpposite(face, first);
@@ -60,7 +67,9 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
                                 if (third.ordinal > second.ordinal) {
                                     Face thirdV = getOpposite(face,third);
                                     if (firstV != thirdV && secondV != thirdV) {
-                                       add(first, second, third);
+                                       if (!add(first, second, third)) {
+                                           return;
+                                       }
                                     }
                                 }
                             }
@@ -85,10 +94,11 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
         }
 
         @Override
-        public void add(Tension first, Tension second, Tension third) {
+        public boolean add(Tension first, Tension second, Tension third) {
             ok.add(first);
             ok.add(second);
             ok.add(third);
+            return true;
         }
 
         boolean isTwisted() {
