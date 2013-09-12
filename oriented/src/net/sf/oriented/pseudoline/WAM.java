@@ -137,36 +137,33 @@ public class WAM {
                 public void undo() {
                     tg.choices.push(opt);
                 }});
-            opt.orderChoices(tg);
+            opt.prepareChoices(tg);
             if (opt.impossible()) {
                 stack.push(new Failure());
+            } if (opt.alreadyDone()) {
+                stack.push(new Frame(){
+                    @Override
+                    boolean call(int counter) {
+                        fail();
+                        return true;
+                    }});
             } else {
-                final Tension choice = opt.fixedChoice();
-                if (choice!=null) {
-                    stack.push(new Frame(){
-                        @Override
-                        boolean call(int counter) {
-                            fail();
-                            return addWithTrail(choice);
-                        }});
-                } else {
-                    final Tension singleChoices[] = opt.singleChoices();
-                    final Tension doubleChoices[] = opt.doubleChoices();
-                    stack.push(new Frame(){
-                        @Override
-                        boolean call(int ix) {
-                            if (ix < singleChoices.length) {
-                                return addWithTrail(singleChoices[ix]);
-                            } else {
-                                ix -= singleChoices.length;
-                                if (ix == doubleChoices.length) {
-                                    fail();
-                                    return false;
-                                }
-                                return addWithTrail(doubleChoices[ix]) && addWithTrail(doubleChoices[ix+1]);
+                final Tension singleChoices[] = opt.singleChoices();
+                final Tension doubleChoices[] = opt.doubleChoices();
+                stack.push(new Frame(){
+                    @Override
+                    boolean call(int ix) {
+                        if (ix < singleChoices.length) {
+                            return addWithTrail(singleChoices[ix]);
+                        } else {
+                            ix -= singleChoices.length;
+                            if (ix == doubleChoices.length) {
+                                fail();
+                                return false;
                             }
-                        }});
-                }
+                            return addWithTrail(doubleChoices[ix]) && addWithTrail(doubleChoices[ix+1]);
+                        }
+                    }});
             }
         } else {
             final Tension t = findPossibleEdge();
@@ -219,6 +216,14 @@ public class WAM {
                 return t;
             }
         }
+    }
+
+    public void pushUndoRemove(final GrowingGraph gg, final Tension t) {
+        trail.push(new Undoable(){
+            @Override
+            public void undo() {
+                gg.removeEdge(t);
+            }});
     }
 
 }

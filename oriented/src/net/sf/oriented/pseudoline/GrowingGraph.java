@@ -21,8 +21,10 @@ import net.sf.oriented.omi.Face;
 public class GrowingGraph extends AbstractTGraph {
     
     private final TensionGraph parent;
-    public GrowingGraph(TensionGraph parent) {
+    private final WAM wam;
+    public GrowingGraph(TensionGraph parent, WAM wam) {
        this.parent = parent; 
+       this.wam = wam;
     }
 
     
@@ -33,13 +35,16 @@ public class GrowingGraph extends AbstractTGraph {
      */
     public boolean addWithConsequences(Tension t) {
         rawAdd(t);
-        boolean rslt = parent.consequences(getSource(t), t, this) && parent.consequences(getDest(t), t, this);
-        return rslt;
+        return parent.consequences(getSource(t), t, this) && parent.consequences(getDest(t), t, this);
     }
     
 
     private void rawAdd(Tension t) {
-        addEdge(t, notNull(parent.getSource(t)), notNull(parent.getDest(t)));
+        
+        if (!addEdge(t, notNull(parent.getSource(t)), notNull(parent.getDest(t)))) {
+            throw new IllegalArgumentException("addEdge failed!");
+        }
+        wam.pushUndoRemove(this,t);
     }
 
     private Face notNull(Face f) {
@@ -68,8 +73,7 @@ public class GrowingGraph extends AbstractTGraph {
 
 
     public boolean addWithTrail(Tension t) {
-        // TODO Auto-generated method stub
-        return false;
+        return addWithConsequences(t);
     }
 }
 

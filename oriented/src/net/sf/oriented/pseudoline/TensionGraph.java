@@ -4,6 +4,7 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -98,7 +99,9 @@ public class TensionGraph extends AbstractTGraph {
             } else if (already.contains(t)) {
                 add(s);
             } else {
-                options.add(ImmutableList.of(s,t));
+                if (space > 1) {
+                   options.add(ImmutableList.of(s,t));
+                }
             }
         }
 
@@ -106,20 +109,22 @@ public class TensionGraph extends AbstractTGraph {
             if (already.contains(t)) {
                 justDoIt = true;
             } else {
-                options.add(ImmutableList.of(t));
+                if (space > 0) {
+                   options.add(ImmutableList.of(t));
+                }
             }
         }
 
-        public boolean alreadyDone() {
-            return already.contains(child);
-        }
-
         public boolean impossible() {
-            return space <= 0;
+            return space < 0;
         }
 
         public void search() {
             this.findPlusMinusPlus();
+            if (justDoIt) {
+                options.clear();
+                options.add(Arrays.asList(new Tension[0]));
+            }
         }
         
     }
@@ -127,30 +132,24 @@ public class TensionGraph extends AbstractTGraph {
     /**
      * 
      * @param face
-     * @param t
+     * @param t Has already been added to tg
      * @param tg
      * @return true if added, false if it cannot be added.
      */
     public boolean consequences(Face face, Tension t, GrowingGraph tg) {
         EdgeSelector selector = new EdgeSelector(face,t,tg);
-        if (selector.alreadyDone()) {
-            return true;
-        }
         if (selector.impossible()) {
             return false;
         }
         selector.search();
-        if (selector.justDoIt) {
-            tg.addWithTrail(t);
-            return true;
-        }
         if (selector.options.isEmpty()) {
             return false;
         }
-        tg.addWithTrail(t);
         if (selector.options.size() == 1) {
             for (Tension tt:selector.options.get(0)) {
-                tg.addWithTrail(tt);
+                if (!tg.addWithTrail(tt)) {
+                    return false;
+                }
             }
         } else {
            tg.addChoices(face,selector.options);

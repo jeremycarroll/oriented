@@ -3,14 +3,26 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.oriented.omi.Face;
 
 class EdgeChoices {
 
+    final Face face;
+    final List<List<Tension>> choices;
+    boolean alreadyDone = false;
+    
+    final List<Tension> oneChoices = new ArrayList<Tension>();
+    final List<Tension> twoChoices = new ArrayList<Tension>();
     public EdgeChoices(Face face, List<List<Tension>> choices) {
-        // TODO Auto-generated constructor stub
+        this.face = face;
+        this.choices = choices;
+    }
+    
+    public boolean alreadyDone() {
+        return alreadyDone;
     }
 
     public Tension fixedChoice() {
@@ -18,9 +30,9 @@ class EdgeChoices {
         return null;
     }
 
-    public void orderChoices(GrowingGraph tg) {
-        // TODO Auto-generated method stub
-        
+    public void prepareChoices(GrowingGraph tg) {
+        alreadyDone = false;
+        // TODO here
     }
 
     public boolean impossible() {
