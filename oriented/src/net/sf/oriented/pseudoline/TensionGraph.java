@@ -147,7 +147,7 @@ public class TensionGraph extends AbstractTGraph {
         }
         if (selector.options.size() == 1) {
             for (Tension tt:selector.options.get(0)) {
-                if (!tg.addWithTrail(tt)) {
+                if (!(tg.containsEdge(tt) || tg.addWithTrail(tt))) {
                     return false;
                 }
             }

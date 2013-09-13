@@ -7,6 +7,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
+import net.sf.oriented.omi.Face;
+
 /**
  * General back tracking design notes:
  * 
@@ -97,7 +99,7 @@ public class WAM {
     
     public void search() {
         extend();
-        while (!stack.isEmpty()) {
+        while (true) {
             Frame top = stack.peek();
             switch (top.port) {
             case Call:
@@ -124,6 +126,8 @@ public class WAM {
                 break;
             case Fail:
                 stack.pop();
+                if (stack.isEmpty())
+                    return;
                 backTrack();
                 break;
             }
@@ -162,11 +166,16 @@ public class WAM {
                             return addWithTrail(singleChoices[ix]);
                         } else {
                             ix -= singleChoices.length;
-                            if (ix == doubleChoices.length) {
+                            if (ix*2 == doubleChoices.length) {
                                 fail();
                                 return false;
                             }
-                            return addWithTrail(doubleChoices[ix]) && addWithTrail(doubleChoices[ix+1]);
+                            if (!  addWithTrail(doubleChoices[2*ix])  )
+                                return false;
+                            Tension t = doubleChoices[2*ix+1];
+                            if (tg.containsEdge(t)) 
+                                return true;
+                            return addWithTrail(t);
                         }
                     }});
             }
@@ -194,9 +203,16 @@ public class WAM {
         }
     }
 
-    protected void removeWithTrail(Tension t) {
-        // TODO Auto-generated method stub
-        
+    protected void removeWithTrail(final Tension t) {
+        final Face source = base.getSource(t);
+        final Face dest = base.getDest(t);
+        base.removeEdge(t);
+        trail.push(new Undoable(){
+
+            @Override
+            public void undo() {
+                base.addEdge(t, source, dest );
+            }});
     }
 
     protected boolean addWithTrail(Tension tension) {

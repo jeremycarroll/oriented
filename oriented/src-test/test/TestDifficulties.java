@@ -8,6 +8,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.TensionGraph;
+import net.sf.oriented.pseudoline.WAM;
 
 import org.junit.Test;
 
@@ -50,7 +51,9 @@ public class TestDifficulties {
             ten.dumpEdges();
             ten.dumpVertices();
         }
-        Assert.assertEquals(prunedTensions,ten.getVertices().size());
+        WAM wam = new WAM(ten);
+        wam.search();
+//        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
     }
