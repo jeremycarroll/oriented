@@ -90,6 +90,11 @@ public class WAM {
     private Deque<Frame> stack = new ArrayDeque<Frame>();
     private Deque<Undoable> trail = new ArrayDeque<Undoable>();
     
+    public WAM(TensionGraph b) {
+        base = b;
+        tg = new GrowingGraph(b, this);
+    }
+    
     public void search() {
         extend();
         while (!stack.isEmpty()) {

@@ -4,6 +4,7 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.sf.oriented.omi.Face;
@@ -12,10 +13,11 @@ class EdgeChoices {
 
     final Face face;
     final List<List<Tension>> choices;
-    boolean alreadyDone = false;
     
+    boolean alreadyDone = false;
     final List<Tension> oneChoices = new ArrayList<Tension>();
     final List<Tension> twoChoices = new ArrayList<Tension>();
+    
     public EdgeChoices(Face face, List<List<Tension>> choices) {
         this.face = face;
         this.choices = choices;
@@ -25,29 +27,56 @@ class EdgeChoices {
         return alreadyDone;
     }
 
-    public Tension fixedChoice() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public void prepareChoices(GrowingGraph tg) {
         alreadyDone = false;
-        // TODO here
+        oneChoices.clear();
+        twoChoices.clear();
+        Collection<Tension> already = tg.getIncidentEdges(face);
+        for (List<Tension> choice:choices) {
+            Tension a = choice.get(0);
+            switch (choice.size()) {
+            case 1:
+                doOne(a, already);
+                break;
+            case 2:
+                Tension b = choice.get(1);
+                if (already.contains(a)) {
+                    doOne(b,already);
+                } else if (already.contains(b)) {
+                    doOne(a, already);
+                } else {
+                    twoChoices.add(a);
+                    twoChoices.add(b);
+                }
+                break;
+            default:
+                    throw new IllegalArgumentException();
+            }
+            if (alreadyDone) {
+                return;
+            }
+            
+        }
+    }
+
+    private void doOne(Tension a, Collection<Tension> already) {
+        if (already.contains(a)) {
+            alreadyDone = true;
+        } else {
+            oneChoices.add(a);
+        }
     }
 
     public boolean impossible() {
-        // TODO Auto-generated method stub
-        return false;
+        return (!alreadyDone) && oneChoices.isEmpty() && twoChoices.isEmpty();
     }
 
     public Tension[] singleChoices() {
-        // TODO Auto-generated method stub
-        return null;
+        return oneChoices.toArray(new Tension[oneChoices.size()]);
     }
 
     public Tension[] doubleChoices() {
-        // TODO Auto-generated method stub
-        return null;
+        return twoChoices.toArray(new Tension[twoChoices.size()]);
     }
 
 }
