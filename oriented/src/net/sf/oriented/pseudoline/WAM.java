@@ -5,6 +5,7 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -83,7 +84,10 @@ public class WAM {
 
         @Override
         boolean call(int ix) {
-            removeChoice(ix-1);
+            if (!removeChoice(ix-1)) {
+                fail();
+                return false;
+            }
             if (ix < singleChoices.length) {
                 return add(singleChoices[ix]);
             } else {
@@ -101,14 +105,21 @@ public class WAM {
             }
         }
 
-        private void removeChoice(int ix) {
+        /**
+         * 
+         * @param ix
+         * @return true if operation omitted or successful, false to force backtracking
+         */
+        private boolean removeChoice(int ix) {
             if ( ix== -1) {
-                return;
+                return true;
             }
             if (ix < singleChoices.length) {
-                maybeRemove(singleChoices[ix]);
+                boolean rslt = maybeRemove(singleChoices[ix]);
                 this.trailPtr = trail.size();
+                return rslt;
             } 
+            return true;
         }
     }
 
@@ -164,6 +175,10 @@ public class WAM {
     private final Deque<Frame> stack = new ArrayDeque<Frame>();
     private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private final List<Difficulty> results = new ArrayList<Difficulty>();
+    final Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
+    
+    // tracing and debug fields
+    public int transitions = 0;
     private AbstractTGraph expected;
     public boolean debug;
     
@@ -173,10 +188,16 @@ public class WAM {
         growing = shrinking.growing;
     }
     
-    public void maybeRemove(Tension tension) {
+    /**
+     * 
+     * @param tension
+     * @return true if operation omitted or successful, false to force backtracking
+     */
+    public boolean maybeRemove(Tension tension) {
         if (shrinking.containsEdge(tension)) {
-            remove(tension);
+            return remove(tension);
         }
+        return true;
     }
 
     public List<Difficulty> search() {
@@ -217,8 +238,6 @@ public class WAM {
         }
     }
 
-    Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
-    public int transitions = 0;
     
 
     void addChoice(final EdgeChoices opt) {
@@ -240,8 +259,6 @@ public class WAM {
         if (success) {
             results.add(new Difficulty(growing));
             growing.dumpEdges();
-        } else {
-//            System.err.println(tg.getVertexCount()+"/"+tg.getEdgeCount()+" ["+stack.size()+":"+trail.size()+"]");
         }
         return success;
     }
@@ -254,7 +271,7 @@ public class WAM {
                 public void undo() {
                     choices.push(opt);
                 }});
-            opt.prepareChoices(growing);
+            opt.prepareChoices(growing,shrinking);
             if (opt.impossible()) {
                 stack.push(new Failure());
             } if (opt.alreadyDone()) {
@@ -285,8 +302,7 @@ public class WAM {
                         return add(t);
                     case 1:
                         fail();
-                        remove(t);
-                        return true;
+                        return remove(t);
                     default:
                         throw new IllegalArgumentException("WAM call logic error");
                     }
@@ -312,22 +328,28 @@ public class WAM {
     private void debugMsg(String port) {
         transitions ++;
         if (debug)
-        System.err.println(port+"["+stack.size()+"/"+trail.size()+"] "+pad(stack.size())+pad(trail.size())+stack.peek().toString());
+        System.err.println(port+"["+stack.size()+"/"+trail.size()+":"+choices.size()+"] "+pad(stack)+
+                pad(trail)+pad(choices)+stack.peek().toString());
     }
-    private String pad(int size) {
+    private String pad(Collection<?> c) {
+        int size = c.size();
         return size<10?"  ":(size<100?" ":"");
     }
 
+    boolean edgeRemovalFailed;
     /**
      * Remove an edge from the current solution space.
      * @param t
+     * @return true if removal was ok, false to force backtracking
      */
-    protected void remove(final Tension t) {
+    protected boolean remove(final Tension t) {
+        edgeRemovalFailed = false;
         shrinking.removeEdge(t);
         Set<Face> vv = new HashSet<Face>();
         vv.add(t.source);
         vv.add(t.dest);
         shrinking.prune(vv,true);
+        return !edgeRemovalFailed;
     }
 
     void trailRemove(final Tension t) {
@@ -337,6 +359,12 @@ public class WAM {
             public void undo() {
                 shrinking.addEdge(t, t.source, t.dest );
             }});
+        for (EdgeChoices ch:this.choices) {
+            if (edgeRemovalFailed) {
+                return;
+            }
+            edgeRemovalFailed = ch.choiceRemoved(t, this);
+        }
     }
 
     /**
@@ -407,6 +435,14 @@ public class WAM {
             }
         }
         return true;
+    }
+
+    public void pushUndoReplace(final Set<Tension> allChoices, final Tension t) {
+        trail.push(new Undoable(){
+            @Override
+            public void undo() {
+                allChoices.add(t);
+            }});
     }
 
 }
