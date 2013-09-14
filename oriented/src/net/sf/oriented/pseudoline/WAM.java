@@ -51,6 +51,65 @@ import net.sf.oriented.omi.Face;
  */
 public class WAM {
     
+    private final class MakeChoiceAtFace extends Frame {
+        private final EdgeChoices opt;
+        private final Tension[] singleChoices;
+        private final Tension[] doubleChoices;
+
+        private MakeChoiceAtFace(EdgeChoices opt) {
+            this.opt = opt;
+            this.singleChoices = opt.singleChoices();
+            this.doubleChoices = opt.doubleChoices();
+        }
+
+        @Override
+        public String toString() {
+            return opt.face.covector().toString() +":" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
+        }
+
+        private String edgeLabel(int ix) {
+        if (ix < singleChoices.length) {
+            return singleChoices[ix].toString();
+        } else {
+            ix -= singleChoices.length;
+            if (ix*2 >= doubleChoices.length) {
+                return "";
+            }
+            return doubleChoices[2*ix].toString()+","+doubleChoices[2*ix+1].toString();
+        }
+         }
+
+        @Override
+        boolean call(int ix) {
+            removeChoice(ix-1);
+            if (ix < singleChoices.length) {
+                return add(singleChoices[ix]);
+            } else {
+                ix -= singleChoices.length;
+                if (ix*2 == doubleChoices.length) {
+                    fail();
+                    return false;
+                }
+                if (!  add(doubleChoices[2*ix])  )
+                    return false;
+                Tension t = doubleChoices[2*ix+1];
+                if (growing.containsEdge(t)) 
+                    return true;
+                return add(t);
+            }
+        }
+
+        private void removeChoice(int ix) {
+            if ( ix== -1) {
+                return;
+            }
+            if (ix < singleChoices.length) {
+                maybeRemove(singleChoices[ix]);
+                this.trailPtr = trail.size();
+            } 
+        }
+    }
+
     private final class Failure extends Frame {
         @Override
         boolean call(int counter) {
@@ -111,6 +170,12 @@ public class WAM {
         growing = shrinking.growing;
     }
     
+    public void maybeRemove(Tension tension) {
+        if (shrinking.containsEdge(tension)) {
+            remove(tension);
+        }
+    }
+
     public void search() {
         extend();
         while (true) {
@@ -201,43 +266,7 @@ public class WAM {
                         return true;
                     }});
             } else {
-                final Tension singleChoices[] = opt.singleChoices();
-                final Tension doubleChoices[] = opt.doubleChoices();
-                stack.push(new Frame(){
-                    @Override
-                    public String toString() {
-                        return opt.face.covector().toString() +":" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
-                    }
-
-                    private String edgeLabel(int ix) {
-                    if (ix < singleChoices.length) {
-                        return singleChoices[ix].toString();
-                    } else {
-                        ix -= singleChoices.length;
-                        if (ix*2 >= doubleChoices.length) {
-                            return "";
-                        }
-                        return doubleChoices[2*ix].toString()+","+doubleChoices[2*ix+1].toString();
-                    }
-            }
-                    @Override
-                    boolean call(int ix) {
-                        if (ix < singleChoices.length) {
-                            return add(singleChoices[ix]);
-                        } else {
-                            ix -= singleChoices.length;
-                            if (ix*2 == doubleChoices.length) {
-                                fail();
-                                return false;
-                            }
-                            if (!  add(doubleChoices[2*ix])  )
-                                return false;
-                            Tension t = doubleChoices[2*ix+1];
-                            if (growing.containsEdge(t)) 
-                                return true;
-                            return add(t);
-                        }
-                    }});
+                stack.push(new MakeChoiceAtFace(opt));
             }
         } else {
             final Tension t = findPossibleEdge();
@@ -312,7 +341,7 @@ public class WAM {
      * @return
      */
     protected boolean add(Tension tension) {
-        return growing.addWithConsequences(tension);
+        return shrinking.containsEdge(tension) && growing.addWithConsequences(tension);
     }
 
     private void backTrack() {

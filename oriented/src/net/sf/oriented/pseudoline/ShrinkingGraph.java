@@ -34,6 +34,9 @@ public class ShrinkingGraph extends PrunableGraph {
     @Override
     public boolean removeEdge(Tension t) {
         boolean rslt = super.removeEdge(t);
+        if (!rslt) {
+            throw new IllegalArgumentException("Logic error");
+        }
         wam.trailRemove(t);
         return rslt;
     }
