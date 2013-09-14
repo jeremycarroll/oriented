@@ -38,10 +38,10 @@ class EdgeChoices {
      * @return false if the operation failed and backtracking is needed.
      */
     public boolean choiceRemoved(Tension t, WAM wam) {
-//        if (allChoices.remove(t)) {
-//            wam.pushUndoReplace(allChoices,t);
-//            return true; // !allChoices.isEmpty();
-//        }
+        if (allChoices.remove(t)) {
+            wam.pushUndoReplace(allChoices,t);
+            return !allChoices.isEmpty();
+        }
         return true;
     }
     
