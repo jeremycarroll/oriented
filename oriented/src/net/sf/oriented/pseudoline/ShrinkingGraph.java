@@ -6,7 +6,10 @@ package net.sf.oriented.pseudoline;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.oriented.omi.Face;
 
@@ -52,15 +55,10 @@ public class ShrinkingGraph extends PrunableGraph {
         EdgeSelector(Face f, Tension wanted) {
             super(f);
             this.wanted = wanted;
-            // how may edges are involved at this face?
-            if (f.type() == Face.Type.Cocircuit ) {
-                size = f.higher().size() / 2;
-            } else {
-                size = f.lower().size();
-            }
+            this.size = faceSize(f);
             // what is already at this face concerning the child
             already = growing.getIncidentEdges(f);
-            space = size - already.size();
+            space = faceSize(f) - already.size();
         }
 
         @Override
@@ -139,6 +137,47 @@ public class ShrinkingGraph extends PrunableGraph {
         return true;
     }
 
+    
+    Tension[] sortedEdges() {
+//        System.err.println("sorting");
+        Tension rslt[] = getEdges().toArray(new Tension[getEdgeCount()]);
+        final Map<Face,Integer> faceScore = new HashMap<Face,Integer>();
+        for (Face f:getVertices()) {
+            faceScore.put(f, score(f));
+        }
+        Arrays.sort(rslt, new Comparator<Tension>(){
+
+            @Override
+            public int compare(Tension o1, Tension o2) {
+                
+                return  score(o1) - score(o2);
+            }
+
+            private int score(Tension t) {
+                return faceScore.get(t.source) * faceScore.get(t.dest);
+            }});
+        
+        
+        return rslt;
+    }
+
+    private int score(Face f) {
+        return faceSize(f) - 2;
+//        int in = this.getInEdges(f).size();
+//        int out = this.getOutEdges(f).size();
+//        if (in == 0 || out == 0) {
+//            // this face cannot be in a solution, put any edge involving it early
+//            return 0;
+//        }
+//        if (in == 1) {
+//            return out;
+//        }
+//        if (out == 1) {
+//            return in;
+//        }
+//        int min = in<out?in:out;
+//        return min + getEdgeCount();
+    }
 }
 
 

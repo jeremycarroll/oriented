@@ -138,6 +138,16 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
             addEdge(t,t.source,t.dest);
         }
     }
+    protected int faceSize(Face f) {
+        // how may edges are involved at this face?
+        int size;
+        if (f.type() == Face.Type.Cocircuit ) {
+            size = f.higher().size() / 2;
+        } else {
+            size = f.lower().size();
+        }
+        return size;
+    }
 
 }
 

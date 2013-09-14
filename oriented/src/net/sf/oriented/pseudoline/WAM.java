@@ -5,6 +5,7 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
@@ -258,7 +259,7 @@ public class WAM {
         boolean success = growing.isTwistedGraph();
         if (success) {
             results.add(new Difficulty(growing));
-            growing.dumpEdges();
+//            growing.dumpEdges();
         }
         return success;
     }
@@ -402,7 +403,10 @@ public class WAM {
     }
 
     private Tension findPossibleEdge() {
-        Iterator<Tension> it = shrinking.getEdges().iterator();
+        Iterator<Tension> it = 
+                Arrays.asList(shrinking.sortedEdges()).
+//                shrinking.getEdges().
+                iterator();
         Tension t;
         while (true) {
             if (!it.hasNext()) {
