@@ -30,48 +30,12 @@ public class ShrinkingGraph extends PrunableGraph {
         copy(orig);
         growing = new GrowingGraph(wam, this);
     }
-    final class EdgePruner extends TwistedFace {
-        private EdgePruner(Face f) {
-            super(f);
-        }
-
-        private void removeIfNotOk(Collection<Tension> out, Collection<Tension> toBeRemoved) {
-            for (Tension e:out) {
-                if (!ok.contains(e)) {
-                    toBeRemoved.add(e);
-                }
-            }
-        }
-
-        /**
-         * 
-         * @return true if an edge or vertex was removed
-         */
-        boolean prune() {
-            List<Tension> toBeRemoved = new ArrayList<Tension>();
-            removeIfNotOk(out, toBeRemoved);
-            removeIfNotOk(in, toBeRemoved);
-            for (Tension e:toBeRemoved) {
-                removeEdge(e);
-            }
-            return !toBeRemoved.isEmpty();
-        }
-    }
-
+    
     @Override
-    public void prune() {
-        boolean pruned = true;
-        while (pruned) {
-            pruned = false;
-            for (Face f:new ArrayList<Face>(getVertices())) {
-                if (getNeighborCount(f)<3) {
-                    removeVertex(f);
-                    pruned = true;
-                } else {
-                    pruned = new EdgePruner(f).prune() || pruned;
-                }
-            }
-        }
+    public boolean removeEdge(Tension t) {
+        boolean rslt = super.removeEdge(t);
+        wam.trailRemove(t);
+        return rslt;
     }
     
     class EdgeSelector extends FaceAnalyzer {

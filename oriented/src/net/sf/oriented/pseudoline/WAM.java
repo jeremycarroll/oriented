@@ -289,6 +289,10 @@ public class WAM {
      */
     protected void remove(final Tension t) {
         shrinking.removeEdge(t);
+        shrinking.prune();
+    }
+
+    void trailRemove(final Tension t) {
         trail.push(new Undoable(){
 
             @Override
