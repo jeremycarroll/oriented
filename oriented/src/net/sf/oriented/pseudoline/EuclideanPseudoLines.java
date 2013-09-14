@@ -442,7 +442,7 @@ public class EuclideanPseudoLines {
                 }
                 UnsignedSet tension = notLoops.minus(from.covector().minus()).minus(to.covector().plus());
                 for (Label l:tension) {
-                    rslt.addEdge(new Tension(l, this.modified.asInt(l)), from, to);
+                    rslt.addEdge(new Tension(l, this.modified.asInt(l), from, to), from, to);
                 }
             }
         }

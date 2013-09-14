@@ -55,9 +55,13 @@ public class WAM {
             fail();
             return false;
         }
+        @Override
+        public String toString() {
+            return "fail";
+        }
     }
     private enum Port {
-        Call, Retry, Fail
+        Call, Redo, Fail
     }
 
     private abstract class Frame {
@@ -68,7 +72,7 @@ public class WAM {
 
         final boolean call() {
             trailPtr = trail.size();
-            port = Port.Retry;
+            port = Port.Redo;
             return retry();
         }
 
@@ -92,6 +96,7 @@ public class WAM {
     private Deque<Frame> stack = new ArrayDeque<Frame>();
     private Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private AbstractTGraph expected;
+    public boolean debug;
     
     public WAM(TensionGraph b) {
         base = b;
@@ -102,6 +107,7 @@ public class WAM {
         extend();
         while (true) {
             Frame top = stack.peek();
+            this.debugMsg(top.port.name());
             switch (top.port) {
             case Call:
                 if (top.call()) {
@@ -114,7 +120,7 @@ public class WAM {
                     backTrack();
                 }
                 break;
-            case Retry:
+            case Redo:
                 if (top.retry()) {
                     if (success()) {
                         backTrack();
@@ -136,10 +142,9 @@ public class WAM {
     }
 
     private boolean success() {
-        if (tg.getEdgeCount()==6)
-           tg.dumpEdges();
         boolean success = tg.isTwistedGraph();
         if (success) {
+            tg.dumpEdges();
         } else {
 //            System.err.println(tg.getVertexCount()+"/"+tg.getEdgeCount()+" ["+stack.size()+":"+trail.size()+"]");
         }
@@ -160,6 +165,11 @@ public class WAM {
             } if (opt.alreadyDone()) {
                 stack.push(new Frame(){
                     @Override
+                    public String toString() {
+                        return "true";
+                    }
+                    
+                    @Override
                     boolean call(int counter) {
                         fail();
                         return true;
@@ -168,6 +178,22 @@ public class WAM {
                 final Tension singleChoices[] = opt.singleChoices();
                 final Tension doubleChoices[] = opt.doubleChoices();
                 stack.push(new Frame(){
+                    @Override
+                    public String toString() {
+                        return opt.face.covector().toString() +":" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
+                    }
+
+                    private String edgeLabel(int ix) {
+                    if (ix < singleChoices.length) {
+                        return singleChoices[ix].toString();
+                    } else {
+                        ix -= singleChoices.length;
+                        if (ix*2 >= doubleChoices.length) {
+                            return "";
+                        }
+                        return doubleChoices[2*ix].toString()+","+doubleChoices[2*ix+1].toString();
+                    }
+            }
                     @Override
                     boolean call(int ix) {
                         if (ix < singleChoices.length) {
@@ -206,9 +232,30 @@ public class WAM {
                         throw new IllegalArgumentException("WAM call logic error");
                     }
                 }
+                @Override
+                public String toString() {
+                    switch (this.retryCount) {
+                case 0:
+                    return "add "+t.toString();
+                case 1:
+                    return "[-add] "+t.toString();
+                case 2:
+                    return "fail [-add] "+t.toString();
+                default:
+                    throw new IllegalArgumentException("WAM call logic error");
+                }
+                }
             });
             }
         }
+    }
+
+    private void debugMsg(String port) {
+        if (debug)
+        System.err.println(port+"["+stack.size()+"/"+trail.size()+"] "+pad(stack.size())+pad(trail.size())+stack.peek().toString());
+    }
+    private String pad(int size) {
+        return size<10?"  ":(size<100?" ":"");
     }
 
     protected void removeWithTrail(final Tension t) {
@@ -228,6 +275,7 @@ public class WAM {
     }
 
     private void backTrack() {
+        debugMsg("back");
         while (trail.size() > stack.peek().trailPtr) {
             trail.pop().undo();
         }
@@ -266,6 +314,7 @@ public class WAM {
 
     public void setDebugExpected(AbstractTGraph expected) {
         this.expected = expected;
+        this.debug = true;
     }
     
     boolean debugLookingGood() {

@@ -3,22 +3,30 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
 
 public class Tension {
 
+    final Face source;
+    final Face dest;
     private final Label label;
     public final int ordinal;
-    public Tension(Label l, int ordinal) {
+    public Tension(Label l, int ordinal, Face s, Face d) {
         label = l;
         this.ordinal = ordinal;
+        this.source = s;
+        this.dest = d;
     }
 
     public Label label() {
-        
         return label;
     }
 
+    @Override
+    public String toString() {
+        return label+":"+source.covector()+"⇒"+dest.covector();
+    }
 }
 
 

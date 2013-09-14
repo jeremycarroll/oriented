@@ -94,6 +94,7 @@ public class TestDifficulties {
 //            ten.dumpVertices();
 //        }
         WAM wam = new WAM(ten);
+        wam.setDebugExpected(circSawResult());
         wam.search();
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         
