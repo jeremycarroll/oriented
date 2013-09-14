@@ -20,9 +20,9 @@ import net.sf.oriented.omi.Face;
  */
 public class GrowingGraph extends AbstractTGraph {
     
-    private final TensionGraph parent;
+    private final ShrinkingGraph parent;
     private final WAM wam;
-    public GrowingGraph(TensionGraph parent, WAM wam) {
+    public GrowingGraph(ShrinkingGraph parent, WAM wam) {
        this.parent = parent; 
        this.wam = wam;
     }

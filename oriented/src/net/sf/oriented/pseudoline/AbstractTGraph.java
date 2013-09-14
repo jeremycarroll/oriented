@@ -129,19 +129,15 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
         }
         return true;
     }
-//        private void findPlusMinusPlus(Face vertex, Collection<Tension> in,
-//                Collection<Tension> out, Add3 add3, FaceAnalyzer fa) {
-//                    fa.findPlusMinusPlus(vertex, in, out, add3, this);
-//                }
-//    protected void findPlusMinusPlusX(Face vertex, Collection<Tension> in,
-//            Collection<Tension> out, final Set<Tension[]> ok) {
-//        Add3 add3 = new Add3(){
-//            @Override
-//            public void add(Tension first, Tension second, Tension third) {
-//                ok.add(new Tension[]{first,second,third});
-//            }};
-//        findPlusMinusPlus(vertex, in, out, add3, null);
-//    }
+    /**
+     * Copy all the edges from the orig graph.
+     * @param orig
+     */
+    protected void copy(AbstractTGraph orig) {
+        for (Tension t:orig.getEdges()) {
+            addEdge(t,t.source,t.dest);
+        }
+    }
 
 }
 

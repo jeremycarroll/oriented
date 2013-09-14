@@ -91,16 +91,18 @@ public class WAM {
         public abstract void undo() ;
     }
 
-    private TensionGraph base;
-    private GrowingGraph tg;
-    private Deque<Frame> stack = new ArrayDeque<Frame>();
-    private Deque<Undoable> trail = new ArrayDeque<Undoable>();
+    private final TensionGraph base;
+    private final GrowingGraph tg;
+    private final ShrinkingGraph shrinking;
+    private final Deque<Frame> stack = new ArrayDeque<Frame>();
+    private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private AbstractTGraph expected;
     public boolean debug;
     
     public WAM(TensionGraph b) {
         base = b;
-        tg = new GrowingGraph(b, this);
+        shrinking = new ShrinkingGraph(this, base);
+        tg = new GrowingGraph(shrinking, this);
     }
     
     public void search() {
@@ -142,6 +144,7 @@ public class WAM {
     }
 
     Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
+    public int transitions = 0;
     
 
     void addChoice(final EdgeChoices opt) {
@@ -268,6 +271,7 @@ public class WAM {
     }
 
     private void debugMsg(String port) {
+        transitions ++;
         if (debug)
         System.err.println(port+"["+stack.size()+"/"+trail.size()+"] "+pad(stack.size())+pad(trail.size())+stack.peek().toString());
     }
@@ -276,14 +280,12 @@ public class WAM {
     }
 
     protected void removeWithTrail(final Tension t) {
-        final Face source = base.getSource(t);
-        final Face dest = base.getDest(t);
-        base.removeEdge(t);
+        shrinking.removeEdge(t);
         trail.push(new Undoable(){
 
             @Override
             public void undo() {
-                base.addEdge(t, source, dest );
+                shrinking.addEdge(t, t.source, t.dest );
             }});
     }
 
@@ -299,7 +301,7 @@ public class WAM {
     }
 
     private Tension findPossibleEdge() {
-        Iterator<Tension> it = base.getEdges().iterator();
+        Iterator<Tension> it = shrinking.getEdges().iterator();
         Tension t;
         while (true) {
             if (!it.hasNext()) {
@@ -335,7 +337,7 @@ public class WAM {
     }
     
     boolean debugLookingGood() {
-        return expected == null || subGraph(this.tg, expected) && subGraph(expected, base);
+        return expected == null || subGraph(this.tg, expected) && subGraph(expected, shrinking);
     }
 
     private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {

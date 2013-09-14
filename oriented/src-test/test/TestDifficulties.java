@@ -32,6 +32,7 @@ public class TestDifficulties {
     }
 
 
+    @Ignore
     @Test
     public void testRingel() {
         count("ringel","0",21,4,1);
@@ -101,7 +102,7 @@ public class TestDifficulties {
 //        wam.setDebugExpected(circSawResult());
         wam.search();
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
-        
+        System.err.println(wam.transitions+" wam transitions");
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
     }
 
