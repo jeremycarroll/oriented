@@ -34,10 +34,49 @@ public class TestDifficulties {
     }
 
 
+    @Test
+    public void testCeva2() {
+        count("ceva","0",10,4,2);
+    }
+
+    @Test
+    public void testSaw2() {
+        count("circularsaw3","0",10,4,1);
+    }
+
+    @Test
+    public void testCeva3() {
+        count("ceva","0",10,4,2);
+    }
+
+    @Test
+    public void testSaw3() {
+        count("circularsaw3","0",10,4,1);
+    }
+    @Test
+    public void testCeva2a() {
+        count("ceva","0",10,4,2);
+    }
+
+    @Test
+    public void testSaw2a() {
+        count("circularsaw3","0",10,4,1);
+    }
+
+    @Test
+    public void testCeva3a() {
+        count("ceva","0",10,4,2);
+    }
+
+    @Test
+    public void testSaw3a() {
+        count("circularsaw3","0",10,4,1);
+    }
+
     @Ignore
     @Test
     public void testRingel() {
-        count("ringel","0",21,4,1);
+        count("ringel","0",21,4,-6);
     }
     @Ignore
     @Test
@@ -102,9 +141,10 @@ public class TestDifficulties {
 //        }
         WAM wam = new WAM(ten);
 //        wam.setDebugExpected(circSawResult());
-        assertEquals(expectedDifficultCount, wam.search().size() );
-//        Assert.assertEquals(prunedTensions,ten.getVertices().size());
+        int actualDificultyCount = wam.search().size();
         System.err.println(wam.transitions+" wam transitions");
+        assertEquals(expectedDifficultCount, actualDificultyCount );
+//        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
     }
 
