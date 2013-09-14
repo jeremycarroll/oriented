@@ -8,10 +8,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
-
 import net.sf.oriented.omi.Face;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * This graph gets smaller as we move along the stack of the {@link WAM}
@@ -59,6 +58,7 @@ public class ShrinkingGraph extends PrunableGraph {
         }
     }
 
+    @Override
     public void prune() {
         boolean pruned = true;
         while (pruned) {

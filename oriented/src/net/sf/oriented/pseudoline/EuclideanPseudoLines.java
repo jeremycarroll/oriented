@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uci.ics.jung.graph.DirectedGraph;
-
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
@@ -23,6 +21,7 @@ import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.util.combinatorics.Permutation;
+import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
  * This class takes a rank 3 oriented matroid and prepares it for 

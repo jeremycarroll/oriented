@@ -3,8 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 
 import net.sf.oriented.omi.Face;
@@ -40,11 +38,7 @@ public class GrowingGraph extends AbstractTGraph {
     
 
     private void rawAdd(Tension t) {
-        if (this.containsEdge(t)) {
-            throw new IllegalArgumentException("edge already present failed!" + t.hashCode());
-        }
         if (!addEdge(t, notNull(parent.getSource(t)), notNull(parent.getDest(t)))) {
-            
             throw new IllegalArgumentException("addEdge failed!");
         }
         wam.pushUndoRemove(this,t);

@@ -250,7 +250,7 @@ public class WAM {
                         return add(t);
                     case 1:
                         fail();
-                        removeWithTrail(t);
+                        remove(t);
                         return true;
                     default:
                         throw new IllegalArgumentException("WAM call logic error");
@@ -283,7 +283,11 @@ public class WAM {
         return size<10?"  ":(size<100?" ":"");
     }
 
-    protected void removeWithTrail(final Tension t) {
+    /**
+     * Remove an edge from the current solution space.
+     * @param t
+     */
+    protected void remove(final Tension t) {
         shrinking.removeEdge(t);
         trail.push(new Undoable(){
 
@@ -330,7 +334,9 @@ public class WAM {
                 Face v1 = gg.getSource(t);
                 Face v2 = gg.getDest(t);
                 
-                gg.removeEdge(t);
+                if (!gg.removeEdge(t)) {
+                    throw new IllegalStateException("Failed to remove edge");
+                }
                 if (gg.getNeighborCount(v1)==0) {
                     gg.removeVertex(v1);
                 }
