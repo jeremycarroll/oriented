@@ -4,6 +4,11 @@
 package net.sf.oriented.pseudoline;
 
 public class Difficulty {
+    
+    final TensionGraph rslt;
+    Difficulty(GrowingGraph gg) {
+        rslt = new TensionGraph(gg);
+    }
 
 }
 

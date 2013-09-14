@@ -3,6 +3,8 @@
  ************************************************************************/
 package test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +64,7 @@ public class TestDifficulties {
         ten.dumpVertices();
         WAM wam = new WAM(ten);
 //        wam.setDebugExpected(circSawResult());
-        wam.search();
+        assertEquals(1, wam.search().size() );
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
@@ -100,7 +102,7 @@ public class TestDifficulties {
 //        }
         WAM wam = new WAM(ten);
 //        wam.setDebugExpected(circSawResult());
-        wam.search();
+        assertEquals(expectedDifficultCount, wam.search().size() );
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         System.err.println(wam.transitions+" wam transitions");
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());

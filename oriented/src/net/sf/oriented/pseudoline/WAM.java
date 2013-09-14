@@ -4,9 +4,11 @@
 package net.sf.oriented.pseudoline;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import net.sf.oriented.omi.Face;
@@ -161,6 +163,7 @@ public class WAM {
     private final ShrinkingGraph shrinking;
     private final Deque<Frame> stack = new ArrayDeque<Frame>();
     private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
+    private final List<Difficulty> results = new ArrayList<Difficulty>();
     private AbstractTGraph expected;
     public boolean debug;
     
@@ -176,7 +179,7 @@ public class WAM {
         }
     }
 
-    public void search() {
+    public List<Difficulty> search() {
         extend();
         while (true) {
             Frame top = stack.peek();
@@ -207,7 +210,7 @@ public class WAM {
             case Fail:
                 stack.pop();
                 if (stack.isEmpty())
-                    return;
+                    return results;
                 backTrack();
                 break;
             }
@@ -235,6 +238,7 @@ public class WAM {
     private boolean success() {
         boolean success = growing.isTwistedGraph();
         if (success) {
+            results.add(new Difficulty(growing));
             growing.dumpEdges();
         } else {
 //            System.err.println(tg.getVertexCount()+"/"+tg.getEdgeCount()+" ["+stack.size()+":"+trail.size()+"]");

@@ -5,6 +5,13 @@ package net.sf.oriented.pseudoline;
 
 
 public class TensionGraph extends PrunableGraph {
+
+    public TensionGraph(AbstractTGraph gg) {
+        copy(gg);
+    }
+
+    public TensionGraph() {
+    }
     
 
 }
