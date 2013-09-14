@@ -5,7 +5,9 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import net.sf.oriented.omi.Face;
 
@@ -289,7 +291,10 @@ public class WAM {
      */
     protected void remove(final Tension t) {
         shrinking.removeEdge(t);
-        shrinking.prune();
+        Set<Face> vv = new HashSet<Face>();
+        vv.add(t.source);
+        vv.add(t.dest);
+        shrinking.prune(vv,true);
     }
 
     void trailRemove(final Tension t) {

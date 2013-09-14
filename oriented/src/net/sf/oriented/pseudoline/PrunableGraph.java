@@ -27,27 +27,46 @@ public class PrunableGraph extends AbstractTGraph {
          * 
          * @return true if an edge or vertex was removed
          */
-        boolean prune() {
+        List<Tension> prune() {
             List<Tension> toBeRemoved = new ArrayList<Tension>();
             removeIfNotOk(out, toBeRemoved);
             removeIfNotOk(in, toBeRemoved);
             for (Tension e:toBeRemoved) {
                 removeEdge(e);
             }
-            return !toBeRemoved.isEmpty();
+            return toBeRemoved;
         }
     }
 
     public void prune() {
+        Collection<Face> vv = getVertices();
+        prune(vv, false);
+    }
+
+    void prune(Collection<Face> vv, boolean expand) {
         boolean pruned = true;
         while (pruned) {
             pruned = false;
-            for (Face f:new ArrayList<Face>(getVertices())) {
+            for (Face f:new ArrayList<Face>(vv)) {
+                if (!this.containsVertex(f)) {
+                    continue;
+                }
                 if (getNeighborCount(f)<3) {
+                    if (expand) {
+                        vv.addAll(this.getNeighbors(f));
+                    }
                     removeVertex(f);
                     pruned = true;
                 } else {
-                    pruned = new EdgePruner(f).prune() || pruned;
+                    List<Tension> removedEdges  = new EdgePruner(f).prune();
+                    boolean prunedThisFace = !removedEdges.isEmpty();
+                    if (expand && prunedThisFace) {
+                        for (Tension t:removedEdges) {
+                            vv.add(t.source);
+                            vv.add(t.dest);
+                        }
+                    }
+                    pruned = prunedThisFace || pruned;
                 }
             }
         }
