@@ -91,6 +91,7 @@ public class WAM {
     private GrowingGraph tg;
     private Deque<Frame> stack = new ArrayDeque<Frame>();
     private Deque<Undoable> trail = new ArrayDeque<Undoable>();
+    private AbstractTGraph expected;
     
     public WAM(TensionGraph b) {
         base = b;
@@ -135,7 +136,14 @@ public class WAM {
     }
 
     private boolean success() {
-        return tg.isTwistedGraph();
+        if (tg.getEdgeCount()==6)
+           tg.dumpEdges();
+        boolean success = tg.isTwistedGraph();
+        if (success) {
+        } else {
+//            System.err.println(tg.getVertexCount()+"/"+tg.getEdgeCount()+" ["+stack.size()+":"+trail.size()+"]");
+        }
+        return success;
     }
 
     private void extend() {
@@ -243,8 +251,37 @@ public class WAM {
         trail.push(new Undoable(){
             @Override
             public void undo() {
+                Face v1 = gg.getSource(t);
+                Face v2 = gg.getDest(t);
+                
                 gg.removeEdge(t);
+                if (gg.getNeighborCount(v1)==0) {
+                    gg.removeVertex(v1);
+                }
+                if (gg.getNeighborCount(v2)==0) {
+                    gg.removeVertex(v2);
+                }
             }});
+    }
+
+    public void setDebugExpected(AbstractTGraph expected) {
+        this.expected = expected;
+    }
+    
+    boolean debugLookingGood() {
+        return expected == null || subGraph(this.tg, expected) && subGraph(expected, base);
+    }
+
+    private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {
+        for (Tension edge: small.getEdges()) {
+            if (small.getSource(edge) != big.getSource(edge) ) {
+                return false;
+            }
+            if (small.getDest(edge) != big.getDest(edge) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
