@@ -363,7 +363,7 @@ public class WAM {
             if (edgeRemovalFailed) {
                 return;
             }
-            edgeRemovalFailed = ch.choiceRemoved(t, this);
+            edgeRemovalFailed = !ch.choiceRemoved(t, this);
         }
     }
 
