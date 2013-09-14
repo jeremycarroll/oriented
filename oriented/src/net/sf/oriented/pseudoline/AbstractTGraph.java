@@ -113,7 +113,11 @@ public class AbstractTGraph extends DirectedSparseMultigraph<Face, Tension> {
         
     }
     public boolean isTwistedGraph() {
-        for (Face f:new ArrayList<Face>(getVertices())) {
+        Collection<Face> vv = getVertices();
+        if (vv.isEmpty()) {
+            return false;
+        }
+        for (Face f:new ArrayList<Face>(vv)) {
             if (getNeighborCount(f)<3) {
                 return false;
             } else {

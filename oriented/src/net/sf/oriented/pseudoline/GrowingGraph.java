@@ -57,21 +57,10 @@ public class GrowingGraph extends AbstractTGraph {
         return f;
     }
 
-    Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
     
     public void addChoices(Face face, List<List<Tension>> choices) {
         EdgeChoices opt = new EdgeChoices(face,choices);
-        addChoice(opt);
-    }
-
-
-    private void addChoice(EdgeChoices opt) {
-        choices.push(opt);
-    }
-
-
-    public boolean hasOptions() {
-        return !choices.isEmpty();
+        wam.addChoice(opt);
     }
 
 

@@ -141,6 +141,23 @@ public class WAM {
         }
     }
 
+    Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
+    
+
+    void addChoice(final EdgeChoices opt) {
+        choices.push(opt);
+
+        trail.push(new Undoable(){
+            @Override
+            public void undo() {
+                choices.remove(opt);
+            }});
+    }
+
+
+    public boolean hasOptions() {
+        return !choices.isEmpty();
+    }
     private boolean success() {
         boolean success = tg.isTwistedGraph();
         if (success) {
@@ -152,12 +169,12 @@ public class WAM {
     }
 
     private void extend() {
-        if ( tg.hasOptions() ) {
-            final EdgeChoices opt = tg.choices.pop();
+        if ( hasOptions() ) {
+            final EdgeChoices opt = choices.pop();
             trail.push(new Undoable(){
                 @Override
                 public void undo() {
-                    tg.choices.push(opt);
+                    choices.push(opt);
                 }});
             opt.prepareChoices(tg);
             if (opt.impossible()) {
@@ -240,7 +257,7 @@ public class WAM {
                 case 1:
                     return "[-add] "+t.toString();
                 case 2:
-                    return "fail [-add] "+t.toString();
+                    return "fail [add] "+t.toString();
                 default:
                     throw new IllegalArgumentException("WAM call logic error");
                 }

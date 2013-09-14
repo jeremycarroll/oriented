@@ -21,7 +21,6 @@ import org.junit.Test;
 public class TestDifficulties {
 
 
-    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",10,4,2);
@@ -32,6 +31,11 @@ public class TestDifficulties {
         count("circularsaw3","0",10,4,1);
     }
 
+
+    @Test
+    public void testRingel() {
+        count("ringel","0",21,4,1);
+    }
     @Ignore
     @Test
     public void testCevaA() {
@@ -56,7 +60,7 @@ public class TestDifficulties {
         ten.dumpEdges();
         ten.dumpVertices();
         WAM wam = new WAM(ten);
-        wam.setDebugExpected(circSawResult());
+//        wam.setDebugExpected(circSawResult());
         wam.search();
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         
@@ -94,7 +98,7 @@ public class TestDifficulties {
 //            ten.dumpVertices();
 //        }
         WAM wam = new WAM(ten);
-        wam.setDebugExpected(circSawResult());
+//        wam.setDebugExpected(circSawResult());
         wam.search();
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         
