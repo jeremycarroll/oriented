@@ -265,30 +265,7 @@ public class WAM {
 
     private void extend() {
         if ( hasOptions() ) {
-            final EdgeChoices opt = choices.pop();
-            trail.push(new Undoable(){
-                @Override
-                public void undo() {
-                    choices.push(opt);
-                }});
-            opt.prepareChoices(growing,shrinking);
-            if (opt.impossible()) {
-                stack.push(new Failure());
-            } if (opt.alreadyDone()) {
-                stack.push(new Frame(){
-                    @Override
-                    public String toString() {
-                        return "true";
-                    }
-                    
-                    @Override
-                    boolean call(int counter) {
-                        fail();
-                        return true;
-                    }});
-            } else {
-                stack.push(new MakeChoiceAtFace(opt));
-            }
+            pushChoiceFromEdge(selectNextEdgeChoice());
         } else {
             final Tension t = findPossibleEdge();
             if (t==null) {
@@ -322,6 +299,37 @@ public class WAM {
                 }
             });
             }
+        }
+    }
+
+    private EdgeChoices selectNextEdgeChoice() {
+        return choices.peek();
+    }
+
+    private void pushChoiceFromEdge(final EdgeChoices opt) {
+        choices.remove(opt);
+        trail.push(new Undoable(){
+            @Override
+            public void undo() {
+                choices.push(opt);
+            }});
+        opt.prepareChoices(growing,shrinking);
+        if (opt.impossible()) {
+            stack.push(new Failure());
+        } if (opt.alreadyDone()) {
+            stack.push(new Frame(){
+                @Override
+                public String toString() {
+                    return "true";
+                }
+                
+                @Override
+                boolean call(int counter) {
+                    fail();
+                    return true;
+                }});
+        } else {
+            stack.push(new MakeChoiceAtFace(opt));
         }
     }
 
