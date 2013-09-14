@@ -92,7 +92,11 @@ public class WAM {
     }
 
     private final TensionGraph base;
-    private final GrowingGraph tg;
+    /**
+     * The current solution space is the set of graphs between growing and shrinking.
+     * As the algorithm progresses these get closer together until we hit success!
+     */
+    private final GrowingGraph growing;
     private final ShrinkingGraph shrinking;
     private final Deque<Frame> stack = new ArrayDeque<Frame>();
     private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
@@ -102,7 +106,7 @@ public class WAM {
     public WAM(TensionGraph b) {
         base = b;
         shrinking = new ShrinkingGraph(this, base);
-        tg = new GrowingGraph(shrinking, this);
+        growing = shrinking.growing;
     }
     
     public void search() {
@@ -162,9 +166,9 @@ public class WAM {
         return !choices.isEmpty();
     }
     private boolean success() {
-        boolean success = tg.isTwistedGraph();
+        boolean success = growing.isTwistedGraph();
         if (success) {
-            tg.dumpEdges();
+            growing.dumpEdges();
         } else {
 //            System.err.println(tg.getVertexCount()+"/"+tg.getEdgeCount()+" ["+stack.size()+":"+trail.size()+"]");
         }
@@ -179,7 +183,7 @@ public class WAM {
                 public void undo() {
                     choices.push(opt);
                 }});
-            opt.prepareChoices(tg);
+            opt.prepareChoices(growing);
             if (opt.impossible()) {
                 stack.push(new Failure());
             } if (opt.alreadyDone()) {
@@ -217,19 +221,19 @@ public class WAM {
                     @Override
                     boolean call(int ix) {
                         if (ix < singleChoices.length) {
-                            return addWithTrail(singleChoices[ix]);
+                            return add(singleChoices[ix]);
                         } else {
                             ix -= singleChoices.length;
                             if (ix*2 == doubleChoices.length) {
                                 fail();
                                 return false;
                             }
-                            if (!  addWithTrail(doubleChoices[2*ix])  )
+                            if (!  add(doubleChoices[2*ix])  )
                                 return false;
                             Tension t = doubleChoices[2*ix+1];
-                            if (tg.containsEdge(t)) 
+                            if (growing.containsEdge(t)) 
                                 return true;
-                            return addWithTrail(t);
+                            return add(t);
                         }
                     }});
             }
@@ -243,7 +247,7 @@ public class WAM {
                 boolean call(int ix) {
                     switch(ix) {
                     case 0:
-                        return addWithTrail(t);
+                        return add(t);
                     case 1:
                         fail();
                         removeWithTrail(t);
@@ -289,8 +293,13 @@ public class WAM {
             }});
     }
 
-    protected boolean addWithTrail(Tension tension) {
-        return tg.addWithTrail(tension);
+    /**
+     * Add the edge to the current solution space.
+     * @param tension
+     * @return
+     */
+    protected boolean add(Tension tension) {
+        return growing.addWithConsequences(tension);
     }
 
     private void backTrack() {
@@ -308,7 +317,7 @@ public class WAM {
                 return null;
             }
             t = it.next();
-            if (!tg.containsEdge(t)) {
+            if (!growing.containsEdge(t)) {
                 return t;
             }
         }
@@ -337,7 +346,7 @@ public class WAM {
     }
     
     boolean debugLookingGood() {
-        return expected == null || subGraph(this.tg, expected) && subGraph(expected, shrinking);
+        return expected == null || subGraph(this.growing, expected) && subGraph(expected, shrinking);
     }
 
     private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {

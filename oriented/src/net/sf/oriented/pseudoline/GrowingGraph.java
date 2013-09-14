@@ -22,7 +22,7 @@ public class GrowingGraph extends AbstractTGraph {
     
     private final ShrinkingGraph parent;
     private final WAM wam;
-    public GrowingGraph(ShrinkingGraph parent, WAM wam) {
+    public GrowingGraph(WAM wam, ShrinkingGraph parent) {
        this.parent = parent; 
        this.wam = wam;
     }
@@ -61,11 +61,6 @@ public class GrowingGraph extends AbstractTGraph {
     public void addChoices(Face face, List<List<Tension>> choices) {
         EdgeChoices opt = new EdgeChoices(face,choices);
         wam.addChoice(opt);
-    }
-
-
-    public boolean addWithTrail(Tension t) {
-        return addWithConsequences(t);
     }
 }
 

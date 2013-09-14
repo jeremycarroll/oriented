@@ -25,9 +25,11 @@ import net.sf.oriented.omi.Face;
 public class ShrinkingGraph extends PrunableGraph {
     
     final private WAM wam;
+    final GrowingGraph growing;
     ShrinkingGraph(WAM wam, TensionGraph orig) {
         this.wam = wam;
         copy(orig);
+        growing = new GrowingGraph(wam, this);
     }
     final class EdgePruner extends TwistedFace {
         private EdgePruner(Face f) {
@@ -75,16 +77,14 @@ public class ShrinkingGraph extends PrunableGraph {
     class EdgeSelector extends FaceAnalyzer {
 
         final Tension wanted;
-        final GrowingGraph child;
         final int size;
         final List<List<Tension>> options = new ArrayList<List<Tension>>();
         final Collection<Tension> already;
         final int space;
         boolean justDoIt = false;
-        EdgeSelector(Face f, Tension wanted, GrowingGraph child) {
+        EdgeSelector(Face f, Tension wanted) {
             super(f);
             this.wanted = wanted;
-            this.child = child;
             // how may edges are involved at this face?
             if (f.type() == Face.Type.Cocircuit ) {
                 size = f.higher().size() / 2;
@@ -92,7 +92,7 @@ public class ShrinkingGraph extends PrunableGraph {
                 size = f.lower().size();
             }
             // what is already at this face concerning the child
-            already = child.getIncidentEdges(f);
+            already = growing.getIncidentEdges(f);
             space = size - already.size();
         }
 
@@ -152,7 +152,7 @@ public class ShrinkingGraph extends PrunableGraph {
      * @return true if added, false if it cannot be added.
      */
     public boolean consequences(Face face, Tension t, GrowingGraph tg) {
-        EdgeSelector selector = new EdgeSelector(face,t,tg);
+        EdgeSelector selector = new EdgeSelector(face,t);
         if (selector.impossible()) {
             return false;
         }
@@ -162,7 +162,7 @@ public class ShrinkingGraph extends PrunableGraph {
         }
         if (selector.options.size() == 1) {
             for (Tension tt:selector.options.get(0)) {
-                if (!(tg.containsEdge(tt) || tg.addWithTrail(tt))) {
+                if (!(tg.containsEdge(tt) || tg.addWithConsequences(tt))) {
                     return false;
                 }
             }
