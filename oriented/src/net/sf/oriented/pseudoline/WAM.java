@@ -303,7 +303,17 @@ public class WAM {
     }
 
     private EdgeChoices selectNextEdgeChoice() {
-        return choices.peek();
+        Iterator<EdgeChoices> it = choices.iterator();
+        EdgeChoices best = it.next();
+        int bestSize = best.size();
+        while (it.hasNext()) {
+            EdgeChoices n = it.next();
+            if (n.size()<bestSize) {
+                bestSize = n.size();
+                best = n;
+            }
+        }
+        return best;
     }
 
     private void pushChoiceFromEdge(final EdgeChoices opt) {
