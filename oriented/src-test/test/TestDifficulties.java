@@ -25,52 +25,52 @@ public class TestDifficulties {
 
     @Test
     public void testCeva() {
-        count("ceva","0",10,4,2);
+        count("ceva","0",10,4,2,10000);
     }
 
     @Test
     public void testSaw() {
-        count("circularsaw3","0",10,4,1);
+        count("circularsaw3","0",10,4,1,1000);
     }
 
 
     @Test
     public void testCeva2() {
-        count("ceva","0",10,4,2);
+        count("ceva","0",10,4,2,10000);
     }
 
     @Test
     public void testSaw2() {
-        count("circularsaw3","0",10,4,1);
+        count("circularsaw3","0",10,4,1,1000);
     }
 
     @Test
     public void testCeva3() {
-        count("ceva","0",10,4,2);
+        count("ceva","0",10,4,2,10000);
     }
 
     @Test
     public void testSaw3() {
-        count("circularsaw3","0",10,4,1);
+        count("circularsaw3","0",10,4,1,1000);
     }
     @Test
     public void testCeva2a() {
-        count("ceva","0",10,4,2);
+        count("ceva","0",10,4,2,10000);
     }
 
     @Test
     public void testSaw2a() {
-        count("circularsaw3","0",10,4,1);
+        count("circularsaw3","0",10,4,1,1000);
     }
 
     @Test
     public void testCeva3a() {
-        count("ceva","0",10,4,2);
+        count("ceva","0",10,4,2,10000);
     }
 
     @Test
     public void testSaw3a() {
-        count("circularsaw3","0",10,4,1);
+        count("circularsaw3","0",10,4,1,1000);
     }
 
     @Ignore
@@ -129,6 +129,9 @@ public class TestDifficulties {
         return ten;
     }
     private void count(String omName, String inf, int tensions, int prunedTensions, int expectedDifficultCount) {
+      this.count(omName, inf, tensions, prunedTensions, expectedDifficultCount, Integer.MAX_VALUE);
+    }
+    private void count(String omName, String inf, int tensions, int prunedTensions, int expectedDifficultCount, int maxTransitions) {
         System.err.println(omName+" ===== "+inf+" ==");
         OM om = Examples.all().get(omName);
         EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
@@ -144,6 +147,7 @@ public class TestDifficulties {
         int actualDificultyCount = wam.search().size();
         System.err.println(wam.transitions+" wam transitions");
         assertEquals(expectedDifficultCount, actualDificultyCount );
+        Assert.assertTrue("Too many transitions",wam.transitions<maxTransitions);
 //        Assert.assertEquals(prunedTensions,ten.getVertices().size());
         //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
     }
