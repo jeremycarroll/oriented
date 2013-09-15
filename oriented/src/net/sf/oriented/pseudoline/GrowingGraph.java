@@ -33,23 +33,17 @@ public class GrowingGraph extends AbstractTGraph {
      */
     public boolean addWithConsequences(Tension t) {
         rawAdd(t);
-        return parent.consequences(getSource(t), t, this) && parent.consequences(getDest(t), t, this);
+        return parent.removeParallel(t) && parent.consequences(t.source, t, this) && parent.consequences(t.dest, t, this);
     }
     
 
     private void rawAdd(Tension t) {
-        if (!addEdge(t, notNull(parent.getSource(t)), notNull(parent.getDest(t)))) {
+        if (!addEdge(t, t.source, t.dest)) {
             throw new IllegalArgumentException("addEdge failed!");
         }
         wam.pushUndoRemove(this,t);
     }
 
-    private Face notNull(Face f) {
-        if (f==null) {
-            throw new NullPointerException("Face not found");
-        }
-        return f;
-    }
 
     
     public void addChoices(Face face, List<List<Tension>> choices) {

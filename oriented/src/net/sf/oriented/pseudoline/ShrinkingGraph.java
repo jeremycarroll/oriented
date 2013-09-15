@@ -117,6 +117,9 @@ public class ShrinkingGraph extends PrunableGraph {
      * @return true if added, false if it cannot be added.
      */
     public boolean consequences(Face face, Tension t, GrowingGraph tg) {
+        if (!containsVertex(face)) {
+            return false;
+        }
         EdgeSelector selector = new EdgeSelector(face,t);
         if (selector.impossible()) {
             return false;
@@ -177,6 +180,35 @@ public class ShrinkingGraph extends PrunableGraph {
         }
         int min = in<out?in:out;
         return factor*(min + getEdgeCount());
+    }
+
+    public boolean removeParallel(Tension t) {
+        Collection<Tension> s = getIncidentEdges(t.source);
+        Collection<Tension> d = getIncidentEdges(t.dest);
+        if (s.size()<d.size()) {
+            return removeParallel(t,s,t.dest);
+        } else {
+            return removeParallel(t,d,t.source);
+            
+        }
+    }
+
+    private boolean removeParallel(Tension added, Collection<Tension> toCheck, Face opposite) {
+        List<Tension> toBeRemoved = new ArrayList<Tension>();
+        for (Tension t:toCheck) {
+            if (t == added) {
+                continue;
+            }
+            if (isIncident(opposite, t)) {
+                toBeRemoved.add(t);
+            }
+        }
+        for (Tension t:toBeRemoved) {
+            if (!wam.maybeRemove(t)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
