@@ -162,21 +162,21 @@ public class ShrinkingGraph extends PrunableGraph {
     }
 
     private int score(Face f) {
-        return faceSize(f) - 2;
-//        int in = this.getInEdges(f).size();
-//        int out = this.getOutEdges(f).size();
-//        if (in == 0 || out == 0) {
-//            // this face cannot be in a solution, put any edge involving it early
-//            return 0;
-//        }
-//        if (in == 1) {
-//            return out;
-//        }
-//        if (out == 1) {
-//            return in;
-//        }
-//        int min = in<out?in:out;
-//        return min + getEdgeCount();
+        int factor =  faceSize(f) - 2;
+        int in = this.getInEdges(f).size();
+        int out = this.getOutEdges(f).size();
+        if (in == 0 || out == 0) {
+            // this face cannot be in a solution, put any edge involving it early
+            return 0;
+        }
+        if (in == 1) {
+            return factor*out;
+        }
+        if (out == 1) {
+            return factor*in;
+        }
+        int min = in<out?in:out;
+        return factor*(min + getEdgeCount());
     }
 }
 
