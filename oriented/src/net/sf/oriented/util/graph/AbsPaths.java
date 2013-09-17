@@ -18,9 +18,10 @@ import java.util.Set;
 import edu.uci.ics.jung.graph.Graph;
 
 
-public class Paths<V, E> {
+public abstract class AbsPaths<V, E, P extends Path<V>> {
     
-    
+
+
     private final List<V> vertex;
     private final Map<V,Integer> vertexIndex = new HashMap<V,Integer>();
     /**
@@ -30,7 +31,16 @@ public class Paths<V, E> {
      */
     private final BitSet[][] paths;
     
-    public Paths( Graph<V,E>  g ) {
+    protected abstract P singleStep(Graph<V,E>  g, V from, V to) ;
+    
+//    {
+//        return new SimplePath<V>(from, to);
+//    }
+    protected abstract P combinePaths( P first, P andThen) ;
+//    {
+//        return null; // new SimplePath<V>(first, andThen);
+//    }
+    public AbsPaths( Graph<V,E>  g ) {
         Collection<V> vv = g.getVertices();
         paths = (BitSet[][]) Array.newInstance(BitSet.class, vv.size(), vv.size());
         vertex = new ArrayList<V>(vv);
