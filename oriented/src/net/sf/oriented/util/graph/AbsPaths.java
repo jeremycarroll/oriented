@@ -5,6 +5,7 @@ package net.sf.oriented.util.graph;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -29,20 +33,13 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
      * then 
      * to get from i to j, one way is to go to k first.
      */
-    private final BitSet[][] paths;
+    private final List<P>[][] paths;
     
     protected abstract P singleStep(Graph<V,E>  g, V from, V to) ;
-    
-//    {
-//        return new SimplePath<V>(from, to);
-//    }
     protected abstract P combinePaths( P first, P andThen) ;
-//    {
-//        return null; // new SimplePath<V>(first, andThen);
-//    }
     public AbsPaths( Graph<V,E>  g ) {
         Collection<V> vv = g.getVertices();
-        paths = (BitSet[][]) Array.newInstance(BitSet.class, vv.size(), vv.size());
+        paths = (List<P>[][]) Array.newInstance(List.class, vv.size(), vv.size());
         vertex = new ArrayList<V>(vv);
         initializeVertexIndex();
         initializePathsOfLengthOne(g);
@@ -60,8 +57,11 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
             V from = vertex.get(i);
             for (V to : graph.getNeighbors(from) ) {
                 int j = vertexIndex.get(to);
-                paths[i][j] = new BitSet();
-                paths[i][j].set(j);
+                P v = singleStep(graph, from, to);
+                if (v!=null) {
+                    paths[i][j] = new ArrayList<P>();
+                    paths[i][j].add(v);
+                }
             }
         }
     }
@@ -78,9 +78,16 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
                         continue;
                     }
                     if (paths[i][j] == null) {
-                        paths[i][j] = new BitSet();
+                        paths[i][j] = new ArrayList<P>();
                     }
-                    paths[i][j].or(paths[i][k]);
+                    for (P p:paths[i][k]) {
+                        for (P q:paths[k][j]) {
+                            P pq = combinePaths(p,q);
+                            if (pq!=null) {
+                                paths[i][j].add(pq);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -92,108 +99,15 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
         return new Iterable<List<V>>(){
             @Override
             public Iterator<List<V>> iterator() {
-                return new Iterator<List<V>>(){
-                    final private BitSet visited = new BitSet();
-                    final private int path[] = new int[vertex.size()];
-                    private int currentPos = 0;
-                    private boolean isValid = false;
-                    private boolean exhausted = false;
-                    {
-                        path[0] = source;
-                        if (source != dest) {
-                           visited.set(path[0]);
-                        }
-                        isValid = advance(0);
-                        if (!isValid) {
-                            exhausted = true;
-                        }
-                    }
-                    
-                    private boolean advance(int fromHere) {
-                        while (true) {
-                            BitSet next =paths[path[currentPos]][dest];
-                            int step;
-                            if (next != null) {
-                                next =  (BitSet) next.clone();
-                                next.andNot(visited);
-                                step = next.nextSetBit(fromHere);
-                            } else {
-                                step = -1;
+                return Iterators.transform(paths[source][dest].iterator(),
+                        new Function<Path<V>,List<V>>(){
+                            @SuppressWarnings("unchecked")
+                            @Override
+                            public List<V> apply(Path<V> input) {
+                                return (List<V>) Arrays.asList(input.getPath());
                             }
-                            if (step < 0) {
-                                if (currentPos==0) {
-                                    return false;
-                                }
-                                else {
-                                    int old = path[currentPos];
-                                    visited.clear(old);
-                                    currentPos--;
-                                    fromHere = old+1;
-                                }
-                            } else {
-                                currentPos++;
-                                path[currentPos] = step;
-                                visited.set(step);
-                                if (step==dest) {
-                                    return true;
-                                } else {
-                                    boolean rslt = advance(0);
-                                    if (rslt) {
-                                        return true;
-                                    }
-                                    if (currentPos == 0) {
-                                        return false;
-                                    }
-                                    visited.clear(step);
-                                    path[currentPos] = step;
-                                    currentPos--;
-                                    fromHere = step+1;
-//                                    fromHere = 0;
-                                }
-                            }
-                        }
-                    }
-                    
-                    private void advance() {
-                           visited.clear(path[currentPos]);
-                           currentPos--;
-                           boolean rslt = advance(path[currentPos+1]+1);
-                           if (rslt) {
-                               isValid = true;
-                               return;
-                           } else {
-                               isValid = false;
-                               exhausted = true;
-                           }
-                    }
-
-                    @Override
-                    public boolean hasNext() {
-                        if (!isValid && !exhausted) {
-                            advance();
-                        }
-                        return isValid;
-                    }
-
-                    @Override
-                    public List<V> next() {
-                        if (!hasNext()) {
-                            throw new NoSuchElementException();
-                        }
-                        isValid = false;
-                        List<V> soln = new ArrayList<V>(currentPos);
-                        for (int i=0;i<=currentPos;i++) {
-                            soln.add(vertex.get(path[i]));
-                        }
-                        return soln;
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }};
+                });
             }
-            
         };
     }
     

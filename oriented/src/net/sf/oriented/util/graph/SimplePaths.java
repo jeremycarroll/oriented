@@ -44,10 +44,10 @@ public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
         }
         
         boolean canBeFollowedBy(SimplePath<V> p) {
-            if (getDestination()!=getSource()) {
+            if (!getDestination().equals(p.getSource())) {
                 return false;
             }
-            for (int i=0;i<path.length-1;i++) {
+            for (int i=0;i<path.length;i++) {
                 for (int j=1;j<p.path.length;j++) {
                     if (path[i] == p.path[j] && (i!=0 || j!= p.path.length-1) ) {
                         return false;
