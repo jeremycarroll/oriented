@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +35,7 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
      * to get from i to j, one way is to go to k first.
      */
     private final List<P>[][] paths;
+    private int counter = 0;
     
     protected abstract P singleStep(Graph<V,E>  g, V from, V to) ;
     protected abstract P combinePaths( P first, P andThen) ;
@@ -60,6 +62,7 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
                 P v = singleStep(graph, from, to);
                 if (v!=null) {
                     paths[i][j] = new ArrayList<P>();
+                    counter++;
                     paths[i][j].add(v);
                 }
             }
@@ -69,6 +72,7 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
     private void royWarshall() {
         int size = paths.length;
         for (int k=0;k<size;k++) {
+            System.err.println(""+k + " "+vertex.get(k)+" "+counter);
             for (int i=0;i<size;i++) {
                 if (paths[i][k] == null || i==k) {
                     continue;
@@ -84,6 +88,7 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
                         for (P q:paths[k][j]) {
                             P pq = combinePaths(p,q);
                             if (pq!=null) {
+                                counter++;
                                 paths[i][j].add(pq);
                             }
                         }
@@ -96,6 +101,9 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
     public Iterable<List<V>> paths(V from, V to) {
         final int source = vertexIndex.get(from);
         final int dest = vertexIndex.get(to);
+        if (paths[source][dest]==null) {
+            return Collections.emptyList();
+        }
         return new Iterable<List<V>>(){
             @Override
             public Iterator<List<V>> iterator() {

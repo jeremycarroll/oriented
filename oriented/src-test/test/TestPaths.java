@@ -17,7 +17,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 
 public class TestPaths {
-//    @Test
+    @Test
     public void testSmallPaths() {
         Graph<String, Number> g = TestGraphs.getSmallGraph();
         SimplePaths<String, Number> p = new SimplePaths<String, Number>(g);
@@ -44,11 +44,11 @@ public class TestPaths {
         int count =0;
         for (Iterator<List<String>> iterator = p.paths(f, t).iterator(); iterator
                 .hasNext();) {
-            iterator.next();
-            //            for (String v:path) {
-            //                System.err.print(v+",");
-            //            }
-            //            System.err.println();
+            List<String> path = iterator.next();
+                        for (String v:path) {
+                            System.err.print(v+",");
+                        }
+                        System.err.println();
             count++;
         }
 //                System.err.println("# = " + count);
@@ -59,15 +59,23 @@ public class TestPaths {
     @Test
     public void testDemoPaths() {
         Graph<String, Number> g = TestGraphs.getDemoGraph();
+        g.removeVertex("c2");
+        g.removeVertex("c4");
+        g.removeVertex("c6");
+        g.removeVertex("c7");
+        g.removeVertex("p11");
+        g.removeVertex("p13");
+        g.removeVertex("p15");
+        g.removeVertex("p16");
         SimplePaths<String, Number> p = new SimplePaths<String, Number>(g);
         printPaths(p,"a","e", 2);
         printPaths(p,"a","c", 2);
         printPaths(p,"b","c", 2);
         printPaths(p,"a","d", 2);
-        printPaths(p,"c3", "c5", 109601);
-        printPaths(p,"c1", "c5", 109601);
-        printPaths(p,"c5", "c3", 109601);
-        Assert.assertTrue(printPaths(p,"p12","p17")<109601);
+        printPaths(p,"c3", "c5", 65);
+        printPaths(p,"c1", "c5", 65);
+        printPaths(p,"c5", "c3", 65);
+        Assert.assertTrue(printPaths(p,"p12","p17")<65);
         printPaths(p,"c1","p14", 0);
     }
 

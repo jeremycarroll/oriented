@@ -49,7 +49,7 @@ public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
             }
             for (int i=0;i<path.length;i++) {
                 for (int j=1;j<p.path.length;j++) {
-                    if (path[i] == p.path[j] && (i!=0 || j!= p.path.length-1) ) {
+                    if (path[i].equals(p.path[j]) && (i!=0 || j!= p.path.length-1) ) {
                         return false;
                     }
                 }
