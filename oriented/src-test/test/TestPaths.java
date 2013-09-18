@@ -10,7 +10,6 @@ import junit.framework.Assert;
 
 import net.sf.oriented.util.graph.SimplePaths;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.uci.ics.jung.graph.Graph;

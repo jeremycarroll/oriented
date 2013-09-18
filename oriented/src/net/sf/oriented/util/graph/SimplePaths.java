@@ -3,8 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.util.graph;
 
-import edu.uci.ics.jung.graph.Graph;
 import net.sf.oriented.util.graph.SimplePaths.SimplePath;
+import edu.uci.ics.jung.graph.Graph;
 
 public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
 

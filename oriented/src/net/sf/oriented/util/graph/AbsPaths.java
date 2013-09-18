@@ -6,16 +6,12 @@ package net.sf.oriented.util.graph;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
@@ -39,6 +35,7 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
     
     protected abstract P singleStep(Graph<V,E>  g, V from, V to) ;
     protected abstract P combinePaths( P first, P andThen) ;
+    @SuppressWarnings("unchecked")
     public AbsPaths( Graph<V,E>  g ) {
         Collection<V> vv = g.getVertices();
         paths = (List<P>[][]) Array.newInstance(List.class, vv.size(), vv.size());
