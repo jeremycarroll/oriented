@@ -5,16 +5,12 @@ package net.sf.oriented.util.graph;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -95,28 +91,16 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
         }
     }
 
-    public Iterable<List<V>> paths(V from, V to) {
+    public Collection<P> paths(V from, V to) {
         final int source = vertexIndex.get(from);
         final int dest = vertexIndex.get(to);
         if (paths[source][dest]==null) {
             return Collections.emptyList();
         }
-        return new Iterable<List<V>>(){
-            @Override
-            public Iterator<List<V>> iterator() {
-                return Iterators.transform(paths[source][dest].iterator(),
-                        new Function<Path<V>,List<V>>(){
-                            @SuppressWarnings("unchecked")
-                            @Override
-                            public List<V> apply(Path<V> input) {
-                                return (List<V>) Arrays.asList(input.getPath());
-                            }
-                });
-            }
-        };
+        return paths[source][dest];
     }
-    public Collection<Path<V>> getCycles() {
-        List<Path<V>> rslt = new ArrayList<Path<V>>();
+    public Collection<P> cycles() {
+        List<P> rslt = new ArrayList<P>();
         for (int i=0;i<paths.length;i++) {
             List<P> list = paths[i][i];
             if (list == null) {

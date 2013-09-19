@@ -3,11 +3,13 @@
  ************************************************************************/
 package net.sf.oriented.util.graph;
 
+import java.util.List;
+
 public interface Path<V> {
     
     V getSource();
     V getDestination();
-    Object[] getPath();
+    List<V> getPath();
 
 }
 

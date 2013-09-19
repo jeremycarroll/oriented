@@ -4,6 +4,9 @@
 package net.sf.oriented.util.graph;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.sf.oriented.util.graph.SimplePaths.SimplePath;
 import edu.uci.ics.jung.graph.Graph;
 
@@ -14,14 +17,14 @@ public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
         super(g);
     }
 
-    static final class SimplePath<V> implements Path<V> {
+    public static final class SimplePath<V> implements Path<V> {
         final Object path[];
         
-        public SimplePath(V from, V to) {
+        SimplePath(V from, V to) {
             path = new Object[]{from,to};
         }
 
-        public SimplePath(SimplePath<V> first, SimplePath<V> andThen) {
+        SimplePath(SimplePath<V> first, SimplePath<V> andThen) {
             path = new Object[first.path.length+andThen.path.length-1];
             System.arraycopy(first.path, 0, path, 0, first.path.length);
             System.arraycopy(andThen.path, 1, path, first.path.length, andThen.path.length - 1);
@@ -39,9 +42,10 @@ public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
             return (V)path[path.length-1];
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        public Object[] getPath() {
-            return path;
+        public List<V> getPath() {
+            return (List<V>) Arrays.asList(path);
         }
         
         boolean canBeFollowedBy(SimplePath<V> p) {

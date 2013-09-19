@@ -6,7 +6,6 @@ package test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -43,7 +42,7 @@ public class TestPaths {
     
     @Test
     public void testCycles() {
-        Collection<Path<String>> cycles = new SimplePaths<String, Number>(verySimplifiedDemoGraph()).getCycles();
+        Collection<? extends Path<String>> cycles = new SimplePaths<String, Number>(verySimplifiedDemoGraph()).cycles();
         Assert.assertEquals(120,countSize(cycles,7));
         // 120 = 5 * 4 * 3 * 2 * 1
         Assert.assertEquals(144,countSize(cycles,6));
@@ -64,10 +63,10 @@ public class TestPaths {
 
 
 
-    private int countSize(Collection<Path<String>> cycles, int sz) {
+    private int countSize(Collection<? extends Path<String>> cycles, int sz) {
        int cnt = 0;
        for (Path<?> p:cycles) {
-           if (p.getPath().length == sz) {
+           if (p.getPath().size() == sz) {
                for (Object o:p.getPath()) {
                    System.err.print(o+", ");
                }
@@ -117,13 +116,9 @@ public class TestPaths {
 
     private int printPaths(SimplePaths<String, Number> p, String f, String t) {
         int count =0;
-        for (Iterator<List<String>> iterator = p.paths(f, t).iterator(); iterator
-                .hasNext();) {
-            List<String> path = iterator.next();
-//            for (String v:path) {
-//                System.err.print(v+",");
-//            }
-//            System.err.println();
+        for (Iterator<? extends Path<String>> iterator = p.paths(f, t).iterator(); 
+                iterator.hasNext();) {
+                    iterator.next();
             count++;
         }
         //                System.err.println("# = " + count);
