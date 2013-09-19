@@ -10,7 +10,7 @@ import java.util.Iterator;
 import junit.framework.Assert;
 
 import net.sf.oriented.util.graph.Path;
-import net.sf.oriented.util.graph.AbsPaths;
+import net.sf.oriented.util.graph.Paths;
 import net.sf.oriented.util.graph.SimplePath;
 
 import org.junit.Test;
@@ -20,7 +20,7 @@ import edu.uci.ics.jung.graph.util.TestGraphs;
 
 public class TestPaths {
     
-    private final class MyPaths extends  AbsPaths<String, Number, SimplePath<String>>{
+    private final class MyPaths extends  Paths<String, Number, SimplePath<String>>{
 
         public MyPaths(Graph<String, Number> g) {
             super(g);
