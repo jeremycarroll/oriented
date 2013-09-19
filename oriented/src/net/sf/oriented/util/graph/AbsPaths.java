@@ -15,7 +15,7 @@ import java.util.Map;
 import edu.uci.ics.jung.graph.Graph;
 
 
-public abstract class AbsPaths<V, E, P extends Path<V>> {
+public class AbsPaths<V, E, P extends SimplePath<V>> {
     
 
 
@@ -29,8 +29,6 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
     private final List<P>[][] paths;
     private int counter = 0;
     
-    protected abstract P singleStep(Graph<V,E>  g, V from, V to) ;
-    protected abstract P combinePaths( P first, P andThen) ;
     @SuppressWarnings("unchecked")
     public AbsPaths( Graph<V,E>  g ) {
         Collection<V> vv = g.getVertices();
@@ -117,6 +115,16 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
             }
         }
         return rslt;
+    }
+    protected P singleStep(Graph<V, E> g, V from, V to) {
+        return (P) new SimplePath<V>(from,to);
+    }
+    protected P combinePaths(P first,P andThen) {
+        if (first.canBeFollowedBy(andThen)) {
+           return (P) new SimplePath<V>(first,andThen);
+        } else {
+            return null;
+        }
     }
     
 

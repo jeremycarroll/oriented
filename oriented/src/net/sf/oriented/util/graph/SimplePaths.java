@@ -4,10 +4,7 @@
 package net.sf.oriented.util.graph;
 
 
-import java.util.Arrays;
-import java.util.List;
 
-import net.sf.oriented.util.graph.SimplePaths.SimplePath;
 import edu.uci.ics.jung.graph.Graph;
 
 public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
@@ -15,67 +12,6 @@ public class SimplePaths<V,E> extends AbsPaths<V,E,SimplePath<V>> {
     
     public SimplePaths(Graph<V, E> g) {
         super(g);
-    }
-
-    public static final class SimplePath<V> implements Path<V> {
-        final Object path[];
-        
-        SimplePath(V from, V to) {
-            path = new Object[]{from,to};
-        }
-
-        SimplePath(SimplePath<V> first, SimplePath<V> andThen) {
-            path = new Object[first.path.length+andThen.path.length-1];
-            System.arraycopy(first.path, 0, path, 0, first.path.length);
-            System.arraycopy(andThen.path, 1, path, first.path.length, andThen.path.length - 1);
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public V getSource() {
-            return (V)path[0];
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public V getDestination() {
-            return (V)path[path.length-1];
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public List<V> getPath() {
-            return (List<V>) Arrays.asList(path);
-        }
-        
-        boolean canBeFollowedBy(SimplePath<V> p) {
-            if (!getDestination().equals(p.getSource())) {
-                return false;
-            }
-            for (int i=0;i<path.length;i++) {
-                for (int j=1;j<p.path.length;j++) {
-                    if (path[i].equals(p.path[j]) && (i!=0 || j!= p.path.length-1) ) {
-                        return false;
-                    }
-                }
-            }
-                
-            return true;
-        }
-    }
-
-    @Override
-    protected SimplePath<V> singleStep(Graph<V, E> g, V from, V to) {
-        return new SimplePath<V>(from,to);
-    }
-
-    @Override
-    protected SimplePath<V> combinePaths(SimplePath<V> first, SimplePath<V> andThen) {
-        if (first.canBeFollowedBy(andThen)) {
-           return new SimplePath<V>(first,andThen);
-        } else {
-            return null;
-        }
     }
 }
 

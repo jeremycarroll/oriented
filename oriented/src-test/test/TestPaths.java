@@ -10,7 +10,8 @@ import java.util.Iterator;
 import junit.framework.Assert;
 
 import net.sf.oriented.util.graph.Path;
-import net.sf.oriented.util.graph.SimplePaths;
+import net.sf.oriented.util.graph.AbsPaths;
+import net.sf.oriented.util.graph.SimplePath;
 
 import org.junit.Test;
 
@@ -18,6 +19,14 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 
 public class TestPaths {
+    
+    private final class MyPaths extends  AbsPaths<String, Number, SimplePath<String>>{
+
+        public MyPaths(Graph<String, Number> g) {
+            super(g);
+        }
+        
+    }
 
 
     @Test public void testSmall0_1() { testSmall("0","1",1); }
@@ -36,13 +45,13 @@ public class TestPaths {
     @Test public void testDemo_c1_p14() { testDemo("c1","p14",0); }
     @Test
     public void testDemo_p12_p17() {
-        SimplePaths<String, Number> p = new SimplePaths<String, Number>(simplifiedDemoGraph());
+        MyPaths p = new MyPaths(simplifiedDemoGraph());
         Assert.assertTrue(printPaths(p,"p12","p17")<65);
     }
     
     @Test
     public void testCycles() {
-        Collection<? extends Path<String>> cycles = new SimplePaths<String, Number>(verySimplifiedDemoGraph()).cycles();
+        Collection<? extends Path<String>> cycles = new MyPaths(verySimplifiedDemoGraph()).cycles();
         Assert.assertEquals(120,countSize(cycles,7));
         // 120 = 5 * 4 * 3 * 2 * 1
         Assert.assertEquals(144,countSize(cycles,6));
@@ -78,12 +87,12 @@ public class TestPaths {
     }
     private void testSmall(String f, String t, int cnt) {
         Graph<String, Number> g = TestGraphs.getSmallGraph();
-        SimplePaths<String, Number> p = new SimplePaths<String, Number>(g);
+        MyPaths p = new MyPaths(g);
         this.printPaths(p, f, t,cnt);
     }
     private void testDemo(String f, String t, int cnt) {
         Graph<String, Number> g = simplifiedDemoGraph();
-        SimplePaths<String, Number> p = new SimplePaths<String, Number>(g);
+        MyPaths p = new MyPaths(g);
         this.printPaths(p, f, t,cnt);
     }
     private Graph<String, Number> simplifiedDemoGraph() {
@@ -109,12 +118,12 @@ public class TestPaths {
 
     
 
-    private void printPaths(SimplePaths<String, Number> p, String f,
+    private void printPaths(MyPaths p, String f,
             String t, int expected) {
         Assert.assertEquals(expected, printPaths(p,f,t));
     }
 
-    private int printPaths(SimplePaths<String, Number> p, String f, String t) {
+    private int printPaths(MyPaths p, String f, String t) {
         int count =0;
         for (Iterator<? extends Path<String>> iterator = p.paths(f, t).iterator(); 
                 iterator.hasNext();) {
