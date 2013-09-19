@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.util.graph;
 
+
 import net.sf.oriented.util.graph.SimplePaths.SimplePath;
 import edu.uci.ics.jung.graph.Graph;
 

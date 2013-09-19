@@ -115,6 +115,25 @@ public abstract class AbsPaths<V, E, P extends Path<V>> {
             }
         };
     }
+    public Collection<Path<V>> getCycles() {
+        List<Path<V>> rslt = new ArrayList<Path<V>>();
+        for (int i=0;i<paths.length;i++) {
+            List<P> list = paths[i][i];
+            if (list == null) {
+                continue;
+            }
+            path:
+            for (P p:list) {
+                for (Object o : p.getPath() ) {
+                    if (vertexIndex.get(o)<i) {
+                        continue path;
+                    }
+                }
+                rslt.add(p);
+            }
+        }
+        return rslt;
+    }
     
 
 }

@@ -3,11 +3,14 @@
  ************************************************************************/
 package test;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
 
+import net.sf.oriented.util.graph.Path;
 import net.sf.oriented.util.graph.SimplePaths;
 
 import org.junit.Test;
@@ -37,9 +40,43 @@ public class TestPaths {
         SimplePaths<String, Number> p = new SimplePaths<String, Number>(simplifiedDemoGraph());
         Assert.assertTrue(printPaths(p,"p12","p17")<65);
     }
+    
+    @Test
+    public void testCycles() {
+        Collection<Path<String>> cycles = new SimplePaths<String, Number>(verySimplifiedDemoGraph()).getCycles();
+        Assert.assertEquals(120,countSize(cycles,7));
+        // 120 = 5 * 4 * 3 * 2 * 1
+        Assert.assertEquals(144,countSize(cycles,6));
+        // 144 = 6 * 4 * 3 * 2 * 1
+        Assert.assertEquals(90,countSize(cycles,5));
+        // 90 = 6 * 5 / 2 * 3 * 2 * 1
+        Assert.assertEquals(40,countSize(cycles,4));
+        // 40 = 6 * 5 * 4 / 3 *  2  * 2 * 1
+        Assert.assertEquals(15,countSize(cycles,3));
+        // 15 = 6 * 5 * 4  * 3 / 4 *  3 *  2  * 1
+        Assert.assertEquals(0,countSize(cycles,2));
+        Assert.assertEquals(0,countSize(cycles,1));
+                
+                
+//                +120+60+20+6,
+//                cycles.size());
+    }
 
 
 
+    private int countSize(Collection<Path<String>> cycles, int sz) {
+       int cnt = 0;
+       for (Path<?> p:cycles) {
+           if (p.getPath().length == sz) {
+               for (Object o:p.getPath()) {
+                   System.err.print(o+", ");
+               }
+               System.err.println("");
+               cnt++;
+           }
+       }
+       return cnt;
+    }
     private void testSmall(String f, String t, int cnt) {
         Graph<String, Number> g = TestGraphs.getSmallGraph();
         SimplePaths<String, Number> p = new SimplePaths<String, Number>(g);
@@ -60,6 +97,14 @@ public class TestPaths {
         g.removeVertex("p13");
         g.removeVertex("p15");
         g.removeVertex("p16");
+        return g;
+    }
+    private Graph<String, Number> verySimplifiedDemoGraph() {
+        Graph<String, Number> g = simplifiedDemoGraph();
+        for (String v:new ArrayList<String>(g.getVertices())) {
+            if (!v.startsWith("c"))
+                g.removeVertex(v);
+        }   
         return g;
     }
 
