@@ -15,7 +15,7 @@ import java.util.Map;
 import edu.uci.ics.jung.graph.Graph;
 
 
-public class Paths<V, E, P extends SimplePath<V>> {
+public class Paths<V, E, P extends Path<V>> {
     
 
 
@@ -28,12 +28,18 @@ public class Paths<V, E, P extends SimplePath<V>> {
      */
     private final List<P>[][] paths;
     private int counter = 0;
-    
+    private final PathFactory<V, P> factory;
+
     @SuppressWarnings("unchecked")
     public Paths( Graph<V,E>  g ) {
+        this(g, (PathFactory<V,P>) SimplePath.createFactory(g));
+    }
+    @SuppressWarnings("unchecked")
+    public Paths( Graph<V,E>  g , PathFactory<V,P> factory) {
         Collection<V> vv = g.getVertices();
         paths = (List<P>[][]) Array.newInstance(List.class, vv.size(), vv.size());
         vertex = new ArrayList<V>(vv);
+        this.factory = factory;
         initializeVertexIndex();
         initializePathsOfLengthOne(g);
         royWarshall();
@@ -50,7 +56,7 @@ public class Paths<V, E, P extends SimplePath<V>> {
             V from = vertex.get(i);
             for (V to : graph.getNeighbors(from) ) {
                 int j = vertexIndex.get(to);
-                P v = singleStep(graph, from, to);
+                P v = factory.create(from,to);
                 if (v!=null) {
                     paths[i][j] = new ArrayList<P>();
                     counter++;
@@ -77,7 +83,7 @@ public class Paths<V, E, P extends SimplePath<V>> {
                     }
                     for (P p:paths[i][k]) {
                         for (P q:paths[k][j]) {
-                            P pq = combinePaths(p,q);
+                            P pq = factory.combine(p,q);
                             if (pq!=null) {
                                 counter++;
                                 paths[i][j].add(pq);
@@ -115,16 +121,6 @@ public class Paths<V, E, P extends SimplePath<V>> {
             }
         }
         return rslt;
-    }
-    protected P singleStep(Graph<V, E> g, V from, V to) {
-        return (P) new SimplePath<V>(from,to);
-    }
-    protected P combinePaths(P first,P andThen) {
-        if (first.canBeFollowedBy(andThen)) {
-           return (P) new SimplePath<V>(first,andThen);
-        } else {
-            return null;
-        }
     }
     
 

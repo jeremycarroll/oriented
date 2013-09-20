@@ -3,39 +3,42 @@
  ************************************************************************/
 package net.sf.oriented.util.graph;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
+import edu.uci.ics.jung.graph.Graph;
 
 
 public class SimplePath<V> implements Path<V> {
-    final Object path[];
+    final V path[];
     
-    protected SimplePath(V from, V to) {
-        path = new Object[]{from,to};
+    @SuppressWarnings("unchecked")
+    protected SimplePath(Class<V> clazzV, V from, V to) {
+        path = (V[]) Array.newInstance(clazzV, 2);
+        path[0] = from;
+        path[1] = to;
     }
 
     protected SimplePath(SimplePath<V> first, SimplePath<V> andThen) {
-        path = new Object[first.path.length+andThen.path.length-1];
-        System.arraycopy(first.path, 0, path, 0, first.path.length);
+        path = Arrays.copyOf(first.path, first.path.length + andThen.path.length - 1);
         System.arraycopy(andThen.path, 1, path, first.path.length, andThen.path.length - 1);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public V getSource() {
-        return (V)path[0];
+        return path[0];
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public V getDestination() {
-        return (V)path[path.length-1];
+        return path[path.length-1];
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<V> getPath() {
-        return (List<V>) Arrays.asList(path);
+        return Arrays.asList(path);
     }
     
     protected boolean canBeFollowedBy(SimplePath<V> p) {
@@ -52,6 +55,32 @@ public class SimplePath<V> implements Path<V> {
             
         return true;
     }
+    
+    static <V,E> PathFactory<V,SimplePath<V>> createFactory(Graph<V,E> g) {
+        Iterator<V> it = g.getVertices().iterator();
+        if (!it.hasNext()) {
+            return null;
+        }
+        @SuppressWarnings("unchecked")
+        final Class<V> clazzV =(Class<V>) it.next().getClass();
+        return new PathFactory<V,SimplePath<V>>(){
+
+            @Override
+            public SimplePath<V> create(V from, V to) {
+                return new SimplePath<V>(clazzV,from,to);
+            }
+
+
+            @Override
+            public SimplePath<V> combine(SimplePath<V> first,SimplePath<V> andThen) {
+                if (first.canBeFollowedBy(andThen)) {
+                    return new SimplePath<V>(first,andThen);
+                }
+                return null;
+            }};
+        
+    }
+    
 }
 
 /************************************************************************
