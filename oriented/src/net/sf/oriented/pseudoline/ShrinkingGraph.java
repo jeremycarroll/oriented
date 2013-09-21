@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.pseudoline.TensionPath.EdgeInfo;
 
 import com.google.common.collect.ImmutableList;
 
@@ -42,6 +43,38 @@ public class ShrinkingGraph extends PrunableGraph {
         }
         wam.trailRemove(t);
         return rslt;
+    }
+    
+    class FaceConstraints extends FaceAnalyzer {
+        
+        FaceConstraints(FaceConstraints faceConstraints) {
+            super(faceConstraints.face);
+        }
+
+        public FaceConstraints(Face face) {
+           super(face);
+        }
+
+        @Override
+        boolean add(Tension f, Tension s, Tension t) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        public FaceConstraints copy() {
+            return new FaceConstraints(this);
+        }
+
+        public void forward(EdgeInfo edgeInfo) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void backward(EdgeInfo edgeInfo) {
+            // TODO Auto-generated method stub
+            
+        }
+        
     }
     
     class EdgeSelector extends FaceAnalyzer {
@@ -209,6 +242,10 @@ public class ShrinkingGraph extends PrunableGraph {
             }
         }
         return true;
+    }
+
+    public FaceConstraints faceConstaints(Face from) {
+        return new FaceConstraints(from);
     }
 }
 

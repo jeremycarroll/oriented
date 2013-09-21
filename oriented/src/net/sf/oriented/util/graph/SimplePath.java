@@ -12,7 +12,7 @@ import edu.uci.ics.jung.graph.Graph;
 
 
 public class SimplePath<V> implements Path<V> {
-    final V path[];
+    protected final V path[];
     
     @SuppressWarnings("unchecked")
     protected SimplePath(Class<V> clazzV, V from, V to) {

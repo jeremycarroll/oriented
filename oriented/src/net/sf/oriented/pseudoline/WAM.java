@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+
 import net.sf.oriented.omi.Face;
 
 /**
@@ -189,6 +190,10 @@ public class WAM {
         growing = shrinking.growing;
     }
     
+    public void computeCycles() {
+        TensionPaths simplePaths = new TensionPaths(this, shrinking);
+        
+    }
     /**
      * 
      * @param tension
