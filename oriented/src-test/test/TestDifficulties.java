@@ -21,7 +21,7 @@ import org.junit.Test;
 
 
 public class TestDifficulties {
-
+// circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
     @Test
     public void testCeva() {
