@@ -5,12 +5,15 @@ package net.sf.oriented.pseudoline;
 
 
 public class TensionGraph extends PrunableGraph {
+    
+    final EuclideanPseudoLines pseudolines;
 
-    public TensionGraph(AbstractTGraph gg) {
-        copy(gg);
+    public TensionGraph(EuclideanPseudoLines euclideanPseudoLines) {
+        this.pseudolines = euclideanPseudoLines;
     }
 
-    public TensionGraph() {
+    public EuclideanPseudoLines getEuclideanPseudoLines() {
+        return pseudolines;
     }
     
 

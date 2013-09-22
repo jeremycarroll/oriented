@@ -9,14 +9,16 @@ import net.sf.oriented.util.graph.PathFactory;
 public class TensionPathFactory implements PathFactory<Face, TensionPath>{
     
     final ShrinkingGraph graph;
+    final int lineCount;
     
     TensionPathFactory(ShrinkingGraph g) {
         graph = g;
+        lineCount = g.getEuclideanPseudoLines().getEquivalentOM().elements().length;
     }
 
     @Override
     public TensionPath create(Face from, Face to) {
-        return checkNotBad(new TensionPath(graph,from,to));
+        return checkNotBad(new TensionPath(graph,lineCount,from,to));
     }
 
     @Override

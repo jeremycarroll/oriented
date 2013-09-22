@@ -5,9 +5,9 @@ package net.sf.oriented.pseudoline;
 
 public class Difficulty {
     
-    final TensionGraph rslt;
+    final PrunableGraph rslt;
     Difficulty(GrowingGraph gg) {
-        rslt = new TensionGraph(gg);
+        rslt = new PrunableGraph(gg);
     }
 
 }

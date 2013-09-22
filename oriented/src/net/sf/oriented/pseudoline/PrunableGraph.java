@@ -10,6 +10,13 @@ import java.util.List;
 import net.sf.oriented.omi.Face;
 
 public class PrunableGraph extends AbstractTGraph {
+    public PrunableGraph() {
+    }
+
+    public PrunableGraph(AbstractTGraph gg) {
+        copy(gg);
+    }
+
     final class EdgePruner extends TwistedFace {
         private EdgePruner(Face f) {
             super(f);

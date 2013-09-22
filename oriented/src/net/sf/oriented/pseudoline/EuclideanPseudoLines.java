@@ -423,7 +423,7 @@ public class EuclideanPseudoLines {
     }
 
     public TensionGraph getTensions() {
-        TensionGraph rslt = new TensionGraph();
+        TensionGraph rslt = new TensionGraph(this);
         switchFaceLattice();
         for (Face f:getFaceLattice().withDimension(0)) {
             if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)

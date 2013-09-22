@@ -3,38 +3,65 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.pseudoline.ShrinkingGraph.FaceConstraints;
 import net.sf.oriented.util.graph.SimplePath;
 
 public class TensionPath extends SimplePath<Face> {
     class EdgeInfo {
+        
+        // the jth line is represented as the jth bit
+        int possibleLines;
+        private final Set<Tension> edges;
+        final int index;
 
-        public EdgeInfo(ShrinkingGraph g, Face from, Face to) {
-            // TODO Auto-generated constructor stub
+        public EdgeInfo(int index, ShrinkingGraph g, Face from, Face to) {
+            edges = (Set<Tension>) g.getIncidentEdges(from);
+            edges.retainAll(g.getIncidentEdges(to));
+            for (Tension t:edges) {
+                possibleLines |= 1 << t.ordinal;
+            }
+            this.index = index;
         }
 
         // Copy constructor.
-        public EdgeInfo(EdgeInfo edgeInfo) {
-            // TODO Auto-generated constructor stub
+        public EdgeInfo(int index, EdgeInfo edgeInfo) {
+            this.possibleLines = edgeInfo.possibleLines;
+            this.edges = new HashSet<Tension>(edgeInfo.edges);
+            this.index = index;
         }
         
     }
     
     final EdgeInfo edges[];
     final FaceConstraints faces[];
+    // which lines appear in which edges
+    // the ith edge is represented as the ith bit in each entry in the map
+    // the jth line is the jth entry in the map
+    final int lineMap[];
+    
+    // the jth bit is set if this path definitely uses the jth line
+    int necessaryLines;
 
-    protected TensionPath(ShrinkingGraph g, Face from, Face to) {
+    protected TensionPath(ShrinkingGraph g, int lineCount, Face from, Face to) {
         super(Face.class, from, to);
         edges = new EdgeInfo[1];
-        edges[0] = new EdgeInfo(g, from,to);
-        faces = new FaceConstraints[]{g.faceConstaints(from),g.faceConstaints(to)};
+        edges[0] = new EdgeInfo(0,g, from,to);
+        faces = new FaceConstraints[]{g.faceConstaints(0,this,from),g.faceConstaints(1,this,to)};
         faces[0].forward(edges[0]);
         faces[1].backward(edges[0]);
+        lineMap = new int[lineCount];
     }
 
     public TensionPath(TensionPath first, TensionPath andThen) {
         super(first,andThen);
+        lineMap = first.lineMap.clone();
+        for (int i=0;i<lineMap.length;i++) {
+            lineMap[i] |= andThen.lineMap[i]<< first.edges.length;
+        }
         edges = new EdgeInfo[first.edges.length+andThen.edges.length];
         cloneEdges(0,first.edges);
         cloneEdges(first.edges.length,andThen.edges);
@@ -46,13 +73,13 @@ public class TensionPath extends SimplePath<Face> {
 
     private void cloneFaces(int pos, FaceConstraints[] faces) {
         for (int i=0;i<faces.length;i++) {
-            this.faces[i+pos] = faces[i].copy();
+            this.faces[i+pos] = faces[i].copy(i+pos);
         }
     }
 
     private void cloneEdges(int pos, EdgeInfo[] edges) {
         for (int i=0;i<edges.length;i++) {
-            this.edges[i+pos] = new EdgeInfo(edges[i]);
+            this.edges[i+pos] = new EdgeInfo(i+pos,edges[i]);
         }
     }
 

@@ -29,10 +29,15 @@ public class ShrinkingGraph extends PrunableGraph {
     
     final private WAM wam;
     final GrowingGraph growing;
+    final EuclideanPseudoLines pseudolines;
     ShrinkingGraph(WAM wam, TensionGraph orig) {
         this.wam = wam;
         copy(orig);
         growing = new GrowingGraph(wam, this);
+        pseudolines = orig.getEuclideanPseudoLines();
+    }
+    public EuclideanPseudoLines getEuclideanPseudoLines() {
+        return pseudolines;
     }
     
     @Override
@@ -46,13 +51,23 @@ public class ShrinkingGraph extends PrunableGraph {
     }
     
     class FaceConstraints extends FaceAnalyzer {
+        final int index;
+        final TensionPath path;
         
-        FaceConstraints(FaceConstraints faceConstraints) {
+        FaceConstraints(int ix, FaceConstraints faceConstraints) {
             super(faceConstraints.face);
+            out = faceConstraints.out;
+            in = faceConstraints.in;
+            path = faceConstraints.path;
+            index = ix;
         }
 
-        public FaceConstraints(Face face) {
+        public FaceConstraints(int i, TensionPath path, Face face) {
            super(face);
+           out = new ArrayList<Tension>(out);
+           in = new ArrayList<Tension>(in);
+           index = i;
+           this.path = path;
         }
 
         @Override
@@ -61,8 +76,8 @@ public class ShrinkingGraph extends PrunableGraph {
             return false;
         }
 
-        public FaceConstraints copy() {
-            return new FaceConstraints(this);
+        public FaceConstraints copy(int i) {
+            return new FaceConstraints(i,this);
         }
 
         public void forward(EdgeInfo edgeInfo) {
@@ -244,8 +259,8 @@ public class ShrinkingGraph extends PrunableGraph {
         return true;
     }
 
-    public FaceConstraints faceConstaints(Face from) {
-        return new FaceConstraints(from);
+    public FaceConstraints faceConstaints(int i, TensionPath path, Face from) {
+        return new FaceConstraints(i, path, from);
     }
 }
 
