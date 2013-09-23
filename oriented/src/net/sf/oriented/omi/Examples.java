@@ -207,6 +207,13 @@ public class Examples {
         }
         return circularSaw3;
     }
+    
+    public static OM deformedCircularSaw() {
+        return circularsaw3().getChirotope().mutate(1,1,2,3);
+    }
+    public static OM deformedCeva() {
+        return ceva().getChirotope().mutate(-1,1,2,3).mutate(-1,3,4,5);
+    }
     /**
      * Suvorov's non-isotopic Oriented Matroid,
      * (as presented in {@link Bibliography#björnerEtAl1999}

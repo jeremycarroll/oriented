@@ -21,6 +21,26 @@
             <fileset dir="${website.dir}" includes="**"/>
 		</copy>
 		<exec executable="scripts/mkwebpage" >
+		    <arg value="--deformedCeva"/>
+		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
+		    <arg value="A"/>
+		    <arg value="--infinity"/>
+		    <arg value="B"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
+		    <arg value="--deformedCircularSaw"/>
+		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		    <arg value="--infinity"/>
+		    <arg value="A"/>
+		    <arg value="--infinity"/>
+		    <arg value="B"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
 		    <arg value="--chapter1"/>
 		    <arg value="-v"/>
 		</exec>
