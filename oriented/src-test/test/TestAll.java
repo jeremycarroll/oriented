@@ -35,6 +35,8 @@ import org.junit.runners.Suite.SuiteClasses;
     TestRealization.class,
     TestGrassmannPlucker.class,
     TestDrawing.class,
+    TestPlusMinusPlus.class,
+    TestDifficulties.class,
 })
 @RunWith(Suite.class)
 public class TestAll {
