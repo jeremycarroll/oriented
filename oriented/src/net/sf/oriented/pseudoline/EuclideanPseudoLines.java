@@ -66,9 +66,9 @@ public class EuclideanPseudoLines {
         this(om,om.asInt(infinity));
     }
 
-    final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
-    final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
-    final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
+//    final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
+//    final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
+//    final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
     /**
      * TODO: this field is incorrectly named
      */
@@ -420,6 +420,21 @@ public class EuclideanPseudoLines {
         DirectedGraph<Face,Tension> tensions = getTensions();
         
         return null;
+    }
+    
+    public List<TGVertex> getTGVertices() {
+        List<TGVertex> rslt = new ArrayList<TGVertex>();
+        switchFaceLattice();
+        for (Face f:getFaceLattice().withDimension(0)) {
+            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)
+               rslt.addAll(TGVertex.fromPoint(f, this.notLoops.minus(f.covector().support()),original.ffactory() ));
+        }
+        for (Face f:getFaceLattice().withDimension(2)) {
+            if (f.covector().sign(getInfinity())==1 && !touchesInfinity(f)) {
+                rslt.addAll(TGVertex.fromFace(f,original.ffactory()));
+            }
+        }
+        return rslt;
     }
 
     public TensionGraph getTensions() {
