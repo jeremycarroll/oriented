@@ -3,7 +3,10 @@
  ************************************************************************/
 package oriented;
 
-import static net.sourceforge.argparse4j.impl.Arguments.*;
+import static net.sourceforge.argparse4j.impl.Arguments.store;
+import static net.sourceforge.argparse4j.impl.Arguments.storeConst;
+import static net.sourceforge.argparse4j.impl.Arguments.storeFalse;
+import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +18,9 @@ import javax.imageio.stream.ImageOutputStream;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
-import net.sf.oriented.pseudoline.PseudoLineDrawing;
-import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.ImageOptions;
+import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;

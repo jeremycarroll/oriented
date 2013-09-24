@@ -3,7 +3,9 @@
  ************************************************************************/
 package oriented;
 
-import static net.sourceforge.argparse4j.impl.Arguments.*;
+import static net.sourceforge.argparse4j.impl.Arguments.append;
+import static net.sourceforge.argparse4j.impl.Arguments.storeConst;
+import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,14 +25,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
-import java.net.URL;
-
-import com.google.common.base.Charsets;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
-
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
@@ -39,15 +34,21 @@ import net.sf.oriented.omi.Options;
 import net.sf.oriented.omi.SetFactory;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
-import net.sf.oriented.pseudoline.PseudoLineDrawing;
-import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.ImageOptions;
+import net.sf.oriented.pseudoline.PseudoLineDrawing;
 import net.sf.oriented.util.combinatorics.Lexicographic;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.MutuallyExclusiveGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 
 public class WebPage {
 

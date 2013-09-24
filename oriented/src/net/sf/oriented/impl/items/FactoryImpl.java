@@ -7,14 +7,13 @@ package net.sf.oriented.impl.items;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
-
-
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.Options;
+
+import com.google.common.reflect.TypeToken;
 
 //@formatter:off
 public abstract class FactoryImpl<

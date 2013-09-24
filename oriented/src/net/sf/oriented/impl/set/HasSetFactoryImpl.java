@@ -5,14 +5,14 @@
 
 package net.sf.oriented.impl.set;
 
-import com.google.common.reflect.TypeToken;
-
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
 import net.sf.oriented.impl.items.HasFactoryImpl;
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.SetOf;
+
+import com.google.common.reflect.TypeToken;
 
 /**
  * Things that have factories that build sets.

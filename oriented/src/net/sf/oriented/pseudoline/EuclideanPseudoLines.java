@@ -6,21 +6,17 @@ package net.sf.oriented.pseudoline;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
-import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.util.combinatorics.Permutation;
 import edu.uci.ics.jung.graph.DirectedGraph;
 
@@ -35,7 +31,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
  *
  */
 public class EuclideanPseudoLines {
-    private final OM original;
+    public final OM original;
     private final OMasChirotope modified;
     private Label[] reorientation;
     private Permutation permutation;
@@ -73,7 +69,7 @@ public class EuclideanPseudoLines {
     /**
      * TODO: this field is incorrectly named
      */
-    private UnsignedSet notLoops;
+    public UnsignedSet notLoops;
     
     
     
@@ -403,7 +399,7 @@ public class EuclideanPseudoLines {
         rslt.add(new Face[]{point,edge});
     }
 
-    FaceLattice getFaceLattice() {
+    public FaceLattice getFaceLattice() {
         return flHelper.modified.getFaceLattice();
     }
 
@@ -423,21 +419,6 @@ public class EuclideanPseudoLines {
         return null;
     }
     
-    public List<TGVertex> getTGVertices() {
-        List<TGVertex> rslt = new ArrayList<TGVertex>();
-        switchFaceLattice();
-        for (Face f:getFaceLattice().withDimension(0)) {
-            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)
-               rslt.addAll(TGVertex.fromPoint(f, this.notLoops.minus(f.covector().support()),original.ffactory() ));
-        }
-        for (Face f:getFaceLattice().withDimension(2)) {
-            if (f.covector().sign(getInfinity())==1 && !touchesInfinity(f)) {
-                rslt.addAll(TGVertex.fromFace(f,original.ffactory()));
-            }
-        }
-        return rslt;
-    }
-
     public TensionGraph getTensions() {
         TensionGraph rslt = new TensionGraph(this);
         switchFaceLattice();
@@ -464,7 +445,7 @@ public class EuclideanPseudoLines {
         return rslt;
     }
 
-    private boolean touchesInfinity(Face f) {
+    public boolean touchesInfinity(Face f) {
         for (Face e:f.lower()) {
             for (Face v:e.lower()) {
                 if (v.covector().sign(getInfinity())==0) {

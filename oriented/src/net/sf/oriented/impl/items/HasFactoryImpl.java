@@ -4,11 +4,11 @@
  ************************************************************************/
 package net.sf.oriented.impl.items;
 
-import com.google.common.reflect.TypeToken;
-
 import net.sf.oriented.impl.util.TypeChecker;
 import net.sf.oriented.omi.Factory;
 import net.sf.oriented.omi.FactoryFactory;
+
+import com.google.common.reflect.TypeToken;
 
 /**
  * 

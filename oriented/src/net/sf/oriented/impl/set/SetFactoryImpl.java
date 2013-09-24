@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
-
 import net.sf.oriented.impl.items.FactoryImpl;
 import net.sf.oriented.impl.items.FactoryInternal;
 import net.sf.oriented.impl.items.HasFactory;
@@ -21,6 +19,8 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.JavaSet;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOf;
+
+import com.google.common.reflect.TypeToken;
 
 //@formatter:off
 abstract public class SetFactoryImpl<

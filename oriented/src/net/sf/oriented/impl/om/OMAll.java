@@ -22,9 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
@@ -39,6 +36,9 @@ import net.sf.oriented.omi.OMasRealized;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.polytope.DualFaceLattice;
 import net.sf.oriented.util.combinatorics.Permutation;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class OMAll extends AbsOMAxioms<Object>  {
 

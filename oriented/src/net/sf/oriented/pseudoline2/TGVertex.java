@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
+
+import com.google.common.base.Preconditions;
 
 /**
  * This class is destined to be the class of vertices in a rejigged TensionGraph

@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
 
 public class TGEdge {

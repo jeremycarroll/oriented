@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.oriented.omi.Face;
-
 public class PrunableGraph extends AbstractTGraph {
     public PrunableGraph() {
     }
