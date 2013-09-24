@@ -72,6 +72,16 @@ public class TestDifficulties {
     public void testSaw3a() {
         count("circularsaw3","0",10,4,1,1000);
     }
+    
+    @Test
+    public void testDeformedCeva() {
+        count("deformedCeva","0",10,4,0,1000);
+    }
+
+    @Test
+    public void testDeformedSaw() {
+        count("deformedCircularSaw","0",10,4,0,1000);
+    }
 
     @Ignore
     @Test
