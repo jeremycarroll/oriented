@@ -20,6 +20,7 @@ import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.util.combinatorics.Permutation;
 import edu.uci.ics.jung.graph.DirectedGraph;
 

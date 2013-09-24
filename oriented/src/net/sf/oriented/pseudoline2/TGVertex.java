@@ -1,7 +1,7 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.pseudoline;
+package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +14,7 @@ import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.pseudoline.PlusMinusPlus;
 
 /**
  * This class is destined to be the class of vertices in a rejigged TensionGraph
@@ -29,7 +30,7 @@ public class TGVertex {
         identity = id;
         extent = Arrays.asList(faces);
     }
-    static List<TGVertex> fromPoint(Face cocircuit, UnsignedSet lines, FactoryFactory fact) {
+    public static List<TGVertex> fromPoint(Face cocircuit, UnsignedSet lines, FactoryFactory fact) {
         Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
         Preconditions.checkArgument(lines.size()>=3);
         for (Face f : cocircuit.higher()) {
@@ -57,7 +58,7 @@ public class TGVertex {
         return result;
     }
 
-    static List<TGVertex> fromFace(Face tope, FactoryFactory fact) {
+    public static List<TGVertex> fromFace(Face tope, FactoryFactory fact) {
 //        Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
 //        Preconditions.checkArgument(lines.size()>=3);
 //        for (Face f : cocircuit.higher()) {
