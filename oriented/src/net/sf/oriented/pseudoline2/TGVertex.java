@@ -30,7 +30,7 @@ public class TGVertex {
         identity = id;
         extent = Arrays.asList(faces);
     }
-    public static List<TGVertex> fromPoint(Face cocircuit, UnsignedSet lines, FactoryFactory fact) {
+    public static void fromPoint(Face cocircuit, TensionGraph tg, UnsignedSet lines, FactoryFactory fact) {
         Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
         Preconditions.checkArgument(lines.size()>=3);
         for (Face f : cocircuit.higher()) {
@@ -38,7 +38,6 @@ public class TGVertex {
         }
         List<Label> plus = new ArrayList<Label>();
         List<Label> minus = new ArrayList<Label>();
-        List<TGVertex> result = new ArrayList<TGVertex>();
         for (int sz=3;sz<=lines.size();sz++) {
             for (UnsignedSet someLines:lines.subsetsOfSize(sz)) {
                 Label labels[] = someLines.toArray();
@@ -48,17 +47,16 @@ public class TGVertex {
                     for (int i=0;i<labels.length;i++) {
                         (pmp[i]?plus:minus).add(labels[i]);
                     }
-                    result.add( new TGVertex(
+                    tg.addVertex( new TGVertex(
                     fact.signedSets().construct(fact.unsignedSets().copyBackingCollection(plus), 
                             fact.unsignedSets().copyBackingCollection(minus)),
                             cocircuit ) );
                 }
             }
         }
-        return result;
     }
 
-    public static List<TGVertex> fromFace(Face tope, FactoryFactory fact) {
+    public static void fromFace(Face tope, TensionGraph tg, FactoryFactory fact) {
 //        Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
 //        Preconditions.checkArgument(lines.size()>=3);
 //        for (Face f : cocircuit.higher()) {
@@ -66,7 +64,6 @@ public class TGVertex {
 //        }
 //        List<Label> plus = new ArrayList<Label>();
 //        List<Label> minus = new ArrayList<Label>();
-        List<TGVertex> result = new ArrayList<TGVertex>();
 //        for (int sz=3;sz<=lines.size();sz++) {
 //            for (UnsignedSet someLines:lines.subsetsOfSize(sz)) {
 //                Label labels[] = someLines.toArray();
@@ -83,7 +80,6 @@ public class TGVertex {
 //                }
 //            }
 //        }
-        return result;
     }
     
     

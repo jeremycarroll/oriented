@@ -32,15 +32,16 @@ public class TGFactory {
     }
 
     private void initVertices() {
-        List<TGVertex> rslt = new ArrayList<TGVertex>();
         euclideanPseudoLines.switchFaceLattice();
         for (Face f:euclideanPseudoLines.getFaceLattice().withDimension(0)) {
             if (f.covector().sign(euclideanPseudoLines.getInfinity())==1 && f.higher().size()>4)
-               rslt.addAll(TGVertex.fromPoint(f, euclideanPseudoLines.notLoops.minus(f.covector().support()),euclideanPseudoLines.original.ffactory() ));
+               TGVertex.fromPoint(f, result,
+                       euclideanPseudoLines.notLoops.minus(f.covector().support()),
+                       euclideanPseudoLines.original.ffactory() );
         }
         for (Face f:euclideanPseudoLines.getFaceLattice().withDimension(2)) {
             if (f.covector().sign(euclideanPseudoLines.getInfinity())==1 && !euclideanPseudoLines.touchesInfinity(f)) {
-                rslt.addAll(TGVertex.fromFace(f,euclideanPseudoLines.original.ffactory()));
+                TGVertex.fromFace(f,result, euclideanPseudoLines.original.ffactory());
             }
         }
     }
