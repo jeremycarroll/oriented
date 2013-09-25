@@ -264,6 +264,11 @@ public class SignedSetImpl extends
 				.intersection(x), factory());
 	}
 
+    @Override
+    public SignedSet intersection(SignedSet b) {
+        return new SignedSetImpl(plus().intersection(b.plus()), minus().intersection(b.plus()), factory());
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

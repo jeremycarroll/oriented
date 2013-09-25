@@ -183,7 +183,11 @@ public class SignedSetImpl extends
 				.intersection(x), factory());
 	}
 
-
+    @Override
+    public SignedSet intersection(SignedSet b) {
+        SignedSetImpl bb = remake(b);
+        return make(plus & bb.plus, minus & bb.minus);
+    }
 
 }
 /************************************************************************

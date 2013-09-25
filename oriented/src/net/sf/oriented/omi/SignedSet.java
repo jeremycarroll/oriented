@@ -59,6 +59,12 @@ public interface SignedSet {
 	 * @return The unsigned set of elements differing in sign
 	 */
 	public abstract UnsignedSet separation(SignedSet b);
+    /**
+     * The set of elements that have the same sign in this and b.
+     * @param b The signed set to compare with
+     * @return The signed set of elements with the same sign
+     */
+    public abstract SignedSet intersection(SignedSet b);
 
 	/**
 	 * Signed set composition.
