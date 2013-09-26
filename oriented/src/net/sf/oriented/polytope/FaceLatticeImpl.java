@@ -125,6 +125,11 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
         public int hashCode() {
             return covector.hashCode();
         }
+        
+        @Override
+        public String toString() {
+            return covector+"["+dimension+":"+higher.length+"-"+lower.length+"]";
+        }
     }
     static class TopOrBottomImpl extends AbsFaceImpl {
         TopOrBottomImpl(Type type, SignedSet covector, int dimension, AbsFaceImpl minOrMax[]) {
@@ -141,10 +146,10 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
         @Override
         void allocateArrays() {}
         
-        @Override
-        public String toString() {
-            return type().toString();
-        }
+//        @Override
+//        public String toString() {
+//            return type().toString();
+//        }
 
     }
     static final class TopImpl extends TopOrBottomImpl {
@@ -171,6 +176,9 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
         @Override
         public int hashCode() {
             return 77;
+        }@Override
+        public String toString() {
+            return "TOP["+dimension()+":0-"+lower.length+"]";
         }
         
     }
@@ -216,10 +224,10 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
             higher = new AbsFaceImpl[counter];
             counter = 0;
         }
-        @Override
-        public String toString() {
-            return type().toString()+": "+covector().toString();
-        }
+//        @Override
+//        public String toString() {
+//            return type().toString()+": "+covector().toString();
+//        }
     }
     
     private final AbsFaceImpl top, bottom;

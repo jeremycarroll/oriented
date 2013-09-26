@@ -30,9 +30,24 @@ public class TGVertex {
     private final List<Face> extent;
     private final SignedSet  identity;
     
-    private TGVertex(SignedSet id, Face ... faces ) {
+    private final String desc;
+    private final Face source;
+    
+    private TGVertex(SignedSet id, Face source, String desc, Face ... faces ) {
         identity = id;
         extent = Arrays.asList(faces);
+        this.source = source;
+        this.desc = desc;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuffer rslt = new StringBuffer(identity +": \""+desc+"\" ");
+        for (Face f:extent) {
+            rslt.append(f.toString()+"; ");
+        }
+        return rslt.toString();
+        
     }
     public static void fromPoint(Face cocircuit, TensionGraph tg, UnsignedSet lines, FactoryFactory fact) {
         Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
@@ -54,6 +69,8 @@ public class TGVertex {
                     tg.addVertex( new TGVertex(
                     fact.signedSets().construct(fact.unsignedSets().copyBackingCollection(plus), 
                             fact.unsignedSets().copyBackingCollection(minus)),
+                            cocircuit,
+                            "Point: "+someLines,
                             cocircuit ) );
                 }
             }
@@ -70,7 +87,10 @@ public class TGVertex {
         }
         if (lines.length==3) {
             // easy case
-            tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),tope.covector(),lines),tope));
+            tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),tope.covector(),lines),
+                    tope,
+                    "Triangle",
+                    tope));
         } else {
             // find any parallel sides first
             int parallel[] = new int[lines.length*(lines.length-1)/2];
@@ -134,7 +154,10 @@ public class TGVertex {
                 
                 // TODO: later, nonUniform points
                 
-                tg.addVertex(new TGVertex(id,extent.toArray(new Face[0])));
+                tg.addVertex(new TGVertex(id,
+                        tope,
+                        "Polygon: "+bitCount,
+                              extent.toArray(new Face[0])));
             }
         }
     }

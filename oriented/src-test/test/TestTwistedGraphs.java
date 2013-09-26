@@ -8,6 +8,7 @@ import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline2.TGFactory;
+import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.pseudoline2.TensionGraph;
 
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCeva() {
-        count("ceva","0",10,4,2,10000);
+        count("ceva","0",14,4,2,10000);
     }
 
     @Test
@@ -53,6 +54,9 @@ public class TestTwistedGraphs {
         OM om = Examples.all().get(omName);
         EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
         TensionGraph ten = new TGFactory(pseudoLines).create();
+        for (TGVertex v:ten.getVertices()) {
+            System.err.println(v);
+        }
         Assert.assertEquals(tensions,ten.getVertices().size());
         ten.prune();
 //        if (prunedTensions != ten.getVertices().size()) {
