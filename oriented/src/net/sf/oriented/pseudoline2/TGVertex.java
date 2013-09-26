@@ -125,13 +125,16 @@ public class TGVertex {
                 }
                 
                 SignedSet id = createIdentity(fact,tope.covector(),sides,lines);
-                
+//                System.err.println(id);
                 // check point of intersection is on the 'correct' side of at least one line
                 for (int i=0;i<lines.length;i++) {
                     if ( ( (1<<i) & sides ) != 0 ) {
                         for (int j=i+1;j<lines.length;j++) {
                             if ( ( (1<<j) & sides ) != 0 ) {
                                 SignedSet inter = epl.lineIntersection(lines[i],lines[j]);
+                                if (inter.conformsWith(tope.covector())) {
+                                    continue;
+                                }
                                 SignedSet otherLines = inter.intersection(id);
                                 if (otherLines.support().isEmpty() ) {
                                     continue sides;
