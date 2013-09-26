@@ -219,6 +219,10 @@ public class TGVertex {
             }
         }
     }
+
+    public List<Face> getExtent() {
+        return extent;
+    }
 }
 
 

@@ -5,6 +5,7 @@ package test;
 
 import junit.framework.Assert;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline2.TGFactory;
@@ -25,6 +26,78 @@ public class TestTwistedGraphs {
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,4,1,1000);
+    }
+    
+    @Test
+    public void testSawParts() {
+        OM om = Examples.circularsaw3();
+        EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,"0");
+        TensionGraph ten = new TGFactory(pseudoLines).create();
+        
+        int bad = 0; // 0
+        int tri1_0 = 0; // 4
+        int tri1_1 = 0; // 6
+        int tri1_2 = 0; // 3
+        int tri1_3 = 0; // 3
+        int quad2_2 = 0; // 3
+        int quad2_3 = 0; // 3
+        for (TGVertex v:ten.getVertices()) {
+            int tri = 0;
+            int quad = 0;
+            for (Face f:v.getExtent()) {
+                switch (f.lower().size()) {
+                case 3:
+                    tri++;
+                    break;
+                case 4:
+                    quad++;
+                    break;
+                default:
+                     bad++;
+                }   
+            }
+            switch (tri) {
+            case 1:
+                switch (quad) {
+                case 0:
+                    tri1_0++;
+                    break;
+                case 1:
+                    tri1_1++;
+                    break;
+                case 2:
+                    tri1_2++;
+                    break;
+                case 3:
+                    tri1_3++;
+                    break;
+                default:
+                        bad++;
+                }
+                break;
+            case 2:
+                switch (quad) {
+                case 2:
+                    quad2_2++;
+                    break;
+                case 3:
+                    quad2_3++;
+                    break;
+                default:
+                        bad++;
+                }
+                break;
+            default:
+                bad++;
+            }
+        }
+        Assert.assertEquals(4,tri1_0);
+        Assert.assertEquals(6,tri1_1);
+        Assert.assertEquals(3,tri1_2);
+        Assert.assertEquals(3,tri1_3);
+        Assert.assertEquals(3,quad2_2);
+        Assert.assertEquals(3,quad2_3);
+        Assert.assertEquals(0,bad);
     }
 
     @Test
