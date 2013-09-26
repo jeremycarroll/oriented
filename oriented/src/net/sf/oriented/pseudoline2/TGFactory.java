@@ -4,12 +4,19 @@
 package net.sf.oriented.pseudoline2;
 
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TGFactory {
     
     private final EuclideanPseudoLines euclideanPseudoLines;
-    public TensionGraph result;
+    private TensionGraph result;
+    private Map<SignedSet,TGVertex> id2vertex;
 
     public TGFactory(EuclideanPseudoLines s) {
         this.euclideanPseudoLines = s;
@@ -18,13 +25,49 @@ public class TGFactory {
     public TensionGraph create() {
         result = new TensionGraph(euclideanPseudoLines);
         initVertices();
+        checkVertices();
         initEdges();
         return result;
         
     }
 
+    private void checkVertices() {
+       id2vertex = new HashMap<SignedSet,TGVertex>();
+       for (TGVertex v:result.getVertices()) {
+           TGVertex old = id2vertex.put(v.getId(), v);
+           if (old != null) {
+               throw new IllegalStateException(v.getId()+" has both "+v + " and "+old);
+           }
+       }
+        
+    }
+
     private void initEdges() {
-        // TODO Auto-generated method stub
+        TGVertex all[] = new TGVertex[result.getVertexCount()];
+        result.getVertices().toArray(all);
+        for (int i=0;i<all.length;i++) {
+            SignedSet idI = all[i].getId();
+            for (int j=i+1;j<all.length;j++) {
+                SignedSet idJ = all[j].getId();
+                // find edge ...
+                SignedSet line = idI.intersection(idJ.opposite());
+                UnsignedSet unsignedLine = idI.support().intersection(idJ.support());
+                if (line.size()==1
+                     && unsignedLine.size() == 1
+                     && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()) {
+                    TGEdge edge;
+                    Label lbl = unsignedLine.iterator().next();
+                    int ix = euclideanPseudoLines.getEquivalentOM().asInt(lbl);
+                    if (line.minus().isEmpty()) {
+                        edge = new TGEdge(lbl, ix, all[i], all[j]);
+                    } else {
+                        edge = new TGEdge(lbl, ix, all[j], all[i]);
+                    }
+                    result.addEdge(edge, edge.source, edge.dest);
+                }
+                
+            }
+        }
         
     }
 

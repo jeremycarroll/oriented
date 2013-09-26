@@ -13,6 +13,7 @@ import java.util.Set;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
@@ -27,23 +28,35 @@ import com.google.common.base.Preconditions;
  *
  */
 public class TGVertex {
-    private final List<Face> extent;
+    private final SetOfSignedSet extent;
     private final SignedSet  identity;
     
     private final String desc;
     private final Face source;
     
-    private TGVertex(SignedSet id, Face source, String desc, Face ... faces ) {
+    private TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc, Face ... faces ) {
         identity = id;
-        extent = Arrays.asList(faces);
+        Set<SignedSet> ss = new HashSet<SignedSet>();
+        for (Face f:faces) {
+            addFace(ss,f);
+        }
+        extent = fact.setsOfSignedSet().copyBackingCollection(ss);
         this.source = source;
         this.desc = desc;
     }
     
+    private void addFace(Set<SignedSet> ss, Face f) {
+        if (ss.add(f.covector()) && f.dimension()>0) {
+            for (Face ff:f.lower()) {
+                addFace(ss,ff);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         StringBuffer rslt = new StringBuffer(identity +": \""+desc+"\" ");
-        for (Face f:extent) {
+        for (SignedSet f:extent) {
             rslt.append(f.toString()+"; ");
         }
         return rslt.toString();
@@ -69,6 +82,7 @@ public class TGVertex {
                     tg.addVertex( new TGVertex(
                     fact.signedSets().construct(fact.unsignedSets().copyBackingCollection(plus), 
                             fact.unsignedSets().copyBackingCollection(minus)),
+                            fact,
                             cocircuit,
                             "Point: "+someLines,
                             cocircuit ) );
@@ -88,6 +102,7 @@ public class TGVertex {
         if (lines.length==3) {
             // easy case
             tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),tope.covector(),lines),
+                    epl.ffactory(),
                     tope,
                     "Triangle",
                     tope));
@@ -157,7 +172,7 @@ public class TGVertex {
                 
                 // TODO: later, nonUniform points
                 
-                tg.addVertex(new TGVertex(id,
+                tg.addVertex(new TGVertex(id,epl.ffactory(),
                         tope,
                         "Polygon: "+bitCount,
                               extent.toArray(new Face[0])));
@@ -223,8 +238,12 @@ public class TGVertex {
         }
     }
 
-    public List<Face> getExtent() {
+    public SetOfSignedSet getExtent() {
         return extent;
+    }
+
+    public SignedSet getId() {
+        return identity;
     }
 }
 
