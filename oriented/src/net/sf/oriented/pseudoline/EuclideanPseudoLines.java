@@ -6,7 +6,12 @@ package net.sf.oriented.pseudoline;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
@@ -17,6 +22,7 @@ import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.util.combinatorics.Permutation;
 import edu.uci.ics.jung.graph.DirectedGraph;
 
@@ -63,13 +69,12 @@ public class EuclideanPseudoLines {
         this(om,om.asInt(infinity));
     }
 
-//    final Map<Label,JavaSet<SignedSet>> line2cocircuit = new HashMap<Label,JavaSet<SignedSet>>();
-//    final Map<SignedSet,JavaSet<SignedSet>> tope2cocircuit = new HashMap<SignedSet,JavaSet<SignedSet>>();
-//    final Map<SignedSet,JavaSet<SignedSet>> cocircuit2tope = new HashMap<SignedSet,JavaSet<SignedSet>>();
     /**
      * TODO: this field is incorrectly named
      */
     public UnsignedSet notLoops;
+    private List<Face[]>[] fullPseudoLines;
+    private Face[][] pseudoLines;
     
     
     
@@ -256,21 +261,25 @@ public class EuclideanPseudoLines {
      */
     public String[] toCrossingsString() {
         final Label ground[] = modified.elements();
+        boolean oneChar = allOneChar(ground);
+        String crossings[] = new String[getPseudoLines().length];
+        for (int cnt=0;cnt<pseudoLines.length;cnt++) {
+            crossings[cnt] = toString(cnt,fullPseudoLines[cnt],ground,!oneChar, notLoops);
+        }
+        return crossings;
+    }
+
+    private List<Face[]>[] computePseudoLines() {
+        final Label ground[] = modified.elements();
         int n = ground.length;
         @SuppressWarnings({ "unchecked" })
         List<Face[]> result[] = new List[n];
-        boolean oneChar = allOneChar(ground);
         Face startTope = getPositiveFace();
         for (int i=0;i<n;i++) {
             startTope = otherFace(edgeOnLine(ground[i], startTope),startTope);
             result[i] = followLine(startTope.covector(), ground[i], ground[i==0?1:0]) ;
         }
-        
-        String crossings[] = new String[result.length];
-        for (int cnt=0;cnt<result.length;cnt++) {
-            crossings[cnt] = toString(cnt,result[cnt],ground,!oneChar, notLoops);
-        }
-        return crossings;
+        return result;
     }
 
     private Face getPositiveFace() {
@@ -296,7 +305,7 @@ public class EuclideanPseudoLines {
         rslt.append(':');
         boolean insideBracket = false;
         for (int i=0;i<result.size()-1;i++) {
-            boolean nextInsideBracket = result.get(i)[0] == result.get(i+1)[0];
+            boolean nextInsideBracket = result.get(i)[0].equals(result.get(i+1)[0]);
             if (nextInsideBracket && !insideBracket) {
                 rslt.append('(');
             }
@@ -372,14 +381,14 @@ public class EuclideanPseudoLines {
             point = next[0];
             edge = next[1];
             face = next[2];
-        } while (point.covector().sign(last)!=0 || point==firstPoint);
+        } while (point.covector().sign(last)!=0 || point.equals(firstPoint));
         return rslt;
     }
 
     private static Face[] crossEdge(Face point, Face edge, Face face, Label along) {
         Face nextFace = otherFace(edge, face);
         Face eps[] = edgesTouchingLine(along,nextFace);
-        if (eps[0] == edge) {
+        if (eps[0].equals(edge)) {
             return new Face[]{eps[3],eps[2],nextFace};
         } else {
             return new Face[]{eps[1],eps[0],nextFace};
@@ -388,7 +397,7 @@ public class EuclideanPseudoLines {
 
     private static Face otherFace(Face edge, Face face) {
         for (Face f:edge.higher()) {
-            if (f != face) {
+            if (!f.equals(face)) {
                 return  f;
             }
         }
@@ -433,7 +442,7 @@ public class EuclideanPseudoLines {
         }
         for (Face from:rslt.getVertices()) {
             for (Face to:rslt.getVertices()) {
-                if (from == to) {
+                if (from.equals(to)) {
                     continue;
                 }
                 UnsignedSet tension = notLoops.minus(from.covector().minus()).minus(to.covector().plus());
@@ -456,6 +465,71 @@ public class EuclideanPseudoLines {
         return false;
     }
 
+    public FactoryFactory ffactory() {
+        return original.ffactory();
+    }
+
+    public boolean areParallel(Label line1, Label line2) {
+        return lineIntersection(line1,line2).sign(getInfinity()) == 0;
+    }
+
+    public SignedSet lineIntersection(Label line1, Label line2) {
+        Set<Face> points = new HashSet<Face>(Arrays.asList(getPseudoLine(line1)));
+        points.retainAll(Arrays.asList(getPseudoLine(line2)));
+        if (points.size() != 1) {
+            throw new IllegalStateException("Pseudolines intersect in two points???!!!");
+        }
+        return points.iterator().next().covector();
+    }
+
+    public void collectConformingTopes(SignedSet triangleId, Set<Face> extent) {
+        // TODO something in the non-Uniform case
+        for (Face f:properFaces()) {
+            if (f.covector().conformsWith(triangleId)) {
+                extent.add(f);
+            }
+        }
+    }
+    
+    private Face[] getPseudoLine(Label line) {
+        int ix = modified.asInt(line);
+        return getPseudoLines()[ix];
+    }
+
+    private Face[][] getPseudoLines() {
+        if (pseudoLines == null) {
+            fullPseudoLines = computePseudoLines();
+            pseudoLines = new Face[fullPseudoLines.length][];
+            for (int i=0;i<pseudoLines.length;i++) {
+                int duplicates = 0;
+                List<Face[]> full = fullPseudoLines[i];
+                for (int j=1;j<full.size();j++) {
+                    if (full.get(j-1)[0].equals(full.get(j)[0])) {
+                        duplicates++;
+                    }
+                }
+                pseudoLines[i] = new Face[full.size()-duplicates];
+                Face pl[] = pseudoLines[i];
+                pl[0] = full.get(0)[0];
+                int ix = 1;
+                for (int j=1;j<full.size();j++) {
+                    if (!full.get(j-1)[0].equals(full.get(j)[0])) {
+                        pl[ix++] = full.get(j)[0];
+                    }
+                }
+            }
+        }
+        return pseudoLines;
+    }
+
+    public Iterable<? extends Face> properFaces() {
+        return Iterables.filter(getFaceLattice().withDimension(2), new Predicate<Face>(){
+            @Override
+            public  boolean apply(Face f) {
+                return f.covector().sign(getInfinity())==1 && !touchesInfinity(f);
+            }
+        });
+    }
 
 }
 

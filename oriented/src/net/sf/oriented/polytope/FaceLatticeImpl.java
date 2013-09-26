@@ -116,6 +116,15 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
             }
             
         }
+        
+        @Override
+        public boolean equals(Object o) {
+            return o == this || (o instanceof AbsFaceImpl && this.covector.equals(((AbsFaceImpl)o).covector));
+        }
+        @Override
+        public int hashCode() {
+            return covector.hashCode();
+        }
     }
     static class TopOrBottomImpl extends AbsFaceImpl {
         TopOrBottomImpl(Type type, SignedSet covector, int dimension, AbsFaceImpl minOrMax[]) {
@@ -152,6 +161,16 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
             if (lower().isEmpty()) {
                 throw new AxiomViolation(this," has nothing below it");
             }
+        }
+        
+
+        @Override
+        public boolean equals(Object o) {
+            return o == this || (o instanceof TopImpl);
+        }
+        @Override
+        public int hashCode() {
+            return 77;
         }
         
     }

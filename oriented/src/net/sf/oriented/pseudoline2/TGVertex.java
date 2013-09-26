@@ -5,13 +5,17 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
 
 import com.google.common.base.Preconditions;
@@ -56,7 +60,90 @@ public class TGVertex {
         }
     }
 
-    public static void fromFace(Face tope, TensionGraph tg, FactoryFactory fact) {
+    // TODO convert this method into a helper class
+    public static void fromFace(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
+        // TODO extend using nonUniform corners too.
+        Label lines[] = new Label[tope.lower().size()];
+        int ix=0;
+        for (Face edge : tope.lower() ) {
+              lines[ix++] = uniqueMember(epl.notLoops.minus(edge.covector().support()));
+        }
+        if (lines.length==3) {
+            // easy case
+            tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),tope.covector(),lines),tope));
+        } else {
+            // find any parallel sides first
+            int parallel[] = new int[lines.length*(lines.length-1)/2];
+            int pCount = 0;
+            for (int i=0;i<lines.length;i++) {
+                for (int j=i+1;j<lines.length;j++) {
+                    if (epl.areParallel(lines[i],lines[j])) {
+                        parallel[pCount++] = (1<<i)|(1<<j);
+                    }
+                }
+            }
+            
+            // initialize singleton sets
+            FactoryFactory fact = epl.ffactory();
+            UnsignedSet singletons[] = new UnsignedSet[lines.length];
+            for (int i=0;i<lines.length;i++) {
+                singletons[i] = fact.unsignedSets().copyBackingCollection(Arrays.asList(lines[i]));
+            }
+            
+            sides:
+            for (int sides=7;sides<(1<<lines.length);sides++) {
+                Set<Face> extent = new HashSet<Face>();
+                int bitCount = Integer.bitCount(sides);
+                if (bitCount<3) {
+                    continue; // too few sides
+                }
+                // check we do not include parallel sides
+                for (int k=0;k<pCount;k++) {
+                    if ((parallel[k] & sides) == parallel[k]) {
+                        continue sides;
+                    }
+                }
+                
+                SignedSet id = createIdentity(fact,tope.covector(),sides,lines);
+                
+                // check point of intersection is on the 'correct' side of at least one line
+                for (int i=0;i<lines.length;i++) {
+                    if ( ( (1<<i) & sides ) != 0 ) {
+                        for (int j=i+1;j<lines.length;j++) {
+                            if ( ( (1<<j) & sides ) != 0 ) {
+                                SignedSet inter = epl.lineIntersection(lines[i],lines[j]);
+                                SignedSet otherLines = inter.intersection(id);
+                                if (otherLines.support().isEmpty() ) {
+                                    continue sides;
+                                }
+                                // NOT TODO: if this is a nonUniform point then we need to save for later
+                                // hmmm - but we would need to check that one for its intersections etc.
+                                // hunch - don't need this.
+                                
+                                for (UnsignedSet other : otherLines.support().subsetsOfSize(1)) {
+                                    UnsignedSet triangleSupport = other.union(singletons[i]).union(singletons[j]);
+                                    SignedSet triangleId = tope.covector().restriction(triangleSupport);
+                                    // TODO: make this more efficient - we are doing the same collection
+                                    // several times over.
+                                    epl.collectConformingTopes(triangleId,extent);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // TODO: later, nonUniform points
+                
+                tg.addVertex(new TGVertex(id,extent.toArray(new Face[0])));
+            }
+        }
+    }
+           
+        
+        
+        
+        
+        
 //        Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
 //        Preconditions.checkArgument(lines.size()>=3);
 //        for (Face f : cocircuit.higher()) {
@@ -80,10 +167,35 @@ public class TGVertex {
 //                }
 //            }
 //        }
+    private static SignedSet createIdentity(FactoryFactory ffactory, SignedSet tope, int sides,
+            Label[] lines) {
+        List<Label> us = new ArrayList<Label>(lines.length);
+        for (int i=0;i<lines.length;i++) {
+            if ( ( (1<<i) & sides ) != 0 ) {
+                us.add(lines[i]);
+            }
+        }
+        return createIdentity(ffactory, tope, us);
     }
-    
-    
-
+    private static SignedSet createIdentity(FactoryFactory ffactory,
+            SignedSet tope, Label ... us) {
+        return tope.restriction(ffactory.unsignedSets().copyBackingCollection(Arrays.asList(us)));
+    }
+    private static SignedSet createIdentity(FactoryFactory ffactory,
+            SignedSet tope, List<Label> us) {
+        return tope.restriction(ffactory.unsignedSets().copyBackingCollection(us));
+    }
+    private static Label uniqueMember(UnsignedSet singleton) {
+        Iterator<Label> it = singleton.iterator();
+        try {
+           return it.next();
+        }
+        finally {
+            if (it.hasNext()) {
+                throw new IllegalArgumentException("Non-singletone set: "+singleton);
+            }
+        }
+    }
 }
 
 

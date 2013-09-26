@@ -30,26 +30,26 @@ public class TestTwistedGraphs {
 
     @Test
     public void testSaw() {
-        count("circularsaw3","0",10,4,1,1000);
+        count("circularsaw3","0",22,4,1,1000);
     }
 
     @Test
     public void testDeformedCeva() {
-        count("deformedCeva","0",10,4,0,1000);
+        count("deformedCeva","0",16,4,0,1000);
     }
 
     @Test
     public void testDeformedSaw() {
-        count("deformedCircularSaw","0",10,4,0,1000);
+        count("deformedCircularSaw","0",26,4,0,1000);
     }
 
     @Test
     public void testRingel() {
-        count("ringel","0",21,4,-6);
+        count("ringel","0",63,4,-6);
     }
     @Test
     public void testChap1() {
-        count("chapter1","1",4,0,0);
+        count("chapter1","1",6,0,0);
     }
 
     private void count(String omName, String inf, int tensions, int prunedTensions, int expectedDifficultCount) {

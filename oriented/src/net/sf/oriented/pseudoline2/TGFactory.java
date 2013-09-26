@@ -12,7 +12,7 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 public class TGFactory {
     
     private final EuclideanPseudoLines euclideanPseudoLines;
-    private TensionGraph result;
+    public TensionGraph result;
 
     public TGFactory(EuclideanPseudoLines s) {
         this.euclideanPseudoLines = s;
@@ -37,12 +37,10 @@ public class TGFactory {
             if (f.covector().sign(euclideanPseudoLines.getInfinity())==1 && f.higher().size()>4)
                TGVertex.fromPoint(f, result,
                        euclideanPseudoLines.notLoops.minus(f.covector().support()),
-                       euclideanPseudoLines.original.ffactory() );
+                       euclideanPseudoLines.ffactory() );
         }
-        for (Face f:euclideanPseudoLines.getFaceLattice().withDimension(2)) {
-            if (f.covector().sign(euclideanPseudoLines.getInfinity())==1 && !euclideanPseudoLines.touchesInfinity(f)) {
-                TGVertex.fromFace(f,result, euclideanPseudoLines.original.ffactory());
-            }
+        for (Face f1:euclideanPseudoLines.properFaces()) {
+            TGVertex.fromFace(f1, result, euclideanPseudoLines);
         }
     }
     
