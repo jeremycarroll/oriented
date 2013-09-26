@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import junit.framework.Assert;
-
 import net.sf.oriented.util.graph.Path;
 import net.sf.oriented.util.graph.Paths;
 import net.sf.oriented.util.graph.SimplePath;

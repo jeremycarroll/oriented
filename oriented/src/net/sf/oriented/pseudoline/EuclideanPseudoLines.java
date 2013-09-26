@@ -10,9 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
@@ -22,8 +19,11 @@ import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.OMasSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
-import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.util.combinatorics.Permutation;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**

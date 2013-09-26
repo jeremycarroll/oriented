@@ -3,9 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 

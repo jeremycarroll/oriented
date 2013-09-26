@@ -3,20 +3,13 @@
  ************************************************************************/
 package test;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Assert;
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
-import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.TGFactory;
+import net.sf.oriented.pseudoline2.TensionGraph;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 
