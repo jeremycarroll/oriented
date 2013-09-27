@@ -54,33 +54,37 @@ import java.util.Set;
  */
 public class WAM {
     
-    private final class MakeChoiceAtFace extends Frame {
-        private final EdgeChoices opt;
-        private final TGEdge[] singleChoices;
-        private final TGEdge[] doubleChoices;
+    private final class True extends Frame {
+        @Override
+        public String toString() {
+            return "true";
+        }
 
-        private MakeChoiceAtFace(EdgeChoices opt) {
-            this.opt = opt;
+        @Override
+        boolean call(int counter) {
+            fail();
+            return true;
+        }
+    }
+
+    private final class ChoiceOfEdge extends Frame {
+        private final TGEdge[] singleChoices;
+
+        private ChoiceOfEdge(EdgeChoices opt) {
             this.singleChoices = opt.singleChoices();
-            this.doubleChoices = opt.doubleChoices();
         }
 
         @Override
         public String toString() {
             return //opt.face.covector().toString() +
-                    "TODO:" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
+                    "TODO:" + this.retryCount + "/" +(singleChoices.length)+" "+edgeLabel(retryCount);
         }
 
         private String edgeLabel(int ix) {
         if (ix < singleChoices.length) {
             return singleChoices[ix].toString();
-        } else {
-            ix -= singleChoices.length;
-            if (ix*2 >= doubleChoices.length) {
-                return "";
-            }
-            return doubleChoices[2*ix].toString()+","+doubleChoices[2*ix+1].toString();
-        }
+        } 
+        return "";
          }
 
         @Override
@@ -89,21 +93,10 @@ public class WAM {
                 fail();
                 return false;
             }
-            if (ix < singleChoices.length) {
-                return add(singleChoices[ix]);
-            } else {
-                ix -= singleChoices.length;
-                if (ix*2 == doubleChoices.length) {
-                    fail();
-                    return false;
-                }
-                if (!  add(doubleChoices[2*ix])  )
-                    return false;
-                TGEdge t = doubleChoices[2*ix+1];
-                if (growing.containsEdge(t)) 
-                    return true;
-                return add(t);
+            if (ix>=singleChoices.length-1) {
+                fail();
             }
+            return ix < singleChoices.length && add(singleChoices[ix]);
         }
 
         /**
@@ -189,10 +182,7 @@ public class WAM {
         growing = shrinking.growing;
     }
     
-    public void computeCycles() {
-       // TensionPaths simplePaths = new TensionPaths(this, shrinking);
-        
-    }
+ 
     /**
      * 
      * @param tension
@@ -206,7 +196,7 @@ public class WAM {
     }
 
     public List<Difficulty> search() {
-        extend();
+        addChoiceOfInitialTGVertex();
         while (true) {
             Frame top = stack.peek();
             this.debugMsg(top.port.name());
@@ -245,7 +235,20 @@ public class WAM {
 
     
 
-    void addChoice(final EdgeChoices opt) {
+    /**
+     * Every solution has at least one vertex from the base.
+     * We choose that vertex first, then we add edges until we have a twisted graph
+     * or failure.
+     * This method adds the choicepoint for the first vertex.
+     * We go with larger vertices first.
+     */
+   private void addChoiceOfInitialTGVertex() {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+ void addChoice(final EdgeChoices opt) {
         choices.push(opt);
 
         trail.push(new Undoable(){
@@ -272,38 +275,39 @@ public class WAM {
         if ( hasOptions() ) {
             pushChoiceFromEdge(selectNextEdgeChoice());
         } else {
-            final TGEdge t = findPossibleEdge();
-            if (t==null) {
-                stack.push(new Failure());
-            } else {
-            stack.push(new Frame(){
-                @Override
-                boolean call(int ix) {
-                    switch(ix) {
-                    case 0:
-                        return add(t);
-                    case 1:
-                        fail();
-                        return remove(t);
-                    default:
-                        throw new IllegalArgumentException("WAM call logic error");
-                    }
-                }
-                @Override
-                public String toString() {
-                    switch (this.retryCount) {
-                case 0:
-                    return "add "+t.toString();
-                case 1:
-                    return "[-add] "+t.toString();
-                case 2:
-                    return "fail [add] "+t.toString();
-                default:
-                    throw new IllegalArgumentException("WAM call logic error");
-                }
-                }
-            });
-            }
+            throw new IllegalStateException("Not possible");
+//            final TGEdge t = findPossibleEdge();
+//            if (t==null) {
+//                stack.push(new Failure());
+//            } else {
+//            stack.push(new Frame(){
+//                @Override
+//                boolean call(int ix) {
+//                    switch(ix) {
+//                    case 0:
+//                        return add(t);
+//                    case 1:
+//                        fail();
+//                        return remove(t);
+//                    default:
+//                        throw new IllegalArgumentException("WAM call logic error");
+//                    }
+//                }
+//                @Override
+//                public String toString() {
+//                    switch (this.retryCount) {
+//                case 0:
+//                    return "add "+t.toString();
+//                case 1:
+//                    return "[-add] "+t.toString();
+//                case 2:
+//                    return "fail [add] "+t.toString();
+//                default:
+//                    throw new IllegalArgumentException("WAM call logic error");
+//                }
+//                }
+//            });
+//            }
         }
     }
 
@@ -332,19 +336,9 @@ public class WAM {
         if (opt.impossible()) {
             stack.push(new Failure());
         } if (opt.alreadyDone()) {
-            stack.push(new Frame(){
-                @Override
-                public String toString() {
-                    return "true";
-                }
-                
-                @Override
-                boolean call(int counter) {
-                    fail();
-                    return true;
-                }});
+            stack.push(new True());
         } else {
-            stack.push(new MakeChoiceAtFace(opt));
+            stack.push(new ChoiceOfEdge(opt));
         }
     }
 
@@ -368,6 +362,7 @@ public class WAM {
     protected boolean remove(final TGEdge t) {
         edgeRemovalFailed = false;
         shrinking.removeEdge(t);
+        growing.edgeHasBeenRemoved(t);
         Set<TGVertex> vv = new HashSet<TGVertex>();
         vv.add(t.source);
         vv.add(t.dest);
@@ -423,7 +418,7 @@ public class WAM {
         }
     }
 
-    public void pushUndoRemove(final GrowingGraph gg, final TGEdge t) {
+    public void pushRemoveUndoingAdd(final GrowingGraph gg, final TGEdge t) {
         trail.push(new Undoable(){
             @Override
             public void undo() {
@@ -463,7 +458,7 @@ public class WAM {
         return true;
     }
 
-    public void pushUndoReplace(final Set<TGEdge> allChoices, final TGEdge t) {
+    public void pushAddUndoingRemove(final Set<TGEdge> allChoices, final TGEdge t) {
         trail.push(new Undoable(){
             @Override
             public void undo() {

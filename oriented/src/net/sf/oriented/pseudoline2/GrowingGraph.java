@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,16 +32,45 @@ public class GrowingGraph extends AbstractTGraph {
      * @return true if added, false if it cannot be added.
      */
     public boolean addWithConsequences(TGEdge t) {
-        rawAdd(t);
-        return parent.removeParallel(t) && parent.consequences(t.source, t, this) && parent.consequences(t.dest, t, this);
+        List<TGEdge> moreToAdd = new ArrayList<TGEdge>();
+        if (canAdd(t.source, moreToAdd) && canAdd(t.dest, moreToAdd)) {
+            rawAdd(t);
+            for (TGEdge e:moreToAdd) {
+                if (!maybeAdd(e)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
+
+    private boolean maybeAdd(TGEdge e) {
+        return containsEdge(e) || addWithConsequences(e);
+    }
+
+
+    private boolean canAdd(TGVertex vertex, List<TGEdge> moreToAdd) {
+        if (!this.containsVertex(vertex)) {
+            for (TGVertex overlap:vertex.overlapping()) {
+                if (!parent.maybeRemove(vertex)) {
+                    return false;
+                }
+            }
+            vertex.addEdgeChoices(wam,moreToAdd);
+        }
+        return true;
+    }
+
 
     private void rawAdd(TGEdge t) {
         if (!addEdge(t, t.source, t.dest)) {
             throw new IllegalArgumentException("addEdge failed!");
         }
-        wam.pushUndoRemove(this,t);
+        wam.pushRemoveUndoingAdd(this,t);
     }
 
 
@@ -48,6 +78,12 @@ public class GrowingGraph extends AbstractTGraph {
     public void addChoices(TGVertex face, List<List<TGEdge>> choices) {
         EdgeChoices opt = new EdgeChoices(face,choices);
         wam.addChoice(opt);
+    }
+
+
+    public void edgeHasBeenRemoved(TGEdge t) {
+        // TODO Auto-generated method stub
+        
     }
 }
 

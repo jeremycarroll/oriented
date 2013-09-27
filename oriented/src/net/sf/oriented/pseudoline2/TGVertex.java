@@ -257,6 +257,22 @@ public class TGVertex {
         }
     }
 
+    public Iterable<TGVertex> overlapping() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * This vertex is being added to growing, what additional edges
+     * should be added, either now or later.
+     * @param addLater
+     * @param addNow
+     */
+    public void addEdgeChoices(WAM addLater, List<TGEdge> addNow) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
 
 

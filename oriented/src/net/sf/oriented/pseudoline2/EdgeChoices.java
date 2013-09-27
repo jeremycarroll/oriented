@@ -16,7 +16,7 @@ class EdgeChoices {
     
     boolean alreadyDone = false;
     final Set<TGEdge> oneChoices = new HashSet<TGEdge>();
-    final List<TGEdge> twoChoices = new ArrayList<TGEdge>();
+  //  private final List<TGEdge> twoChoices = new ArrayList<TGEdge>();
     final Set<TGEdge> allChoices = new HashSet<TGEdge>();
     
     public EdgeChoices(TGVertex face, List<List<TGEdge>> choices) {
@@ -37,7 +37,7 @@ class EdgeChoices {
      */
     public boolean choiceRemoved(TGEdge t, WAM wam) {
         if (allChoices.remove(t)) {
-            wam.pushUndoReplace(allChoices,t);
+            wam.pushAddUndoingRemove(allChoices,t);
             return !allChoices.isEmpty();
         }
         return true;
@@ -54,7 +54,7 @@ class EdgeChoices {
     public void prepareChoices(GrowingGraph gg, ShrinkingGraph sg) {
         alreadyDone = false;
         oneChoices.clear();
-        twoChoices.clear();
+//        twoChoices.clear();
         Collection<TGEdge> already = gg.getIncidentEdges(face);
         for (List<TGEdge> choice:choices) {
             TGEdge a = choice.get(0);
@@ -75,8 +75,8 @@ class EdgeChoices {
                 } else if (already.contains(b)) {
                     doOne(a, already);
                 } else {
-                    twoChoices.add(a);
-                    twoChoices.add(b);
+//                    twoChoices.add(a);
+//                    twoChoices.add(b);
                 }
                 break;
             default:
@@ -86,20 +86,20 @@ class EdgeChoices {
                 return;
             }
         }
-        for (int i=twoChoices.size()-1;i>=0;i--) {
-            if (oneChoices.contains(twoChoices.get(i))) {
-                if (i%2 == 0) {
-//                    System.err.println("even");
-                    twoChoices.remove(i+1);
-                    twoChoices.remove(i);
-                } else {
-//                    System.err.println("odd");
-                    twoChoices.remove(i);
-                    twoChoices.remove(i-1);
-                    i--;
-                }
-            }
-        }
+//        for (int i=twoChoices.size()-1;i>=0;i--) {
+//            if (oneChoices.contains(twoChoices.get(i))) {
+//                if (i%2 == 0) {
+////                    System.err.println("even");
+//                    twoChoices.remove(i+1);
+//                    twoChoices.remove(i);
+//                } else {
+////                    System.err.println("odd");
+//                    twoChoices.remove(i);
+//                    twoChoices.remove(i-1);
+//                    i--;
+//                }
+//            }
+//        }
     }
 
     private void doOne(TGEdge a, Collection<TGEdge> already) {
@@ -111,16 +111,16 @@ class EdgeChoices {
     }
 
     public boolean impossible() {
-        return (!alreadyDone) && oneChoices.isEmpty() && twoChoices.isEmpty();
+        return (!alreadyDone) && oneChoices.isEmpty() ; //&& twoChoices.isEmpty();
     }
 
     public TGEdge[] singleChoices() {
         return oneChoices.toArray(new TGEdge[oneChoices.size()]);
     }
 
-    public TGEdge[] doubleChoices() {
-        return twoChoices.toArray(new TGEdge[twoChoices.size()]);
-    }
+//    public TGEdge[] doubleChoices() {
+//        return twoChoices.toArray(new TGEdge[twoChoices.size()]);
+//    }
 
 }
 

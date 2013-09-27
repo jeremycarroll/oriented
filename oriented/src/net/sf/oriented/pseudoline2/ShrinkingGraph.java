@@ -226,35 +226,49 @@ public class ShrinkingGraph extends PrunableGraph {
         int min = in<out?in:out;
         return factor*(min + getEdgeCount());
     }
-
-    public boolean removeParallel(TGEdge t) {
-        Collection<TGEdge> s = getIncidentEdges(t.source);
-        Collection<TGEdge> d = getIncidentEdges(t.dest);
-        if (s.size()<d.size()) {
-            return removeParallel(t,s,t.dest);
-        } else {
-            return removeParallel(t,d,t.source);
-            
-        }
+//    boolean removeTouchingEdges(TGEdge t) {
+//        // TODO Auto-generated method stub
+//        return false;
+//    }
+    /**
+     * return true to indicate that we have successfully ensured that
+     * vertex is not part of this graph.
+     * @param vertex
+     * @return
+     */
+    public boolean maybeRemove(TGVertex vertex) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
-    private boolean removeParallel(TGEdge added, Collection<TGEdge> toCheck, TGVertex opposite) {
-        List<TGEdge> toBeRemoved = new ArrayList<TGEdge>();
-        for (TGEdge t:toCheck) {
-            if (t == added) {
-                continue;
-            }
-            if (isIncident(opposite, t)) {
-                toBeRemoved.add(t);
-            }
-        }
-        for (TGEdge t:toBeRemoved) {
-            if (!wam.maybeRemove(t)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean removeParallel(TGEdge t) {
+////        Collection<TGEdge> s = getIncidentEdges(t.source);
+////        Collection<TGEdge> d = getIncidentEdges(t.dest);
+////        if (s.size()<d.size()) {
+////            return removeParallel(t,s,t.dest);
+////        } else {
+////            return removeParallel(t,d,t.source);
+////            
+////        }
+//    }
+
+//    private boolean removeParallel(TGEdge added, Collection<TGEdge> toCheck, TGVertex opposite) {
+//        List<TGEdge> toBeRemoved = new ArrayList<TGEdge>();
+//        for (TGEdge t:toCheck) {
+//            if (t == added) {
+//                continue;
+//            }
+//            if (isIncident(opposite, t)) {
+//                toBeRemoved.add(t);
+//            }
+//        }
+//        for (TGEdge t:toBeRemoved) {
+//            if (!wam.maybeRemove(t)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
 //    public FaceConstraints faceConstaints(int i, TensionPath path, Face from) {
 //        return new FaceConstraints(i, path, from);
