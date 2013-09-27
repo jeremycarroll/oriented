@@ -53,6 +53,25 @@ public class TGVertex {
         }
     }
 
+    public SetOfSignedSet getExtent() {
+        return extent;
+    }
+
+    public SignedSet getId() {
+        return identity;
+    }
+
+    public boolean impossible(PrunableGraph g) {
+        int eCount = g.getNeighborCount(this);
+        if (eCount < identity.size()) {
+            return true;
+        }
+        UnsignedSet incident = identity.minus().minus(identity.minus());
+        for (TGEdge e:g.getIncidentEdges(this)) {
+            incident = incident.union(e.label());
+        }
+        return incident.size() < identity.size();
+    }
     @Override
     public String toString() {
         StringBuffer rslt = new StringBuffer(identity +": \""+desc+"\" ");
@@ -238,13 +257,6 @@ public class TGVertex {
         }
     }
 
-    public SetOfSignedSet getExtent() {
-        return extent;
-    }
-
-    public SignedSet getId() {
-        return identity;
-    }
 }
 
 

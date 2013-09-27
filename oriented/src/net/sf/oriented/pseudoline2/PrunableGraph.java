@@ -49,32 +49,22 @@ public class PrunableGraph extends AbstractTGraph {
     }
 
     void prune(Collection<TGVertex> vv, boolean expand) {
-//        boolean pruned = true;
-//        while (pruned) {
-//            pruned = false;
-//            for (Face f:new ArrayList<Face>(vv)) {
-//                if (!this.containsVertex(f)) {
-//                    continue;
-//                }
-//                if (getNeighborCount(f)<3) {
-//                    if (expand) {
-//                        vv.addAll(this.getNeighbors(f));
-//                    }
-//                    removeVertex(f);
-//                    pruned = true;
-//                } else {
-//                    List<TGEdge> removedEdges  = new EdgePruner(f).prune();
-//                    boolean prunedThisFace = !removedEdges.isEmpty();
-//                    if (expand && prunedThisFace) {
-//                        for (TGEdge t:removedEdges) {
-//                            vv.add(t.source);
-//                            vv.add(t.dest);
-//                        }
-//                    }
-//                    pruned = prunedThisFace || pruned;
-//                }
-//            }
-//        }
+        boolean pruned = true;
+        while (pruned) {
+            pruned = false;
+            for (TGVertex vertex:new ArrayList<TGVertex>(vv)) {
+                if (!this.containsVertex(vertex)) {
+                    continue;
+                }
+                if (vertex.impossible(this)) {
+                    if (expand) {
+                        vv.addAll(this.getNeighbors(vertex));
+                    }
+                    removeVertex(vertex);
+                    pruned = true;
+                } 
+            }
+        }
     }
 
 }

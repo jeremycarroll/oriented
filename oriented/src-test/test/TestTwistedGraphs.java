@@ -21,12 +21,12 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCeva() {
-        count("ceva","0",14,24,2,10000);
+        count("ceva","0",14,24,8,12);
     }
 
     @Test
     public void testSaw() {
-        count("circularsaw3","0",22,24,1,1000);
+        count("circularsaw3","0",22,24,4,6);
     }
     
     @Ignore
@@ -104,27 +104,24 @@ public class TestTwistedGraphs {
 
     @Test
     public void testDeformedCeva() {
-        count("deformedCeva","0",16,14,0,1000);
+        count("deformedCeva","0",16,14,0,0);
     }
 
     @Test
     public void testDeformedSaw() {
-        count("deformedCircularSaw","0",26,19,0,1000);
+        count("deformedCircularSaw","0",26,19,0,0);
     }
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,172,-6);
+        count("ringel","0",63,172,17,54);
     }
     @Test
     public void testChap1() {
-        count("chapter1","1",6,2,0);
+        count("chapter1","1",6,2,0,0);
     }
 
-    private void count(String omName, String inf, int tensions, int prunedTensions, int expectedDifficultCount) {
-      this.count(omName, inf, tensions, prunedTensions, expectedDifficultCount, Integer.MAX_VALUE);
-    }
-    private void count(String omName, String inf, int vCount, int eCount, int expectedDifficultCount, int maxTransitions) {
+    private void count(String omName, String inf, int vCount, int eCount, int vCount2, int eCount2) {
         System.err.println(omName+" ===== "+inf+" ==");
         OM om = Examples.all().get(omName);
         EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
@@ -135,6 +132,8 @@ public class TestTwistedGraphs {
         Assert.assertEquals(vCount,ten.getVertexCount());
         Assert.assertEquals(eCount,ten.getEdgeCount());
         ten.prune();
+        Assert.assertEquals(vCount2,ten.getVertexCount());
+        Assert.assertEquals(eCount2,ten.getEdgeCount());
 //        if (prunedTensions != ten.getVertices().size()) {
 //            ten.dumpEdges();
 //            ten.dumpVertices();
