@@ -3,14 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 /**
@@ -154,78 +146,78 @@ public class ShrinkingGraph extends PrunableGraph {
 //        
 //    }
 
-    /**
-     * 
-     * @param face
-     * @param t Has already been added to tg
-     * @param tg
-     * @return true if added, false if it cannot be added.
-     */
-    public boolean consequences(TGVertex face, TGEdge t, GrowingGraph tg) {
-        if (!containsVertex(face)) {
-            return false;
-        }
-        EdgeSelector selector = new EdgeSelector(face,t);
-        if (selector.impossible()) {
-            return false;
-        }
-        selector.search();
-        if (selector.options.isEmpty()) {
-            return false;
-        }
-        if (selector.options.size() == 1) {
-            for (TGEdge tt:selector.options.get(0)) {
-                if (!(tg.containsEdge(tt) || tg.addWithConsequences(tt))) {
-                    return false;
-                }
-            }
-        } else {
-           tg.addChoices(face,selector.options);
-        }
-        return true;
-    }
+//    /**
+//     * 
+//     * @param face
+//     * @param t Has already been added to tg
+//     * @param tg
+//     * @return true if added, false if it cannot be added.
+//     */
+//    public boolean consequences(TGVertex face, TGEdge t, GrowingGraph tg) {
+//        if (!containsVertex(face)) {
+//            return false;
+//        }
+//        EdgeSelector selector = new EdgeSelector(face,t);
+//        if (selector.impossible()) {
+//            return false;
+//        }
+//        selector.search();
+//        if (selector.options.isEmpty()) {
+//            return false;
+//        }
+//        if (selector.options.size() == 1) {
+//            for (TGEdge tt:selector.options.get(0)) {
+//                if (!(tg.containsEdge(tt) || tg.addWithConsequences(tt))) {
+//                    return false;
+//                }
+//            }
+//        } else {
+//           tg.addChoices(face,selector.options);
+//        }
+//        return true;
+//    }
 
-    
-    TGEdge[] sortedEdges() {
-//        System.err.println("sorting");
-        TGEdge rslt[] = getEdges().toArray(new TGEdge[getEdgeCount()]);
-        final Map<TGVertex,Integer> faceScore = new HashMap<TGVertex,Integer>();
-        for (TGVertex f:getVertices()) {
-            faceScore.put(f, score(f));
-        }
-        Arrays.sort(rslt, new Comparator<TGEdge>(){
+//    
+//    TGEdge[] sortedEdges() {
+////        System.err.println("sorting");
+//        TGEdge rslt[] = getEdges().toArray(new TGEdge[getEdgeCount()]);
+//        final Map<TGVertex,Integer> faceScore = new HashMap<TGVertex,Integer>();
+//        for (TGVertex f:getVertices()) {
+//            faceScore.put(f, score(f));
+//        }
+//        Arrays.sort(rslt, new Comparator<TGEdge>(){
+//
+//            @Override
+//            public int compare(TGEdge o1, TGEdge o2) {
+//                
+//                return  score(o1) - score(o2);
+//            }
+//
+//            private int score(TGEdge t) {
+//                return faceScore.get(t.source) * faceScore.get(t.dest);
+//            }});
+//        
+//        
+//        return rslt;
+//    }
 
-            @Override
-            public int compare(TGEdge o1, TGEdge o2) {
-                
-                return  score(o1) - score(o2);
-            }
-
-            private int score(TGEdge t) {
-                return faceScore.get(t.source) * faceScore.get(t.dest);
-            }});
-        
-        
-        return rslt;
-    }
-
-    private int score(TGVertex f) {
-        int factor =  1; //faceSize(f) - 2;
-        int in = this.getInEdges(f).size();
-        int out = this.getOutEdges(f).size();
-        if (in == 0 || out == 0) {
-            // this face cannot be in a solution, put any edge involving it early
-            return 0;
-        }
-        if (in == 1) {
-            return factor*out;
-        }
-        if (out == 1) {
-            return factor*in;
-        }
-        int min = in<out?in:out;
-        return factor*(min + getEdgeCount());
-    }
+//    private int score(TGVertex f) {
+//        int factor =  1; //faceSize(f) - 2;
+//        int in = this.getInEdges(f).size();
+//        int out = this.getOutEdges(f).size();
+//        if (in == 0 || out == 0) {
+//            // this face cannot be in a solution, put any edge involving it early
+//            return 0;
+//        }
+//        if (in == 1) {
+//            return factor*out;
+//        }
+//        if (out == 1) {
+//            return factor*in;
+//        }
+//        int min = in<out?in:out;
+//        return factor*(min + getEdgeCount());
+//    }
 //    boolean removeTouchingEdges(TGEdge t) {
 //        // TODO Auto-generated method stub
 //        return false;

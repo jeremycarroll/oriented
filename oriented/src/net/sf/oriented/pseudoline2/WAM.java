@@ -5,7 +5,6 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
@@ -401,22 +400,22 @@ public class WAM {
         }
     }
 
-    private TGEdge findPossibleEdge() {
-        Iterator<TGEdge> it = 
-                Arrays.asList(shrinking.sortedEdges()).
-//                shrinking.getEdges().
-                iterator();
-        TGEdge t;
-        while (true) {
-            if (!it.hasNext()) {
-                return null;
-            }
-            t = it.next();
-            if (!growing.containsEdge(t)) {
-                return t;
-            }
-        }
-    }
+//    private TGEdge findPossibleEdge() {
+//        Iterator<TGEdge> it = 
+//                Arrays.asList(shrinking.sortedEdges()).
+////                shrinking.getEdges().
+//                iterator();
+//        TGEdge t;
+//        while (true) {
+//            if (!it.hasNext()) {
+//                return null;
+//            }
+//            t = it.next();
+//            if (!growing.containsEdge(t)) {
+//                return t;
+//            }
+//        }
+//    }
 
     public void pushRemoveUndoingAdd(final GrowingGraph gg, final TGEdge t) {
         trail.push(new Undoable(){

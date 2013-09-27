@@ -5,7 +5,6 @@ package test;
 
 import junit.framework.Assert;
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline2.TGFactory;

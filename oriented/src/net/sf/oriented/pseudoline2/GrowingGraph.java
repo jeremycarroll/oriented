@@ -56,7 +56,7 @@ public class GrowingGraph extends AbstractTGraph {
     private boolean canAdd(TGVertex vertex, List<TGEdge> moreToAdd) {
         if (!this.containsVertex(vertex)) {
             for (TGVertex overlap:vertex.overlapping()) {
-                if (!parent.maybeRemove(vertex)) {
+                if (!parent.maybeRemove(overlap)) {
                     return false;
                 }
             }
