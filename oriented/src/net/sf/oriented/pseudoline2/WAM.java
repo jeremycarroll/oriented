@@ -67,7 +67,8 @@ public class WAM {
 
         @Override
         public String toString() {
-            return opt.face.covector().toString() +":" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
+            return //opt.face.covector().toString() +
+                    "TODO:" + this.retryCount + "/" +(singleChoices.length+doubleChoices.length/2)+" "+edgeLabel(retryCount);
         }
 
         private String edgeLabel(int ix) {
@@ -189,7 +190,7 @@ public class WAM {
     }
     
     public void computeCycles() {
-        TensionPaths simplePaths = new TensionPaths(this, shrinking);
+       // TensionPaths simplePaths = new TensionPaths(this, shrinking);
         
     }
     /**

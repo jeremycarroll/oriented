@@ -3,14 +3,14 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TGFactory {
     

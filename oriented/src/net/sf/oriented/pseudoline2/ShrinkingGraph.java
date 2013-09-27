@@ -11,11 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
-import net.sf.oriented.pseudoline.TensionPath.EdgeInfo;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * This graph gets smaller as we move along the stack of the {@link WAM}
@@ -214,7 +210,7 @@ public class ShrinkingGraph extends PrunableGraph {
     }
 
     private int score(TGVertex f) {
-        int factor =  faceSize(f) - 2;
+        int factor =  1; //faceSize(f) - 2;
         int in = this.getInEdges(f).size();
         int out = this.getOutEdges(f).size();
         if (in == 0 || out == 0) {
