@@ -75,10 +75,10 @@ public class GrowingGraph extends AbstractTGraph {
 
 
     
-    public void addChoices(TGVertex face, List<List<TGEdge>> choices) {
-        EdgeChoices opt = new EdgeChoices(face,choices);
-        wam.addChoice(opt);
-    }
+//    public void addChoices(TGVertex face, List<List<TGEdge>> choices) {
+//        EdgeChoices opt = new EdgeChoices(face,choices);
+//        wam.addChoice(opt);
+//    }
 
 
     public void edgeHasBeenRemoved(TGEdge t) {

@@ -16,7 +16,7 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
  */
 public class ShrinkingGraph extends PrunableGraph {
     
-    final private WAM wam;
+    final WAM wam;
     final GrowingGraph growing;
     final EuclideanPseudoLines pseudolines;
     ShrinkingGraph(WAM wam, TensionGraph orig) {

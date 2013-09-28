@@ -3,6 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import com.google.common.base.Preconditions;
+
 import net.sf.oriented.omi.Label;
 
 public class TGEdge {
@@ -11,7 +13,11 @@ public class TGEdge {
     final TGVertex dest;
     private final Label label;
     public final int ordinal;
+    EdgeChoices inChoice;
+    EdgeChoices outChoice;
     public TGEdge(Label l, int ordinal, TGVertex s, TGVertex d) {
+        Preconditions.checkArgument(s.getId().sign(l) != 1);
+        Preconditions.checkArgument(d.getId().sign(l) != 1);
         label = l;
         this.ordinal = ordinal;
         this.source = s;

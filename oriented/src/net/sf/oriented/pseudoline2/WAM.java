@@ -66,25 +66,23 @@ public class WAM {
         }
     }
 
-    private final class ChoiceOfEdge extends Frame {
-        private final TGEdge[] singleChoices;
-
-        private ChoiceOfEdge(EdgeChoices opt) {
-            this.singleChoices = opt.singleChoices();
+    private abstract class Choice<T> extends Frame {
+        private final T[] choices;
+        private Choice(T[] opt) {
+            this.choices = opt;
         }
 
         @Override
         public String toString() {
-            return //opt.face.covector().toString() +
-                    "TODO:" + this.retryCount + "/" +(singleChoices.length)+" "+edgeLabel(retryCount);
+            return retryCount + "/" +(choices.length)+" "+label(retryCount);
         }
 
-        private String edgeLabel(int ix) {
-        if (ix < singleChoices.length) {
-            return singleChoices[ix].toString();
-        } 
-        return "";
-         }
+        private String label(int ix) {
+            if (ix < choices.length) {
+                return choices[ix].toString();
+            } 
+            return "";
+        }
 
         @Override
         boolean call(int ix) {
@@ -92,11 +90,14 @@ public class WAM {
                 fail();
                 return false;
             }
-            if (ix>=singleChoices.length-1) {
+            if (ix>=choices.length-1) {
                 fail();
             }
-            return ix < singleChoices.length && add(singleChoices[ix]);
+            return ix < choices.length && makeChoice(choices[ix]);
         }
+        
+        abstract boolean makeChoice(T a);
+        abstract boolean decideAgainst(T a);
 
         /**
          * 
@@ -107,12 +108,36 @@ public class WAM {
             if ( ix== -1) {
                 return true;
             }
-            if (ix < singleChoices.length) {
-                boolean rslt = maybeRemove(singleChoices[ix]);
+            if (ix < choices.length) {
+                boolean rslt = decideAgainst(choices[ix]);
                 this.trailPtr = trail.size();
                 return rslt;
             } 
             return true;
+        }
+    }
+    private final class ChoiceOfEdge extends Choice<TGEdge> {
+        private final EdgeChoices opt;
+
+        private ChoiceOfEdge(EdgeChoices opt) {
+            super(opt.choices.toArray(new TGEdge[0]));
+            this.opt = opt;
+        }
+
+       
+        @Override
+        boolean makeChoice(TGEdge a) {
+            if (opt.alreadyDone()) {
+                // this choice is now moot - as a result of choice removal
+                fail(); // don't retry further
+                return true;
+            }
+            return add(a);
+        }
+
+        @Override
+        boolean decideAgainst(TGEdge a) {
+            return maybeRemove(a);
         }
     }
 
@@ -254,6 +279,7 @@ public class WAM {
             @Override
             public void undo() {
                 choices.remove(opt);
+                opt.forgetChoiceInEdges();
             }});
     }
 
@@ -331,7 +357,7 @@ public class WAM {
             public void undo() {
                 choices.push(opt);
             }});
-        opt.prepareChoices(growing,shrinking);
+//        opt.prepareChoices(growing,shrinking);
         if (opt.impossible()) {
             stack.push(new Failure());
         } if (opt.alreadyDone()) {
@@ -376,12 +402,7 @@ public class WAM {
             public void undo() {
                 shrinking.addEdge(t, t.source, t.dest );
             }});
-        for (EdgeChoices ch:this.choices) {
-            if (edgeRemovalFailed) {
-                return;
-            }
-            edgeRemovalFailed = !ch.choiceRemoved(t, this);
-        }
+        
     }
 
     /**

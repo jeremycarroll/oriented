@@ -3,119 +3,184 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class EdgeChoices {
+import net.sf.oriented.omi.Label;
 
-    final TGVertex face;
-    final List<List<TGEdge>> choices;
+abstract class EdgeChoices {
+
+    final List<TGEdge> choices = new ArrayList<TGEdge>();
     
-    boolean alreadyDone = false;
-    final Set<TGEdge> oneChoices = new HashSet<TGEdge>();
-  //  private final List<TGEdge> twoChoices = new ArrayList<TGEdge>();
-    final Set<TGEdge> allChoices = new HashSet<TGEdge>();
+    private boolean alreadyDone = false;
     
-    public EdgeChoices(TGVertex face, List<List<TGEdge>> choices) {
-        this.face = face;
-        this.choices = choices;
-        for (List<TGEdge> l:choices) {
-            for (TGEdge t:l) {
-                allChoices.add(t);
+    private int deleteCount = 0;
+    
+    static EdgeChoices create(TGVertex v, ShrinkingGraph sg, Label l) {
+        switch (v.getId().sign(l)) {
+        case 1:
+            return new EdgeChoices(sg,l,sg.getOutEdges(v)){
+
+                @Override
+                void rememberChoiceInEdge(TGEdge e) {
+                    e.outChoice = this;
+                }
+
+                @Override
+                void forgetChoiceInEdge(TGEdge e) {
+                    e.outChoice = null;
+                }
+            };
+        case -1:
+            return new EdgeChoices(sg,l,sg.getInEdges(v)){
+                @Override
+                void rememberChoiceInEdge(TGEdge e) {
+                    e.inChoice = this;
+                }
+
+                @Override
+                void forgetChoiceInEdge(TGEdge e) {
+                    e.inChoice = null;
+                }
+            };
+        case 0:
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+    private EdgeChoices(ShrinkingGraph sg, Label l,Collection<TGEdge> c) {
+        // we must choose one of these with label l
+        for (TGEdge e:c) {
+            if (e.label().equals(l)) {
+                if (sg.growing.containsEdge(e)) {
+                    alreadyDone = true;
+                    return;
+                }
+                choices.add(e);
             }
         }
     }
-    
-    /**
-     * Remove choices requiring t (if any)
-     * @param t
-     * @param wam
-     * @return false if the operation failed and backtracking is needed.
-     */
-    public boolean choiceRemoved(TGEdge t, WAM wam) {
-        if (allChoices.remove(t)) {
-            wam.pushAddUndoingRemove(allChoices,t);
-            return !allChoices.isEmpty();
-        }
-        return true;
-    }
-    
-    int size() {
-        return allChoices.size();
-    }
-    
+
     public boolean alreadyDone() {
         return alreadyDone;
     }
-
-    public void prepareChoices(GrowingGraph gg, ShrinkingGraph sg) {
-        alreadyDone = false;
-        oneChoices.clear();
-//        twoChoices.clear();
-        Collection<TGEdge> already = gg.getIncidentEdges(face);
-        for (List<TGEdge> choice:choices) {
-            TGEdge a = choice.get(0);
-            if (!sg.containsEdge(a)) {
-                continue;
-            }
-            switch (choice.size()) {
-            case 1:
-                doOne(a, already);
-                break;
-            case 2:
-                TGEdge b = choice.get(1);
-                if (!sg.containsEdge(b)) {
-                    continue;
-                }
-                if (already.contains(a)) {
-                    doOne(b,already);
-                } else if (already.contains(b)) {
-                    doOne(a, already);
-                } else {
-//                    twoChoices.add(a);
-//                    twoChoices.add(b);
-                }
-                break;
-            default:
-                    throw new IllegalArgumentException();
-            }
-            if (alreadyDone) {
-                return;
-            }
+    
+    boolean makeChoiceNowOrLater(ShrinkingGraph sg) {
+        if (alreadyDone) {
+            return true;
         }
-//        for (int i=twoChoices.size()-1;i>=0;i--) {
-//            if (oneChoices.contains(twoChoices.get(i))) {
-//                if (i%2 == 0) {
-////                    System.err.println("even");
-//                    twoChoices.remove(i+1);
-//                    twoChoices.remove(i);
-//                } else {
-////                    System.err.println("odd");
-//                    twoChoices.remove(i);
-//                    twoChoices.remove(i-1);
-//                    i--;
+        switch (choices.size()) {
+        case 0:
+            return false;
+        case 1:
+            return sg.growing.addWithConsequences(choices.get(0));
+        default:
+            sg.wam.addChoice(this);
+            for (TGEdge e:choices) {
+                rememberChoiceInEdge(e);
+            }
+            return true;
+        }
+    }
+    abstract void rememberChoiceInEdge(TGEdge e);
+    abstract void forgetChoiceInEdge(TGEdge e);
+    
+    void forgetChoiceInEdges() {
+        for (TGEdge e:choices) {
+            forgetChoiceInEdge(e);
+        }
+    }
+
+    int size() {
+        return choices.size() - deleteCount;
+    }
+
+  public boolean impossible() {
+      return (!alreadyDone) && size() == 0 ;
+  }
+    
+//    /**
+//     * Remove choices requiring t (if any)
+//     * @param t
+//     * @param wam
+//     * @return false if the operation failed and backtracking is needed.
+//     */
+//    public boolean choiceRemoved(TGEdge t, WAM wam) {
+//        if (allChoices.remove(t)) {
+//            wam.pushAddUndoingRemove(allChoices,t);
+//            return !allChoices.isEmpty();
+//        }
+//        return true;
+//    }
+//    
+//    
+//
+//    public void prepareChoices(GrowingGraph gg, ShrinkingGraph sg) {
+//        alreadyDone = false;
+//        oneChoices.clear();
+////        twoChoices.clear();
+//        Collection<TGEdge> already = gg.getIncidentEdges(face);
+//        for (List<TGEdge> choice:choices) {
+//            TGEdge a = choice.get(0);
+//            if (!sg.containsEdge(a)) {
+//                continue;
+//            }
+//            switch (choice.size()) {
+//            case 1:
+//                doOne(a, already);
+//                break;
+//            case 2:
+//                TGEdge b = choice.get(1);
+//                if (!sg.containsEdge(b)) {
+//                    continue;
 //                }
+//                if (already.contains(a)) {
+//                    doOne(b,already);
+//                } else if (already.contains(b)) {
+//                    doOne(a, already);
+//                } else {
+////                    twoChoices.add(a);
+////                    twoChoices.add(b);
+//                }
+//                break;
+//            default:
+//                    throw new IllegalArgumentException();
+//            }
+//            if (alreadyDone) {
+//                return;
 //            }
 //        }
-    }
+////        for (int i=twoChoices.size()-1;i>=0;i--) {
+////            if (oneChoices.contains(twoChoices.get(i))) {
+////                if (i%2 == 0) {
+//////                    System.err.println("even");
+////                    twoChoices.remove(i+1);
+////                    twoChoices.remove(i);
+////                } else {
+//////                    System.err.println("odd");
+////                    twoChoices.remove(i);
+////                    twoChoices.remove(i-1);
+////                    i--;
+////                }
+////            }
+////        }
+//    }
+//
+//    private void doOne(TGEdge a, Collection<TGEdge> already) {
+//        if (already.contains(a)) {
+//            alreadyDone = true;
+//        } else {
+//            oneChoices.add(a);
+//        }
+//    }
 
-    private void doOne(TGEdge a, Collection<TGEdge> already) {
-        if (already.contains(a)) {
-            alreadyDone = true;
-        } else {
-            oneChoices.add(a);
-        }
-    }
-
-    public boolean impossible() {
-        return (!alreadyDone) && oneChoices.isEmpty() ; //&& twoChoices.isEmpty();
-    }
-
-    public TGEdge[] singleChoices() {
-        return oneChoices.toArray(new TGEdge[oneChoices.size()]);
-    }
+//
+//    public TGEdge[] singleChoices() {
+//        return oneChoices.toArray(new TGEdge[oneChoices.size()]);
+//    }
 
 //    public TGEdge[] doubleChoices() {
 //        return twoChoices.toArray(new TGEdge[twoChoices.size()]);
