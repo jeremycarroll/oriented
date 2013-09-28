@@ -10,6 +10,7 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.pseudoline2.TensionGraph;
+import net.sf.oriented.pseudoline2.WAM;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -125,14 +126,20 @@ public class TestTwistedGraphs {
         OM om = Examples.all().get(omName);
         EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
         TensionGraph ten = new TGFactory(pseudoLines).create();
-        for (TGVertex v:ten.getVertices()) {
-            System.err.println(v);
-        }
+//        for (TGVertex v:ten.getVertices()) {
+//            System.err.println(v);
+//        }
         Assert.assertEquals(vCount,ten.getVertexCount());
         Assert.assertEquals(eCount,ten.getEdgeCount());
         ten.prune();
         Assert.assertEquals(vCount2,ten.getVertexCount());
         Assert.assertEquals(eCount2,ten.getEdgeCount());
+        if (vCount2 != 0) {
+            WAM wam = new WAM(ten);
+            int actualDificultyCount = wam.search().size();
+            System.err.println(wam.transitions+" wam transitions");
+            System.err.println(actualDificultyCount+" difficulties");
+        }
 //        if (prunedTensions != ten.getVertices().size()) {
 //            ten.dumpEdges();
 //            ten.dumpVertices();

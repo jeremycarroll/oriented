@@ -16,7 +16,7 @@ public class TGEdge {
     EdgeChoices inChoice;
     EdgeChoices outChoice;
     public TGEdge(Label l, int ordinal, TGVertex s, TGVertex d) {
-        Preconditions.checkArgument(s.getId().sign(l) != 1);
+        Preconditions.checkArgument(s.getId().sign(l) != -1);
         Preconditions.checkArgument(d.getId().sign(l) != 1);
         label = l;
         this.ordinal = ordinal;

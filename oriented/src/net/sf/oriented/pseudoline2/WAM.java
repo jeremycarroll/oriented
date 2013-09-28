@@ -5,11 +5,13 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 /**
@@ -134,7 +136,7 @@ public class WAM {
 
         @Override
         boolean decideAgainst(TGVertex a) {
-            boolean rslt = remove(a);
+            boolean rslt = maybeRemove(a);
             if (!rslt) {
                 fail();
             }
@@ -290,11 +292,39 @@ public class WAM {
                 break;
             case Fail:
                 stack.pop();
-                if (stack.isEmpty()) return results;
+                if (stack.isEmpty()) return minimalResults();
                 backTrack();
                 break;
             }
         }
+    }
+
+    private List<Difficulty> minimalResults() {
+        Difficulty r[] = new Difficulty[results.size()];
+        results.toArray(r);
+        int i = 0;
+        int sz = r.length;
+        
+        while (i<sz-1) {
+            Difficulty di = r[i++];
+            int isz = di.rslt.getEdgeCount();
+            int j = i;
+            while (j<sz) {
+                Difficulty dj = r[j++];
+                int jsz = dj.rslt.getEdgeCount();
+                if (jsz <= isz && this.subGraph(dj.rslt, di.rslt)) {
+                    System.arraycopy(r, j, r, j-1, sz-j);
+                    sz--;
+                    continue;
+                }
+                if (subGraph(di.rslt,dj.rslt)) {
+                    System.arraycopy(r, i, r, i-1, sz-i);
+                    sz--;
+                    break;
+                }
+            }
+        }
+        return Arrays.asList(r).subList(0, sz);
     }
 
     /**
@@ -453,8 +483,9 @@ public class WAM {
      * @return
      */
     protected boolean add(TGEdge tension) {
-        return shrinking.containsEdge(tension)
-                && growing.addWithConsequences(tension);
+        return growing.containsEdge(tension)  // TODO remove first possibility - inefficient
+                || ( shrinking.containsEdge(tension)
+                && growing.addWithConsequences(tension));
     }
 
     private void backTrack() {
