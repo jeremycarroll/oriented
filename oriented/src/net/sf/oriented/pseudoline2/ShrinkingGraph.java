@@ -18,15 +18,10 @@ public class ShrinkingGraph extends PrunableGraph {
     
     final WAM wam;
     final GrowingGraph growing;
-    final EuclideanPseudoLines pseudolines;
     ShrinkingGraph(WAM wam, TensionGraph orig) {
         this.wam = wam;
         copy(orig);
         growing = new GrowingGraph(wam, this);
-        pseudolines = orig.getEuclideanPseudoLines();
-    }
-    public EuclideanPseudoLines getEuclideanPseudoLines() {
-        return pseudolines;
     }
     
     @Override
@@ -39,189 +34,6 @@ public class ShrinkingGraph extends PrunableGraph {
         return rslt;
     }
     
-//    class FaceConstraints extends FaceAnalyzer {
-//        final int index;
-//        final TensionPath path;
-//        
-//        FaceConstraints(int ix, FaceConstraints faceConstraints) {
-//            super(faceConstraints.face);
-//            out = faceConstraints.out;
-//            in = faceConstraints.in;
-//            path = faceConstraints.path;
-//            index = ix;
-//        }
-//
-//        public FaceConstraints(int i, TensionPath path, Face face) {
-//           super(face);
-//           out = new ArrayList<Tension>(out);
-//           in = new ArrayList<Tension>(in);
-//           index = i;
-//           this.path = path;
-//        }
-//
-//        @Override
-//        boolean add(Tension f, Tension s, Tension t) {
-//            // TODO Auto-generated method stub
-//            return false;
-//        }
-//
-//        public FaceConstraints copy(int i) {
-//            return new FaceConstraints(i,this);
-//        }
-//
-//        public void forward(EdgeInfo edgeInfo) {
-//            // TODO Auto-generated method stub
-//            
-//        }
-//
-//        public void backward(EdgeInfo edgeInfo) {
-//            // TODO Auto-generated method stub
-//            
-//        }
-//        
-//    }
-//    
-//    class EdgeSelector extends FaceAnalyzer {
-//
-//        final Tension wanted;
-//        final int size;
-//        final List<List<Tension>> options = new ArrayList<List<Tension>>();
-//        final Collection<Tension> already;
-//        final int space;
-//        boolean justDoIt = false;
-//        EdgeSelector(Face f, Tension wanted) {
-//            super(f);
-//            this.wanted = wanted;
-//            this.size = faceSize(f);
-//            // what is already at this face concerning the child
-//            already = growing.getIncidentEdges(f);
-//            space = faceSize(f) - already.size();
-//        }
-//
-//        @Override
-//        boolean add(Tension f, Tension s, Tension t) {
-//            if (f==wanted) {
-//                add(s,t);
-//            } else  if (s==wanted) {
-//                add(f,t);
-//            } else if (t==wanted) {
-//                add(f,s);
-//            }
-//            return !justDoIt;
-//        }
-//
-//        private void add(Tension s, Tension t) {
-//            if (already.contains(s)) {
-//                add(t);
-//            } else if (already.contains(t)) {
-//                add(s);
-//            } else {
-//                if (space > 1) {
-//                   options.add(ImmutableList.of(s,t));
-//                }
-//            }
-//        }
-//
-//        private void add(Tension t) {
-//            if (already.contains(t)) {
-//                justDoIt = true;
-//            } else {
-//                if (space > 0) {
-//                   options.add(ImmutableList.of(t));
-//                }
-//            }
-//        }
-//
-//        public boolean impossible() {
-//            return space < 0;
-//        }
-//
-//        public void search() {
-//            this.findPlusMinusPlus();
-//            if (justDoIt) {
-//                options.clear();
-//                options.add(Arrays.asList(new Tension[0]));
-//            }
-//        }
-//        
-//    }
-
-//    /**
-//     * 
-//     * @param face
-//     * @param t Has already been added to tg
-//     * @param tg
-//     * @return true if added, false if it cannot be added.
-//     */
-//    public boolean consequences(TGVertex face, TGEdge t, GrowingGraph tg) {
-//        if (!containsVertex(face)) {
-//            return false;
-//        }
-//        EdgeSelector selector = new EdgeSelector(face,t);
-//        if (selector.impossible()) {
-//            return false;
-//        }
-//        selector.search();
-//        if (selector.options.isEmpty()) {
-//            return false;
-//        }
-//        if (selector.options.size() == 1) {
-//            for (TGEdge tt:selector.options.get(0)) {
-//                if (!(tg.containsEdge(tt) || tg.addWithConsequences(tt))) {
-//                    return false;
-//                }
-//            }
-//        } else {
-//           tg.addChoices(face,selector.options);
-//        }
-//        return true;
-//    }
-
-//    
-//    TGEdge[] sortedEdges() {
-////        System.err.println("sorting");
-//        TGEdge rslt[] = getEdges().toArray(new TGEdge[getEdgeCount()]);
-//        final Map<TGVertex,Integer> faceScore = new HashMap<TGVertex,Integer>();
-//        for (TGVertex f:getVertices()) {
-//            faceScore.put(f, score(f));
-//        }
-//        Arrays.sort(rslt, new Comparator<TGEdge>(){
-//
-//            @Override
-//            public int compare(TGEdge o1, TGEdge o2) {
-//                
-//                return  score(o1) - score(o2);
-//            }
-//
-//            private int score(TGEdge t) {
-//                return faceScore.get(t.source) * faceScore.get(t.dest);
-//            }});
-//        
-//        
-//        return rslt;
-//    }
-
-//    private int score(TGVertex f) {
-//        int factor =  1; //faceSize(f) - 2;
-//        int in = this.getInEdges(f).size();
-//        int out = this.getOutEdges(f).size();
-//        if (in == 0 || out == 0) {
-//            // this face cannot be in a solution, put any edge involving it early
-//            return 0;
-//        }
-//        if (in == 1) {
-//            return factor*out;
-//        }
-//        if (out == 1) {
-//            return factor*in;
-//        }
-//        int min = in<out?in:out;
-//        return factor*(min + getEdgeCount());
-//    }
-//    boolean removeTouchingEdges(TGEdge t) {
-//        // TODO Auto-generated method stub
-//        return false;
-//    }
     /**
      * return true to indicate that we have successfully ensured that
      * vertex is not part of this graph.
@@ -233,38 +45,6 @@ public class ShrinkingGraph extends PrunableGraph {
         return false;
     }
 
-//    public boolean removeParallel(TGEdge t) {
-////        Collection<TGEdge> s = getIncidentEdges(t.source);
-////        Collection<TGEdge> d = getIncidentEdges(t.dest);
-////        if (s.size()<d.size()) {
-////            return removeParallel(t,s,t.dest);
-////        } else {
-////            return removeParallel(t,d,t.source);
-////            
-////        }
-//    }
-
-//    private boolean removeParallel(TGEdge added, Collection<TGEdge> toCheck, TGVertex opposite) {
-//        List<TGEdge> toBeRemoved = new ArrayList<TGEdge>();
-//        for (TGEdge t:toCheck) {
-//            if (t == added) {
-//                continue;
-//            }
-//            if (isIncident(opposite, t)) {
-//                toBeRemoved.add(t);
-//            }
-//        }
-//        for (TGEdge t:toBeRemoved) {
-//            if (!wam.maybeRemove(t)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
-//    public FaceConstraints faceConstaints(int i, TensionPath path, Face from) {
-//        return new FaceConstraints(i, path, from);
-//    }
 }
 
 
