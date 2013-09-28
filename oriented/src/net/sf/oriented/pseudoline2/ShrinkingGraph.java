@@ -20,7 +20,7 @@ public class ShrinkingGraph extends PrunableGraph {
     ShrinkingGraph(WAM wam, TensionGraph orig) {
         this.wam = wam;
         copy(orig);
-        growing = new GrowingGraph(wam, this);
+        growing = new GrowingGraph(wam,this);
     }
     
     @Override

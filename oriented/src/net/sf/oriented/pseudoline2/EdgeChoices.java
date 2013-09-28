@@ -66,7 +66,7 @@ abstract class EdgeChoices {
         return alreadyDone;
     }
     
-    boolean makeChoiceNowOrLater(ShrinkingGraph sg) {
+    boolean makeChoiceNowOrLater(WAM wam, List<TGEdge> addNow) {
         if (alreadyDone) {
             return true;
         }
@@ -74,9 +74,10 @@ abstract class EdgeChoices {
         case 0:
             return false;
         case 1:
-            return sg.growing.addWithConsequences(choices.get(0));
+            addNow.add(choices.get(0));
+            return true;
         default:
-            sg.wam.addChoice(this);
+            wam.addChoice(this);
             for (TGEdge e:choices) {
                 rememberChoiceInEdge(e);
             }

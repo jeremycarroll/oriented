@@ -218,7 +218,7 @@ public class WAM {
      * hit success!
      */
     private final GrowingGraph growing;
-    private final ShrinkingGraph shrinking;
+    final ShrinkingGraph shrinking;
     private final Deque<Frame> stack = new ArrayDeque<Frame>();
     private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private final List<Difficulty> results = new ArrayList<Difficulty>();

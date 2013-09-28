@@ -28,10 +28,10 @@ public class TGEdge {
         return label;
     }
 
-//    @Override
-//    public String toString() {
-//        return label+":"+source.covector()+"⇒"+dest.covector();
-//    }
+    @Override
+    public String toString() {
+        return label+":"+source.getId()+"⇒"+dest.getId();
+    }
 }
 
 

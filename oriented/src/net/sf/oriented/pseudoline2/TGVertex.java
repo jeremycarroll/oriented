@@ -62,15 +62,51 @@ public class TGVertex {
     }
 
     public boolean impossible(PrunableGraph g) {
+        return !(checkEdgeCount(g) && checkEdgeLabels(g));
+    }
+
+    public Iterable<TGVertex> overlapping(AbstractTGraph g) {
+        List<TGVertex> rslt = new ArrayList<TGVertex>();
+        for (TGVertex v:g.getVertices()) {
+            if (!v.equals(this)) {
+                if (!v.extent.intersection(extent).isEmpty()) {
+                    rslt.add(v);
+                }
+            }
+        }
+        return rslt;
+    }
+
+    /**
+     * This vertex is being added to growing, what additional edges
+     * should be added, either now or later.
+     * @param addLater
+     * @param addNow
+     */
+    boolean addEdgeChoices(WAM addLater, List<TGEdge> addNow) {
+        for (Label l: this.identity.support()) {
+           if (!EdgeChoices.create(this, addLater.shrinking, l).makeChoiceNowOrLater(addLater, addNow)) {
+               return false;
+           }
+        }
+        return true;
+        
+    }
+
+    public boolean checkEdgeCount(AbstractTGraph g) {
         int eCount = g.getNeighborCount(this);
         if (eCount < identity.size()) {
-            return true;
+            return false;
         }
+        return true;
+    }
+
+    public boolean checkEdgeLabels(AbstractTGraph g) {
         UnsignedSet incident = identity.minus().minus(identity.minus());
         for (TGEdge e:g.getIncidentEdges(this)) {
             incident = incident.union(e.label());
         }
-        return incident.size() < identity.size();
+        return incident.size() == identity.size();
     }
     @Override
     public String toString() {
@@ -203,30 +239,6 @@ public class TGVertex {
         
         
         
-        
-//        Preconditions.checkArgument(cocircuit.higher().size()==lines.size()*2);
-//        Preconditions.checkArgument(lines.size()>=3);
-//        for (Face f : cocircuit.higher()) {
-//            Preconditions.checkArgument(lines.minus(f.covector().support()).size()==1);
-//        }
-//        List<Label> plus = new ArrayList<Label>();
-//        List<Label> minus = new ArrayList<Label>();
-//        for (int sz=3;sz<=lines.size();sz++) {
-//            for (UnsignedSet someLines:lines.subsetsOfSize(sz)) {
-//                Label labels[] = someLines.toArray();
-//                for (boolean pmp[]:PlusMinusPlus.get(sz)) {
-//                    plus.clear();
-//                    minus.clear();
-//                    for (int i=0;i<labels.length;i++) {
-//                        (pmp[i]?plus:minus).add(labels[i]);
-//                    }
-//                    result.add( new TGVertex(
-//                    fact.signedSets().construct(fact.unsignedSets().copyBackingCollection(plus), 
-//                            fact.unsignedSets().copyBackingCollection(minus)),
-//                            cocircuit ) );
-//                }
-//            }
-//        }
     private static SignedSet createIdentity(FactoryFactory ffactory, SignedSet tope, int sides,
             Label[] lines) {
         List<Label> us = new ArrayList<Label>(lines.length);
@@ -257,31 +269,6 @@ public class TGVertex {
         }
     }
 
-    public Iterable<TGVertex> overlapping() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * This vertex is being added to growing, what additional edges
-     * should be added, either now or later.
-     * @param addLater
-     * @param addNow
-     */
-    public void addEdgeChoices(WAM addLater, List<TGEdge> addNow) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public boolean checkEdgeCount(AbstractTGraph abstractTGraph) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean checkEdgeLabels(AbstractTGraph abstractTGraph) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 
 }
 
