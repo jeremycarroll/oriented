@@ -3,9 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import com.google.common.base.Preconditions;
-
 import net.sf.oriented.omi.Label;
+
+import com.google.common.base.Preconditions;
 
 public class TGEdge {
 

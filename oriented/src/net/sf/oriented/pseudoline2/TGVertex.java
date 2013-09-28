@@ -273,6 +273,16 @@ public class TGVertex {
         
     }
 
+    public boolean checkEdgeCount(AbstractTGraph abstractTGraph) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean checkEdgeLabels(AbstractTGraph abstractTGraph) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
 
 

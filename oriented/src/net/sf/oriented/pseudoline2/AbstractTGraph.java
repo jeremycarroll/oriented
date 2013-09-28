@@ -4,8 +4,6 @@
 package net.sf.oriented.pseudoline2;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.sf.oriented.omi.Face;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
@@ -38,96 +36,24 @@ public class AbstractTGraph extends DirectedSparseMultigraph<TGVertex, TGEdge> {
 //            System.err.println();
 //        }
 //    }
-    abstract class FaceAnalyzer  {
-        TGVertex face;
-        protected Collection<TGEdge> out;
-        protected Collection<TGEdge> in;
-        FaceAnalyzer(TGVertex f) {
-            face = f;
-            out = getOutEdges(face);
-            in = getInEdges(face);
-        }
-        /**
-         * 
-         * @param f
-         * @param s
-         * @param t
-         * @return True to keep looking, false to finish the search
-         */
-        abstract boolean add(TGEdge f, TGEdge s, TGEdge t);
-//        void findPlusMinusPlus(Collection<TGEdge> in, Collection<TGEdge> out) {
-//            for (TGEdge first:out) {
-//                Face firstV = getOpposite(face, first);
-//                for (TGEdge second:in) {
-//                    if (second.ordinal > first.ordinal) {
-//                        Face secondV = getOpposite(face,second);
-//                        if (firstV != secondV) {
-//                            for (TGEdge third: out) {
-//                                if (third.ordinal > second.ordinal) {
-//                                    Face thirdV = getOpposite(face,third);
-//                                    if (firstV != thirdV && secondV != thirdV) {
-//                                       if (!add(first, second, third)) {
-//                                           return;
-//                                       }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        protected void findPlusMinusPlus() {
-//            findPlusMinusPlus(in, out);
-//            findPlusMinusPlus(out, in);
-//        }
-        
-    }
-    class TwistedFace extends FaceAnalyzer {
-        final Set<TGEdge> ok = new HashSet<TGEdge>();
-
-        TwistedFace(TGVertex f) {
-            super(f);
-//            findPlusMinusPlus();
-        }
-
-        @Override
-        public boolean add(TGEdge first, TGEdge second, TGEdge third) {
-            ok.add(first);
-            ok.add(second);
-            ok.add(third);
-            return true;
-        }
-
-        boolean isTwisted() {
-            if (!ok.containsAll(out)) {
-                return false;
-            }
-            if (!ok.containsAll(in)) {
-                return false;
-            }
-            return true;
-        }
-        
-    }
     public boolean isTwistedGraph() {
-//        Collection<Face> vv = getVertices();
-//        if (vv.isEmpty()) {
-//            return false;
-//        }
-//        for (Face f:new ArrayList<Face>(vv)) {
-//            if (getNeighborCount(f)<3) {
-//                return false;
-//            } else {
-//                TwistedFace fa = new TwistedFace(f);
-//                if (!fa.isTwisted()) {
-//                    return false;
-//                }
-//            }
-//        }
+        Collection<TGVertex> vv = getVertices();
+        if (vv.isEmpty()) {
+            return false;
+        }
+        for (TGVertex v:vv) {
+            if (!v.checkEdgeCount(this)) {
+                return false;
+            }
+        }
+        for (TGVertex v:vv) {
+            if (!v.checkEdgeLabels(this)) {
+                return false;
+            }
+        }
         return true;
     }
+ 
     /**
      * Copy all the edges from the orig graph.
      * @param orig
@@ -138,7 +64,6 @@ public class AbstractTGraph extends DirectedSparseMultigraph<TGVertex, TGEdge> {
         }
     }
     protected int faceSize(Face f) {
-        // how may edges are involved at this face?
         int size;
         if (f.type() == Face.Type.Cocircuit ) {
             size = f.higher().size() / 2;

@@ -5,7 +5,6 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class PrunableGraph extends AbstractTGraph {
     public PrunableGraph() {
@@ -13,34 +12,6 @@ public class PrunableGraph extends AbstractTGraph {
 
     public PrunableGraph(AbstractTGraph gg) {
         copy(gg);
-    }
-
-    final class EdgePruner extends TwistedFace {
-        private EdgePruner(TGVertex f) {
-            super(f);
-        }
-
-        private void removeIfNotOk(Collection<TGEdge> out, Collection<TGEdge> toBeRemoved) {
-            for (TGEdge e:out) {
-                if (!ok.contains(e)) {
-                    toBeRemoved.add(e);
-                }
-            }
-        }
-
-        /**
-         * 
-         * @return true if an edge or vertex was removed
-         */
-        List<TGEdge> prune() {
-            List<TGEdge> toBeRemoved = new ArrayList<TGEdge>();
-            removeIfNotOk(out, toBeRemoved);
-            removeIfNotOk(in, toBeRemoved);
-            for (TGEdge e:toBeRemoved) {
-                removeEdge(e);
-            }
-            return toBeRemoved;
-        }
     }
 
     public void prune() {
