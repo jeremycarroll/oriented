@@ -116,6 +116,13 @@ public class TestTwistedGraphs {
     public void testRingel() {
         count("ringel","0",63,172,17,54);
     }
+    
+    @Test
+    public void testManyRingel() {
+        for (int i=0;i<10;i++) {
+            testRingel();
+        }
+    }
     @Test
     public void testChap1() {
         count("chapter1","1",6,2,0,0);

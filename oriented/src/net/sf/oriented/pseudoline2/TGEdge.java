@@ -32,6 +32,17 @@ public class TGEdge {
     public String toString() {
         return label+":"+source.getId()+"⇒"+dest.getId();
     }
+    
+    public void afterAdd(WAM wam) {
+        afterAdd(inChoice, wam);
+        afterAdd(outChoice, wam);
+    }
+
+    private void afterAdd(EdgeChoices c, WAM wam) {
+        if (c != null) {
+            c.madeChoice(this, wam);
+        }
+    }
 }
 
 

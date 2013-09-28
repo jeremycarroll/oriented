@@ -24,11 +24,16 @@ abstract class EdgeChoices {
 
                 @Override
                 void rememberChoiceInEdge(TGEdge e) {
+                    if (e.outChoice != null) {
+                        throw new IllegalStateException("outChoice set "+e);
+                    }
+//                    System.err.println("OutChoice: "+e);
                     e.outChoice = this;
                 }
 
                 @Override
                 void forgetChoiceInEdge(TGEdge e) {
+//                    System.err.println("Forgetting OutChoice: "+e);
                     e.outChoice = null;
                 }
             };
@@ -36,11 +41,16 @@ abstract class EdgeChoices {
             return new EdgeChoices(sg,l,sg.getInEdges(v)){
                 @Override
                 void rememberChoiceInEdge(TGEdge e) {
+                    if (e.inChoice != null) {
+                        throw new IllegalStateException("inChoice set");
+                    }
+//                    System.err.println("InChoice: "+e);
                     e.inChoice = this;
                 }
 
                 @Override
                 void forgetChoiceInEdge(TGEdge e) {
+//                    System.err.println("Forgetting InChoice: "+e);
                     e.inChoice = null;
                 }
             };
@@ -66,7 +76,7 @@ abstract class EdgeChoices {
         return alreadyDone;
     }
     
-    boolean makeChoiceNowOrLater(WAM wam, List<TGEdge> addNow) {
+    boolean makeChoiceNowOrLater(WAM wam, TGVertex v, List<TGEdge> addNow) {
         if (alreadyDone) {
             return true;
         }
@@ -77,7 +87,7 @@ abstract class EdgeChoices {
             addNow.add(choices.get(0));
             return true;
         default:
-            wam.addChoice(this);
+            wam.addChoice(v, this);
             for (TGEdge e:choices) {
                 rememberChoiceInEdge(e);
             }
@@ -100,9 +110,14 @@ abstract class EdgeChoices {
   public boolean impossible() {
       return (!alreadyDone) && size() == 0 ;
   }
-public void madeChoice(TGEdge tgEdge, WAM wam) {
-    // TODO Auto-generated method stub
-    
+  public void madeChoice(TGEdge tgEdge, WAM wam) {
+      if (!alreadyDone) {
+          wam.pushReenableChoice(this);
+          alreadyDone = true;
+      }
+  }
+public void unsetAlreadyDone() {
+    alreadyDone = false;
 }
 
 }

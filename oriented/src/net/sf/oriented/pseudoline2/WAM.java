@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -230,6 +232,7 @@ public class WAM {
     public int transitions = 0;
     private AbstractTGraph expected;
     public boolean debug;
+    private Map<TGVertex,EdgeChoices> v2choice = new HashMap<TGVertex,EdgeChoices>();
 
     public WAM(TensionGraph b) {
         base = b;
@@ -337,13 +340,15 @@ public class WAM {
         stack.push(new ChoiceOfVertex());
     }
 
-    void addChoice(final EdgeChoices opt) {
+    void addChoice(final TGVertex v, final EdgeChoices opt) {
         choices.push(opt);
+        v2choice .put(v,opt);
 
         trail.push(new Undoable() {
             @Override
             public void undo() {
                 choices.remove(opt);
+                v2choice.remove(v);
                 opt.forgetChoiceInEdges();
             }
         });
@@ -479,13 +484,14 @@ public class WAM {
 
     /**
      * Add the edge to the current solution space.
-     * @param tension
+     * @param e
      * @return
      */
-    protected boolean add(TGEdge tension) {
-        return growing.containsEdge(tension)  // TODO remove first possibility - inefficient
-                || ( shrinking.containsEdge(tension)
-                && growing.addWithConsequences(tension));
+    protected boolean add(TGEdge e) {
+        boolean rslt = shrinking.containsEdge(e)
+        && growing.addWithConsequences(e);
+        return //growing.containsEdge(tension)  // TODO remove first possibility - inefficient
+                rslt;
     }
 
     private void backTrack() {
@@ -590,6 +596,20 @@ public class WAM {
             throw new IllegalStateException("vertex removal logic");
         }
         return true;
+    }
+
+    public void pushReenableChoice(final EdgeChoices edgeChoices) {
+        trail.push(new Undoable(){
+
+            @Override
+            public void undo() {
+                edgeChoices.unsetAlreadyDone();
+                
+            }});
+    }
+
+    public boolean containsChoiceFor(TGVertex v) {
+        return v2choice.containsKey(v);
     }
 
 }

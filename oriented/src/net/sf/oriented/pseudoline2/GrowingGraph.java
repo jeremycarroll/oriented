@@ -33,7 +33,13 @@ public class GrowingGraph extends AbstractTGraph {
      */
     public boolean addWithConsequences(TGEdge t) {
         List<TGEdge> moreToAdd = new ArrayList<TGEdge>();
+        if (containsEdge(t)) {
+            throw new IllegalStateException("addEdge failure");
+        }
         if (canAdd(t.source, moreToAdd) && canAdd(t.dest, moreToAdd)) {
+            if (containsEdge(t)) {
+                return true;
+            }
             rawAdd(t);
             for (TGEdge e:moreToAdd) {
                 if (!maybeAdd(e)) {
@@ -66,7 +72,7 @@ public class GrowingGraph extends AbstractTGraph {
                     return false;
                 }
             }
-            return vertex.addEdgeChoices(wam,moreToAdd);
+            return containsVertex(vertex) || vertex.addEdgeChoices(wam,moreToAdd);
         }
         return true;
     }
@@ -95,6 +101,7 @@ public class GrowingGraph extends AbstractTGraph {
             throw new IllegalArgumentException("addEdge failed!");
         }
         wam.pushRemoveUndoingAdd(this,t);
+        t.afterAdd(wam);
     }
 
 

@@ -84,8 +84,11 @@ public class TGVertex {
      * @param addNow
      */
     boolean addEdgeChoices(WAM addLater, List<TGEdge> addNow) {
+        if (addLater.containsChoiceFor(this)) {
+            return true;
+        }
         for (Label l: this.identity.support()) {
-           if (!EdgeChoices.create(this, addLater.shrinking, l).makeChoiceNowOrLater(addLater, addNow)) {
+           if (!EdgeChoices.create(this, addLater.shrinking, l).makeChoiceNowOrLater(addLater, this, addNow)) {
                return false;
            }
         }
