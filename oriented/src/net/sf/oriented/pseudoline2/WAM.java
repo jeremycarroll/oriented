@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
 /**
  * General back tracking design notes:
  * 
@@ -28,31 +27,32 @@ import java.util.Set;
  * 
  * two methods {? and ?} are used for generating new entries for the call stack
  * 
- * currently the call stack is a bit naive forward looking, in that either there are no entries
- * or there is one.
+ * currently the call stack is a bit naive forward looking, in that either there
+ * are no entries or there is one.
  * 
- * if there are no entries then one of the two methods is used to generate the next entry, if 
- * none is forthcoming then we have failed.
+ * if there are no entries then one of the two methods is used to generate the
+ * next entry, if none is forthcoming then we have failed.
  * 
  * after every call or retry we check for success
  * 
- * it may be the case that the search finds two twisted graphs where the latter is a proper subgraph of the former, 
- * this needs to be explicitly checked for
+ * it may be the case that the search finds two twisted graphs where the latter
+ * is a proper subgraph of the former, this needs to be explicitly checked for
  * 
  * each call stack entry has a pointer to the trail before the call
  * 
  * when we backtrack to a call stack entry, we undo the trail
  * 
- * trail changes include changes to the twisted graph and the parent tension graph
+ * trail changes include changes to the twisted graph and the parent tension
+ * graph
  * 
  * 
  * 
  * 
  * @author jeremycarroll
- *
+ * 
  */
 public class WAM {
-    
+
     private final class True extends Frame {
         @Override
         public String toString() {
@@ -68,54 +68,88 @@ public class WAM {
 
     private abstract class Choice<T> extends Frame {
         private final T[] choices;
+
         private Choice(T[] opt) {
             this.choices = opt;
         }
 
         @Override
         public String toString() {
-            return retryCount + "/" +(choices.length)+" "+label(retryCount);
+            return retryCount + "/" + (choices.length) + " "
+                    + label(retryCount);
         }
 
         private String label(int ix) {
             if (ix < choices.length) {
                 return choices[ix].toString();
-            } 
+            }
             return "";
         }
 
         @Override
         boolean call(int ix) {
-            if (!removeChoice(ix-1)) {
+            if (!removeChoice(ix - 1)) {
                 fail();
                 return false;
             }
-            if (ix>=choices.length-1) {
+            if (ix >= choices.length - 1) {
                 fail();
             }
             return ix < choices.length && makeChoice(choices[ix]);
         }
-        
+
         abstract boolean makeChoice(T a);
+
         abstract boolean decideAgainst(T a);
 
         /**
          * 
          * @param ix
-         * @return true if operation omitted or successful, false to force backtracking
+         * @return true if operation omitted or successful, false to force
+         *         backtracking
          */
         private boolean removeChoice(int ix) {
-            if ( ix== -1) {
+            if (ix == -1) {
                 return true;
             }
             if (ix < choices.length) {
                 boolean rslt = decideAgainst(choices[ix]);
                 this.trailPtr = trail.size();
                 return rslt;
-            } 
+            }
             return true;
         }
     }
+
+    private final class ChoiceOfVertex extends Choice<TGVertex> {
+
+        ChoiceOfVertex() {
+            super(shrinking.getVertices().toArray(new TGVertex[0]));
+        }
+
+        @Override
+        boolean makeChoice(TGVertex a) {
+            return growing.addWithConsequences(a);
+        }
+
+        @Override
+        boolean decideAgainst(TGVertex a) {
+            List<TGEdge> es = new ArrayList<TGEdge>(
+                    shrinking.getIncidentEdges(a));
+            for (TGEdge e : es) {
+                if (!maybeRemove(e)) {
+                    fail();
+                    return false;
+                }
+            }
+            if (shrinking.containsVertex(a)) {
+                throw new IllegalStateException("vertex removal logic");
+            }
+            return true;
+        }
+
+    }
+
     private final class ChoiceOfEdge extends Choice<TGEdge> {
         private final EdgeChoices opt;
 
@@ -124,7 +158,6 @@ public class WAM {
             this.opt = opt;
         }
 
-       
         @Override
         boolean makeChoice(TGEdge a) {
             if (opt.alreadyDone()) {
@@ -147,11 +180,13 @@ public class WAM {
             fail();
             return false;
         }
+
         @Override
         public String toString() {
             return "fail";
         }
     }
+
     private enum Port {
         Call, Redo, Fail
     }
@@ -171,22 +206,23 @@ public class WAM {
         final boolean retry() {
             return call(retryCount++);
         }
-        
+
         abstract boolean call(int counter);
-  
+
         protected void fail() {
             port = Port.Fail;
         }
     }
-    
+
     private abstract class Undoable {
-        public abstract void undo() ;
+        public abstract void undo();
     }
 
     private final TensionGraph base;
     /**
-     * The current solution space is the set of graphs between growing and shrinking.
-     * As the algorithm progresses these get closer together until we hit success!
+     * The current solution space is the set of graphs between growing and
+     * shrinking. As the algorithm progresses these get closer together until we
+     * hit success!
      */
     private final GrowingGraph growing;
     private final ShrinkingGraph shrinking;
@@ -194,25 +230,25 @@ public class WAM {
     private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private final List<Difficulty> results = new ArrayList<Difficulty>();
     final Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
-    
+
     // tracing and debug fields
     public int transitions = 0;
     private AbstractTGraph expected;
     public boolean debug;
-    
+
     public WAM(TensionGraph b) {
         base = b;
         shrinking = new ShrinkingGraph(this, base);
         growing = shrinking.growing;
     }
-    
- 
+
     /**
      * 
      * @param tension
-     * @return true if operation omitted or successful, false to force backtracking
+     * @return true if operation omitted or successful, false to force
+     *         backtracking
      */
-    public boolean maybeRemove(TGEdge tension) {
+    boolean maybeRemove(TGEdge tension) {
         if (shrinking.containsEdge(tension)) {
             return remove(tension);
         }
@@ -230,7 +266,7 @@ public class WAM {
                     if (success()) {
                         backTrack();
                     } else {
-                       extend();
+                        extend();
                     }
                 } else {
                     backTrack();
@@ -241,7 +277,7 @@ public class WAM {
                     if (success()) {
                         backTrack();
                     } else {
-                       extend();
+                        extend();
                     }
                 } else {
                     backTrack();
@@ -249,90 +285,85 @@ public class WAM {
                 break;
             case Fail:
                 stack.pop();
-                if (stack.isEmpty())
-                    return results;
+                if (stack.isEmpty()) return results;
                 backTrack();
                 break;
             }
         }
     }
 
-    
-
     /**
-     * Every solution has at least one vertex from the base.
-     * We choose that vertex first, then we add edges until we have a twisted graph
-     * or failure.
-     * This method adds the choicepoint for the first vertex.
-     * We go with larger vertices first.
+     * Every solution has at least one vertex from the base. We choose that
+     * vertex first, then we add edges until we have a twisted graph or failure.
+     * This method adds the choicepoint for the first vertex. We go with larger
+     * vertices first.
      */
-   private void addChoiceOfInitialTGVertex() {
-        // TODO Auto-generated method stub
-        
+    private void addChoiceOfInitialTGVertex() {
+        stack.push(new ChoiceOfVertex());
     }
 
-
- void addChoice(final EdgeChoices opt) {
+    void addChoice(final EdgeChoices opt) {
         choices.push(opt);
 
-        trail.push(new Undoable(){
+        trail.push(new Undoable() {
             @Override
             public void undo() {
                 choices.remove(opt);
                 opt.forgetChoiceInEdges();
-            }});
+            }
+        });
     }
-
 
     public boolean hasOptions() {
         return !choices.isEmpty();
     }
+
     private boolean success() {
         boolean success = growing.isTwistedGraph();
         if (success) {
             results.add(new Difficulty(growing));
-//            growing.dumpEdges();
+            // growing.dumpEdges();
         }
         return success;
     }
 
     private void extend() {
-        if ( hasOptions() ) {
+        if (hasOptions()) {
             pushChoiceFromEdge(selectNextEdgeChoice());
         } else {
             throw new IllegalStateException("Not possible");
-//            final TGEdge t = findPossibleEdge();
-//            if (t==null) {
-//                stack.push(new Failure());
-//            } else {
-//            stack.push(new Frame(){
-//                @Override
-//                boolean call(int ix) {
-//                    switch(ix) {
-//                    case 0:
-//                        return add(t);
-//                    case 1:
-//                        fail();
-//                        return remove(t);
-//                    default:
-//                        throw new IllegalArgumentException("WAM call logic error");
-//                    }
-//                }
-//                @Override
-//                public String toString() {
-//                    switch (this.retryCount) {
-//                case 0:
-//                    return "add "+t.toString();
-//                case 1:
-//                    return "[-add] "+t.toString();
-//                case 2:
-//                    return "fail [add] "+t.toString();
-//                default:
-//                    throw new IllegalArgumentException("WAM call logic error");
-//                }
-//                }
-//            });
-//            }
+            // final TGEdge t = findPossibleEdge();
+            // if (t==null) {
+            // stack.push(new Failure());
+            // } else {
+            // stack.push(new Frame(){
+            // @Override
+            // boolean call(int ix) {
+            // switch(ix) {
+            // case 0:
+            // return add(t);
+            // case 1:
+            // fail();
+            // return remove(t);
+            // default:
+            // throw new IllegalArgumentException("WAM call logic error");
+            // }
+            // }
+            // @Override
+            // public String toString() {
+            // switch (this.retryCount) {
+            // case 0:
+            // return "add "+t.toString();
+            // case 1:
+            // return "[-add] "+t.toString();
+            // case 2:
+            // return "fail [add] "+t.toString();
+            // default:
+            // throw new IllegalArgumentException("WAM call logic error");
+            // }
+            // }
+            // });
+            // }
         }
     }
 
@@ -342,7 +373,7 @@ public class WAM {
         int bestSize = best.size();
         while (it.hasNext()) {
             EdgeChoices n = it.next();
-            if (n.size()<bestSize) {
+            if (n.size() < bestSize) {
                 bestSize = n.size();
                 best = n;
             }
@@ -352,15 +383,17 @@ public class WAM {
 
     private void pushChoiceFromEdge(final EdgeChoices opt) {
         choices.remove(opt);
-        trail.push(new Undoable(){
+        trail.push(new Undoable() {
             @Override
             public void undo() {
                 choices.push(opt);
-            }});
-//        opt.prepareChoices(growing,shrinking);
+            }
+        });
+        // opt.prepareChoices(growing,shrinking);
         if (opt.impossible()) {
             stack.push(new Failure());
-        } if (opt.alreadyDone()) {
+        }
+        if (opt.alreadyDone()) {
             stack.push(new True());
         } else {
             stack.push(new ChoiceOfEdge(opt));
@@ -368,41 +401,45 @@ public class WAM {
     }
 
     private void debugMsg(String port) {
-        transitions ++;
+        transitions++;
         if (debug)
-        System.err.println(port+"["+stack.size()+"/"+trail.size()+":"+choices.size()+"] "+pad(stack)+
-                pad(trail)+pad(choices)+stack.peek().toString());
+            System.err.println(port + "[" + stack.size() + "/" + trail.size()
+                    + ":" + choices.size() + "] " + pad(stack) + pad(trail)
+                    + pad(choices) + stack.peek().toString());
     }
+
     private String pad(Collection<?> c) {
         int size = c.size();
-        return size<10?"  ":(size<100?" ":"");
+        return size < 10 ? "  " : (size < 100 ? " " : "");
     }
 
     boolean edgeRemovalFailed;
+
     /**
      * Remove an edge from the current solution space.
      * @param t
      * @return true if removal was ok, false to force backtracking
      */
-    protected boolean remove(final TGEdge t) {
+    boolean remove(final TGEdge t) {
         edgeRemovalFailed = false;
         shrinking.removeEdge(t);
         growing.edgeHasBeenRemoved(t);
         Set<TGVertex> vv = new HashSet<TGVertex>();
         vv.add(t.source);
         vv.add(t.dest);
-        shrinking.prune(vv,true);
+        shrinking.prune(vv, true);
         return !edgeRemovalFailed;
     }
 
     void trailRemove(final TGEdge t) {
-        trail.push(new Undoable(){
+        trail.push(new Undoable() {
 
             @Override
             public void undo() {
-                shrinking.addEdge(t, t.source, t.dest );
-            }});
-        
+                shrinking.addEdge(t, t.source, t.dest);
+            }
+        });
+
     }
 
     /**
@@ -411,7 +448,8 @@ public class WAM {
      * @return
      */
     protected boolean add(TGEdge tension) {
-        return shrinking.containsEdge(tension) && growing.addWithConsequences(tension);
+        return shrinking.containsEdge(tension)
+                && growing.addWithConsequences(tension);
     }
 
     private void backTrack() {
@@ -421,84 +459,101 @@ public class WAM {
         }
     }
 
-//    private TGEdge findPossibleEdge() {
-//        Iterator<TGEdge> it = 
-//                Arrays.asList(shrinking.sortedEdges()).
-////                shrinking.getEdges().
-//                iterator();
-//        TGEdge t;
-//        while (true) {
-//            if (!it.hasNext()) {
-//                return null;
-//            }
-//            t = it.next();
-//            if (!growing.containsEdge(t)) {
-//                return t;
-//            }
-//        }
-//    }
+    // private TGEdge findPossibleEdge() {
+    // Iterator<TGEdge> it =
+    // Arrays.asList(shrinking.sortedEdges()).
+    // // shrinking.getEdges().
+    // iterator();
+    // TGEdge t;
+    // while (true) {
+    // if (!it.hasNext()) {
+    // return null;
+    // }
+    // t = it.next();
+    // if (!growing.containsEdge(t)) {
+    // return t;
+    // }
+    // }
+    // }
 
     public void pushRemoveUndoingAdd(final GrowingGraph gg, final TGEdge t) {
-        trail.push(new Undoable(){
+        trail.push(new Undoable() {
             @Override
             public void undo() {
                 TGVertex v1 = gg.getSource(t);
                 TGVertex v2 = gg.getDest(t);
-                
+
                 if (!gg.removeEdge(t)) {
                     throw new IllegalStateException("Failed to remove edge");
                 }
-                if (gg.getNeighborCount(v1)==0) {
+                if (gg.getNeighborCount(v1) == 0) {
                     gg.removeVertex(v1);
                 }
-                if (gg.getNeighborCount(v2)==0) {
+                if (gg.getNeighborCount(v2) == 0) {
                     gg.removeVertex(v2);
                 }
-            }});
+            }
+        });
+    }
+
+    public void pushRemoveUndoingAdd(final GrowingGraph gg, final TGVertex v1) {
+        trail.push(new Undoable() {
+            @Override
+            public void undo() {
+                if (!gg.containsVertex(v1)) {
+                    return;
+                }
+                if (gg.getNeighborCount(v1) != 0) {
+                    throw new IllegalStateException("backtracking problem");
+                }
+                gg.removeVertex(v1);
+            }
+        });
     }
 
     public void setDebugExpected(AbstractTGraph expected) {
         this.expected = expected;
         this.debug = true;
     }
-    
+
     boolean debugLookingGood() {
-        return expected == null || subGraph(this.growing, expected) && subGraph(expected, shrinking);
+        return expected == null || subGraph(this.growing, expected)
+                && subGraph(expected, shrinking);
     }
 
     private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {
-        for (TGEdge edge: small.getEdges()) {
-            if (small.getSource(edge) != big.getSource(edge) ) {
+        for (TGEdge edge : small.getEdges()) {
+            if (small.getSource(edge) != big.getSource(edge)) {
                 return false;
             }
-            if (small.getDest(edge) != big.getDest(edge) ) {
+            if (small.getDest(edge) != big.getDest(edge)) {
                 return false;
             }
         }
         return true;
     }
 
-    public void pushAddUndoingRemove(final Set<TGEdge> allChoices, final TGEdge t) {
-        trail.push(new Undoable(){
+    public void pushAddUndoingRemove(final Set<TGEdge> allChoices,
+            final TGEdge t) {
+        trail.push(new Undoable() {
             @Override
             public void undo() {
                 allChoices.add(t);
-            }});
+            }
+        });
     }
 
 }
 
-
 /************************************************************************
-    This file is part of the Java Oriented Matroid Library.  
-
-    The Java Oriented Matroid Library is distributed in the hope that it 
-    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-    See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with the Java Oriented Matroid Library.  
-    If not, see <http://www.gnu.org/licenses/>.
-
-**************************************************************************/
+ * This file is part of the Java Oriented Matroid Library.
+ * 
+ * The Java Oriented Matroid Library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * the Java Oriented Matroid Library. If not, see
+ * <http://www.gnu.org/licenses/>.
+ **************************************************************************/

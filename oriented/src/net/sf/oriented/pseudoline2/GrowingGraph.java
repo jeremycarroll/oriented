@@ -64,6 +64,24 @@ public class GrowingGraph extends AbstractTGraph {
         }
         return true;
     }
+    
+    public boolean addWithConsequences(TGVertex vertex) {
+        List<TGEdge> moreToAdd = new ArrayList<TGEdge>();
+        if (canAdd(vertex, moreToAdd)) {
+            addVertex(vertex);
+            wam.pushRemoveUndoingAdd(this, vertex);
+            for (TGEdge e:moreToAdd) {
+                if (!maybeAdd(e)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
 
 
     private void rawAdd(TGEdge t) {
