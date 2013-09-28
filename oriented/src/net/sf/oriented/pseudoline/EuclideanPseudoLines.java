@@ -422,37 +422,37 @@ public class EuclideanPseudoLines {
         return modified.elements()[0];
     }
 
-    public Collection<Difficulty> getDifficulties() {
-        DirectedGraph<Face,Tension> tensions = getTensions();
-        
-        return null;
-    }
-    
-    public TensionGraph getTensions() {
-        TensionGraph rslt = new TensionGraph(this);
-        switchFaceLattice();
-        for (Face f:getFaceLattice().withDimension(0)) {
-            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)
-               rslt.addVertex(f);
-        }
-        for (Face f:getFaceLattice().withDimension(2)) {
-            if (f.covector().sign(getInfinity())==1 && !touchesInfinity(f)) {
-                rslt.addVertex(f);
-            }
-        }
-        for (Face from:rslt.getVertices()) {
-            for (Face to:rslt.getVertices()) {
-                if (from.equals(to)) {
-                    continue;
-                }
-                UnsignedSet tension = notLoops.minus(from.covector().minus()).minus(to.covector().plus());
-                for (Label l:tension) {
-                    rslt.addEdge(new Tension(l, this.modified.asInt(l), from, to), from, to);
-                }
-            }
-        }
-        return rslt;
-    }
+//    public Collection<Difficulty> getDifficulties() {
+//        DirectedGraph<Face,Tension> tensions = getTensions();
+//        
+//        return null;
+//    }
+//    
+//    public TensionGraph getTensions() {
+//        TensionGraph rslt = new TensionGraph(this);
+//        switchFaceLattice();
+//        for (Face f:getFaceLattice().withDimension(0)) {
+//            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)
+//               rslt.addVertex(f);
+//        }
+//        for (Face f:getFaceLattice().withDimension(2)) {
+//            if (f.covector().sign(getInfinity())==1 && !touchesInfinity(f)) {
+//                rslt.addVertex(f);
+//            }
+//        }
+//        for (Face from:rslt.getVertices()) {
+//            for (Face to:rslt.getVertices()) {
+//                if (from.equals(to)) {
+//                    continue;
+//                }
+//                UnsignedSet tension = notLoops.minus(from.covector().minus()).minus(to.covector().plus());
+//                for (Label l:tension) {
+//                    rslt.addEdge(new Tension(l, this.modified.asInt(l), from, to), from, to);
+//                }
+//            }
+//        }
+//        return rslt;
+//    }
 
     public boolean touchesInfinity(Face f) {
         for (Face e:f.lower()) {

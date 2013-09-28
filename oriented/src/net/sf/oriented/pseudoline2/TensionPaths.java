@@ -1,24 +1,23 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.pseudoline;
+package net.sf.oriented.pseudoline2;
 
+import net.sf.oriented.util.graph.Paths;
+import net.sf.oriented.util.graph.SimplePath;
+import edu.uci.ics.jung.graph.Graph;
 
-public class TensionGraph extends PrunableGraph {
-    
-    final EuclideanPseudoLines pseudolines;
+final class TensionPaths extends Paths<TGVertex, TGEdge, SimplePath<TGVertex>> {
+    /**
+     * 
+     */
+    private final WAM wam;
 
-    public TensionGraph(EuclideanPseudoLines euclideanPseudoLines) {
-        this.pseudolines = euclideanPseudoLines;
+    TensionPaths(WAM wam, Graph<TGVertex, TGEdge> g) {
+        super(g);
+        this.wam = wam;
     }
-
-    public EuclideanPseudoLines getEuclideanPseudoLines() {
-        return pseudolines;
-    }
-    
-
 }
-
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.  

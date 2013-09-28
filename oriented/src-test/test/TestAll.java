@@ -36,7 +36,6 @@ import org.junit.runners.Suite.SuiteClasses;
     TestGrassmannPlucker.class,
     TestDrawing.class,
     TestPlusMinusPlus.class,
-    TestDifficulties.class,
 })
 @RunWith(Suite.class)
 public class TestAll {

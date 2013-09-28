@@ -1,23 +1,22 @@
 /************************************************************************
   (c) Copyright 2013 Jeremy J. Carroll
  ************************************************************************/
-package net.sf.oriented.pseudoline;
+package net.sf.oriented.pseudoline2;
 
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.util.graph.PathFactory;
 
-public class TensionPathFactory implements PathFactory<Face, TensionPath>{
+public class TensionPathFactory implements PathFactory<TGVertex, TensionPath>{
     
     final ShrinkingGraph graph;
     final int lineCount;
     
     TensionPathFactory(ShrinkingGraph g) {
         graph = g;
-        lineCount = g.getEuclideanPseudoLines().getEquivalentOM().elements().length;
+        lineCount = g.wam.getEuclideanPseudoLines().getEquivalentOM().elements().length;
     }
 
     @Override
-    public TensionPath create(Face from, Face to) {
+    public TensionPath create(TGVertex from, TGVertex to) {
         return checkNotBad(new TensionPath(graph,lineCount,from,to));
     }
 
