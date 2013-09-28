@@ -134,18 +134,11 @@ public class WAM {
 
         @Override
         boolean decideAgainst(TGVertex a) {
-            List<TGEdge> es = new ArrayList<TGEdge>(
-                    shrinking.getIncidentEdges(a));
-            for (TGEdge e : es) {
-                if (!maybeRemove(e)) {
-                    fail();
-                    return false;
-                }
+            boolean rslt = remove(a);
+            if (!rslt) {
+                fail();
             }
-            if (shrinking.containsVertex(a)) {
-                throw new IllegalStateException("vertex removal logic");
-            }
-            return true;
+            return rslt;
         }
 
     }
@@ -255,6 +248,18 @@ public class WAM {
         return true;
     }
 
+    /**
+     * 
+     * @param v
+     * @return true if operation omitted or successful, false to force
+     *         backtracking
+     */
+    boolean maybeRemove(TGVertex v) {
+        if (shrinking.containsVertex(v)) {
+            return remove(v);
+        }
+        return true;
+    }
     public List<Difficulty> search() {
         addChoiceOfInitialTGVertex();
         while (true) {
@@ -541,6 +546,19 @@ public class WAM {
                 allChoices.add(t);
             }
         });
+    }
+
+    private boolean remove(TGVertex a) {
+        List<TGEdge> es = new ArrayList<TGEdge>(shrinking.getIncidentEdges(a));
+        for (TGEdge e : es) {
+            if (!maybeRemove(e)) {
+                return false;
+            }
+        }
+        if (shrinking.containsVertex(a)) {
+            throw new IllegalStateException("vertex removal logic");
+        }
+        return true;
     }
 
 }

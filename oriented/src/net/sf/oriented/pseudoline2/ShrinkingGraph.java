@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 /**
  * This graph gets smaller as we move along the stack of the {@link WAM}
@@ -34,17 +33,6 @@ public class ShrinkingGraph extends PrunableGraph {
         return rslt;
     }
     
-    /**
-     * return true to indicate that we have successfully ensured that
-     * vertex is not part of this graph.
-     * @param vertex
-     * @return
-     */
-    public boolean maybeRemove(TGVertex vertex) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }
 
 
