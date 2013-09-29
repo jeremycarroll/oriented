@@ -3,6 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This graph gets smaller as we move along the stack of the {@link WAM}
@@ -31,6 +34,20 @@ public class ShrinkingGraph extends PrunableGraph {
         }
         wam.trailRemove(t);
         return rslt;
+    }
+
+    public TGEdge[] filter(TGEdge[] array) {
+//        return array;
+        // following code makes no difference to runtime, but does make the number of transitions more
+        // indicative of actual work-load.
+        List<TGEdge> rslt = new ArrayList<TGEdge>(array.length);
+        for (TGEdge e:array) {
+            if (containsEdge(e)) {
+                rslt.add(e);
+            }
+        }
+        
+        return rslt.toArray(new TGEdge[0]);
     }
     
 }

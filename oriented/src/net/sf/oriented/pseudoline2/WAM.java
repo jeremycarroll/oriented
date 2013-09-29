@@ -165,8 +165,8 @@ public class WAM {
     private final class ChoiceOfEdge extends Choice<TGEdge> {
         private final EdgeChoices opt;
 
-        private ChoiceOfEdge(EdgeChoices opt) {
-            super(maybeSort(opt.choices.toArray(new TGEdge[0])));
+        private ChoiceOfEdge(EdgeChoices opt, ShrinkingGraph sg) {
+            super(maybeSort(sg.filter(opt.choices.toArray(new TGEdge[0]))));
             this.opt = opt;
         }
 
@@ -488,8 +488,22 @@ public class WAM {
         Iterator<EdgeChoices> it = choices.iterator();
         EdgeChoices best = it.next();
         int bestSize = best.size();
+        // this forced choice stuff gives only a marginal performance improvement.
+        if (best.forcedChoice == 0) {
+            return best;
+        }
+        if (best.forcedChoice == 1) {
+            bestSize = 1;
+        }
         while (it.hasNext()) {
             EdgeChoices n = it.next();
+            if (n.forcedChoice == 0) {
+                return n;
+            }
+            if (n.forcedChoice == 1) {
+                bestSize = 1;
+                best = n;
+            }
             if (n.size() < bestSize) {
                 bestSize = n.size();
                 best = n;
@@ -513,7 +527,7 @@ public class WAM {
         if (opt.alreadyDone()) {
             stack.push(new True());
         } else {
-            stack.push(new ChoiceOfEdge(opt));
+            stack.push(new ChoiceOfEdge(opt, shrinking));
         }
     }
 

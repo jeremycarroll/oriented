@@ -14,13 +14,15 @@ import net.sf.oriented.pseudoline2.WAM.Undoable;
 
 abstract class EdgeChoices {
 
+    static final int NOT_FORCED = -1;
+
     final List<TGEdge> choices = new ArrayList<TGEdge>();
     
     private boolean alreadyDone = false;
     
     private int deleteCount = 0;
 
-    private boolean forcedChoice;
+    int forcedChoice = NOT_FORCED;
     
     static EdgeChoices create(TGVertex v, ShrinkingGraph sg, Label l) {
         switch (v.getId().sign(l)) {
@@ -135,17 +137,17 @@ public boolean reduceCount(WAM wam) {
             
         }});
     
-    switch (size()) {
+    switch (choices.size()-deleteCount) {
     case 0:
 //        return false;
     case 1:
-        if (!forcedChoice) {
-        forcedChoice = true;
+        if (forcedChoice==NOT_FORCED) {
+        forcedChoice =choices.size()-deleteCount;
         wam.trail.push(new Undoable(){
 
             @Override
             public void undo() {
-               forcedChoice = false;
+               forcedChoice = NOT_FORCED;
                 
             }});
         }
