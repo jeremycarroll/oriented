@@ -54,7 +54,9 @@ public class TGFactory {
                 UnsignedSet unsignedLine = idI.support().intersection(idJ.support());
                 if (line.size()==1
                      && unsignedLine.size() == 1
-                     && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()) {
+                     && !all[i].getSource().equals(all[j].getSource())
+//                     && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()
+                     ) {
                     TGEdge edge;
                     Label lbl = unsignedLine.iterator().next();
                     int ix = euclideanPseudoLines.getEquivalentOM().asInt(lbl);

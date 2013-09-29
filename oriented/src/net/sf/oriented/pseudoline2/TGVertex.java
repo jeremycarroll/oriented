@@ -46,11 +46,7 @@ public class TGVertex implements Comparable<TGVertex> {
     }
     
     private void addFace(Set<SignedSet> ss, Face f) {
-        if (ss.add(f.covector()) && f.dimension()>0) {
-            for (Face ff:f.lower()) {
-                addFace(ss,ff);
-            }
-        }
+        ss.add(f.covector());
     }
 
     public Face getSource() {

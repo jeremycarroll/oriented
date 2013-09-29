@@ -70,7 +70,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,515,45,255);
+        count("circularsaw5","0",96,1105,91,1005);
     }
     @Ignore
     @Test
@@ -94,7 +94,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,172,17,54);
+        count("ringel","0",63,427,39,211);
     }
 
     @Test
@@ -135,6 +135,7 @@ public class TestTwistedGraphs {
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(diff.size()+" difficulties");
+                if (false)
                 for (int i=0;i<diff.size();i++) {
                     DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, diff.get(i));
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
