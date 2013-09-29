@@ -62,10 +62,9 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
-    @Ignore
     @Test
     public void testCeva() {
-        count("ceva","0",14,24,8,12);
+        count("ceva","0",14,27,14,27);
     }
 
     @Test
@@ -106,6 +105,7 @@ public class TestTwistedGraphs {
         for (int i=0;i<10;i++) {
             testRingel();
             testCircSaw5();
+            testCircSaw5A();
         }
     }
 
@@ -133,7 +133,6 @@ public class TestTwistedGraphs {
             if (vCount2 != 0) {
                 soln ++;
                 ImageOptions options = ImageOptions.defaultBlackAndWhite();
-                options.originArrowSize = 15;
                 WAM wam = new WAM(ten);
                 List<Difficulty> diff = wam.search();
                 
@@ -141,6 +140,9 @@ public class TestTwistedGraphs {
                 System.err.println(diff.size()+" difficulties");
                 if (false)
                 for (int i=0;i<diff.size();i++) {
+                    if (i>40) {
+                        break;
+                    }
                     DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, diff.get(i));
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
                     ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 

@@ -35,10 +35,9 @@ public class DifficultyDrawing extends PseudoLineDrawing {
 
     @Override
     protected void drawUnderlay(Graphics2D graphics) {
-        graphics.setColor(new Color(255,160,160));
-        graphics.setStroke(new BasicStroke(3));
         
         for (TGVertex v:difficulty.rslt.getVertices()) {
+            graphics.setColor(options.getNextTwistedGraphColor());
             Face source = v.getSource();
             IPoint pos;
             switch (source.dimension()) {
@@ -65,14 +64,14 @@ public class DifficultyDrawing extends PseudoLineDrawing {
         // c) draw it
         
 
-        graphics.setColor(new Color(255,0,0));
-        graphics.setStroke(new BasicStroke(5));
+        graphics.setColor(options.twistedGraphColor);
+        graphics.setStroke(new BasicStroke(options.twistedGraphLineWidth));
         // for each edge
         // draw it
         for (TGEdge e:difficulty.rslt.getEdges()) {
             IPoint from = positions.get(e.source);
             IPoint to = positions.get(e.dest);
-            drawArrow(graphics,from.getX(),from.getY(),(from.getX()+to.getX())/2,(from.getY()+to.getY())/2);
+            drawArrow(graphics,from.getX(),from.getY(),(from.getX()+to.getX())/2,(from.getY()+to.getY())/2, options.twistedGraphArrowSize);
             graphics.drawLine((int)from.getX(),(int)from.getY(),(int)to.getX(),(int)to.getY());
         }
     }
@@ -168,7 +167,8 @@ public class DifficultyDrawing extends PseudoLineDrawing {
     }
 
     private void highlightVertex(Graphics2D graphics, IPoint pos) {
-        graphics.drawOval((int)pos.getX()-10, (int)pos.getY()-10, 20, 20);
+        int sz = options.twistedGraphVertexSize;
+        graphics.fillOval((int)pos.getX()-sz/2, (int)pos.getY()-sz/2, sz, sz);
     }
 
 

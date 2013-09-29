@@ -381,11 +381,13 @@ public class WAM {
                 if (jsz <= isz && this.subGraph(di.rslt, dj.rslt)) {
                     System.arraycopy(r, j, r, j-1, sz-j);
                     sz--;
+                    j--;
                     continue;
                 }
                 if (subGraph(dj.rslt,di.rslt)) {
                     System.arraycopy(r, i, r, i-1, sz-i);
                     sz--;
+                    i--;
                     break;
                 }
             }
@@ -637,10 +639,10 @@ public class WAM {
 
     private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {
         for (TGEdge edge : small.getEdges()) {
-            if (small.getSource(edge) != big.getSource(edge)) {
+            if (!small.getSource(edge).equals(big.getSource(edge))) {
                 return false;
             }
-            if (small.getDest(edge) != big.getDest(edge)) {
+            if (!small.getDest(edge).equals(big.getDest(edge))) {
                 return false;
             }
         }

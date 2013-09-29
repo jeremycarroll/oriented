@@ -482,7 +482,7 @@ public class PseudoLineDrawing implements Verify {
     final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
-    private ImageOptions options;
+    protected ImageOptions options;
     
     protected PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopCannotBeDrawnException {
         projective = pseudoLines;
@@ -825,7 +825,18 @@ public class PseudoLineDrawing implements Verify {
         graphics.drawString(lbl, (float) x, (float)y);
     }
     
-    protected void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
+    private void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
+        int arr_size = options.originArrowSize;
+        drawArrow(g1, x1, y1, x2, y2, arr_size, true);
+    }
+
+    protected void drawArrow(Graphics2D g1, double x1, double y1, double x2,
+            double y2, int arr_size) {
+        drawArrow(g1, x1, y1, x2, y2, arr_size, false);
+    }
+
+    protected void drawArrow(Graphics2D g1, double x1, double y1, double x2,
+            double y2, int arr_size, boolean includeOval) {
         if (!options.showOrigin) {
             return;
         }
@@ -833,7 +844,6 @@ public class PseudoLineDrawing implements Verify {
 
         double dx = x2 - x1, dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
-        int arr_size = options.originArrowSize;
         int len = (int) Math.sqrt(dx*dx + dy*dy);
         AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
         at.concatenate(AffineTransform.getRotateInstance(angle));
@@ -842,7 +852,9 @@ public class PseudoLineDrawing implements Verify {
 
         // Draw horizontal arrow starting in (0, 0)
         g.drawLine(0, 0, len, 0);
-        g.fillOval((int)(-arr_size*0.6), (int)(0-arr_size*0.6), (int)(arr_size*1.2), (int)(arr_size*1.2));
+        if (includeOval) {
+           g.fillOval((int)(-arr_size*0.6), (int)(0-arr_size*0.6), (int)(arr_size*1.2), (int)(arr_size*1.2));
+        }
         g.fillPolygon(new int[] {len, len-arr_size, len-arr_size, len},
                       new int[] {0, -arr_size, arr_size, 0}, 4);
     }

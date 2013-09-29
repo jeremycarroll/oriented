@@ -73,6 +73,14 @@ public class ImageOptions {
      */
     public Color foreground;
     
+    public Color twistedGraphColor;
+    
+    public int twistedGraphLineWidth;
+    
+    public int twistedGraphArrowSize;
+    
+    public int twistedGraphVertexSize;
+    
     /**
      * The length of the arrow used to show the origin.
      */
@@ -110,6 +118,10 @@ public class ImageOptions {
         originArrowSize = 8;
         labelBorder = 1;
         lineWidth = 2.5f;
+        twistedGraphColor = Color.RED;
+        twistedGraphLineWidth = 5;
+        twistedGraphArrowSize = 15;
+        twistedGraphVertexSize = 25;
     }
     
     private double internalFontSizeRatio = 2;
@@ -124,6 +136,7 @@ public class ImageOptions {
     private int nextStroke = 0;
     
     private static Color someColors[] = new Color[18];
+    private static Color lightColors[] = new Color[15];
 
     /**
      * Provides the color for the line at infinity, if null then
@@ -180,6 +193,7 @@ public class ImageOptions {
     }
     static {
         int ix = 0;
+        int jx = 0;
         for (int i=0;i<3;i++)
             for (int j=0;j<3;j++)
                 for (int k=0;k<3;k++) {
@@ -194,13 +208,20 @@ public class ImageOptions {
                         continue;
                     }
                     someColors[ix++] = new Color((3+6*i)*17,(3+6*j)*17,(3+6*k)*17);
+                    if (i+j+k==4) {
+                        continue;
+                    }
+                    lightColors[jx++] = new Color(128+(3+3*i)*9,128+(3+3*j)*9,128+(3+3*k)*9);
                 }
-        Arrays.sort(someColors,new Comparator<Color>(){
+        Comparator<Color> comp = new Comparator<Color>(){
             @Override
             public int compare(Color o1, Color o2) {
                 // pseudorandom order
                 return System.identityHashCode(o1) - System.identityHashCode(o2);
-            }});
+            }};
+        Arrays.sort(someColors,comp);
+        System.err.println(ix+" "+jx);
+        Arrays.sort(lightColors,comp);
     }
     private static float someStrokes[][] = new float[][]{
             { 100, 10 },
@@ -237,6 +258,17 @@ public class ImageOptions {
     
     void setInfinity(Label inf) {
         infinity = inf;
+    }
+    int tgColorIx = 0;
+    public Color getNextTwistedGraphColor() {
+        try {
+            return lightColors[tgColorIx++];
+        }
+        finally {
+            if (tgColorIx==lightColors.length) {
+                tgColorIx = 0;
+            }
+        }
     }
     Color getColor(Label lbl) { 
         if ( lbl == infinity && infinityColor != null) {
