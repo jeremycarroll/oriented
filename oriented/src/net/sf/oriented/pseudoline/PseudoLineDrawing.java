@@ -112,29 +112,30 @@ public class PseudoLineDrawing implements Verify {
             
             return result;
         }
-        private IPoint[] controlPoints(IPoint point1, IPoint point2, IPoint point3) {
-            double xDiff = (point3.getX() - point1.getX());
-            double yDiff = (point3.getY() - point1.getY());
-            double diffNorm = Math.sqrt(xDiff*xDiff+yDiff*yDiff);
-            double p1dx = point2.getX() - point1.getX();
-            double p1dy = point2.getY() - point1.getY();
-//            double p1dnorm = Math.sqrt(p1dx*p1dx+p1dy*p1dy);
-            double p1DotDiff = p1dx * xDiff + p1dy * yDiff;
-            double p3dx = point3.getX() - point2.getX();
-            double p3dy = point3.getY() - point2.getY();
-//            double p3dnorm = Math.sqrt(p3dx*p3dx+p3dy*p3dy);
-            double p3DotDiff = p3dx * xDiff + p3dy * yDiff;
-            double x1 = point2.getX() -  xDiff*p1DotDiff/diffNorm/3/diffNorm,
-                    y1 = point2.getY() - yDiff*p1DotDiff/diffNorm/3/diffNorm, 
-                    x2 = point2.getX()  + xDiff*p3DotDiff/diffNorm/3/diffNorm, 
-                    y2 = point2.getY() + yDiff*p3DotDiff/diffNorm/3/diffNorm;
-            
-            return new IPoint[]{new Point2DDouble(x1,y1),new Point2DDouble(x2,y2)};
-        }
         public Label label() {
             return label;
         }
 
+    }
+
+    protected IPoint[] controlPoints(IPoint point1, IPoint point2, IPoint point3) {
+        double xDiff = (point3.getX() - point1.getX());
+        double yDiff = (point3.getY() - point1.getY());
+        double diffNorm = Math.sqrt(xDiff*xDiff+yDiff*yDiff);
+        double p1dx = point2.getX() - point1.getX();
+        double p1dy = point2.getY() - point1.getY();
+//        double p1dnorm = Math.sqrt(p1dx*p1dx+p1dy*p1dy);
+        double p1DotDiff = p1dx * xDiff + p1dy * yDiff;
+        double p3dx = point3.getX() - point2.getX();
+        double p3dy = point3.getY() - point2.getY();
+//        double p3dnorm = Math.sqrt(p3dx*p3dx+p3dy*p3dy);
+        double p3DotDiff = p3dx * xDiff + p3dy * yDiff;
+        double x1 = point2.getX() -  xDiff*p1DotDiff/diffNorm/3/diffNorm,
+                y1 = point2.getY() - yDiff*p1DotDiff/diffNorm/3/diffNorm, 
+                x2 = point2.getX()  + xDiff*p3DotDiff/diffNorm/3/diffNorm, 
+                y2 = point2.getY() + yDiff*p3DotDiff/diffNorm/3/diffNorm;
+        
+        return new IPoint[]{new Point2DDouble(x1,y1),new Point2DDouble(x2,y2)};
     }
     private static class XLine extends SubLine {
         @SuppressWarnings("unused")
@@ -165,12 +166,12 @@ public class PseudoLineDrawing implements Verify {
         }
 
     }
-    interface IPoint {
+    protected interface IPoint {
         double getX();
         double getY();
     }
 
-    static class Point2DDouble extends Point2D.Double implements IPoint {
+    protected static class Point2DDouble extends Point2D.Double implements IPoint {
 
         public Point2DDouble(double x, double y) {
             super(x,y);
@@ -476,14 +477,14 @@ public class PseudoLineDrawing implements Verify {
 
 
     }
-    final EuclideanPseudoLines projective;
+    protected final EuclideanPseudoLines projective;
     final Set<Point> points = new HashSet<Point>();
     final Set<Point> unclassified = new HashSet<Point>();
     final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
     private final List<List<Point>> rings = new ArrayList<List<Point>>();
     private ImageOptions options;
     
-    PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopCannotBeDrawnException {
+    protected PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopCannotBeDrawnException {
         projective = pseudoLines;
         Label inf = projective.getInfinity();
         for (SignedSet ss:projective.getEquivalentOM().dual().getCircuits()) {
@@ -700,6 +701,7 @@ public class PseudoLineDrawing implements Verify {
        graphics.translate(options.width/2, options.height/2);
        graphics.scale(options.width/1000.0, options.height/1000.0);
        graphics.fill(circ);
+       drawUnderlay(graphics);
        options.setInfinity(projective.getInfinity());
        setLineColorAndStroke(graphics, projective.getInfinity());
        graphics.draw(circ);
@@ -735,10 +737,19 @@ public class PseudoLineDrawing implements Verify {
        IPoint p = centerOfPositiveFace();
        drawArrow(graphics,p.getX(),p.getY(),p.getX()+options.originArrowLength,p.getY());
        
+       drawOverlay(graphics);
+       
        options = null;
        return image;
     }
 
+    protected void drawOverlay(Graphics2D graphics) {
+        // does nothing, for subclasses
+    }
+
+    protected void drawUnderlay(Graphics2D graphics) {
+        // does nothing, for subclasses
+    }
     private void setLineColorAndStroke(Graphics2D graphics, Label lbl) {
       graphics.setStroke(new BasicStroke(options.lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, options.getStroke(lbl), 0.0f));
       graphics.setColor(options.getColor(lbl));
@@ -814,7 +825,7 @@ public class PseudoLineDrawing implements Verify {
         graphics.drawString(lbl, (float) x, (float)y);
     }
     
-    private void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
+    protected void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
         if (!options.showOrigin) {
             return;
         }
@@ -849,6 +860,10 @@ public class PseudoLineDrawing implements Verify {
     }
     private Color getForegroundColor() {
         return options.foreground;
+    }
+    
+    protected IPoint getPoint(SignedSet ss) {
+        return ss2point.get(ss);
     }
 
 }

@@ -3,20 +3,64 @@
  ************************************************************************/
 package test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+
 import junit.framework.Assert;
+import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.ImageOptions;
+import net.sf.oriented.pseudoline2.Difficulty;
+import net.sf.oriented.pseudoline2.DifficultyDrawing;
 import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 
 public class TestTwistedGraphs {
+    
+
+    private static String tmp;
+    private static boolean fixedDir = true;
+    
+    @BeforeClass
+    public static void createTmpDir() throws IOException {
+        File tFile = File.createTempFile("oriented", ".d");
+        if (fixedDir) {
+            // change this directory as appropriate
+            tmp = "/Users/jeremycarroll/tmp";
+        } else {
+            tmp = tFile.getAbsolutePath();
+            tFile.delete();
+            tFile.mkdir();
+        }
+    }
+    
+    @AfterClass
+    public static void deleteTmpDir() {
+        if (!fixedDir) {
+            File dir = new File(tmp);
+            for (File f : dir.listFiles() ) {
+                f.delete();
+            }
+            dir.delete();
+        }
+    }
+
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
     @Test
@@ -128,37 +172,53 @@ public class TestTwistedGraphs {
         count("chapter1","1",6,2,0,0);
     }
 
+    static int soln = 0;
     private void count(String omName, String inf, int vCount, int eCount, int vCount2, int eCount2) {
-        System.err.println(omName+" ===== "+inf+" ==");
-        OM om = Examples.all().get(omName);
-        EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
-        TensionGraph ten = new TGFactory(pseudoLines).create();
+        try {
+            System.err.println(omName+" ===== "+inf+" ==");
+            OM om = Examples.all().get(omName);
+            EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
+            TensionGraph ten = new TGFactory(pseudoLines).create();
 //        for (TGVertex v:ten.getVertices()) {
 //            System.err.println(v);
 //        }
-        Assert.assertEquals(vCount,ten.getVertexCount());
-        Assert.assertEquals(eCount,ten.getEdgeCount());
-        ten.prune();
-        Assert.assertEquals(vCount2,ten.getVertexCount());
-        Assert.assertEquals(eCount2,ten.getEdgeCount());
-        if (vCount2 != 0) {
-            WAM wam = new WAM(ten);
-            int actualDificultyCount = wam.search().size();
-            System.err.println(wam.transitions+" wam transitions");
-            System.err.println(actualDificultyCount+" difficulties");
+            Assert.assertEquals(vCount,ten.getVertexCount());
+            Assert.assertEquals(eCount,ten.getEdgeCount());
+            ten.prune();
+            Assert.assertEquals(vCount2,ten.getVertexCount());
+            Assert.assertEquals(eCount2,ten.getEdgeCount());
+            if (vCount2 != 0) {
+                soln ++;
+                ImageOptions options = ImageOptions.defaultBlackAndWhite();
+                options.originArrowSize = 15;
+                WAM wam = new WAM(ten);
+                List<Difficulty> diff = wam.search();
+                
+                System.err.println(wam.transitions+" wam transitions");
+                System.err.println(diff.size()+" difficulties");
+                for (int i=0;i<diff.size();i++) {
+                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, diff.get(i));
+                    ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
+                    ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 
+                            soln + "-" + (i<10?"0":"")+i +".jpeg"));
+                    iw.setOutput(imageOutput);
+                    iw.write(euclid.image(options));
+                    euclid.verify();
+                    imageOutput.close();
+                    iw.dispose();
+                    
+                }
+            }
         }
-//        if (prunedTensions != ten.getVertices().size()) {
-//            ten.dumpEdges();
-//            ten.dumpVertices();
-//        }
-//        WAM wam = new WAM(ten);
-//        wam.setDebugExpected(circSawResult());
-//        int actualDificultyCount = wam.search().size();
-//        System.err.println(wam.transitions+" wam transitions");
-//        assertEquals(expectedDifficultCount, actualDificultyCount );
-//        Assert.assertTrue("Too many transitions",wam.transitions<maxTransitions);
-//        Assert.assertEquals(prunedTensions,ten.getVertices().size());
-        //Assert.assertEquals(expectedCount,pseudoLines.getDifficulties().size());
+        catch (CoLoopCannotBeDrawnException e) {
+            throw new RuntimeException(e);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        catch (AxiomViolation e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

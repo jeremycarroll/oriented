@@ -53,6 +53,9 @@ public class TGVertex {
         }
     }
 
+    public Face getSource() {
+        return source;
+    }
     public SetOfSignedSet getExtent() {
         return extent;
     }
