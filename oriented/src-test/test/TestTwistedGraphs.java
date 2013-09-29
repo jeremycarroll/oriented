@@ -64,7 +64,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCeva() {
-        count("ceva","0",14,27,14,27,2);
+        count("ceva","0",50,114,14,27,2);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testDeformedCeva() {
-        count("deformedCeva","0",16,21,0,0);
+        count("deformedCeva","0",42,88,0,0);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testMany() {
-        for (int i=0;i<10;i++) {
+        for (int i=0;i<2;i++) {
             testRingel();
             testCircSaw5();
             testCircSaw5A();

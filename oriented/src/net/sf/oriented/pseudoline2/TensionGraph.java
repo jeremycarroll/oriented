@@ -3,12 +3,17 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 
 public class TensionGraph extends PrunableGraph {
     
     final EuclideanPseudoLines pseudolines;
+    final Map<SignedSet, TGVertex> id2vertex = new HashMap<SignedSet, TGVertex>();
 
     public TensionGraph(EuclideanPseudoLines euclideanPseudoLines) {
         this.pseudolines = euclideanPseudoLines;
@@ -16,6 +21,16 @@ public class TensionGraph extends PrunableGraph {
 
     public EuclideanPseudoLines getEuclideanPseudoLines() {
         return pseudolines;
+    }
+
+    public void maybeAddVertex(TGVertex tgVertex) {
+        SignedSet ss = tgVertex.getId();
+        if (id2vertex.containsKey(ss)) {
+            return;
+        }
+        id2vertex.put(ss, tgVertex);
+        addVertex(tgVertex);
+        
     }
     
 

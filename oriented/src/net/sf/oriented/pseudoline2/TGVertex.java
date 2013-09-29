@@ -111,14 +111,16 @@ public class TGVertex implements Comparable<TGVertex> {
         for (SignedSet f:extent) {
             rslt.append(f.toString()+"; ");
         }
-        return rslt.toString();
+        return rslt.toString()+ " "+source.covector().toString();
         
     }
+    @SuppressWarnings("unused")
     public static void fromPoint(Face cocircuit, TensionGraph tg, UnsignedSet lines, FactoryFactory fact) {
         new TGVertexFactory(cocircuit,tg,lines,fact);
     }
 
     // TODO convert this method into a helper class
+    @SuppressWarnings("unused")
     public static void fromFace(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
         new TGVertexFactory(tope,tg,epl);
     }

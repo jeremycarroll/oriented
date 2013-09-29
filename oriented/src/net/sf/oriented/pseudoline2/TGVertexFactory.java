@@ -90,9 +90,7 @@ public class TGVertexFactory {
                 }
             }
             int mask = saveLineLabels(Arrays.asList(lines));
-            if (ix>=3) {
-                save(mask);
-            }
+            save(mask|bitFor(line1)|bitFor(line2));
 
         }
 
@@ -133,6 +131,14 @@ public class TGVertexFactory {
         }
     }
 
+    public int bitFor(UnsignedSet line) {
+        int bitPosition = lines.indexOf(uniqueMember(line));
+        if (bitPosition == -1) {
+            throw new IllegalStateException("Did not find line");
+        }
+        return (1<<bitPosition);
+    }
+
     class ParallelHelper extends MaskHelper {
         ParallelHelper(EuclideanPseudoLines epl) {
             super(lines.size() * (lines.size() - 1) / 2);
@@ -156,9 +162,8 @@ public class TGVertexFactory {
 
     TGVertexFactory(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
         this.epl = epl;
+        int initialTope = saveLines(tope.lower());
         NonUniformHelper nonUniform = new NonUniformHelper(tope);
-        Collection<? extends Face> edges = tope.lower();
-        saveLines(edges);
         if (lines.size() == 3) {
             // easy case
             tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),
@@ -181,6 +186,9 @@ public class TGVertexFactory {
                 if (bitCount < 3) {
                     continue; // too few sides
                 }
+//                if (Integer.bitCount(sides&initialTope)<2) {
+//                    continue; // guessing wildly
+//                }
                 // check we do not include parallel sides
                 if (parallel.matchesAny(sides)) {
                     continue;
@@ -232,7 +240,7 @@ public class TGVertexFactory {
 
                 // TODO: later, nonUniform points : I think not.
 
-                tg.addVertex(new TGVertex(id, epl.ffactory(), tope, "Polygon: "
+                tg.maybeAddVertex(new TGVertex(id, epl.ffactory(), tope, "Polygon: "
                         + bitCount, extent.toArray(new Face[0])));
             }
         }
@@ -259,7 +267,11 @@ public class TGVertexFactory {
     }
 
     private Label uniqueMember(Face edge) {
-        UnsignedSet singleton = epl.notLoops.minus(edge.covector().support());
+        return uniqueMember(edge.covector().support());
+    }
+
+    protected Label uniqueMember(UnsignedSet support) {
+        UnsignedSet singleton = epl.notLoops.minus(support);
         Iterator<Label> it = singleton.iterator();
         try {
             return it.next();
