@@ -5,6 +5,7 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,16 +24,44 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
 
 public class TGVertexFactory {
-    private class NonUniformHelper {
+    abstract class MaskHelper {
+
+        protected int masks[];
+        protected int mCount;
+        
+        MaskHelper(int sz) {
+            masks = new int[sz];
+            mCount = 0;
+        }
+
+        public boolean matchesAny(int sides) {
+            for (int k = 0; k < mCount; k++) {
+                int saved = masks[k];
+                if (matches(sides, saved)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        abstract boolean matches(int sides, int savedValue);
+
+        protected int save(int mask) {
+            return masks[mCount++] = mask;
+        }
+
+    }
+
+    private class NonUniformHelper extends MaskHelper {
 
         public NonUniformHelper(Face tope) {
+            super(tope.lower().size());
             Map<Face, Face> nonUniform2oneEdge = new HashMap<Face, Face>();
             for (Face e : tope.lower()) {
                 for (Face v : e.lower()) {
                     if (v.higher().size() != 4) {
                         if (nonUniform2oneEdge.containsKey(v)) {
                             found(v, e, nonUniform2oneEdge.get(v));
-
                         } else {
                             nonUniform2oneEdge.put(v, e);
                         }
@@ -43,21 +72,37 @@ public class TGVertexFactory {
         }
 
         private void found(Face v, Face e1, Face e2) {
-            Label lines[] = new Label[v.higher().size() - 4];
+            Label lines[] = new Label[v.higher().size()/2 - 2];
             int ix = 0;
             UnsignedSet line1 = e1.covector().support();
             UnsignedSet line2 = e2.covector().support();
+            edges:
             for (Face e : v.higher()) {
                 UnsignedSet line = e.covector().support();
                 if (!(line.equals(line1) || line.equals(line2))) {
-                    lines[ix++] = uniqueMember(e);
+                    Label lbl = uniqueMember(e);
+                    for (int j=0;j<ix;j++) {
+                        if (lines[j].equals(lbl)) {
+                            continue edges;
+                        }
+                    }
+                    lines[ix++] = lbl;
                 }
+            }
+            int mask = saveLineLabels(Arrays.asList(lines));
+            if (ix>=3) {
+                save(mask);
             }
 
         }
+
+        @Override
+        boolean matches(int sides, int savedValue) {
+            return (sides & ~savedValue) == 0;
+        }
     }
 
-    private Label lines[];
+    private List<Label> lines = new ArrayList<Label>();
 
     TGVertexFactory(Face cocircuit, TensionGraph tg, UnsignedSet lines,
             FactoryFactory fact) {
@@ -88,28 +133,22 @@ public class TGVertexFactory {
         }
     }
 
-    class ParallelHelper {
-        int parallel[] = new int[lines.length * (lines.length - 1) / 2];
-        int pCount;
-
+    class ParallelHelper extends MaskHelper {
         ParallelHelper(EuclideanPseudoLines epl) {
-            pCount = 0;
-            for (int i = 0; i < lines.length; i++) {
-                for (int j = i + 1; j < lines.length; j++) {
-                    if (epl.areParallel(lines[i], lines[j])) {
-                        parallel[pCount++] = (1 << i) | (1 << j);
+            super(lines.size() * (lines.size() - 1) / 2);
+            for (int i = 0; i < lines.size() ; i++) {
+                for (int j = i + 1; j < lines.size() ; j++) {
+                    if (epl.areParallel(lines.get(i), lines.get(j))) {
+                        int mask = (1 << i) | (1 << j);
+                        save(mask);
                     }
                 }
             }
         }
 
-        public boolean includesParallel(int sides) {
-            for (int k = 0; k < pCount; k++) {
-                if ((parallel[k] & sides) == parallel[k]) {
-                    return true;
-                }
-            }
-            return false;
+        @Override
+        protected boolean matches(int sides, int saved) {
+            return (saved & sides) == saved;
         }
     }
 
@@ -118,12 +157,9 @@ public class TGVertexFactory {
     TGVertexFactory(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
         this.epl = epl;
         NonUniformHelper nonUniform = new NonUniformHelper(tope);
-        lines = new Label[tope.lower().size()];
-        int ix = 0;
-        for (Face edge : tope.lower()) {
-            lines[ix++] = uniqueMember(edge);
-        }
-        if (lines.length == 3) {
+        Collection<? extends Face> edges = tope.lower();
+        saveLines(edges);
+        if (lines.size() == 3) {
             // easy case
             tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),
                     tope.covector(), lines), epl.ffactory(), tope, "Triangle",
@@ -133,34 +169,37 @@ public class TGVertexFactory {
             ParallelHelper parallel = new ParallelHelper(epl);
             // initialize singleton sets
             FactoryFactory fact = epl.ffactory();
-            UnsignedSet singletons[] = new UnsignedSet[lines.length];
-            for (int i = 0; i < lines.length; i++) {
+            UnsignedSet singletons[] = new UnsignedSet[lines.size()];
+            for (int i = 0; i < lines.size(); i++) {
                 singletons[i] = fact.unsignedSets().copyBackingCollection(
-                        Arrays.asList(lines[i]));
+                        Arrays.asList(lines.get(i)));
             }
 
-            sides: for (int sides = 7; sides < (1 << lines.length); sides++) {
+            sides: for (int sides = 7; sides < (1 << lines.size()); sides++) {
                 Set<Face> extent = new HashSet<Face>();
                 int bitCount = Integer.bitCount(sides);
                 if (bitCount < 3) {
                     continue; // too few sides
                 }
                 // check we do not include parallel sides
-                if (parallel.includesParallel(sides)) {
-                    continue sides;
+                if (parallel.matchesAny(sides)) {
+                    continue;
+                }
+                
+                // check we are not just using stuff from a vertex of size 5 or more!
+                if (nonUniform.matchesAny(sides)) {
+                    continue;
                 }
 
-                SignedSet id = createIdentity(fact, tope.covector(), sides,
-                        lines);
+                SignedSet id = createIdentity(fact, tope.covector(), sides);
                 // System.err.println(id);
                 // check point of intersection is on the 'correct' side of at
                 // least one line
-                for (int i = 0; i < lines.length; i++) {
+                for (int i = 0; i < lines.size(); i++) {
                     if (((1 << i) & sides) != 0) {
-                        for (int j = i + 1; j < lines.length; j++) {
+                        for (int j = i + 1; j < lines.size(); j++) {
                             if (((1 << j) & sides) != 0) {
-                                SignedSet inter = epl.lineIntersection(
-                                        lines[i], lines[j]);
+                                SignedSet inter = epl.lineIntersection(lines.get(i), lines.get(j));
                                 if (inter.conformsWith(tope.covector())) {
                                     continue;
                                 }
@@ -169,7 +208,7 @@ public class TGVertexFactory {
                                     continue sides;
                                 }
                                 // NOT TODO: if this is a nonUniform point then
-                                // we need to save for later
+                                // we need to save for later, I think not.
                                 // hmmm - but we would need to check that one
                                 // for its intersections etc.
                                 // hunch - don't need this.
@@ -191,12 +230,32 @@ public class TGVertexFactory {
                     }
                 }
 
-                // TODO: later, nonUniform points
+                // TODO: later, nonUniform points : I think not.
 
                 tg.addVertex(new TGVertex(id, epl.ffactory(), tope, "Polygon: "
                         + bitCount, extent.toArray(new Face[0])));
             }
         }
+    }
+
+    protected int saveLines(Collection<? extends Face> edges) {
+        int oldSize = lines.size();
+        for (Face edge : edges) {
+            lines.add(uniqueMember(edge));
+        }
+        return maskFrom(oldSize);
+    }
+
+    private int maskFrom(int oldSize) {
+        return ((1<<lines.size())-1) & ~((1<<oldSize)-1);
+    }
+
+    protected int saveLineLabels(Collection<Label> edges) {
+        int oldSize = lines.size();
+        for (Label edge : edges) {
+            lines.add(edge);
+        }
+        return maskFrom(oldSize);
     }
 
     private Label uniqueMember(Face edge) {
@@ -213,27 +272,21 @@ public class TGVertexFactory {
         }
     }
 
-    private static SignedSet createIdentity(FactoryFactory ffactory,
-            SignedSet tope, int sides, Label[] lines) {
-        List<Label> us = new ArrayList<Label>(lines.length);
-        for (int i = 0; i < lines.length; i++) {
+    private SignedSet createIdentity(FactoryFactory ffactory,
+            SignedSet tope, int sides) {
+        List<Label> us = new ArrayList<Label>(lines.size());
+        for (int i = 0; i < lines.size(); i++) {
             if (((1 << i) & sides) != 0) {
-                us.add(lines[i]);
+                us.add(lines.get(i));
             }
         }
         return createIdentity(ffactory, tope, us);
     }
 
-    private static SignedSet createIdentity(FactoryFactory ffactory,
-            SignedSet tope, Label ... us) {
-        return tope.restriction(ffactory.unsignedSets().copyBackingCollection(
-                Arrays.asList(us)));
-    }
 
     private static SignedSet createIdentity(FactoryFactory ffactory,
             SignedSet tope, List<Label> us) {
-        return tope.restriction(ffactory.unsignedSets().copyBackingCollection(
-                us));
+        return tope.restriction(ffactory.unsignedSets().copyBackingCollection(us));
     }
 
 }

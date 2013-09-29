@@ -4,9 +4,7 @@
 package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,9 +15,6 @@ import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
-import net.sf.oriented.pseudoline.PlusMinusPlus;
-
-import com.google.common.base.Preconditions;
 
 /**
  * This class is destined to be the class of vertices in a rejigged TensionGraph
