@@ -230,7 +230,7 @@ public class WAM {
         if (DETERMINISTIC) Arrays.sort(array);
         return array;
     }
-    private abstract class Undoable {
+    public static abstract class Undoable {
         public abstract void undo();
     }
 
@@ -243,7 +243,7 @@ public class WAM {
     private final GrowingGraph growing;
     final ShrinkingGraph shrinking;
     private final Deque<Frame> stack = new ArrayDeque<Frame>();
-    private final Deque<Undoable> trail = new ArrayDeque<Undoable>();
+    final Deque<Undoable> trail = new ArrayDeque<Undoable>();
     private final List<Difficulty> results = new ArrayList<Difficulty>();
     final Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
 
@@ -334,7 +334,9 @@ public class WAM {
                     if (success()) {
                         backTrack();
                     } else {
-                        extend();
+                        if (!extend()) {
+                            backTrack();
+                        }
                     }
                 } else {
                     backTrack();
@@ -345,7 +347,9 @@ public class WAM {
                     if (success()) {
                         backTrack();
                     } else {
-                        extend();
+                        if (!extend()) {
+                            backTrack();
+                        }
                     }
                 } else {
                     backTrack();
@@ -438,11 +442,13 @@ public class WAM {
         return success;
     }
 
-    private void extend() {
+    private boolean extend() {
         if (hasOptions()) {
             pushChoiceFromEdge(selectNextEdgeChoice());
+            return true;
         } else {
-            throw new IllegalStateException("Not possible");
+//            throw new IllegalStateException("Not possible");
+            return false;
             // final TGEdge t = findPossibleEdge();
             // if (t==null) {
             // stack.push(new Failure());
@@ -535,14 +541,25 @@ public class WAM {
      * @return true if removal was ok, false to force backtracking
      */
     boolean remove(final TGEdge t) {
+        if (edgeRemovalFailed) {
+            return false;
+        }
         edgeRemovalFailed = false;
-        shrinking.removeEdge(t);
-        growing.edgeHasBeenRemoved(t);
-        Set<TGVertex> vv = new HashSet<TGVertex>();
-        vv.add(t.source);
-        vv.add(t.dest);
-        shrinking.prune(vv, true);
-        return !edgeRemovalFailed;
+        try {
+            shrinking.removeEdge(t);
+            growing.edgeHasBeenRemoved(t);
+//            if (!t.afterRemove(this)) {
+//                return false;
+//            }
+            Set<TGVertex> vv = new HashSet<TGVertex>();
+            vv.add(t.source);
+            vv.add(t.dest);
+            shrinking.prune(vv, true);
+            return !edgeRemovalFailed;
+        }
+        finally {
+            edgeRemovalFailed = false;
+        }
     }
 
     void trailRemove(final TGEdge t) {
@@ -553,7 +570,11 @@ public class WAM {
                 shrinking.addEdge(t, t.source, t.dest);
             }
         });
-
+//        boolean ok = 
+        t.afterRemove(this);
+//        if (!ok) {
+//            edgeRemovalFailed = true;
+//        }
     }
 
     /**

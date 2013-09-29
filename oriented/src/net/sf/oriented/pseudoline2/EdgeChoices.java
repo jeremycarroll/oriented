@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.pseudoline2.WAM.Undoable;
 
 abstract class EdgeChoices {
 
@@ -16,6 +19,8 @@ abstract class EdgeChoices {
     private boolean alreadyDone = false;
     
     private int deleteCount = 0;
+
+    private boolean forcedChoice;
     
     static EdgeChoices create(TGVertex v, ShrinkingGraph sg, Label l) {
         switch (v.getId().sign(l)) {
@@ -118,6 +123,48 @@ abstract class EdgeChoices {
   }
 public void unsetAlreadyDone() {
     alreadyDone = false;
+}
+public boolean reduceCount(WAM wam) {
+    Preconditions.checkState(!alreadyDone);
+    deleteCount++;
+    wam.trail.push(new Undoable(){
+
+        @Override
+        public void undo() {
+           deleteCount--;
+            
+        }});
+    
+    switch (size()) {
+    case 0:
+//        return false;
+    case 1:
+        if (!forcedChoice) {
+        forcedChoice = true;
+        wam.trail.push(new Undoable(){
+
+            @Override
+            public void undo() {
+               forcedChoice = false;
+                
+            }});
+        }
+        return true;
+        // make forced choice
+//        TGEdge theChoice = null;
+//        for (TGEdge e:choices) {
+//            if (wam.shrinking.containsEdge(e)) {
+//                if (theChoice != null) {
+//                    throw new IllegalStateException("Logic error");
+//                }
+//                theChoice = e;
+//            }
+//        }
+//        return wam.add(theChoice);
+    default:
+            return true;
+    }
+    
 }
 
 }

@@ -4,7 +4,6 @@
 package net.sf.oriented.pseudoline2;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.HashMap;

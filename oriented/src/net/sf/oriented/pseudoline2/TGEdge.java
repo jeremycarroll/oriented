@@ -48,6 +48,15 @@ public class TGEdge implements Comparable<TGEdge> {
     public int compareTo(TGEdge o) {
         return toString().compareTo(o.toString());
     }
+
+    boolean afterRemove(WAM wam) {
+        return afterRemove(wam, inChoice) || afterRemove(wam,outChoice);
+        
+    }
+
+    private boolean afterRemove(WAM wam, EdgeChoices choice) {
+         return choice == null || choice.alreadyDone() || choice.reduceCount(wam);
+    }
 }
 
 
