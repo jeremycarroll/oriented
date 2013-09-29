@@ -70,6 +70,7 @@ public class WAM {
      * Some particular twisted graph is hard-coded as the topic of the debugging.
      */
     private final static boolean DEBUG = false;
+    private final static int DEBUG_FREQUENCY = 10000;
 
     private final class True extends Frame {
         @Override
@@ -248,9 +249,9 @@ public class WAM {
     final Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
 
     // tracing and debug fields
-    public int transitions = 0;
+    public long transitions = 0;
     private AbstractTGraph expected;
-    public boolean debug;
+    public boolean debug = true;
     private Map<TGVertex,EdgeChoices> v2choice = new HashMap<TGVertex,EdgeChoices>();
 
     public WAM(TensionGraph b) {
@@ -533,9 +534,12 @@ public class WAM {
 
     private void debugMsg(String port) {
         transitions++;
+        if (transitions%DEBUG_FREQUENCY != 0) {
+            return;
+        }
         if (debug)
             System.err.println(port + "[" + stack.size() + "/" + trail.size()
-                    + ":" + choices.size() + "]" + (debugLookingGood()?"+":"?")+ pad(stack) + pad(trail)
+                    + ":" + choices.size() + "$" + results.size()+"]" + (debugLookingGood()?"+":"?")+ pad(stack) + pad(trail) + pad(results) 
                     + pad(choices) + stack.peek().toString());
         if (stack.size()==6 && trail.size()==74) {
 //            System.err.println("!!!");
