@@ -27,7 +27,7 @@ import com.google.common.base.Preconditions;
  * @author jeremycarroll
  *
  */
-public class TGVertex {
+public class TGVertex implements Comparable<TGVertex> {
     private final SetOfSignedSet extent;
     private final SignedSet  identity;
     
@@ -273,6 +273,11 @@ public class TGVertex {
                 throw new IllegalArgumentException("Non-singletone set: "+singleton);
             }
         }
+    }
+
+    @Override
+    public int compareTo(TGVertex o) {
+        return identity.toString().compareTo(o.identity.toString());
     }
 
 

@@ -6,8 +6,12 @@ package net.sf.oriented.pseudoline2;
 public class Difficulty {
     
     final PrunableGraph rslt;
+    final int vCount;
+    final boolean theOne;
     Difficulty(GrowingGraph gg) {
         rslt = new PrunableGraph(gg);
+        vCount = gg.getVertexCount();
+        theOne = gg.isTheOne();
     }
 
 }

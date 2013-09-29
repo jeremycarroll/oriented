@@ -63,94 +63,27 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
+    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",14,24,8,12);
     }
 
+    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,24,4,6);
     }
     
-    @Ignore
-    @Test
-    public void testSawParts() {
-        OM om = Examples.circularsaw3();
-        EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,"0");
-        TensionGraph ten = new TGFactory(pseudoLines).create();
-        
-        int bad = 0; // 0
-        int tri1_0 = 0; // 4
-        int tri1_1 = 0; // 6
-        int tri1_2 = 0; // 3
-        int tri1_3 = 0; // 3
-        int quad2_2 = 0; // 3
-        int quad2_3 = 0; // 3
-        for (TGVertex v:ten.getVertices()) {
-            int tri = 0;
-            int quad = 0;
-//            for (Face f:v.getExtent()) {
-//                switch (f.lower().size()) {
-//                case 3:
-//                    tri++;
-//                    break;
-//                case 4:
-//                    quad++;
-//                    break;
-//                default:
-//                     bad++;
-//                }   
-//            }
-            switch (tri) {
-            case 1:
-                switch (quad) {
-                case 0:
-                    tri1_0++;
-                    break;
-                case 1:
-                    tri1_1++;
-                    break;
-                case 2:
-                    tri1_2++;
-                    break;
-                case 3:
-                    tri1_3++;
-                    break;
-                default:
-                        bad++;
-                }
-                break;
-            case 2:
-                switch (quad) {
-                case 2:
-                    quad2_2++;
-                    break;
-                case 3:
-                    quad2_3++;
-                    break;
-                default:
-                        bad++;
-                }
-                break;
-            default:
-                bad++;
-            }
-        }
-        Assert.assertEquals(4,tri1_0);
-        Assert.assertEquals(6,tri1_1);
-        Assert.assertEquals(3,tri1_2);
-        Assert.assertEquals(3,tri1_3);
-        Assert.assertEquals(3,quad2_2);
-        Assert.assertEquals(3,quad2_3);
-        Assert.assertEquals(0,bad);
-    }
+    
 
+    @Ignore
     @Test
     public void testDeformedCeva() {
         count("deformedCeva","0",16,14,0,0);
     }
 
+    @Ignore
     @Test
     public void testDeformedSaw() {
         count("deformedCircularSaw","0",26,19,0,0);
@@ -160,13 +93,15 @@ public class TestTwistedGraphs {
     public void testRingel() {
         count("ringel","0",63,172,17,54);
     }
-    
+
     @Test
     public void testManyRingel() {
         for (int i=0;i<10;i++) {
             testRingel();
         }
     }
+
+    @Ignore
     @Test
     public void testChap1() {
         count("chapter1","1",6,2,0,0);

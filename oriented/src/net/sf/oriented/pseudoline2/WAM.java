@@ -15,6 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SetOfUnsignedSet;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 /**
@@ -57,6 +65,12 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
  * 
  */
 public class WAM {
+    
+    private final static boolean DETERMINISTIC = false;
+    /**
+     * Some particular twisted graph is hard-coded as the topic of the debugging.
+     */
+    private final static boolean DEBUG = false;
 
     private final class True extends Frame {
         @Override
@@ -129,8 +143,9 @@ public class WAM {
     private final class ChoiceOfVertex extends Choice<TGVertex> {
 
         ChoiceOfVertex() {
-            super(shrinking.getVertices().toArray(new TGVertex[0]));
+            super(maybeSort(shrinking.getVertices().toArray(new TGVertex[0])));
         }
+
 
         @Override
         boolean makeChoice(TGVertex a) {
@@ -152,7 +167,7 @@ public class WAM {
         private final EdgeChoices opt;
 
         private ChoiceOfEdge(EdgeChoices opt) {
-            super(opt.choices.toArray(new TGEdge[0]));
+            super(maybeSort(opt.choices.toArray(new TGEdge[0])));
             this.opt = opt;
         }
 
@@ -212,6 +227,10 @@ public class WAM {
         }
     }
 
+    private static <T extends Comparable<T>> T[] maybeSort(T[] array) {
+        if (DETERMINISTIC) Arrays.sort(array);
+        return array;
+    }
     private abstract class Undoable {
         public abstract void undo();
     }
@@ -239,6 +258,45 @@ public class WAM {
         base = b;
         shrinking = new ShrinkingGraph(this, base);
         growing = shrinking.growing;
+        if (DEBUG) {
+            String findMe[][] = {
+                    {"4","6","7"},
+                    {"3","5","7"},
+                    {"3","6","8"},
+                    {"1","5","8"},
+                    {"1","3","4"},
+                    
+            };
+            SetOfUnsignedSet findMe2 = ffactory().setsOfUnsignedSet().copyBackingCollection(
+                    Iterables.transform(Arrays.asList(findMe), new Function<String[], UnsignedSet>(){
+                        @Override
+                        public UnsignedSet apply(String[] input) {
+                            return ffactory().unsignedSets().copyBackingCollection(Iterables.transform(Arrays.asList(input),new Function<String,Label>(){
+                                @Override
+                                public Label apply(String l) {
+                                    return ffactory().labels().parse(l);
+                                }
+                            }));
+                        }
+
+                    }));
+            PrunableGraph debugTarget = new PrunableGraph();
+            for (TGVertex v:b.getVertices()) {
+                if (findMe2.contains(v.getId().support())) {
+                    debugTarget.addVertex(v);
+                }
+            }
+            for (TGVertex v:debugTarget.getVertices()) {
+                for (TGVertex w:debugTarget.getVertices()) {
+                    TGEdge e = b.findEdge(v, w);
+                    if (e != null) {
+                        debugTarget.addEdge(e,v,w);
+                    }
+                }
+            }
+            setDebugExpected(debugTarget);
+            
+        }
     }
 
     /**
@@ -306,6 +364,11 @@ public class WAM {
     private List<Difficulty> minimalResults() {
         Difficulty r[] = new Difficulty[results.size()];
         results.toArray(r);
+        for (Difficulty rr:results) {
+            if (rr.theOne) {
+                System.err.println("OK?");
+            }
+        }
         int i = 0;
         int sz = r.length;
         
@@ -316,19 +379,25 @@ public class WAM {
             while (j<sz) {
                 Difficulty dj = r[j++];
                 int jsz = dj.rslt.getEdgeCount();
-                if (jsz <= isz && this.subGraph(dj.rslt, di.rslt)) {
+                if (jsz <= isz && this.subGraph(di.rslt, dj.rslt)) {
                     System.arraycopy(r, j, r, j-1, sz-j);
                     sz--;
                     continue;
                 }
-                if (subGraph(di.rslt,dj.rslt)) {
+                if (subGraph(dj.rslt,di.rslt)) {
                     System.arraycopy(r, i, r, i-1, sz-i);
                     sz--;
                     break;
                 }
             }
         }
-        return Arrays.asList(r).subList(0, sz);
+        List<Difficulty> rslt = Arrays.asList(r).subList(0, sz);
+        for (Difficulty rr:rslt) {
+            if (rr.theOne) {
+                System.err.println("OK");
+            }
+        }
+        return rslt;
     }
 
     /**
@@ -445,8 +514,11 @@ public class WAM {
         transitions++;
         if (debug)
             System.err.println(port + "[" + stack.size() + "/" + trail.size()
-                    + ":" + choices.size() + "] " + pad(stack) + pad(trail)
+                    + ":" + choices.size() + "]" + (debugLookingGood()?"+":"?")+ pad(stack) + pad(trail)
                     + pad(choices) + stack.peek().toString());
+        if (stack.size()==6 && trail.size()==74) {
+            System.err.println("!!!");
+        }
     }
 
     private String pad(Collection<?> c) {
@@ -559,7 +631,7 @@ public class WAM {
         this.debug = true;
     }
 
-    boolean debugLookingGood() {
+    private boolean debugLookingGood() {
         return expected == null || subGraph(this.growing, expected)
                 && subGraph(expected, shrinking);
     }
@@ -615,6 +687,14 @@ public class WAM {
 
     public EuclideanPseudoLines getEuclideanPseudoLines() {
         return base.getEuclideanPseudoLines();
+    }
+    
+    public FactoryFactory ffactory() {
+        return getEuclideanPseudoLines().ffactory();
+    }
+
+    public boolean isTheOne(GrowingGraph gg) {
+        return expected != null && subGraph(expected, gg) && subGraph(gg, expected);
     }
 
 }

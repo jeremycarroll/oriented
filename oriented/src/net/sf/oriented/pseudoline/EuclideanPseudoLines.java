@@ -5,7 +5,6 @@ package net.sf.oriented.pseudoline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +22,6 @@ import net.sf.oriented.util.combinatorics.Permutation;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-
-import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
  * This class takes a rank 3 oriented matroid and prepares it for 

@@ -7,7 +7,7 @@ import net.sf.oriented.omi.Label;
 
 import com.google.common.base.Preconditions;
 
-public class TGEdge {
+public class TGEdge implements Comparable<TGEdge> {
 
     final TGVertex source;
     final TGVertex dest;
@@ -42,6 +42,11 @@ public class TGEdge {
         if (c != null) {
             c.madeChoice(this, wam);
         }
+    }
+
+    @Override
+    public int compareTo(TGEdge o) {
+        return toString().compareTo(o.toString());
     }
 }
 

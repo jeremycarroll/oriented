@@ -116,6 +116,11 @@ public class GrowingGraph extends AbstractTGraph {
         // TODO Auto-generated method stub
         
     }
+
+
+    boolean isTheOne() {
+        return wam.isTheOne(this);
+    }
 }
 
 
