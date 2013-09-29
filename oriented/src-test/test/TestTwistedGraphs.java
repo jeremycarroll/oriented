@@ -72,6 +72,10 @@ public class TestTwistedGraphs {
     public void testCircSaw5() {
         count("circularsaw5","0",96,1105,91,1005);
     }
+    @Test
+    public void testCircSaw5A() {
+        count("saw5A","0",116,1760,116,1760);
+    }
     @Ignore
     @Test
     public void testSaw() {

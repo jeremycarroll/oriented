@@ -54,6 +54,8 @@ public class Examples {
 
     private static OM circularSaw5;
 
+    private static OM circularSaw5A;
+
     /**
      * This is from the Oriented Matroid book {@link Bibliography#björnerEtAl1999}
      */
@@ -230,6 +232,31 @@ public class Examples {
             
         }
         return circularSaw5;
+    }
+    public static OM saw5A() {
+        if (circularSaw5A == null || FreshEachTime) {
+            circularSaw5A= FactoryFactory.fromCrossings(
+                    "0:AJCBEDGFIH",
+                    "A:0JCDHGEFBI",
+                    "J:0AHGIDCEFB",
+                    
+                    "C:0ADHGIJFEB",
+                    "B:0DHGEFAIJC",
+
+                    "E:0DGHBAIJFC",
+                    "D:0EBACHGIJF",
+                    
+                    "G:0EHBACDJIF",
+                    "F:0HBAIJECDG",
+                    
+                    "I:0HABFECDJG",
+                    "H:0IFEGBACDJ"
+
+                    
+                    );
+            
+        }
+        return circularSaw5A;
     }
     public static OM deformedCircularSaw() {
         return circularsaw3().getChirotope().mutate(1,1,2,3);

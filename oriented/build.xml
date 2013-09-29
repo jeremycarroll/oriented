@@ -27,6 +27,12 @@
 		    <arg value="0"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
+		    <arg value="--saw5A"/>
+		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
 		    <arg value="--deformedCeva"/>
 		    <arg value="-v"/>
 		    <arg value="--infinity"/>
