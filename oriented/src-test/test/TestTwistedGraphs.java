@@ -64,40 +64,37 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCeva() {
-        count("ceva","0",14,27,14,27);
+        count("ceva","0",14,27,14,27,2);
     }
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,1105,91,1005);
+        count("circularsaw5","0",96,1105,91,1005,2011);
     }
     @Test
     public void testCircSaw5A() {
-        count("saw5A","0",116,1760,116,1760);
+        count("saw5A","0",116,1760,116,1760,2086);
     }
-    @Ignore
     @Test
     public void testSaw() {
-        count("circularsaw3","0",22,24,4,6);
+        count("circularsaw3","0",22,48,4,6,1);
     }
     
     
 
-    @Ignore
     @Test
     public void testDeformedCeva() {
-        count("deformedCeva","0",16,14,0,0);
+        count("deformedCeva","0",16,21,0,0);
     }
 
-    @Ignore
     @Test
     public void testDeformedSaw() {
-        count("deformedCircularSaw","0",26,19,0,0);
+        count("deformedCircularSaw","0",26,49,0,0);
     }
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,427,39,211);
+        count("ringel","0",63,427,39,211,19);
     }
 
     @Test
@@ -109,14 +106,16 @@ public class TestTwistedGraphs {
         }
     }
 
-    @Ignore
     @Test
     public void testChap1() {
-        count("chapter1","1",6,2,0,0);
+        count("chapter1","1",6,3,0,0);
     }
 
     static int soln = 0;
     private void count(String omName, String inf, int vCount, int eCount, int vCount2, int eCount2) {
+        count(omName, inf, vCount, eCount, vCount2, eCount2, 0);
+    }
+    private void count(String omName, String inf, int vCount, int eCount, int vCount2, int eCount2, int dCount) {
         try {
             System.err.println(omName+" ===== "+inf+" ==");
             OM om = Examples.all().get(omName);
@@ -138,6 +137,7 @@ public class TestTwistedGraphs {
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(diff.size()+" difficulties");
+                Assert.assertEquals(dCount,diff.size());
                 if (false)
                 for (int i=0;i<diff.size();i++) {
                     if (i>40) {
