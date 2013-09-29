@@ -52,6 +52,8 @@ public class Examples {
 
     private static OM wheel12;
 
+    private static OM circularSaw5;
+
     /**
      * This is from the Oriented Matroid book {@link Bibliography#björnerEtAl1999}
      */
@@ -207,7 +209,28 @@ public class Examples {
         }
         return circularSaw3;
     }
-    
+    /**
+    The oriented matroid corresponding to a circular saw diagram of size five.
+    @see Bibliography#carroll2000d
+    */
+    public static OM circularsaw5() {
+        if (circularSaw5 == null || FreshEachTime) {
+            circularSaw5= FactoryFactory.fromCrossings(
+                    "0:ABCDEFGHIJ",
+                    "A:0CDHGEFBIJ",
+                    "B:0CDHGEFAIJ",
+                    "C:0BADHGIJFE",
+                    "D:0BACHGIJFE",
+                    "E:0GHBAIJFCD",
+                    "F:0GHBAIJECD",
+                    "G:0FEHBACDJI",
+                    "H:0FEGBACDJI",
+                    "I:0ABFECDJGH",
+                    "J:0ABFECDIGH");
+            
+        }
+        return circularSaw5;
+    }
     public static OM deformedCircularSaw() {
         return circularsaw3().getChirotope().mutate(1,1,2,3);
     }

@@ -21,7 +21,6 @@ import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline2.Difficulty;
 import net.sf.oriented.pseudoline2.DifficultyDrawing;
 import net.sf.oriented.pseudoline2.TGFactory;
-import net.sf.oriented.pseudoline2.TGVertex;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
 
@@ -69,6 +68,10 @@ public class TestTwistedGraphs {
         count("ceva","0",14,24,8,12);
     }
 
+    @Test
+    public void testCircSaw5() {
+        count("circularsaw5","0",96,515,45,255);
+    }
     @Ignore
     @Test
     public void testSaw() {
@@ -95,9 +98,10 @@ public class TestTwistedGraphs {
     }
 
     @Test
-    public void testManyRingel() {
+    public void testMany() {
         for (int i=0;i<10;i++) {
             testRingel();
+            testCircSaw5();
         }
     }
 

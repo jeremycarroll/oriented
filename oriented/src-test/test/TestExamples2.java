@@ -84,7 +84,7 @@ public class TestExamples2 {
 
     @Test
     public void testDualFaceLattice() throws AxiomViolation {
-        if (om.dual().rank()<9) {
+        if (om.dual().rank()<8) {
             testFaceLattice(om.dual());
         }
     }

@@ -21,6 +21,12 @@
             <fileset dir="${website.dir}" includes="**"/>
 		</copy>
 		<exec executable="scripts/mkwebpage" >
+		    <arg value="--circularsaw5"/>
+		    <arg value="-v"/>
+		    <arg value="--infinity"/>
+		    <arg value="0"/>
+		</exec>
+		<exec executable="scripts/mkwebpage" >
 		    <arg value="--deformedCeva"/>
 		    <arg value="-v"/>
 		    <arg value="--infinity"/>
@@ -73,7 +79,7 @@
 		    <arg value="B"/>
 		</exec>
 		<exec executable="scripts/mkwebpage" >
-		    <arg value="--circular"/>
+		    <arg value="--circularsaw3"/>
 		    <arg value="-v"/>
 		    <arg value="--infinity"/>
 		    <arg value="0"/>

@@ -21,7 +21,6 @@ import com.google.common.collect.Iterables;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfUnsignedSet;
-import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
@@ -517,7 +516,7 @@ public class WAM {
                     + ":" + choices.size() + "]" + (debugLookingGood()?"+":"?")+ pad(stack) + pad(trail)
                     + pad(choices) + stack.peek().toString());
         if (stack.size()==6 && trail.size()==74) {
-            System.err.println("!!!");
+//            System.err.println("!!!");
         }
     }
 
