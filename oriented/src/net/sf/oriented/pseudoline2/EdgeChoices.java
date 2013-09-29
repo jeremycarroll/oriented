@@ -109,7 +109,7 @@ abstract class EdgeChoices {
     }
 
     int size() {
-        return choices.size() - deleteCount;
+        return choices.size() ; //- deleteCount;
     }
 
   public boolean impossible() {
