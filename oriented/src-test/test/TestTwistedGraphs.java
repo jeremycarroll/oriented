@@ -62,6 +62,7 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
+    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",50,114,14,27,2);
@@ -92,6 +93,12 @@ public class TestTwistedGraphs {
         count("deformedCircularSaw","0",26,49,0,0);
     }
 
+    @Test
+    public void testTsukamotoPlus() {
+        count("tsukamoto13.+1","A",312,9380,312,9380);
+    }
+    
+    
     @Test
     public void testRingel() {
         count("ringel","0",63,427,39,211,19);
