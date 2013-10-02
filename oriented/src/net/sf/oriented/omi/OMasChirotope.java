@@ -42,6 +42,8 @@ public interface OMasChirotope extends OM, FullChirotope {
      * @return A possibly invalid oriented matroid with the given mutation.
      */
     OMasChirotope mutate(int i, Label ... basis);
+
+    OMasChirotope mutate(int i, String ... basis);
     /**
      * Produce a new oriented matroid by setting the value of the chirotope on
      * the given basis to i

@@ -72,10 +72,26 @@ public class TestTwistedGraphs {
     public void testCircSaw5() {
         count("circularsaw5","0",96,1105,91,1005,2011);
     }
+
+    @Ignore
     @Test
     public void testCircSaw5A() {
-        count("saw5A","0",116,1760,116,1760,2086);
+        count("_saw5A","0",116,1760,116,1760,2086);
     }
+
+    @Ignore
+    @Test
+    public void testDeformCircSaw5() {
+        count("_deformSaw5","0",-1,-1,-1,-1,-1);
+    }
+
+
+    @Test
+    public void testPappus() {
+        count("πάππος","0",-1,-1,-1,-1,-1);
+    }
+    
+    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,48,4,6,1);
@@ -83,27 +99,32 @@ public class TestTwistedGraphs {
     
     
 
+    @Ignore
     @Test
     public void testDeformedCeva() {
-        count("deformedCeva","0",42,88,0,0);
+        count("_deformedCeva","0",42,88,0,0);
     }
 
+    @Ignore
     @Test
     public void testDeformedSaw() {
-        count("deformedCircularSaw","0",26,49,0,0);
+        count("_deformedCircularSaw","0",26,49,0,0);
     }
 
+    @Ignore // - too difficult.
     @Test
     public void testTsukamotoPlus() {
         count("tsukamoto13.+1","A",312,9380,312,9380);
     }
     
-    
+
+    @Ignore
     @Test
     public void testRingel() {
         count("ringel","0",63,427,39,211,19);
     }
 
+    @Ignore
     @Test
     public void testMany() {
         for (int i=0;i<2;i++) {
@@ -113,6 +134,7 @@ public class TestTwistedGraphs {
         }
     }
 
+    @Ignore
     @Test
     public void testChap1() {
         count("chapter1","1",6,3,0,0);
@@ -131,11 +153,11 @@ public class TestTwistedGraphs {
 //        for (TGVertex v:ten.getVertices()) {
 //            System.err.println(v);
 //        }
-            Assert.assertEquals(vCount,ten.getVertexCount());
-            Assert.assertEquals(eCount,ten.getEdgeCount());
+            usuallyAssertEquals(vCount,ten.getVertexCount());
+            usuallyAssertEquals(eCount,ten.getEdgeCount());
             ten.prune();
-            Assert.assertEquals(vCount2,ten.getVertexCount());
-            Assert.assertEquals(eCount2,ten.getEdgeCount());
+            usuallyAssertEquals(vCount2,ten.getVertexCount());
+            usuallyAssertEquals(eCount2,ten.getEdgeCount());
             if (vCount2 != 0) {
                 soln ++;
                 ImageOptions options = ImageOptions.defaultBlackAndWhite();
@@ -143,9 +165,10 @@ public class TestTwistedGraphs {
                 List<Difficulty> diff = wam.search();
                 
                 System.err.println(wam.transitions+" wam transitions");
+                System.err.println(wam.foundDifficultyCount+" original difficulty count");
                 System.err.println(diff.size()+" difficulties");
-                Assert.assertEquals(dCount,diff.size());
-                if (false)
+                usuallyAssertEquals(dCount,diff.size());
+                if (true)
                 for (int i=0;i<diff.size();i++) {
                     if (i>40) {
                         break;
@@ -172,6 +195,13 @@ public class TestTwistedGraphs {
         catch (AxiomViolation e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void usuallyAssertEquals(int expected, int actual) {
+        if (expected != -1) {
+            Assert.assertEquals(expected, actual);
+        }
+        
     }
 
 }

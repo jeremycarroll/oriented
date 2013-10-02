@@ -158,6 +158,7 @@ public interface OM extends Verify {
      * @return The corresponding indexes of <code>e</code> in {@link #elements()}
      */
 	<T extends Label> int[] asInt(T ... e);
+    int[] asInt(String ... e);
 	
 
 	/**

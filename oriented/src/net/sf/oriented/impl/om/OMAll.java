@@ -293,6 +293,15 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		return r;
 	}
 
+    @Override
+    public int[] asInt(String ... l) {
+        int r[] = new int[l.length];
+        for (int i = 0; i < l.length; i++) {
+            r[i] = asInt(l[i]);
+        }
+        return r;
+    }
+
 	@Override
 	public int[] asInt(UnsignedSet u) {
 		Label b[] = u.asCollection().toArray(new Label[0]);

@@ -438,6 +438,7 @@ public class WAM {
         boolean success = growing.isTwistedGraph();
         if (success) {
             results.add(new Difficulty(growing));
+            this.foundDifficultyCount++;
             // growing.dumpEdges();
         }
         return success;
@@ -552,6 +553,7 @@ public class WAM {
     }
 
     boolean edgeRemovalFailed;
+    public int foundDifficultyCount = 0;
 
     /**
      * Remove an edge from the current solution space.

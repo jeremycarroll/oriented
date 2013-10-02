@@ -705,6 +705,11 @@ public class ChirotopeImpl extends AbsOM<Object> implements OMasChirotope {
         return false;
     }
 
+    @Override
+    public OMasChirotope mutate(int i, String ... basis) {
+        return mutate(i, asInt(basis));
+    }
+
 
 
 }

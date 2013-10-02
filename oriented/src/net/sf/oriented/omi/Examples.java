@@ -233,7 +233,7 @@ public class Examples {
         }
         return circularSaw5;
     }
-    public static OM saw5A() {
+    public static OM _saw5A() {
         if (circularSaw5A == null || FreshEachTime) {
             circularSaw5A= FactoryFactory.fromCrossings(
                     "0:AJCBEDGFIH",
@@ -258,10 +258,13 @@ public class Examples {
         }
         return circularSaw5A;
     }
-    public static OM deformedCircularSaw() {
+    public static OM _deformSaw5() {
+        return circularsaw5().getChirotope().mutate(0,"C","D","H");
+    }
+    public static OM _deformedCircularSaw() {
         return circularsaw3().getChirotope().mutate(1,1,2,3);
     }
-    public static OM deformedCeva() {
+    public static OM _deformedCeva() {
         return ceva().getChirotope().mutate(-1,1,2,3).mutate(-1,3,4,5);
     }
     /**
