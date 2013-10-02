@@ -70,7 +70,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,1105,91,1005,2011);
+        count("circularsaw5","0",96,1060,91,960,2011);
     }
 
     @Ignore
@@ -88,7 +88,7 @@ public class TestTwistedGraphs {
 
     @Test
     public void testPappus() {
-        count("πάππος","0",-1,-1,-1,-1,-1);
+        count("pappus","0",-1,-1,-1,-1,-1);
     }
     
     @Ignore

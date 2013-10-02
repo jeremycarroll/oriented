@@ -29,17 +29,29 @@ public class TGVertex implements Comparable<TGVertex> {
     private final String desc;
     private final Face source;
     
-    TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc, Face ... faces ) {
+    // no longer using faces parameter ???
+    TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc, Face ... xfaces ) {
         identity = id;
         Set<SignedSet> ss = new HashSet<SignedSet>();
-        for (Face f:faces) {
-            addFace(ss,f);
+        addFace(ss,source);
+        for (Face e:source.lower()) {
+            for (Face v:source.lower()) {
+               addFace(ss,v);
+            }
         }
         extent = fact.setsOfSignedSet().copyBackingCollection(ss);
         this.source = source;
         this.desc = desc;
     }
     
+    // merge constructor
+    TGVertex(TGVertex a, TGVertex b) {
+        extent = a.extent.union(b.extent);
+        source = a.source;
+        desc = a.desc + "; "+ b.desc;
+        identity = a.identity;
+    }
+
     private void addFace(Set<SignedSet> ss, Face f) {
         ss.add(f.covector());
     }

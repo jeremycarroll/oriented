@@ -26,7 +26,9 @@ public class TensionGraph extends PrunableGraph {
     public void maybeAddVertex(TGVertex tgVertex) {
         SignedSet ss = tgVertex.getId();
         if (id2vertex.containsKey(ss)) {
-            return;
+            TGVertex old = id2vertex.get(ss);
+            removeVertex(old);
+            id2vertex.put(ss, new TGVertex(tgVertex, old));
         }
         id2vertex.put(ss, tgVertex);
         addVertex(tgVertex);

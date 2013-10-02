@@ -55,7 +55,7 @@ public class TGFactory {
                 if (line.size()==1
                      && unsignedLine.size() == 1
                      && !all[i].getSource().equals(all[j].getSource())
-//                     && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()
+                     && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()
                      ) {
                     TGEdge edge;
                     Label lbl = unsignedLine.iterator().next();
