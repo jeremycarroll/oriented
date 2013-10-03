@@ -3,15 +3,46 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.BitSet;
+
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.SignedSet;
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
+
 public class Difficulty {
     
-    final PrunableGraph rslt;
-    final int vCount;
-    final boolean theOne;
-    Difficulty(GrowingGraph gg) {
-        rslt = new PrunableGraph(gg);
-        vCount = gg.getVertexCount();
-        theOne = gg.isTheOne();
+    final BitSet bits = new BitSet();
+    final BitSet missingBits;
+    private Graph<Face, DEdge> rslt;
+    Difficulty(GrowingGraph gg, int sz) {
+        for (TGEdge e:gg.getEdges()) {
+            bits.set(e.bit);
+        }
+        missingBits = (BitSet) bits.clone();
+        missingBits.flip(1,sz+1);
+    }
+    Graph<Face, DEdge> getRslt(TensionGraph tg) {
+        if (rslt != null) {
+            return rslt;
+        }
+        rslt = new DirectedSparseGraph<Face, DEdge>();
+        if (bits.get(0)) {
+            throw new IllegalArgumentException("Accessing deleted difficulty");
+        }
+        // 0th bit is the deleted marker
+        int bit = 1;
+        while (true) {
+            bit = bits.nextSetBit(bit);
+            if (bit == -1) {
+                return rslt;
+            }
+            DEdge d = tg.getDEdge(bit);
+            rslt.addEdge(d,  d.source, d.dest);
+            bit++;
+        }
     }
 
 }

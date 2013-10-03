@@ -71,6 +71,7 @@ public class TGFactory {
                     } else {
                         edge = new TGEdge(lbl, ix, all[j], all[i]);
                     }
+                    result.saveEdgeAsBit(edge);
 //                    System.err.println(edge);
                     result.addEdge(edge, edge.source, edge.dest);
                 }

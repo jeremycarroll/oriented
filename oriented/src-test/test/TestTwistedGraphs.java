@@ -69,17 +69,17 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,880,76,640,517);
+        count("circularsaw5","0",96,880,76,640,314);
     }
 
     @Test
     public void testCircSaw5A() {
-        count("_saw5A","0",116,1500,106,1340,462);
+        count("_saw5A","0",116,1500,106,1340,271);
     }
 
     @Test
     public void testDeformCircSaw5() {
-        count("_deformSaw5","0",-1,-1,-1,-1,-1);
+        count("_deformSaw5","0",-1,-1,-1,-1,307);
     }
 
 
@@ -105,16 +105,16 @@ public class TestTwistedGraphs {
         count("_deformedCircularSaw","0",26,29,0,0);
     }
 
-   
+
     @Test
     public void testTsukamotoPlus() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,26497);
+        count("tsukamoto13.+1","A",312,6193,304,5957,13527);
     }
     
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,348,25,99,17);
+        count("ringel","0",63,348,25,99,-1);
     }
 
     @Ignore
@@ -165,7 +165,7 @@ public class TestTwistedGraphs {
                     if (i>40) {
                         break;
                     }
-                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, diff.get(i));
+                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff.get(i));
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
                     ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 
                             soln + "-" + (i<10?"0":"")+i +".jpeg"));

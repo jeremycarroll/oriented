@@ -3,7 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.oriented.omi.SignedSet;
@@ -33,6 +35,28 @@ public class TensionGraph extends PrunableGraph {
         id2vertex.put(ss, tgVertex);
         addVertex(tgVertex);
         
+    }
+    List<DEdge> allEdges = new ArrayList<DEdge>();
+    Map<DEdge,Integer> edgeLookup = new HashMap<DEdge,Integer>();
+
+    void saveEdgeAsBit(TGEdge edge) {
+        DEdge d = new DEdge(edge, pseudolines.getFaceLattice());
+        Integer bit = edgeLookup.get(d);
+        if (bit == null) {
+            allEdges.add(d);
+            edge.bit = allEdges.size();
+            edgeLookup.put(d, edge.bit);
+        } else {
+            edge.bit = bit;
+        }
+    }
+    
+    public int totalBits() {
+        return allEdges.size();
+    }
+
+    DEdge getDEdge(int bit) {
+        return allEdges.get(bit-1);
     }
     
 

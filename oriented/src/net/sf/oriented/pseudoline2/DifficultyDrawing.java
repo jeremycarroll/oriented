@@ -23,21 +23,22 @@ import net.sf.oriented.pseudoline.PseudoLineDrawing;
 public class DifficultyDrawing extends PseudoLineDrawing {
     
     final Difficulty difficulty;
-    
-    final Map<TGVertex,IPoint> positions = new HashMap<TGVertex,IPoint>();
+    final TensionGraph tg;
+    final Map<Face,IPoint> positions = new HashMap<Face,IPoint>();
 
-    public DifficultyDrawing(EuclideanPseudoLines pseudoLines, Difficulty d)
+    public DifficultyDrawing(EuclideanPseudoLines pseudoLines, TensionGraph ten, Difficulty d)
             throws CoLoopCannotBeDrawnException {
         super(pseudoLines);
         difficulty = d;
+        tg = ten;
     }
 
     @Override
     protected void drawUnderlay(Graphics2D graphics) {
         
-        for (TGVertex v:difficulty.rslt.getVertices()) {
+        for (Face v:difficulty.getRslt(tg).getVertices()) {
             graphics.setColor(options.getNextTwistedGraphColor());
-            Face source = v.getSource();
+            Face source = v;
             IPoint pos;
             switch (source.dimension()) {
             case 0:
@@ -46,7 +47,7 @@ public class DifficultyDrawing extends PseudoLineDrawing {
                 break;
             case 2:
                 pos = this.centerOfFace(source);
-                highlightExtent(graphics,v.getExtent());
+                highlightExtent(graphics,source);
                 break;
             default:
                 throw new IllegalStateException("Bad TGVertex dimension: "+source.dimension());
@@ -67,7 +68,7 @@ public class DifficultyDrawing extends PseudoLineDrawing {
         graphics.setStroke(new BasicStroke(options.twistedGraphLineWidth));
         // for each edge
         // draw it
-        for (TGEdge e:difficulty.rslt.getEdges()) {
+        for (DEdge e:difficulty.getRslt(tg).getEdges()) {
             IPoint from = positions.get(e.source);
             IPoint to = positions.get(e.dest);
             drawArrow(graphics,from.getX(),from.getY(),(from.getX()+to.getX())/2,(from.getY()+to.getY())/2, options.twistedGraphArrowSize);
@@ -75,13 +76,13 @@ public class DifficultyDrawing extends PseudoLineDrawing {
         }
     }
 
-    private void highlightExtent(Graphics2D graphics, SetOfSignedSet extent) {
-        for (SignedSet ss:extent) {
-            IPoint vPos = getPoint(ss);
-            if (vPos != null) {
-                highlightVertex(graphics, vPos);
-            } else {
-                Face f = projective.getFaceLattice().get(ss);
+    private void highlightExtent(Graphics2D graphics, Face f) {
+//        for (SignedSet ss:extent) {
+//            IPoint vPos = getPoint(ss);
+//            if (vPos != null) {
+//                highlightVertex(graphics, vPos);
+//            } else {
+//                Face f = projective.getFaceLattice().get(ss);
                 if (f.dimension()==2) {
                     Map<Face,Face> oneWay = new HashMap<Face,Face>();
                     Map<Face,Face> theOther = new HashMap<Face,Face>();
@@ -123,8 +124,8 @@ public class DifficultyDrawing extends PseudoLineDrawing {
                     graphics.fill(fillFace);
                 }
 
-            }
-        }
+//            }
+//        }
 
     }
     

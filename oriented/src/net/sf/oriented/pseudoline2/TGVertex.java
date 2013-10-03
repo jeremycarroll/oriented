@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfSignedSet;
@@ -144,6 +145,40 @@ public class TGVertex implements Comparable<TGVertex> {
     @Override
     public int compareTo(TGVertex o) {
         return identity.toString().compareTo(o.identity.toString());
+    }
+
+    public Face findFaceOrPoint(Label label, FaceLattice fl, int direction) {
+        SignedSet first = null;;
+        SignedSet second = null;
+        for (SignedSet x:extent) {
+            if (x.sign(label)==0) {
+                if (second != null) {
+                    throw new IllegalStateException("Two many zeros");
+                }
+                if (first == null) {
+                    first = x;
+                } else {
+                    second = x;
+                }
+            }
+        }
+        if (first == null) {
+            throw new IllegalStateException("No points found");
+            
+        }
+        if (second == null) {
+            return fl.get(first);
+        }
+        if (!first.conformsWith(second)) {
+            throw new IllegalStateException("Non-conformist are not welcome");
+        }
+        Face edge = fl.get(first.compose(second));
+        for (Face f:edge.higher()) {
+            if (f.covector().sign(label) == direction) {
+                return f;
+            }
+        }
+        throw new IllegalStateException("Face not found");
     }
 
 

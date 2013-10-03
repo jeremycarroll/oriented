@@ -18,6 +18,8 @@ import java.util.Set;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 
+import edu.uci.ics.jung.graph.Graph;
+
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfUnsignedSet;
@@ -368,42 +370,43 @@ public class WAM {
     private List<Difficulty> minimalResults() {
         Difficulty r[] = new Difficulty[results.size()];
         results.toArray(r);
-        for (Difficulty rr:results) {
-            if (rr.theOne) {
-                System.err.println("OK?");
-            }
-        }
+        
         int i = 0;
         int sz = r.length;
         
         while (i<sz-1) {
             Difficulty di = r[i++];
-            int isz = di.rslt.getEdgeCount();
+            if (di.bits.get(0)) {
+                continue;
+            }
+            int isz = di.bits.cardinality();
             int j = i;
             while (j<sz) {
                 Difficulty dj = r[j++];
-                int jsz = dj.rslt.getEdgeCount();
-                if (jsz <= isz && this.subGraph(di.rslt, dj.rslt)) {
-                    System.arraycopy(r, j, r, j-1, sz-j);
-                    sz--;
-                    j--;
+                if (dj.bits.get(0)) {
                     continue;
                 }
-                if (subGraph(dj.rslt,di.rslt)) {
-                    System.arraycopy(r, i, r, i-1, sz-i);
-                    sz--;
-                    i--;
+                int jsz = dj.bits.cardinality();
+                if (jsz <= isz && !dj.bits.intersects(di.missingBits)) {
+                    dj.bits.set(0);
+                    continue;
+                }
+                if (isz <= jsz && !di.bits.intersects(dj.missingBits)) {
+                    di.bits.set(0);
                     break;
                 }
             }
         }
-        List<Difficulty> rslt = Arrays.asList(r).subList(0, sz);
-        for (Difficulty rr:rslt) {
-            if (rr.theOne) {
-                System.err.println("OK");
+        
+        int j=0;
+        for (i=0;i<r.length;i++) {
+            if (!r[i].bits.get(0)) {
+                r[j++] = r[i];
             }
         }
-        return rslt;
+        
+        return Arrays.asList(r).subList(0, j);
+        
     }
 
     /**
@@ -437,7 +440,7 @@ public class WAM {
     private boolean success() {
         boolean success = growing.isTwistedGraph();
         if (success) {
-            results.add(new Difficulty(growing));
+            results.add(new Difficulty(growing, base.totalBits()));
             this.foundDifficultyCount++;
             // growing.dumpEdges();
         }
@@ -678,8 +681,8 @@ public class WAM {
                 && subGraph(expected, shrinking);
     }
 
-    private boolean subGraph(AbstractTGraph small, AbstractTGraph big) {
-        for (TGEdge edge : small.getEdges()) {
+    private <V,E> boolean subGraph(Graph<V,E> small, Graph<V,E> big) {
+        for (E edge : small.getEdges()) {
             if (!small.getSource(edge).equals(big.getSource(edge))) {
                 return false;
             }
