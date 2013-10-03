@@ -69,17 +69,17 @@ public class TestTwistedGraphs {
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,880,76,640,314);
+        count("circularsaw5","0",96,880,76,640,287);
     }
 
     @Test
     public void testCircSaw5A() {
-        count("_saw5A","0",116,1500,106,1340,271);
+        count("_saw5A","0",116,1500,106,1340,262);
     }
 
     @Test
     public void testDeformCircSaw5() {
-        count("_deformSaw5","0",-1,-1,-1,-1,307);
+        count("_deformSaw5","0",-1,-1,-1,-1,263);
     }
 
 
@@ -87,7 +87,7 @@ public class TestTwistedGraphs {
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
-    
+
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
@@ -108,22 +108,21 @@ public class TestTwistedGraphs {
 
     @Test
     public void testTsukamotoPlus() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,13527);
+        count("tsukamoto13.+1","A",312,6193,304,5957,9206);
     }
     
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,348,25,99,-1);
+        count("ringel","0",63,348,25,99,16);
     }
 
-    @Ignore
     @Test
     public void testMany() {
         for (int i=0;i<2;i++) {
             testRingel();
-            testCircSaw5();
-            testCircSaw5A();
+//            testCircSaw5();
+//            testCircSaw5A();
         }
     }
 
@@ -154,18 +153,18 @@ public class TestTwistedGraphs {
                 soln ++;
                 ImageOptions options = ImageOptions.defaultBlackAndWhite();
                 WAM wam = new WAM(ten);
-                List<Difficulty> diff = wam.search();
+                Difficulty[][] diff = wam.search();
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");
-                System.err.println(diff.size()+" difficulties");
-                usuallyAssertEquals(dCount,diff.size());
+                System.err.println(diff[0].length+" difficulties");
+                usuallyAssertEquals(dCount,diff[0].length);
                 if (true)
-                for (int i=0;i<diff.size();i++) {
+                for (int i=0;i<diff[0].length;i++) {
                     if (i>40) {
                         break;
                     }
-                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff.get(i));
+                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff[0][i]);
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
                     ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 
                             soln + "-" + (i<10?"0":"")+i +".jpeg"));

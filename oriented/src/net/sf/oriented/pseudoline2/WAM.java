@@ -326,7 +326,7 @@ public class WAM {
         }
         return true;
     }
-    public List<Difficulty> search() {
+    public Difficulty[][] search() {
         addChoiceOfInitialTGVertex();
         while (true) {
             Frame top = stack.peek();
@@ -367,12 +367,13 @@ public class WAM {
         }
     }
 
-    private List<Difficulty> minimalResults() {
+    private Difficulty[][] minimalResults() {
         Difficulty r[] = new Difficulty[results.size()];
         results.toArray(r);
         
         int i = 0;
         int sz = r.length;
+        int bad = 0;
         
         while (i<sz-1) {
             Difficulty di = r[i++];
@@ -388,24 +389,39 @@ public class WAM {
                 }
                 int jsz = dj.bits.cardinality();
                 if (jsz <= isz && !dj.bits.intersects(di.missingBits)) {
-                    dj.bits.set(0);
-                    continue;
-                }
-                if (isz <= jsz && !di.bits.intersects(dj.missingBits)) {
                     di.bits.set(0);
+                    bad++;
                     break;
                 }
+                if (isz <= jsz && !di.bits.intersects(dj.missingBits)) {
+                    dj.bits.set(0);
+                    bad++;
+                    continue;
+                }
             }
         }
+        
+        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], new Difficulty[bad]};
         
         int j=0;
+        int k=0;
+        int g=0;
+        int b=0;
         for (i=0;i<r.length;i++) {
             if (!r[i].bits.get(0)) {
-                r[j++] = r[i];
+                rr[0][j++] = r[i];
+                if (r[i].bits.cardinality()==6) {
+                    g++;
+                }
+            } else {
+                rr[1][k++] = r[i];
+                if (r[i].bits.cardinality()==7) {
+                    b++;
+                }
             }
         }
-        
-        return Arrays.asList(r).subList(0, j);
+        System.err.println("Sixes: "+g+"/"+b);
+        return rr;
         
     }
 
