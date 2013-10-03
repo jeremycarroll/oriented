@@ -35,7 +35,7 @@ public class TGVertex implements Comparable<TGVertex> {
         Set<SignedSet> ss = new HashSet<SignedSet>();
         addFace(ss,source);
         for (Face e:source.lower()) {
-            for (Face v:source.lower()) {
+            for (Face v:e.lower()) {
                addFace(ss,v);
             }
         }

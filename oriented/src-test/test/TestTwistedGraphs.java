@@ -62,24 +62,21 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
-    @Ignore
     @Test
     public void testCeva() {
-        count("ceva","0",50,114,14,27,2);
+        count("ceva","0",50,48,8,12,2);
     }
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,1060,91,960,2011);
+        count("circularsaw5","0",96,880,76,640,517);
     }
 
-    @Ignore
     @Test
     public void testCircSaw5A() {
-        count("_saw5A","0",116,1760,116,1760,2086);
+        count("_saw5A","0",116,1500,106,1340,462);
     }
 
-    @Ignore
     @Test
     public void testDeformCircSaw5() {
         count("_deformSaw5","0",-1,-1,-1,-1,-1);
@@ -91,37 +88,33 @@ public class TestTwistedGraphs {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
     
-    @Ignore
     @Test
     public void testSaw() {
-        count("circularsaw3","0",22,48,4,6,1);
+        count("circularsaw3","0",22,36,4,6,1);
     }
     
     
 
-    @Ignore
     @Test
     public void testDeformedCeva() {
-        count("_deformedCeva","0",42,88,0,0);
+        count("_deformedCeva","0",42,28,0,0);
     }
 
-    @Ignore
     @Test
     public void testDeformedSaw() {
-        count("_deformedCircularSaw","0",26,49,0,0);
+        count("_deformedCircularSaw","0",26,29,0,0);
     }
 
-    @Ignore // - too difficult.
+   
     @Test
     public void testTsukamotoPlus() {
-        count("tsukamoto13.+1","A",312,9380,312,9380);
+        count("tsukamoto13.+1","A",312,6193,304,5957,26497);
     }
     
 
-    @Ignore
     @Test
     public void testRingel() {
-        count("ringel","0",63,427,39,211,19);
+        count("ringel","0",63,348,25,99,17);
     }
 
     @Ignore
@@ -134,10 +127,9 @@ public class TestTwistedGraphs {
         }
     }
 
-    @Ignore
     @Test
     public void testChap1() {
-        count("chapter1","1",6,3,0,0);
+        count("chapter1","1",6,2,0,0);
     }
 
     static int soln = 0;

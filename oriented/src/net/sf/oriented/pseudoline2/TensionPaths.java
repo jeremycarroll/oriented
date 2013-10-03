@@ -11,11 +11,11 @@ final class TensionPaths extends Paths<TGVertex, TGEdge, SimplePath<TGVertex>> {
     /**
      * 
      */
-    private final WAM wam;
+//    private final WAM wam;
 
     TensionPaths(WAM wam, Graph<TGVertex, TGEdge> g) {
         super(g);
-        this.wam = wam;
+//        this.wam = wam;
     }
 }
 

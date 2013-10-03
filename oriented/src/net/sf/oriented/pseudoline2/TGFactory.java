@@ -48,13 +48,19 @@ public class TGFactory {
         for (int i=0;i<all.length;i++) {
             SignedSet idI = all[i].getId();
             for (int j=i+1;j<all.length;j++) {
+//                if (all[i].getSource().dimension()==0
+//                   && all[j].getSource().dimension()==0 ) {
+//                    System.err.println("1: "+all[i].getId());
+//                    System.err.println("2: "+all[j].getId());
+//                    
+//                }
                 SignedSet idJ = all[j].getId();
                 // find edge ...
                 SignedSet line = idI.intersection(idJ.opposite());
                 UnsignedSet unsignedLine = idI.support().intersection(idJ.support());
                 if (line.size()==1
                      && unsignedLine.size() == 1
-                     && !all[i].getSource().equals(all[j].getSource())
+                     && (!all[i].getSource().equals(all[j].getSource()))
                      && all[i].getExtent().intersection(all[j].getExtent()).isEmpty()
                      ) {
                     TGEdge edge;
@@ -65,6 +71,7 @@ public class TGFactory {
                     } else {
                         edge = new TGEdge(lbl, ix, all[j], all[i]);
                     }
+//                    System.err.println(edge);
                     result.addEdge(edge, edge.source, edge.dest);
                 }
                 

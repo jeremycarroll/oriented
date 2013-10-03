@@ -122,10 +122,12 @@ public class TGVertexFactory {
                     for (int i = 0; i < labels.length; i++) {
                         (pmp[i] ? plus : minus).add(labels[i]);
                     }
-                    tg.addVertex(new TGVertex(fact.signedSets().construct(
+                    TGVertex vertex = new TGVertex(fact.signedSets().construct(
                             fact.unsignedSets().copyBackingCollection(plus),
                             fact.unsignedSets().copyBackingCollection(minus)),
-                            fact, cocircuit, "Point: " + someLines, cocircuit));
+                            fact, cocircuit, "Point: " + someLines, cocircuit);
+                    tg.addVertex(vertex);
+//                    System.err.println(vertex);
                 }
             }
         }
@@ -162,7 +164,8 @@ public class TGVertexFactory {
 
     TGVertexFactory(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
         this.epl = epl;
-        int initialTope = saveLines(tope.lower());
+        //int initialTope = 
+        saveLines(tope.lower());
         NonUniformHelper nonUniform = new NonUniformHelper(tope);
         if (lines.size() == 3) {
             // easy case

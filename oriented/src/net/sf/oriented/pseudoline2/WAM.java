@@ -70,7 +70,7 @@ public class WAM {
      * Some particular twisted graph is hard-coded as the topic of the debugging.
      */
     private final static boolean DEBUG = false;
-    private final static int DEBUG_FREQUENCY = 10000;
+    private final static int DEBUG_FREQUENCY = 200000;
 
     private final class True extends Frame {
         @Override
