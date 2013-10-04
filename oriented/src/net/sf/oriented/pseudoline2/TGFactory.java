@@ -87,7 +87,7 @@ public class TGFactory {
             if (f.covector().sign(euclideanPseudoLines.getInfinity())==1 && f.higher().size()>4)
                TGVertex.fromPoint(f, result,
                        euclideanPseudoLines.notLoops.minus(f.covector().support()),
-                       euclideanPseudoLines.ffactory() );
+                       euclideanPseudoLines );
         }
         for (Face f1:euclideanPseudoLines.properFaces()) {
             TGVertex.fromFace(f1, result, euclideanPseudoLines);

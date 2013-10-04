@@ -62,16 +62,19 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
+    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",50,48,8,12,2);
     }
 
+    @Ignore
     @Test
     public void testCircSaw5() {
         count("circularsaw5","0",96,880,76,640,287);
     }
 
+    @Ignore
     @Test
     public void testCircSaw5A() {
         count("_saw5A","0",116,1500,106,1340,262);
@@ -83,11 +86,13 @@ public class TestTwistedGraphs {
     }
 
 
+    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
 
+    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
@@ -106,17 +111,20 @@ public class TestTwistedGraphs {
     }
 
 
+  //  @Ignore
     @Test
     public void testTsukamotoPlus() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,9206);
+        count("tsukamoto13.+1","A",312,6193,304,5957,10975);
     }
     
 
+    @Ignore
     @Test
     public void testRingel() {
         count("ringel","0",63,348,25,99,16);
     }
 
+    @Ignore
     @Test
     public void testMany() {
         for (int i=0;i<2;i++) {
@@ -126,6 +134,7 @@ public class TestTwistedGraphs {
         }
     }
 
+    @Ignore
     @Test
     public void testChap1() {
         count("chapter1","1",6,2,0,0);

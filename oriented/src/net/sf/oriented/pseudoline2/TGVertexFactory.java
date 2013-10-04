@@ -6,6 +6,7 @@ package net.sf.oriented.pseudoline2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -103,7 +104,8 @@ public class TGVertexFactory {
     private List<Label> lines = new ArrayList<Label>();
 
     TGVertexFactory(Face cocircuit, TensionGraph tg, UnsignedSet lines,
-            FactoryFactory fact) {
+            final EuclideanPseudoLines epl) {
+        FactoryFactory fact = epl.ffactory();
         Preconditions
                 .checkArgument(cocircuit.higher().size() == lines.size() * 2);
         Preconditions.checkArgument(lines.size() >= 3);
@@ -116,6 +118,12 @@ public class TGVertexFactory {
         for (int sz = 3; sz <= lines.size(); sz++) {
             for (UnsignedSet someLines : lines.subsetsOfSize(sz)) {
                 Label labels[] = someLines.toArray();
+                Arrays.sort(labels,new Comparator<Label>(){
+
+                    @Override
+                    public int compare(Label o1, Label o2) {
+                        return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
+                    }});
                 for (boolean pmp[] : PlusMinusPlus.get(sz)) {
                     plus.clear();
                     minus.clear();

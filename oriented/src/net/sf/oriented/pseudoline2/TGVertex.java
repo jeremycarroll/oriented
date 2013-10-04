@@ -128,8 +128,8 @@ public class TGVertex implements Comparable<TGVertex> {
         
     }
     @SuppressWarnings("unused")
-    public static void fromPoint(Face cocircuit, TensionGraph tg, UnsignedSet lines, FactoryFactory fact) {
-        new TGVertexFactory(cocircuit,tg,lines,fact);
+    public static void fromPoint(Face cocircuit, TensionGraph tg, UnsignedSet lines, EuclideanPseudoLines euclideanPseudoLines) {
+        new TGVertexFactory(cocircuit,tg,lines,euclideanPseudoLines);
     }
 
     // TODO convert this method into a helper class
