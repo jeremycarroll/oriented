@@ -132,21 +132,27 @@ public class TGVertex implements Comparable<TGVertex> {
         new TGVertexFactory(cocircuit,tg,lines,euclideanPseudoLines);
     }
 
-    // TODO convert this method into a helper class
     @SuppressWarnings("unused")
     public static void fromFace(Face tope, TensionGraph tg, EuclideanPseudoLines epl) {
         new TGVertexFactory(tope,tg,epl);
     }
-           
-        
-        
-        
 
     @Override
     public int compareTo(TGVertex o) {
         return identity.toString().compareTo(o.identity.toString());
     }
 
+    /**
+     * We are looking for the endpoint of a DEdge, which is either
+     * a point or a face. The DEdge has a label, and comes into this TGVertex.
+     * There are three possibilities: this TGVertex has a face which includes a corner with a third edge
+     * which has that label, or this TGVeretx is a single point which lies on a line with that label,
+     * or there is an edge of the face corresponding to this TGVertex with that label.
+     * @param label
+     * @param fl
+     * @param direction
+     * @return
+     */
     public Face findFaceOrPoint(Label label, FaceLattice fl, int direction) {
         SignedSet first = null;;
         SignedSet second = null;
@@ -175,6 +181,9 @@ public class TGVertex implements Comparable<TGVertex> {
         Face edge = fl.get(first.compose(second));
         for (Face f:edge.higher()) {
             if (f.covector().sign(label) == direction) {
+                if (!f.equals(this.source)) {
+                    throw new IllegalStateException("Hmm - unexpected");
+                }
                 return f;
             }
         }

@@ -49,6 +49,10 @@ public class TensionGraph extends PrunableGraph {
         } else {
             edge.bit = bit;
         }
+        if (! ( (d.source.equals(edge.source.getSource()))
+                && (d.dest.equals(edge.dest.getSource())) )) {
+            edge.saveInDifficulty = true;
+        }
     }
     
     public int totalBits() {

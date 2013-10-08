@@ -16,6 +16,7 @@ public class TGEdge implements Comparable<TGEdge> {
     EdgeChoices inChoice;
     EdgeChoices outChoice;
     int bit;
+    boolean saveInDifficulty;
     public TGEdge(Label l, int ordinal, TGVertex s, TGVertex d) {
         Preconditions.checkArgument(s.getId().sign(l) != -1);
         Preconditions.checkArgument(d.getId().sign(l) != 1);

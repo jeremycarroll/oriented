@@ -827,16 +827,20 @@ public class PseudoLineDrawing implements Verify {
     
     private void drawArrow(Graphics2D g1, double x1, double y1, double x2, double y2) {
         int arr_size = options.originArrowSize;
-        drawArrow(g1, x1, y1, x2, y2, arr_size, true);
+        drawArrow(g1, x1, y1, x2, y2, arr_size, true, true);
     }
 
     protected void drawArrow(Graphics2D g1, double x1, double y1, double x2,
             double y2, int arr_size) {
-        drawArrow(g1, x1, y1, x2, y2, arr_size, false);
+        drawArrow(g1, x1, y1, x2, y2, arr_size, false, true);
     }
 
+    protected void drawArrowHead(Graphics2D g1, double x1, double y1, double x2,
+            double y2, int arr_size) {
+        drawArrow(g1, x1, y1, x2, y2, arr_size, false, false);
+    }
     protected void drawArrow(Graphics2D g1, double x1, double y1, double x2,
-            double y2, int arr_size, boolean includeOval) {
+            double y2, int arr_size, boolean includeOval, boolean includeLine) {
         if (!options.showOrigin) {
             return;
         }
@@ -851,7 +855,9 @@ public class PseudoLineDrawing implements Verify {
         g.setStroke(new BasicStroke(1));
 
         // Draw horizontal arrow starting in (0, 0)
-        g.drawLine(0, 0, len, 0);
+        if (includeLine) {
+           g.drawLine(0, 0, len, 0);
+        }
         if (includeOval) {
            g.fillOval((int)(-arr_size*0.6), (int)(0-arr_size*0.6), (int)(arr_size*1.2), (int)(arr_size*1.2));
         }

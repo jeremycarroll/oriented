@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import edu.uci.ics.jung.graph.Graph;
+
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
@@ -35,45 +37,72 @@ public class DifficultyDrawing extends PseudoLineDrawing {
 
     @Override
     protected void drawUnderlay(Graphics2D graphics) {
-        
-        for (Face v:difficulty.getRslt(tg).getVertices()) {
-            graphics.setColor(options.getNextTwistedGraphColor());
-            Face source = v;
-            IPoint pos;
-            switch (source.dimension()) {
-            case 0:
-                pos = this.getPoint(source.covector());
-                highlightVertex(graphics,pos);
-                break;
-            case 2:
-                pos = this.centerOfFace(source);
-                highlightExtent(graphics,source);
-                break;
-            default:
-                throw new IllegalStateException("Bad TGVertex dimension: "+source.dimension());
-            }
-            positions.put(v, pos);
-        }
-    }
-
-    @Override
-    protected void drawOverlay(Graphics2D graphics) {
         // for each vertex, work out 
         // a) its coordinates
         // b) whether it is tope(s) or a point
         // c) draw it
+        
+        for (Faces v:difficulty.getRslt(tg).getVertices()) {
+            graphics.setColor(options.getNextTwistedGraphColor());
+            highlightPointOrFace(graphics, v.faceOrPoint);
+            if (v.face != null) {
+                highlightPointOrFace(graphics, v.face);
+            }
+        }
+    }
+
+    protected void highlightPointOrFace(Graphics2D graphics, Face source) {
+        IPoint pos;
+        switch (source.dimension()) {
+        case 0:
+            pos = this.getPoint(source.covector());
+            highlightVertex(graphics,pos);
+            break;
+        case 2:
+            pos = this.centerOfFace(source);
+            highlightExtent(graphics,source);
+            break;
+        default:
+            throw new IllegalStateException("Bad TGVertex dimension: "+source.dimension());
+        }
+        positions.put(source, pos);
+    }
+
+    @Override
+    protected void drawOverlay(Graphics2D graphics) {
         
 
         graphics.setColor(options.twistedGraphColor);
         graphics.setStroke(new BasicStroke(options.twistedGraphLineWidth));
         // for each edge
         // draw it
-        for (DEdge e:difficulty.getRslt(tg).getEdges()) {
-            IPoint from = positions.get(e.source);
-            IPoint to = positions.get(e.dest);
-            drawArrow(graphics,from.getX(),from.getY(),(from.getX()+to.getX())/2,(from.getY()+to.getY())/2, options.twistedGraphArrowSize);
-            graphics.drawLine((int)from.getX(),(int)from.getY(),(int)to.getX(),(int)to.getY());
+        Graph<Faces, DEdge> g = difficulty.getRslt(tg);
+        for (DEdge e:g.getEdges()) {
+            Faces from = g.getSource(e);
+            Faces to = g.getDest(e);
+            IPoint fromPt = positions.get(from.faceOrPoint);
+            IPoint toPt = positions.get(to.faceOrPoint);
+            IPoint mid = new Point2DDouble((fromPt.getX()+toPt.getX())/2,(fromPt.getY()+toPt.getY())/2);
+            drawArrowHead(graphics,fromPt.getX(),fromPt.getY(),mid.getX(),mid.getY(), options.twistedGraphArrowSize);
+            drawLine(graphics,from.face,fromPt,mid);
+            drawLine(graphics,to.face,toPt,mid);
+            
         }
+    }
+
+    private void drawLine(Graphics2D graphics, Face face, IPoint fromPt,
+            IPoint toPt) {
+        if (face == null) {
+            graphics.drawLine((int)fromPt.getX(),(int)fromPt.getY(),(int)toPt.getX(),(int)toPt.getY());
+        } else {
+            IPoint realFromPt = positions.get(face);
+            Path2D curve = new Path2D.Double();
+            curve.moveTo(realFromPt.getX(), realFromPt.getY());
+            curve.quadTo(fromPt.getX(),fromPt.getY(),toPt.getX(),toPt.getY());
+            graphics.draw(curve);
+            
+        }
+        
     }
 
     private void highlightExtent(Graphics2D graphics, Face f) {

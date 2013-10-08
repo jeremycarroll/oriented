@@ -86,7 +86,6 @@ public class TestTwistedGraphs {
     }
 
 
-    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);

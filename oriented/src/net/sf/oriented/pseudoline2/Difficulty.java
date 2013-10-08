@@ -3,7 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.SignedSet;
@@ -16,19 +18,26 @@ public class Difficulty {
     
     final BitSet bits = new BitSet();
     final BitSet missingBits;
-    private Graph<Face, DEdge> rslt;
+    private Graph<Faces, DEdge> rslt;
+    private List<TGEdge> saveEdges;
     Difficulty(GrowingGraph gg, int sz) {
         for (TGEdge e:gg.getEdges()) {
             bits.set(e.bit);
+            if (e.saveInDifficulty) {
+                if (saveEdges==null) {
+                    saveEdges = new ArrayList<TGEdge>(4);
+                }
+                saveEdges.add(e);
+            }
         }
         missingBits = (BitSet) bits.clone();
         missingBits.flip(1,sz+1);
     }
-    Graph<Face, DEdge> getRslt(TensionGraph tg) {
+    Graph<Faces, DEdge> getRslt(TensionGraph tg) {
         if (rslt != null) {
             return rslt;
         }
-        rslt = new DirectedSparseGraph<Face, DEdge>();
+        rslt = new DirectedSparseGraph<Faces, DEdge>();
         if (bits.get(0)) {
             throw new IllegalArgumentException("Accessing deleted difficulty");
         }
@@ -40,9 +49,25 @@ public class Difficulty {
                 return rslt;
             }
             DEdge d = tg.getDEdge(bit);
-            rslt.addEdge(d,  d.source, d.dest);
+            TGEdge e = getSavedTGEdge(bit);
+            if (e==null) {
+                rslt.addEdge(d,  new Faces(d.source), new Faces(d.dest) );
+            } else {
+                rslt.addEdge(d,  new Faces(e.source.getSource(), d.source),
+                                 new Faces(e.dest.getSource(), d.dest) );
+            }
             bit++;
         }
+    }
+    private TGEdge getSavedTGEdge(int bit) {
+        if (this.saveEdges==null)
+        return null;
+        for (TGEdge r:saveEdges) {
+            if (r.bit == bit) {
+                return r;
+            }
+        }
+        return null;
     }
 
 }
