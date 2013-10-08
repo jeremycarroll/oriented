@@ -79,7 +79,6 @@ public class TestTwistedCycles {
         count("circularsaw5","0",96,880,76,640,287);
     }
 
-    @Ignore
     @Test
     public void testCircSaw5A() {
         count("_saw5A","0",116,1500,106,1340,262);
@@ -96,7 +95,6 @@ public class TestTwistedCycles {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
 
-    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
@@ -115,14 +113,13 @@ public class TestTwistedCycles {
     }
 
 
-  //  @Ignore
+    @Ignore
     @Test
     public void testTsukamotoPlus() {
         count("tsukamoto13.+1","A",312,6193,304,5957,10975);
     }
     
 
-    @Ignore
     @Test
     public void testRingel() {
         count("ringel","0",63,348,25,99,16);
@@ -165,6 +162,7 @@ public class TestTwistedCycles {
             if (vCount2 != 0) {
                 soln ++;
                 Paths<TGVertex,TGEdge,TGPath> paths = new TGPaths(ten);
+                System.err.println(paths.cycles().size());
                 
             }
         }

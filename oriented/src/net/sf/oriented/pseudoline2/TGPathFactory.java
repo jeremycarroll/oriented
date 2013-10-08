@@ -7,12 +7,12 @@ import net.sf.oriented.util.graph.PathFactory;
 
 public class TGPathFactory implements PathFactory<TGVertex, TGPath>{
     
-    final ShrinkingGraph graph;
+    final TensionGraph graph;
     final int lineCount;
     
-    TGPathFactory(ShrinkingGraph g) {
+    TGPathFactory(TensionGraph g) {
         graph = g;
-        lineCount = g.wam.getEuclideanPseudoLines().getEquivalentOM().elements().length;
+        lineCount = g.getEuclideanPseudoLines().getEquivalentOM().elements().length;
     }
 
     @Override

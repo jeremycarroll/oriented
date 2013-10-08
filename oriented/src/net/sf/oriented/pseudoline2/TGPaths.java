@@ -11,8 +11,8 @@ public final class TGPaths extends Paths<TGVertex, TGEdge, TGPath> {
     /**
      * 
      */
-    public TGPaths(Graph<TGVertex, TGEdge> g) {
-        super(g);
+    public TGPaths(TensionGraph g) {
+        super(g, new TGPathFactory(g));
         //        this.wam = wam;
     }
 }
