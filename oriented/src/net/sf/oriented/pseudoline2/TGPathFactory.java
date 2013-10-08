@@ -3,21 +3,42 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import net.sf.oriented.util.graph.Paths;
-import net.sf.oriented.util.graph.SimplePath;
-import edu.uci.ics.jung.graph.Graph;
+import net.sf.oriented.util.graph.PathFactory;
 
-final class TensionPaths extends Paths<TGVertex, TGEdge, SimplePath<TGVertex>> {
-    /**
-     * 
-     */
-//    private final WAM wam;
-
-    TensionPaths(WAM wam, Graph<TGVertex, TGEdge> g) {
-        super(g);
-//        this.wam = wam;
+public class TGPathFactory implements PathFactory<TGVertex, TGPath>{
+    
+    final ShrinkingGraph graph;
+    final int lineCount;
+    
+    TGPathFactory(ShrinkingGraph g) {
+        graph = g;
+        lineCount = g.wam.getEuclideanPseudoLines().getEquivalentOM().elements().length;
     }
+
+    @Override
+    public TGPath create(TGVertex from, TGVertex to) {
+        return checkNotBad(new TGPath(graph,lineCount,from,to));
+    }
+
+    @Override
+    public TGPath combine(TGPath first, TGPath andThen) {
+        if (first.canBeFollowedBy(andThen)) {
+            return checkNotBad(new TGPath(first,andThen));
+        } else {
+           return null;
+        }
+    }
+
+    private TGPath checkNotBad(TGPath rslt) {
+        if (rslt.isBad()) {
+            return null;
+        } else {
+            return rslt;
+        }
+    }
+
 }
+
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.  

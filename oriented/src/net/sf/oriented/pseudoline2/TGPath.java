@@ -8,7 +8,7 @@ import java.util.Set;
 
 import net.sf.oriented.util.graph.SimplePath;
 
-public class TensionPath extends SimplePath<TGVertex> {
+public class TGPath extends SimplePath<TGVertex> {
     class EdgeInfo {
         
         // the jth line is represented as the jth bit
@@ -44,7 +44,7 @@ public class TensionPath extends SimplePath<TGVertex> {
     // the jth bit is set if this path definitely uses the jth line
     int necessaryLines;
 
-    protected TensionPath(ShrinkingGraph g, int lineCount, TGVertex from, TGVertex to) {
+    protected TGPath(ShrinkingGraph g, int lineCount, TGVertex from, TGVertex to) {
         super(TGVertex.class, from, to);
         edges = new EdgeInfo[1];
         edges[0] = new EdgeInfo(0,g, from,to);
@@ -54,7 +54,7 @@ public class TensionPath extends SimplePath<TGVertex> {
         lineMap = new int[lineCount];
     }
 
-    public TensionPath(TensionPath first, TensionPath andThen) {
+    public TGPath(TGPath first, TGPath andThen) {
         super(first,andThen);
         lineMap = first.lineMap.clone();
         for (int i=0;i<lineMap.length;i++) {
@@ -81,7 +81,7 @@ public class TensionPath extends SimplePath<TGVertex> {
         }
     }
 
-    boolean canBeFollowedBy(TensionPath p) {
+    boolean canBeFollowedBy(TGPath p) {
         return super.canBeFollowedBy(p);
     }
 
