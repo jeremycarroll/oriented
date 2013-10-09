@@ -3,16 +3,18 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.util.graph.Paths;
 import net.sf.oriented.util.graph.SimplePath;
 import edu.uci.ics.jung.graph.Graph;
 
-public final class TGPaths extends Paths<TGVertex, TGEdge, TGPath> {
+public final class DPaths extends Paths<Face, DEdge, DPath> {
     /**
      * 
      */
-    public TGPaths(TensionGraph g) {
-        super(g, new TGPathFactory(g));
+    public DPaths(Graph<Face,DEdge> g, EuclideanPseudoLines epl) {
+        super(g, new DPathFactory(g, epl));
         //        this.wam = wam;
     }
 }

@@ -3,33 +3,36 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import edu.uci.ics.jung.graph.Graph;
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.util.graph.PathFactory;
 
-public class TGPathFactory implements PathFactory<TGVertex, TGPath>{
+public class DPathFactory implements PathFactory<Face, DPath>{
     
-    final TensionGraph graph;
-    final int lineCount;
-    
-    TGPathFactory(TensionGraph g) {
+    final Graph<Face, DEdge> graph;
+    final EuclideanPseudoLines epl;
+
+    DPathFactory(Graph<Face, DEdge> g, EuclideanPseudoLines epl) {
         graph = g;
-        lineCount = g.getEuclideanPseudoLines().getEquivalentOM().elements().length;
+        this.epl = epl;
     }
 
     @Override
-    public TGPath create(TGVertex from, TGVertex to) {
-        return checkNotBad(new TGPath(graph,lineCount,from,to));
+    public DPath create(Face from, Face to) {
+        return checkNotBad(new DPath(graph,epl,from,to));
     }
 
     @Override
-    public TGPath combine(TGPath first, TGPath andThen) {
+    public DPath combine(DPath first, DPath andThen) {
         if (first.canBeFollowedBy(andThen)) {
-            return checkNotBad(new TGPath(first,andThen));
+            return checkNotBad(new DPath(first,andThen));
         } else {
            return null;
         }
     }
 
-    private TGPath checkNotBad(TGPath rslt) {
+    private DPath checkNotBad(DPath rslt) {
         if (rslt.isBad()) {
             return null;
         } else {

@@ -6,24 +6,28 @@ package net.sf.oriented.pseudoline2;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.uci.ics.jung.graph.Graph;
+
+import net.sf.oriented.omi.Face;
+import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.util.graph.SimplePath;
 
-public class TGPath extends SimplePath<TGVertex> {
+public class DPath extends SimplePath<Face> {
     class EdgeInfo {
         
         // the jth line is represented as the jth bit
         final int line;
-        private final TGEdge edge;
+        private final DEdge edge;
         final int index;
 
-        public EdgeInfo(int index, TensionGraph g, TGVertex from, TGVertex to) {
-            Set<TGEdge> edges = (Set<TGEdge>) g.getIncidentEdges(from);
-            edges.retainAll(g.getIncidentEdges(to));
+        public EdgeInfo(int index, Graph<Face, DEdge> graph, EuclideanPseudoLines epl, Face from, Face to) {
+            Set<DEdge> edges = (Set<DEdge>) graph.getIncidentEdges(from);
+            edges.retainAll(graph.getIncidentEdges(to));
             if (edges.size()!=1) {
                 throw new IllegalArgumentException("Expecting one edge");
             }
             edge = edges.iterator().next();
-            line = 1 << edge.ordinal;
+            line = 1 << epl.getEquivalentOM().asInt(edge.label);
             this.index = index;
         }
 
@@ -41,15 +45,15 @@ public class TGPath extends SimplePath<TGVertex> {
     final int necessaryLines;
     final boolean isBad;
 
-    protected TGPath(TensionGraph g, int lineCount, TGVertex from, TGVertex to) {
-        super(TGVertex.class, from, to);
+    protected DPath(Graph<Face, DEdge> graph, EuclideanPseudoLines epl, Face from, Face to) {
+        super(Face.class, from, to);
         edges = new EdgeInfo[1];
-        edges[0] = new EdgeInfo(0,g, from,to);
+        edges[0] = new EdgeInfo(0,graph, epl, from,to);
         necessaryLines = edges[0].line;
         isBad = false;
     }
 
-    public TGPath(TGPath first, TGPath andThen) {
+    public DPath(DPath first, DPath andThen) {
         super(first,andThen);
         edges = new EdgeInfo[first.edges.length+andThen.edges.length];
         cloneEdges(0,first.edges);
@@ -66,7 +70,7 @@ public class TGPath extends SimplePath<TGVertex> {
         }
     }
 
-    boolean canBeFollowedBy(TGPath p) {
+    boolean canBeFollowedBy(DPath p) {
         return super.canBeFollowedBy(p);
     }
 
