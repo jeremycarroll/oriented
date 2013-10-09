@@ -19,6 +19,7 @@ public class Difficulty {
     final BitSet bits = new BitSet();
     final BitSet missingBits;
     private Graph<Faces, DEdge> rslt;
+    private Graph<Face, DEdge> rslt2;
     private List<TGEdge> saveEdges;
     Difficulty(GrowingGraph gg, int sz) {
         for (TGEdge e:gg.getEdges()) {
@@ -55,6 +56,32 @@ public class Difficulty {
             } else {
                 rslt.addEdge(d,  new Faces(e.source.getSource(), d.source),
                                  new Faces(e.dest.getSource(), d.dest) );
+            }
+            bit++;
+        }
+    }
+    Graph<Face, DEdge> getSimplifiedRslt(TensionGraph tg) {
+        if (rslt2 != null) {
+            return rslt2;
+        }
+        rslt2 = new DirectedSparseGraph<Face, DEdge>();
+        if (bits.get(0)) {
+            throw new IllegalArgumentException("Accessing deleted difficulty");
+        }
+        // 0th bit is the deleted marker
+        int bit = 1;
+        while (true) {
+            bit = bits.nextSetBit(bit);
+            if (bit == -1) {
+                return rslt2;
+            }
+            DEdge d = tg.getDEdge(bit);
+            TGEdge e = getSavedTGEdge(bit);
+            if (e==null) {
+                rslt2.addEdge(d,  d.source, d.dest );
+            } else {
+                rslt2.addEdge(d,  new Faces(e.source.getSource(), d.source).getSimplifiedVertex(),
+                                 new Faces(e.dest.getSource(), d.dest).getSimplifiedVertex() );
             }
             bit++;
         }

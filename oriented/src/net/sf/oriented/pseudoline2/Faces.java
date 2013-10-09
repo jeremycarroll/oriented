@@ -36,6 +36,10 @@ class Faces {
         return faceOrPoint.hashCode() ^ face.hashCode()*23;
     }
 
+    public Face getSimplifiedVertex() {
+        return face == null ? faceOrPoint : face;
+    }
+
 }
 
 
