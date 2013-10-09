@@ -68,7 +68,7 @@ public class Paths<V, E, P extends Path<V>> {
     private void royWarshall() {
         int size = paths.length;
         for (int k=0;k<size;k++) {
-            System.err.println(""+k + "/"+size+" "+vertex.get(k)+" "+counter);
+//            System.err.println(""+k + "/"+size+" "+vertex.get(k)+" "+counter);
             for (int i=0;i<size;i++) {
                 if (paths[i][k] == null || i==k) {
                     continue;
