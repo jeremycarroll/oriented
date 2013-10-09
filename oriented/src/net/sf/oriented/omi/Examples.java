@@ -28,6 +28,8 @@ public class Examples {
     private static OM uniform3;
     private static OM uniform4;
     private static OM ceva;
+    
+    private static OM _disconnected;
 
     private static OM πάππος;
     
@@ -261,6 +263,28 @@ public class Examples {
     public static OM _deformSaw5() {
         return circularsaw5().getChirotope().mutate(0,"C","D","H");
     }
+
+    public static OM _disconnected() {
+        if (_disconnected != null && !FreshEachTime) {
+            return _disconnected;
+        }
+        OM om = FactoryFactory.fromCrossings(
+                    "0:ABCDFGHIJ",
+                    "A:0CDHGFBIJ",
+                    "B:0CDHGFAIJ",
+                    "C:0BADHGIJF",
+                    "D:0BACHGIJF",
+                    "F:0GHBAIJCD",
+                    "G:0FHBACDJI",
+                    "H:0FGBACDJI",
+                    "I:0ABFCDJGH",
+                    "J:0ABFCDIGH");
+        _disconnected = om.getChirotope().mutate(1,"C","D","H").flip("D","I","J").flip("C","I","J")
+                ;
+//                .flip("F","I","J");
+        return  _disconnected;
+    }
+    
     public static OM _deformedCircularSaw() {
         return circularsaw3().getChirotope().mutate(1,1,2,3);
     }

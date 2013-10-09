@@ -55,6 +55,10 @@ public interface OMasChirotope extends OM, FullChirotope {
      */
     OMasChirotope mutate(int i, int ... basis);
 
+    OMasChirotope flip(String ... basis);
+    OMasChirotope  flip(int ... basis);
+    OMasChirotope flip(Label ... basis);
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.

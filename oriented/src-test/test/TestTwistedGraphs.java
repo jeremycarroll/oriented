@@ -87,12 +87,18 @@ public class TestTwistedGraphs {
         count("_saw5A","0",116,1500,106,1340,262);
     }
 
+    @Ignore
     @Test
     public void testDeformCircSaw5() {
         count("_deformSaw5","0",-1,-1,-1,-1,263);
     }
 
+    @Test
+    public void testDisconnected() {
+        count("_disconnected","0",-1,-1,-1,-1,-1);
+    }
 
+    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
@@ -106,11 +112,13 @@ public class TestTwistedGraphs {
     
     
 
+    @Ignore
     @Test
     public void testDeformedCeva() {
         count("_deformedCeva","0",42,28,0,0);
     }
 
+    @Ignore
     @Test
     public void testDeformedSaw() {
         count("_deformedCircularSaw","0",26,29,0,0);
@@ -185,6 +193,11 @@ public class TestTwistedGraphs {
                     
                     
                     System.err.println("Candidate found: "+i+": "+cycles.size()+" "+rslt.getEdgeCount());
+                    for (Face f:rslt.getVertices()) {
+                        if ( rslt.getNeighborCount(f) == 3 && f.dimension() == 0) {
+                            System.err.println("!!!!");
+                        }
+                    }
                     
                     DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff[0][i]);
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();

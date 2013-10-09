@@ -710,6 +710,29 @@ public class ChirotopeImpl extends AbsOM<Object> implements OMasChirotope {
         return mutate(i, asInt(basis));
     }
 
+    @Override
+    public OMasChirotope  flip(String ... basis) {
+        return flip(asInt(basis));
+    }
+
+    @Override
+    public OMasChirotope flip(int ... basis) {
+        if (basis.length!= rank()) {
+            throw new IllegalArgumentException("Incorrect number of elements in basis, expecting: "+rank());
+        }
+
+        int v = chi(basis);
+        if (v == 0){
+            throw new IllegalArgumentException("flip(): argument must be a basis");
+        }
+        return mutate(-v,basis); 
+    }
+
+    @Override
+    public OMasChirotope  flip(Label ... basis) {
+        return flip(asInt(basis));
+    }
+
 
 
 }
