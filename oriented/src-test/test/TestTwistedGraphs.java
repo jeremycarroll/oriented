@@ -5,6 +5,7 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,10 +16,12 @@ import javax.imageio.stream.ImageOutputStream;
 import junit.framework.Assert;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ImageOptions;
+import net.sf.oriented.pseudoline2.DEdge;
 import net.sf.oriented.pseudoline2.DPath;
 import net.sf.oriented.pseudoline2.DPaths;
 import net.sf.oriented.pseudoline2.Difficulty;
@@ -31,6 +34,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import edu.uci.ics.jung.graph.Graph;
 
 
 public class TestTwistedGraphs {
@@ -112,7 +117,7 @@ public class TestTwistedGraphs {
     }
 
 
-  //  @Ignore
+    @Ignore
     @Test
     public void testTsukamotoPlus() {
         count("tsukamoto13.+1","A",312,6193,304,5957,10975);
@@ -171,13 +176,16 @@ public class TestTwistedGraphs {
                 usuallyAssertEquals(dCount,diff[0].length);
                 if (true)
                 for (int i=0;i<diff[0].length;i++) {
-                    Collection<DPath> cycles =
-                    new DPaths(diff[0][i].getSimplifiedRslt(ten),pseudoLines).cycles();
-                    System.err.println(i+": "+cycles.size());
+                    Graph<Face, DEdge> rslt = diff[0][i].getSimplifiedRslt(ten);
+                    Collection<DPath> cycles = new DPaths(rslt,pseudoLines).cycles();
                     
-                    if (i>0) {
+                    if (!searchForCyclePair(rslt, cycles)) {
                         continue;
                     }
+                    
+                    
+                    System.err.println("Candidate found: "+i+": "+cycles.size()+" "+rslt.getEdgeCount());
+                    
                     DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff[0][i]);
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
                     ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 
@@ -200,6 +208,43 @@ public class TestTwistedGraphs {
         catch (AxiomViolation e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected boolean searchForCyclePair(Graph<Face, DEdge> rslt,
+            Collection<DPath> cycles) {
+        int sz = rslt.getVertexCount();
+        List<DPath> smallerCycles = new ArrayList<DPath>();
+        for (DPath dp:cycles) {
+            if (dp.getPath().size()<sz-1) {
+                smallerCycles.add(dp);
+            }
+        }
+        for (int i=0;i<smallerCycles.size();i++) {
+            List<Face> iPath = smallerCycles.get(i).getPath();
+            int isz = iPath.size() - 1;
+            for (int j=i+1; j<smallerCycles.size(); j++) {
+                List<Face> jPath = smallerCycles.get(j).getPath();
+                int jsz = jPath.size() - 1;
+                if (isz + jsz <= sz) {
+                    if (!overlap(iPath,jPath)) {
+                        return true;
+                    }
+                }
+                
+            }
+        }
+        return false;
+    }
+
+    private boolean overlap(List<Face> iPath, List<Face> jPath) {
+        for (Face fi:iPath) {
+            for (Face fj:jPath) {
+                if (fi.equals(fj)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void usuallyAssertEquals(int expected, int actual) {
