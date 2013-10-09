@@ -21,7 +21,7 @@ public class DPath extends SimplePath<Face> {
         final int index;
 
         public EdgeInfo(int index, Graph<Face, DEdge> graph, EuclideanPseudoLines epl, Face from, Face to) {
-            Set<DEdge> edges = (Set<DEdge>) graph.getIncidentEdges(from);
+            Set<DEdge> edges = new HashSet<DEdge>( graph.getIncidentEdges(from) );
             edges.retainAll(graph.getIncidentEdges(to));
             if (edges.size()!=1) {
                 throw new IllegalArgumentException("Expecting one edge");

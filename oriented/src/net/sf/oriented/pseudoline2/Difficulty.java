@@ -59,7 +59,7 @@ public class Difficulty {
             bit++;
         }
     }
-    Graph<Face, DEdge> getSimplifiedRslt(TensionGraph tg) {
+    public Graph<Face, DEdge> getSimplifiedRslt(TensionGraph tg) {
         Graph<Face, DEdge> resultGraph = new DirectedSparseGraph<Face, DEdge>();
         if (bits.get(0)) {
             throw new IllegalArgumentException("Accessing deleted difficulty");

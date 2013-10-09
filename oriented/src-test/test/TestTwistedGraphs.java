@@ -5,6 +5,7 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,8 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ImageOptions;
+import net.sf.oriented.pseudoline2.DPath;
+import net.sf.oriented.pseudoline2.DPaths;
 import net.sf.oriented.pseudoline2.Difficulty;
 import net.sf.oriented.pseudoline2.DifficultyDrawing;
 import net.sf.oriented.pseudoline2.TGFactory;
@@ -62,7 +65,6 @@ public class TestTwistedGraphs {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
-    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",50,48,8,12,2);
@@ -169,8 +171,12 @@ public class TestTwistedGraphs {
                 usuallyAssertEquals(dCount,diff[0].length);
                 if (true)
                 for (int i=0;i<diff[0].length;i++) {
-                    if (i>40) {
-                        break;
+                    Collection<DPath> cycles =
+                    new DPaths(diff[0][i].getSimplifiedRslt(ten),pseudoLines).cycles();
+                    System.err.println(i+": "+cycles.size());
+                    
+                    if (i>0) {
+                        continue;
                     }
                     DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff[0][i]);
                     ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
