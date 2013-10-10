@@ -14,5 +14,13 @@
 	<classpathentry kind="lib" path="lib/jung-algorithms-2.0.1.jar" sourcepath="lib/jung-algorithms-2.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jung-api-2.0.1.jar" sourcepath="lib/jung-api-2.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jung-graph-impl-2.0.1.jar" sourcepath="lib/jung-graph-impl-2.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-ooxml-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
