@@ -279,9 +279,7 @@ public class Examples {
                     "H:0FGBACDJI",
                     "I:0ABFCDJGH",
                     "J:0ABFCDIGH");
-        _disconnected = om.getChirotope().mutate(1,"C","D","H").flip("D","I","J").flip("C","I","J")
-                ;
-//                .flip("F","I","J");
+        _disconnected = om.getChirotope().mutate(1,"C","D","H").flip("D","I","J").flip("C","I","J").flip("F","I","J"). flip("C","I","F");
         return  _disconnected;
     }
     
