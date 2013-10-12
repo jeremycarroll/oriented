@@ -113,6 +113,9 @@ public class ExcelExport {
             set(sheet,1+i,0,rts(theta(i)));
             setformula(sheet,1,1+i,"data!"+absrel(5,i));
             setformula(sheet,1+i,1,"data!"+relabs(i,startOfTransposedSection+5));
+            for (int j=1;j<elements().length;j++) {
+                setformula(sheet,i+1,j+1,relabs(i+1,1)+"-"+absrel(1,j+1));
+            }
         }
     }
 
