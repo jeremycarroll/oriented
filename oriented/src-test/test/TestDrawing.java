@@ -27,34 +27,8 @@ import org.junit.Test;
  * @author jeremycarroll
  *
  */
-public class TestDrawing {
+public class TestDrawing  extends TestWithTempDir {
     
-    private static String tmp;
-    private static boolean fixedDir = false;
-    
-    @BeforeClass
-    public static void createTmpDir() throws IOException {
-        File tFile = File.createTempFile("oriented", ".d");
-        if (fixedDir) {
-            // change this directory as appropriate
-            tmp = "/Users/jeremycarroll/tmp";
-        } else {
-            tmp = tFile.getAbsolutePath();
-            tFile.delete();
-            tFile.mkdir();
-        }
-    }
-    
-    @AfterClass
-    public static void deleteTmpDir() {
-        if (!fixedDir) {
-            File dir = new File(tmp);
-            for (File f : dir.listFiles() ) {
-                f.delete();
-            }
-            dir.delete();
-        }
-    }
 
     @Test
     public void testWheel0() throws IOException, CoLoopCannotBeDrawnException, AxiomViolation {

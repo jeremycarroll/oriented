@@ -38,35 +38,8 @@ import org.junit.Test;
 import edu.uci.ics.jung.graph.Graph;
 
 
-public class TestTwistedGraphs {
+public class TestTwistedGraphs extends TestWithTempDir {
     
-
-    private static String tmp;
-    private static boolean fixedDir = true;
-    
-    @BeforeClass
-    public static void createTmpDir() throws IOException {
-        File tFile = File.createTempFile("oriented", ".d");
-        if (fixedDir) {
-            // change this directory as appropriate
-            tmp = "/Users/jeremycarroll/tmp";
-        } else {
-            tmp = tFile.getAbsolutePath();
-            tFile.delete();
-            tFile.mkdir();
-        }
-    }
-    
-    @AfterClass
-    public static void deleteTmpDir() {
-        if (!fixedDir) {
-            File dir = new File(tmp);
-            for (File f : dir.listFiles() ) {
-                f.delete();
-            }
-            dir.delete();
-        }
-    }
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
