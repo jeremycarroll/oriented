@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasChirotope;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -34,6 +36,7 @@ public class ExcelExport {
     private final Font subscript;
     private final Font bold;
     private final CellStyle boldStyle;
+    private final CellStyle signedStyle;
 
     private int startOfTransposedSection;
 
@@ -45,15 +48,17 @@ public class ExcelExport {
         bold.setBoldweight(Font.BOLDWEIGHT_BOLD);
         boldStyle = workbook.createCellStyle();
         boldStyle.setFont(bold);
+        short signedDataFormat = workbook.createDataFormat().getFormat("+0;-0");
+        signedStyle = workbook.createCellStyle();
+        signedStyle.setDataFormat(signedDataFormat);
         
     }
 
     public void make() {
         createDataSheet();
         createAnglesSheet();
-//        createSinesSheet();
-//        createSinesTextSheet();
-//        createChirotopeSheet();
+        createSinesSheet();
+        createChirotopeSheet();
 //        createDifficultiesSheet();
 //        createStartHereSheet();
     }
@@ -119,10 +124,70 @@ public class ExcelExport {
         }
     }
 
-    private void set(Sheet sheet, int i, int j, CellStyle style, String content) {
+    private void createSinesSheet() {
+        Sheet sheet = workbook.createSheet("sines");
+        set(sheet,0,0,boldStyle,"Sines");
+        for (int i=1;i<elements().length;i++) {
+            set(sheet,1,1+i,rts(theta(i)));
+            set(sheet,1+i,1,rts(theta(i)));
+            for (int j=1;j<elements().length;j++) {
+                setformula(sheet,i+1,j+1,"sin(angles!"+rel(i+1,j+1)+")");
+            }
+        }
+    }
+
+    private void createChirotopeSheet() {
+        Sheet sheet = workbook.createSheet("chirotope");
+        set(sheet,0,0,boldStyle,"Chirotope");
+        set(sheet,5,0,"ε =");
+        set(sheet,6,0,"0");
+        sheet.setColumnWidth(4, 35*256);
+        Row row = sheet.createRow((short)1);
+        createCells(row, boldStyle, "I","J","K","χ(I,J,K)","","χ","> 0","= 0");
+        OMasChirotope om = epl.getEquivalentOM().getChirotope();
+        short r = 2;
+        int lg = elements().length;
+        int lg1 = elements().length - 1;
+        for (int i=1;i<elements().length-2;i++) {
+            for (int j=i+1;j<elements().length-1;j++) {
+                for (int k=j+1;k<elements().length-1;k++) {
+                    row = sheet.createRow(r);
+                    row.createCell(0).setCellFormula("IF(B" + r +"<"+lg1+",A"+r+",A"+r +"+1)");
+                    row.createCell(1).setCellFormula("IF(C" + r +"<" + lg +",B" + r+",IF(B"+r+"<"+lg1+",B"+r+"+1,A"+(r+1)+"+1))");
+                    row.createCell(2).setCellFormula("IF(C" + r +"<" + lg +",C" + r+"+1,B"+(r+1)+"+1)");
+                    r++;
+                    int sign = om.chi(i,j,k);
+                    Cell c = row.createCell(3);
+                    c.setCellValue(sign);
+                    if (sign!=0) {
+                        c.setCellStyle(signedStyle);
+                    }
+                    row.createCell(4).setCellValue(rts(append(
+                                      r(i),"sin(",theta(k),"−",theta(j),")−",
+                                      r(j),"sin(",theta(k),"−",theta(i),")+",
+                                      r(k),"sin(",theta(j),"−",theta(i),")")));
+                }
+            }
+        }
+        row = sheet.getRow(2);
+        initIJK(row.getCell(0),1.0);
+        initIJK(row.getCell(1),2.0);
+        initIJK(row.getCell(2),3.0);
+    }
+
+    protected void initIJK(Cell cc, double v) {
+        cc.setCellFormula(null);
+        cc.setCellValue(v);
+        cc.setCellType(Cell.CELL_TYPE_NUMERIC);
+    }
+    private Cell set(Sheet sheet, int i, int j, String content) {
         Cell c = getOrCreate(sheet,i,j);
         c.setCellValue(content);
-        c.setCellStyle(style);
+        return c;
+    }
+
+    private void set(Sheet sheet, int i, int j, CellStyle style, String content) {
+        set(sheet,i,j,content).setCellStyle(style);
     }
 
     private void setformula(Sheet sheet, int i, int j, String formula) {
@@ -160,6 +225,9 @@ public class ExcelExport {
         
     }
 
+    private String rel(int i, int j) {
+        return a2z(i)+(j+1);
+    }
     private String absrel(int i, int j) {
         return "$"+a2z(i)+(j+1);
     }
@@ -219,7 +287,7 @@ public class ExcelExport {
         }
     }
     
-    private String[] append(String[] ... a) {
+    private String[] __append(String[] ... a) {
         switch (a.length) {
         case 0:
             return new String[0];
@@ -234,6 +302,18 @@ public class ExcelExport {
             }
             return r;
         }
+    }
+
+    private String[] append(Object ... a) {
+        String uniform[][] = new String[a.length][];
+        for (int i=0;i<a.length;i++) {
+            if (a[i] instanceof String) {
+                uniform[i] = new String[]{(String)a[i]};
+            } else {
+                uniform[i] = (String[])a[i];
+            }
+        }
+        return __append(uniform);
     }
     private String[] r(int i) {
         return new String[]{"r", elements()[i].label() };
