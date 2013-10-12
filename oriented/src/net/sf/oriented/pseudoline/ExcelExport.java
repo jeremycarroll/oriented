@@ -82,8 +82,12 @@ public class ExcelExport {
             r.createCell(4).setCellValue((int)deg);
             r.createCell(5).setCellFormula("E"+(i+1)+"*PI()/180");
         }
+        Row rr = sheet.createRow(elements().length);
+        rr.createCell(2).setCellValue("ε =");
+        rr.createCell(4).setCellValue(0);
+        rr.createCell(5).setCellFormula("E"+(elements().length+1));
         
-        startOfTransposedSection = elements().length+2;
+        startOfTransposedSection = elements().length+3;
         
         for (int i=0;i<6;i++) {
             Row r = sheet.createRow(startOfTransposedSection+i);
@@ -145,12 +149,13 @@ public class ExcelExport {
         Row row = sheet.createRow((short)1);
         createCells(row, boldStyle, "I","J","K","χ(I,J,K)","","χ","> 0","= 0");
         OMasChirotope om = epl.getEquivalentOM().getChirotope();
-        short r = 2;
-        int lg = elements().length;
-        int lg1 = elements().length - 1;
+        int r = 2;
+        int lg = elements().length - 1;
+        int lg1 = elements().length - 2;
         for (int i=1;i<elements().length-2;i++) {
             for (int j=i+1;j<elements().length-1;j++) {
-                for (int k=j+1;k<elements().length-1;k++) {
+                for (int k=j+1;k<elements().length;k++) {
+                    System.err.println(i+","+j+","+k);
                     row = sheet.createRow(r);
                     row.createCell(0).setCellFormula("IF(B" + r +"<"+lg1+",A"+r+",A"+r +"+1)");
                     row.createCell(1).setCellFormula("IF(C" + r +"<" + lg +",B" + r+",IF(B"+r+"<"+lg1+",B"+r+"+1,A"+(r+1)+"+1))");
@@ -166,6 +171,14 @@ public class ExcelExport {
                                       r(i),"sin(",theta(k),"−",theta(j),")−",
                                       r(j),"sin(",theta(k),"−",theta(i),")+",
                                       r(k),"sin(",theta(j),"−",theta(i),")")));
+                    row.createCell(5).setCellFormula(rSineDiff(r,"ABC")+"-"+rSineDiff(r,"BAC")+"+"+rSineDiff(r,"CAB"));
+                    if (sign == 0) {
+                        row.createCell(6).setCellValue(1);
+                        row.createCell(7).setCellFormula("$F"+r);
+                    } else {
+                        row.createCell(6).setCellFormula("$D"+r+"*$F"+r+"-data!$D$"+(elements().length+1));
+                        row.createCell(7).setCellValue(0);
+                    }
                 }
             }
         }
@@ -173,6 +186,13 @@ public class ExcelExport {
         initIJK(row.getCell(0),1.0);
         initIJK(row.getCell(1),2.0);
         initIJK(row.getCell(2),3.0);
+    }
+
+    protected String rSineDiff(int r,String abc) {
+        String a = abc.substring(0,1);
+        String b = abc.substring(1,2);
+        String c = abc.substring(2,3);
+        return "OFFSET(data!$D$1,$"+a+r+",0)*OFFSET(sines!$B$2,$"+b+r+",$"+c+r+")";
     }
 
     protected void initIJK(Cell cc, double v) {
