@@ -55,6 +55,7 @@ public class ExcelExport {
     }
 
     public void make() {
+        createSolverSheet();
         createDataSheet();
         createAnglesSheet();
         createSinesSheet();
@@ -62,24 +63,64 @@ public class ExcelExport {
 //        createDifficultiesSheet();
 //        createStartHereSheet();
     }
-    private void createDataSheet() {
-        Sheet sheet = workbook.createSheet("data");
-        Row row = sheet.createRow((short)0);
-        
-        createCells(row, boldStyle, "Label","r","R","θ","Degrees","Radians");
-        
-        
+    private void createSolverSheet() {
+        Sheet sheet = workbook.createSheet("solver");
+        createCells(sheet.createRow(0), boldStyle, "Solver: set-up, data and constraints");
+        createCells(sheet.createRow(1), boldStyle, "","Set-up");
+        createCells(sheet.createRow(3), boldStyle, "","","Angles");
+        createCells(sheet.createRow(5), boldStyle, "","","Linear");
+        createCells(sheet.createRow(7), boldStyle, "","","Beautify Outer Square");
+        createCells(sheet.createRow(9), boldStyle, "","","Beautify Inner Square");
+        createCells(sheet.createRow(11), boldStyle, "","","Beautify Outer Circle");
+        createCells(sheet.createRow(13), boldStyle, "","","Beautify Inner Circle");
+
+        createCells(sheet.createRow(15), boldStyle, "","Data");
+        Row rRow = sheet.createRow(16);
+        createCells(rRow, boldStyle, "","","r");
+        Row aRow = sheet.createRow(17);
+        createCells(aRow, boldStyle, "","","θ");
+        Row dRow = sheet.createRow(19);
+
         double step = 180/(elements().length-1);
         double deg = 0;
         for (int i=1;i< elements().length;i++, deg+= step) {
+            rRow.createCell(2+i).setCellValue(1);
+            aRow.createCell(2+i).setCellValue((int)deg);
+            dRow.createCell(2+i).setCellFormula(a2z(3+i)+"$18-"+a2z(2+i)+"$18-$D$19");
+        }
+        aRow.createCell(2+elements().length).setCellValue(180);
+
+        Row eRow = sheet.createRow(18);
+        createCells(eRow, boldStyle, "","","ε");
+        eRow.createCell(3).setCellValue(0);
+        
+        createCells(sheet.createRow(21), boldStyle, "","Constraints");
+        createCells(sheet.createRow(22), boldStyle, "Chirotope","","","","Difficulties");
+        int lg = elements().length - 1;
+        int chiCount = lg * (lg-1) / 2 * (lg-2) / 3;
+        for (int i=0;i<chiCount;i++) {
+            Row row = sheet.createRow(23+i);
+            row.createCell(0).setCellFormula("chirotope!$G"+(i+3));
+            row.createCell(1).setCellFormula("chirotope!$H"+(i+3));
+        }
+        
+        
+    }
+    private void createDataSheet() {
+        Sheet sheet = workbook.createSheet("data");
+        Row row = sheet.createRow(0);
+        
+        createCells(row, boldStyle, "Label","r","R","θ","Degrees","Radians");
+        
+        for (int i=1;i< elements().length;i++) {
             Label lbl= elements()[i];
             Row r = sheet.createRow(i);
             String label = lbl.label();
             r.createCell(0).setCellValue(label);
             r.createCell(1).setCellValue(rts(r(i))); 
-            r.createCell(2).setCellValue(1.0);
+            r.createCell(2).setCellFormula("solver!$"+a2z(2+i)+"$17");
             r.createCell(3).setCellValue(rts(theta(i)));
-            r.createCell(4).setCellValue((int)deg);
+            r.createCell(4).setCellFormula("solver!$"+a2z(2+i)+"$18");
             r.createCell(5).setCellFormula("E"+(i+1)+"*PI()/180");
         }
         Row rr = sheet.createRow(elements().length);
@@ -110,7 +151,7 @@ public class ExcelExport {
         }
     }
 
-    protected Label[] elements() {
+    private Label[] elements() {
         return epl.getEquivalentOM().elements();
     }
 
@@ -144,7 +185,7 @@ public class ExcelExport {
         Sheet sheet = workbook.createSheet("chirotope");
         set(sheet,0,0,boldStyle,"Chirotope");
         set(sheet,5,0,"ε =");
-        set(sheet,6,0,"0");
+        setformula(sheet,6,0,"solver!$D$19");
         sheet.setColumnWidth(4, 35*256);
         Row row = sheet.createRow((short)1);
         createCells(row, boldStyle, "I","J","K","χ(I,J,K)","","χ","> 0","= 0");
@@ -176,7 +217,7 @@ public class ExcelExport {
                         row.createCell(6).setCellValue(1);
                         row.createCell(7).setCellFormula("$F"+r);
                     } else {
-                        row.createCell(6).setCellFormula("$D"+r+"*$F"+r+"-data!$D$"+(elements().length+1));
+                        row.createCell(6).setCellFormula("$D"+r+"*$F"+r+"-$G$1");
                         row.createCell(7).setCellValue(0);
                     }
                 }
@@ -188,14 +229,14 @@ public class ExcelExport {
         initIJK(row.getCell(2),3.0);
     }
 
-    protected String rSineDiff(int r,String abc) {
+    private String rSineDiff(int r,String abc) {
         String a = abc.substring(0,1);
         String b = abc.substring(1,2);
         String c = abc.substring(2,3);
-        return "OFFSET(data!$D$1,$"+a+r+",0)*OFFSET(sines!$B$2,$"+b+r+",$"+c+r+")";
+        return "OFFSET(data!$C$1,$"+a+r+",0)*OFFSET(sines!$B$2,$"+b+r+",$"+c+r+")";
     }
 
-    protected void initIJK(Cell cc, double v) {
+    private void initIJK(Cell cc, double v) {
         cc.setCellFormula(null);
         cc.setCellValue(v);
         cc.setCellType(Cell.CELL_TYPE_NUMERIC);
@@ -254,7 +295,7 @@ public class ExcelExport {
     private String relabs(int i, int j) {
         return a2z(i)+"$"+(j+1);
     }
-    protected String abs(int i, int j) {
+    private String abs(int i, int j) {
         return "$"+a2z(i)+"$"+(j+1);
     }
 
