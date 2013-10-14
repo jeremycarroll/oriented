@@ -43,6 +43,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
 // circularSaw3.getChirotope().mutate(1,1,2,3); - a circ saw that isn't
 
+    private String bad;
     @Test
     public void testCeva() {
         count("ceva","0",50,48,8,12,2);
@@ -98,10 +99,43 @@ public class TestTwistedGraphs extends TestWithTempDir {
     }
 
 
+    @Test
+    public void testTsukamotoPlusA() {
+        count("tsukamoto13.+1","A",312,6193,304,5957,10975);
+    }
+
+    @Test
+    public void testTsukamotoMinusA() {
+        count("tsukamoto13.-1","A", 308  , 6039  , 300  , 5791,17357);
+    }
+
+    @Test
+    public void testTsukamotoPlusB() {
+        count("tsukamoto13.+1","B",312,6193,304,5957,10975);
+    }
+
+    @Test
+    public void testTsukamotoMinusB() {
+        count("tsukamoto13.-1","B", 308  , 6039  , 300  , 5791,17357);
+    }
+
+
     @Ignore
     @Test
-    public void testTsukamotoPlus() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,10975);
+    public void testSuvorov14() {
+        count("suvorov14","A", 716  , 35463  , 675  , 31549 ,10975);
+    }
+
+    @Ignore
+    @Test
+    public void testOmage14Plus() {
+        count("omega14.+1","A",312,6193,304,5957,10975);
+    }
+
+    @Ignore
+    @Test
+    public void testOmage14Minus() {
+        count("omega14.-1","A",312,6193,304,5957,10975);
     }
     
 
@@ -133,7 +167,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
     }
     private void count(String omName, String inf, int vCount, int eCount, int vCount2, int eCount2, int dCount) {
         try {
-            System.err.println(omName+" ===== "+inf+" ==");
+            System.err.println("\n"+omName+" ===== "+inf+" ==");
             OM om = Examples.all().get(omName);
             EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
             TensionGraph ten = new TGFactory(pseudoLines).create();
@@ -155,7 +189,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");
                 System.err.println(diff[0].length+" difficulties");
                 usuallyAssertEquals(dCount,diff[0].length);
-                if (true)
+                if (false)
                 for (int i=0;i<diff[0].length;i++) {
                     Graph<Face, DEdge> rslt = diff[0][i].getSimplifiedRslt(ten);
                     Collection<DPath> cycles = new DPaths(rslt,pseudoLines).cycles();
@@ -183,6 +217,9 @@ public class TestTwistedGraphs extends TestWithTempDir {
                     iw.dispose();
                     
                 }
+            }
+            if (bad != null) {
+                Assert.fail(bad);
             }
         }
         catch (CoLoopCannotBeDrawnException e) {
@@ -234,8 +271,11 @@ public class TestTwistedGraphs extends TestWithTempDir {
     }
 
     private void usuallyAssertEquals(int expected, int actual) {
-        if (expected != -1) {
-            Assert.assertEquals(expected, actual);
+        if ( expected != -1 && expected != actual) {
+            if (bad == null) {
+                bad = "";
+            }
+            bad = bad + expected +" != " + actual + "; ";
         }
         
     }
