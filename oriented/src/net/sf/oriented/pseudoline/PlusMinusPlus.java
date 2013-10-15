@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import com.google.common.base.Preconditions;
@@ -12,7 +13,6 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     private final int patterns[];
     private final int size;
     private final int n;
-    
     
     
     private PlusMinusPlus(int n) {
@@ -110,22 +110,105 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         }
         return instances[sz];
     }
+    
+    public static boolean[] redundant(boolean pmp[]) {
+//        int firstFalse = -1;
+//        int firstTrue = -1;
+//        int lastFalse = -1;
+//        int lastTrue = -1;
+//        for (int i=0;i<pmp.length;i++) {
+//            if (pmp[i]) {
+//                lastTrue = i;
+//                if (firstTrue == -1) {
+//                    firstTrue = i;
+//                }
+//            } else {
+//                lastFalse = i;
+//                if (firstFalse == -1) {
+//                    firstFalse = i;
+//                }
+//            }
+//        }
+//        if (lastTrue == -1 || lastFalse == -1) {
+//            throw new IllegalArgumentException("Not pmp");
+//        }
+//        boolean rslt[] = new boolean[pmp.length];
+//        Arrays.fill(rslt, true);
+//        
+//        if (firstTrue == 1 || firstFalse == 1) {
+//            rslt[0] = false;
+//        }
+//        int penUltimate = pmp.length - 2;
+//        if (lastTrue == penUltimate || lastFalse == penUltimate) {
+//            rslt[penUltimate+1] = false;
+//        }
+//        if (firstTrue == lastTrue) {
+//            rslt[firstTrue] = false;
+//        }
+//        if (firstFalse == lastFalse) {
+//            rslt[firstFalse] = false;
+//        }
+//        
+        boolean rslt[] = new boolean[pmp.length];
+        int firstOpposite = 1;
+        if (pmp[0] == pmp[1]) {
+            rslt[0] = true;
+            for ( ;firstOpposite<pmp.length;firstOpposite++) {
+                if (pmp[firstOpposite] == pmp[0]) {
+                    rslt[firstOpposite] = true;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            // look for pmp starting at 1
+            rslt[0] = hasPmpStartingAt(pmp,1);
+        }
+        
+        
+        return rslt;
+    }
+
+
+    protected static boolean hasPmpStartingAt(boolean[] pmp, int start) {
+        int j;
+        for (j=start+1;j<pmp.length;j++) {
+            if (pmp[j] != pmp[start]) {
+                break;
+            }
+        }
+        if (j==pmp.length) {
+            return false;
+        }
+        for (j++;j<pmp.length;j++) {
+            if (pmp[j] == pmp[start]) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void main(String args[]) {
         for (int i=3;i<7;i++) {
             int cnt = 0;
             System.out.println("== "+i+" ==");
             for (boolean x[]:new PlusMinusPlus(i)) {
-                for (boolean t:x) {
-                    System.out.print(t?"+":"-");
-                }
-                System.out.println();
+                dump(x,"+","-");
+                dump(PlusMinusPlus.redundant(x),"?","#");
                 cnt++;
             }
             System.out.println("** "+i+" ** "+cnt);
             
         }
         
+    }
+
+
+    protected static void dump(boolean[] x,String tt, String ff) {
+        for (boolean t:x) {
+            System.out.print(t?tt:ff);
+        }
+        System.out.println();
     }
 }
 

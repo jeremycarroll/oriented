@@ -117,13 +117,7 @@ public class TGVertexFactory {
         List<Label> minus = new ArrayList<Label>();
         for (int sz = 3; sz <= lines.size(); sz++) {
             for (UnsignedSet someLines : lines.subsetsOfSize(sz)) {
-                Label labels[] = someLines.toArray();
-                Arrays.sort(labels,new Comparator<Label>(){
-
-                    @Override
-                    public int compare(Label o1, Label o2) {
-                        return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
-                    }});
+                Label[] labels = sort(someLines, epl);
                 for (boolean pmp[] : PlusMinusPlus.get(sz)) {
                     plus.clear();
                     minus.clear();
@@ -139,6 +133,17 @@ public class TGVertexFactory {
                 }
             }
         }
+    }
+
+    protected Label[] sort(UnsignedSet someLines, final EuclideanPseudoLines epl) {
+        Label labels[] = someLines.toArray();
+        Arrays.sort(labels,new Comparator<Label>(){
+
+            @Override
+            public int compare(Label o1, Label o2) {
+                return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
+            }});
+        return labels;
     }
 
     public int bitFor(UnsignedSet line) {
@@ -211,6 +216,10 @@ public class TGVertexFactory {
                 }
 
                 SignedSet id = createIdentity(fact, tope.covector(), sides);
+                
+                Label sorted[] = sort(id.support(),epl);
+                boolean pmp[] = signs(sorted,id);
+                
                 // System.err.println(id);
                 // check point of intersection is on the 'correct' side of at
                 // least one line
@@ -255,6 +264,23 @@ public class TGVertexFactory {
                         + bitCount, extent.toArray(new Face[0])));
             }
         }
+    }
+
+    private boolean[] signs(Label[] sorted, SignedSet id) {
+        boolean rslt[] = new boolean[sorted.length];
+        for (int i=0;i<sorted.length;i++) {
+            switch (id.sign(sorted[i])) {
+            case 1:
+                rslt[i] = true;
+                break;
+            case 0:
+                throw new IllegalArgumentException("Must have sign");
+            case -1:
+                rslt[i] = false;
+                break;
+            }
+        }
+        return rslt;
     }
 
     protected int saveLines(Collection<? extends Face> edges) {

@@ -101,19 +101,20 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     @Test
     public void testTsukamotoPlusA() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,10975);
+        count("tsukamoto13.+1","A",312,6193,304,5957,10975);  // 84791
     }
 
     @Test
     public void testTsukamotoMinusA() {
-        count("tsukamoto13.-1","A", 308  , 6039  , 300  , 5791,17357);
+        count("tsukamoto13.-1","A", 308  , 6039  , 300  , 5791,17357); // 266666
     }
 
     @Test
     public void testTsukamotoPlusB() {
-        count("tsukamoto13.+1","B",312,6193,304,5957,10975);
+        count("tsukamoto13.+1","B",312,6193,304,5957,10975); // > 15471548
     }
 
+    @Ignore
     @Test
     public void testTsukamotoMinusB() {
         count("tsukamoto13.-1","B", 308  , 6039  , 300  , 5791,17357);
