@@ -112,23 +112,41 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     }
     
     public static boolean[] redundant(boolean pmp[]) {
-//        int firstFalse = -1;
-//        int firstTrue = -1;
-//        int lastFalse = -1;
-//        int lastTrue = -1;
-//        for (int i=0;i<pmp.length;i++) {
-//            if (pmp[i]) {
-//                lastTrue = i;
-//                if (firstTrue == -1) {
-//                    firstTrue = i;
-//                }
-//            } else {
-//                lastFalse = i;
-//                if (firstFalse == -1) {
-//                    firstFalse = i;
-//                }
-//            }
-//        }
+        int firstFalse = -1;
+        int firstTrue = -1;
+        int lastFalse = -1;
+        int lastTrue = -1;
+        int flips = 0;
+        boolean last = pmp[0];
+        for (int i=0;i<pmp.length;i++) {
+            if (pmp[i]) {
+                lastTrue = i;
+                if (firstTrue == -1) {
+                    firstTrue = i;
+                }
+            } else {
+                lastFalse = i;
+                if (firstFalse == -1) {
+                    firstFalse = i;
+                }
+            }
+            if (last != pmp[i]) {
+                flips++;
+                last = pmp[i];
+            }
+        }
+
+        switch (flips) {
+        case 0:
+        case 1:
+            throw new IllegalArgumentException("Not pmp");
+        case 2:
+            return redundant2(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
+        case 3:
+            return redundant3(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
+        default:
+            return new boolean[pmp.length];
+        }
 //        if (lastTrue == -1 || lastFalse == -1) {
 //            throw new IllegalArgumentException("Not pmp");
 //        }
@@ -149,23 +167,66 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
 //            rslt[firstFalse] = false;
 //        }
 //        
-        boolean rslt[] = new boolean[pmp.length];
-        int firstOpposite = 1;
-        if (pmp[0] == pmp[1]) {
-            rslt[0] = true;
-            for ( ;firstOpposite<pmp.length;firstOpposite++) {
-                if (pmp[firstOpposite] == pmp[0]) {
-                    rslt[firstOpposite] = true;
-                } else {
-                    break;
-                }
-            }
+//        boolean rslt[] = new boolean[pmp.length];
+//        int firstOpposite = 1;
+//        if (pmp[0] == pmp[1]) {
+//            rslt[0] = true;
+//            for ( ;firstOpposite<pmp.length;firstOpposite++) {
+//                if (pmp[firstOpposite] == pmp[0]) {
+//                    rslt[firstOpposite] = true;
+//                } else {
+//                    break;
+//                }
+//            }
+//        } else {
+//            // look for pmp starting at 1
+//            rslt[0] = hasPmpStartingAt(pmp,1);
+//        }
+//        
+//        
+//        return rslt;
+    }
+
+
+    private static boolean[] redundant3(boolean[] pmp, int firstFalse,
+            int lastFalse, int firstTrue, int lastTrue) {
+        if (pmp[0]) {
+            return redundant3A(pmp,firstFalse,lastTrue);
         } else {
-            // look for pmp starting at 1
-            rslt[0] = hasPmpStartingAt(pmp,1);
+            return redundant3A(pmp,firstTrue,lastFalse);
         }
+    }
+
+
+    private static boolean[] redundant3A(boolean[] pmp, int second,
+            int penultimate) {
+        boolean rslt[] = new boolean[pmp.length];
         
-        
+        if (pmp[second] != pmp[second+1]) {
+            rslt[second] = true;
+        }
+        if (pmp[penultimate] != pmp[penultimate-1]) {
+            rslt[penultimate] = true;
+        }
+        return rslt;
+    }
+
+
+    private static boolean[] redundant2(boolean[] pmp, int firstFalse,
+            int lastFalse, int firstTrue, int lastTrue) {
+        boolean rslt[] = new boolean[pmp.length];
+        if (firstFalse == 1 || firstTrue == 1) {
+            rslt[0] = true;
+        }
+        if (lastFalse == pmp.length-2 || lastTrue == pmp.length - 2) {
+            rslt[pmp.length-1] = true;
+        }
+        if (firstFalse==lastFalse) {
+            rslt[firstFalse]  = true;
+        }
+        if (firstTrue==lastTrue) {
+            rslt[firstTrue]  = true;
+        }
         return rslt;
     }
 

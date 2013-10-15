@@ -23,6 +23,14 @@ public class TestRedundant {
     public void test5() {
         test(5);
     }
+    @Test
+    public void test6() {
+        test(6);
+    }
+    @Test
+    public void test7() {
+        test(7);
+    }
     private void test(int i) {
         for (boolean x[]: PlusMinusPlus.get(i)) {
             test(x);
@@ -49,7 +57,7 @@ public class TestRedundant {
             }
         }
         for (int i=0;i<actual.length;i++) {
-            Assert.assertEquals(dump(x,"+","-")+":"+dump(actual,"?","#"),useCount[i]!=count, actual[i]);
+            Assert.assertEquals(dump(x,"+","-")+":"+dump(actual,"?","#"),useCount[i]==count, actual[i]);
         }
         
     }
