@@ -31,7 +31,7 @@ public class TGVertex implements Comparable<TGVertex> {
     private final Face source;
     
     // no longer using faces parameter ???
-    TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc, Face ... xfaces ) {
+    TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc ) {
         identity = id;
         Set<SignedSet> ss = new HashSet<SignedSet>();
         addFace(ss,source);

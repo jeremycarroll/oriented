@@ -127,7 +127,7 @@ public class TGVertexFactory {
                     TGVertex vertex = new TGVertex(fact.signedSets().construct(
                             fact.unsignedSets().copyBackingCollection(plus),
                             fact.unsignedSets().copyBackingCollection(minus)),
-                            fact, cocircuit, "Point: " + someLines, cocircuit);
+                            fact, cocircuit, "Point: " + someLines);
                     tg.addVertex(vertex);
 //                    System.err.println(vertex);
                 }
@@ -183,8 +183,7 @@ public class TGVertexFactory {
         if (lines.size() == 3) {
             // easy case
             tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),
-                    tope.covector(), lines), epl.ffactory(), tope, "Triangle",
-                    tope));
+                    tope.covector(), lines), epl.ffactory(), tope, "Triangle"));
         } else {
             // find any parallel sides first
             ParallelHelper parallel = new ParallelHelper(epl);
@@ -258,10 +257,9 @@ public class TGVertexFactory {
                     }
                 }
 
-                // TODO: later, nonUniform points : I think not.
 
                 tg.maybeAddVertex(new TGVertex(id, epl.ffactory(), tope, "Polygon: "
-                        + bitCount, extent.toArray(new Face[0])));
+                        + bitCount));
             }
         }
     }
