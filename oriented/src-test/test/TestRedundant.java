@@ -31,6 +31,10 @@ public class TestRedundant {
     public void test7() {
         test(7);
     }
+    @Test
+    public void test9() {
+        test(9);
+    }
     private void test(int i) {
         for (boolean x[]: PlusMinusPlus.get(i)) {
             test(x);
@@ -38,10 +42,7 @@ public class TestRedundant {
     }
 
     private void test(boolean[] x) {
-//        if (x[0] != x[x.length-1]) {
-//            return;
-//        }
-        boolean actual[] = PlusMinusPlus.redundant(x);
+        boolean actual[] = PlusMinusPlus.required(x);
         int count = 0;
         int useCount[] = new int[x.length];
         for (int i=0;i<x.length;i++) {

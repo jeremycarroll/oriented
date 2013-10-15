@@ -111,7 +111,13 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         return instances[sz];
     }
     
-    public static boolean[] redundant(boolean pmp[]) {
+    /**
+     * The ith element in the result is true if the ith element of the argument
+     * is used in every plus-minus-plus or minus-plus-minus subsequence.
+     * @param pmp
+     * @return
+     */
+    public static boolean[] required(boolean pmp[]) {
         int firstFalse = -1;
         int firstTrue = -1;
         int lastFalse = -1;
@@ -141,64 +147,43 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         case 1:
             throw new IllegalArgumentException("Not pmp");
         case 2:
-            return redundant2(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
+            return required2(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
         case 3:
-            return redundant3(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
+            return required3(pmp, firstFalse, lastFalse, firstTrue, lastTrue);
         default:
             return new boolean[pmp.length];
         }
-//        if (lastTrue == -1 || lastFalse == -1) {
-//            throw new IllegalArgumentException("Not pmp");
-//        }
-//        boolean rslt[] = new boolean[pmp.length];
-//        Arrays.fill(rslt, true);
-//        
-//        if (firstTrue == 1 || firstFalse == 1) {
-//            rslt[0] = false;
-//        }
-//        int penUltimate = pmp.length - 2;
-//        if (lastTrue == penUltimate || lastFalse == penUltimate) {
-//            rslt[penUltimate+1] = false;
-//        }
-//        if (firstTrue == lastTrue) {
-//            rslt[firstTrue] = false;
-//        }
-//        if (firstFalse == lastFalse) {
-//            rslt[firstFalse] = false;
-//        }
-//        
-//        boolean rslt[] = new boolean[pmp.length];
-//        int firstOpposite = 1;
-//        if (pmp[0] == pmp[1]) {
-//            rslt[0] = true;
-//            for ( ;firstOpposite<pmp.length;firstOpposite++) {
-//                if (pmp[firstOpposite] == pmp[0]) {
-//                    rslt[firstOpposite] = true;
-//                } else {
-//                    break;
-//                }
-//            }
-//        } else {
-//            // look for pmp starting at 1
-//            rslt[0] = hasPmpStartingAt(pmp,1);
-//        }
-//        
-//        
-//        return rslt;
     }
 
 
-    private static boolean[] redundant3(boolean[] pmp, int firstFalse,
+    /**
+     * 
+     * @param pmp A sequence of true followed by a sequence of false followed by a sequence of true followed by a sequence of false,
+     *    or flipped.
+     * @param firstFalse
+     * @param lastFalse
+     * @param firstTrue
+     * @param lastTrue
+     * @return
+     */
+    private static boolean[] required3(boolean[] pmp, int firstFalse,
             int lastFalse, int firstTrue, int lastTrue) {
         if (pmp[0]) {
-            return redundant3A(pmp,firstFalse,lastTrue);
+            return required3(pmp,firstFalse,lastTrue);
         } else {
-            return redundant3A(pmp,firstTrue,lastFalse);
+            return required3(pmp,firstTrue,lastFalse);
         }
     }
 
 
-    private static boolean[] redundant3A(boolean[] pmp, int second,
+    /**
+     * 
+     * @param pmp
+     * @param second  The index of the beginning of the second sequence
+     * @param penultimate The index of the last of the third sequence
+     * @return
+     */
+    private static boolean[] required3(boolean[] pmp, int second,
             int penultimate) {
         boolean rslt[] = new boolean[pmp.length];
         
@@ -212,7 +197,17 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     }
 
 
-    private static boolean[] redundant2(boolean[] pmp, int firstFalse,
+    /**
+     * 
+     * @param pmp A sequence of true followed by a sequence of false followed by a sequence of true,
+     *    or flipped.
+     * @param firstFalse
+     * @param lastFalse
+     * @param firstTrue
+     * @param lastTrue
+     * @return
+     */
+    private static boolean[] required2(boolean[] pmp, int firstFalse,
             int lastFalse, int firstTrue, int lastTrue) {
         boolean rslt[] = new boolean[pmp.length];
         if (firstFalse == 1 || firstTrue == 1) {
@@ -255,7 +250,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
             System.out.println("== "+i+" ==");
             for (boolean x[]:new PlusMinusPlus(i)) {
                 dump(x,"+","-");
-                dump(PlusMinusPlus.redundant(x),"?","#");
+                dump(PlusMinusPlus.required(x),"?","#");
                 cnt++;
             }
             System.out.println("** "+i+" ** "+cnt);
