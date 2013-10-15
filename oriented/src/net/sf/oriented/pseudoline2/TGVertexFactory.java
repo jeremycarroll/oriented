@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -117,7 +116,7 @@ public class TGVertexFactory {
         List<Label> minus = new ArrayList<Label>();
         for (int sz = 3; sz <= lines.size(); sz++) {
             for (UnsignedSet someLines : lines.subsetsOfSize(sz)) {
-                Label[] labels = sort(someLines, epl);
+                Label[] labels = TGVertex.sort(someLines, epl);
                 for (boolean pmp[] : PlusMinusPlus.get(sz)) {
                     plus.clear();
                     minus.clear();
@@ -127,23 +126,12 @@ public class TGVertexFactory {
                     TGVertex vertex = new TGVertex(fact.signedSets().construct(
                             fact.unsignedSets().copyBackingCollection(plus),
                             fact.unsignedSets().copyBackingCollection(minus)),
-                            fact, cocircuit, "Point: " + someLines);
+                            epl, cocircuit, "Point: " + someLines);
                     tg.addVertex(vertex);
 //                    System.err.println(vertex);
                 }
             }
         }
-    }
-
-    protected Label[] sort(UnsignedSet someLines, final EuclideanPseudoLines epl) {
-        Label labels[] = someLines.toArray();
-        Arrays.sort(labels,new Comparator<Label>(){
-
-            @Override
-            public int compare(Label o1, Label o2) {
-                return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
-            }});
-        return labels;
     }
 
     public int bitFor(UnsignedSet line) {
@@ -183,7 +171,7 @@ public class TGVertexFactory {
         if (lines.size() == 3) {
             // easy case
             tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),
-                    tope.covector(), lines), epl.ffactory(), tope, "Triangle"));
+                    tope.covector(), lines), epl, tope, "Triangle"));
         } else {
             // find any parallel sides first
             ParallelHelper parallel = new ParallelHelper(epl);
@@ -216,8 +204,6 @@ public class TGVertexFactory {
 
                 SignedSet id = createIdentity(fact, tope.covector(), sides);
                 
-                Label sorted[] = sort(id.support(),epl);
-                boolean pmp[] = signs(sorted,id);
                 
                 // System.err.println(id);
                 // check point of intersection is on the 'correct' side of at
@@ -258,27 +244,9 @@ public class TGVertexFactory {
                 }
 
 
-                tg.maybeAddVertex(new TGVertex(id, epl.ffactory(), tope, "Polygon: "
-                        + bitCount));
+                tg.maybeAddVertex(new TGVertex(id, epl, tope, "Polygon: "+ bitCount));
             }
         }
-    }
-
-    private boolean[] signs(Label[] sorted, SignedSet id) {
-        boolean rslt[] = new boolean[sorted.length];
-        for (int i=0;i<sorted.length;i++) {
-            switch (id.sign(sorted[i])) {
-            case 1:
-                rslt[i] = true;
-                break;
-            case 0:
-                throw new IllegalArgumentException("Must have sign");
-            case -1:
-                rslt[i] = false;
-                break;
-            }
-        }
-        return rslt;
     }
 
     protected int saveLines(Collection<? extends Face> edges) {

@@ -30,8 +30,6 @@ import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 

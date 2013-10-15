@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline2;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.util.graph.Paths;
-import net.sf.oriented.util.graph.SimplePath;
 import edu.uci.ics.jung.graph.Graph;
 
 public final class DPaths extends Paths<Face, DEdge, DPath> {

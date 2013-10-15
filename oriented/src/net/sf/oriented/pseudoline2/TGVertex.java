@@ -4,18 +4,20 @@
 package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
-import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.SetOfSignedSet;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline.PlusMinusPlus;
 
 /**
  * This class is destined to be the class of vertices in a rejigged TensionGraph
@@ -29,9 +31,10 @@ public class TGVertex implements Comparable<TGVertex> {
     
     private final String desc;
     private final Face source;
+    private final UnsignedSet required;
     
     // no longer using faces parameter ???
-    TGVertex(SignedSet id, FactoryFactory fact, Face source, String desc ) {
+    TGVertex(SignedSet id, EuclideanPseudoLines epl, Face source, String desc ) {
         identity = id;
         Set<SignedSet> ss = new HashSet<SignedSet>();
         addFace(ss,source);
@@ -40,17 +43,49 @@ public class TGVertex implements Comparable<TGVertex> {
                addFace(ss,v);
             }
         }
-        extent = fact.setsOfSignedSet().copyBackingCollection(ss);
+        extent = epl.ffactory().setsOfSignedSet().copyBackingCollection(ss);
         this.source = source;
         this.desc = desc;
+        required = findRequired(id, epl);
     }
-    
+
+    private UnsignedSet findRequired(SignedSet id, EuclideanPseudoLines epl) {
+        Label sorted[] = sort(id.support(),epl);
+        boolean pmp[] = signs(sorted,id);
+        boolean requiredX[] = PlusMinusPlus.required(pmp);
+        List<Label> r = new ArrayList<Label>();
+        for (int i=0;i<sorted.length;i++) {
+            if (requiredX[i]) {
+                r.add(sorted[i]);
+            }
+        }
+        return epl.ffactory().unsignedSets().copyBackingCollection(r);
+    }
+
+    private boolean[] signs(Label[] sorted, SignedSet id) {
+        boolean rslt[] = new boolean[sorted.length];
+        for (int i=0;i<sorted.length;i++) {
+            switch (id.sign(sorted[i])) {
+            case 1:
+                rslt[i] = true;
+                break;
+            case 0:
+                throw new IllegalArgumentException("Must have sign");
+            case -1:
+                rslt[i] = false;
+                break;
+            }
+        }
+        return rslt;
+    }
+
     // merge constructor
     TGVertex(TGVertex a, TGVertex b) {
         extent = a.extent.union(b.extent);
         source = a.source;
         desc = a.desc + "; "+ b.desc;
         identity = a.identity;
+        required = a.required;
     }
 
     private void addFace(Set<SignedSet> ss, Face f) {
@@ -188,6 +223,17 @@ public class TGVertex implements Comparable<TGVertex> {
             }
         }
         throw new IllegalStateException("Face not found");
+    }
+
+    static Label[] sort(UnsignedSet someLines, final EuclideanPseudoLines epl) {
+        Label labels[] = someLines.toArray();
+        Arrays.sort(labels,new Comparator<Label>(){
+    
+            @Override
+            public int compare(Label o1, Label o2) {
+                return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
+            }});
+        return labels;
     }
 
 

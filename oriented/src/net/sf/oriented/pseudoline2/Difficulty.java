@@ -8,10 +8,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import net.sf.oriented.omi.Face;
-import net.sf.oriented.omi.SignedSet;
-
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 
 public class Difficulty {

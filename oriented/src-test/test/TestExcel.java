@@ -3,34 +3,17 @@
  ************************************************************************/
 package test;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
-
-import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.OM;
-import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ExcelExport;
-import net.sf.oriented.pseudoline.ImageOptions;
-import net.sf.oriented.pseudoline2.DEdge;
-import net.sf.oriented.pseudoline2.DPath;
-import net.sf.oriented.pseudoline2.DPaths;
 import net.sf.oriented.pseudoline2.Difficulty;
-import net.sf.oriented.pseudoline2.DifficultyDrawing;
 import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
 
 import org.junit.Test;
-
-import edu.uci.ics.jung.graph.Graph;
 
 public class TestExcel extends TestWithTempDir {
 

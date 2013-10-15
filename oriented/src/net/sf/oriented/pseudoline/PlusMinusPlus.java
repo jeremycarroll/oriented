@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import com.google.common.base.Preconditions;

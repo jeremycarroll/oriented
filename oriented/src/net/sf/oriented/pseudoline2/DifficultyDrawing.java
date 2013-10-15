@@ -14,8 +14,6 @@ import java.util.Set;
 import edu.uci.ics.jung.graph.Graph;
 
 import net.sf.oriented.omi.Face;
-import net.sf.oriented.omi.SetOfSignedSet;
-import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;

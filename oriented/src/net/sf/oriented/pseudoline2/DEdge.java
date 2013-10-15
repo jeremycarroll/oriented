@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline2;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.SignedSet;
 
 public class DEdge {
     

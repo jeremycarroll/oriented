@@ -19,8 +19,6 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline.PseudoLineDrawing;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**

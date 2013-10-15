@@ -3,12 +3,10 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
 
 import org.apache.poi.ss.usermodel.Cell;
