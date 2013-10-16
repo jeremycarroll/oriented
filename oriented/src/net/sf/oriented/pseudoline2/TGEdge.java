@@ -60,6 +60,13 @@ public class TGEdge implements Comparable<TGEdge> {
     private boolean afterRemove(WAM wam, EdgeChoices choice) {
          return choice == null || choice.alreadyDone() || choice.reduceCount(wam);
     }
+
+    boolean unnecessary() {
+            if ( source.unnecessary(this) && dest.unnecessary(this) ) {
+                return true;
+            }
+            return false;
+        }
 }
 
 

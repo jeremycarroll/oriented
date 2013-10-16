@@ -41,6 +41,15 @@ public class GrowingGraph extends AbstractTGraph {
                 return true;
             }
             rawAdd(t);
+            
+            if ( ! ( t.source.choose(t, this, parent) && t.dest.choose(t, this, parent) ) ) {
+                return false;
+            }
+            
+            if (t.unnecessary()) {
+                return false;
+            }
+            
             for (TGEdge e:moreToAdd) {
                 if (!maybeAdd(e)) {
                     return false;
@@ -52,9 +61,9 @@ public class GrowingGraph extends AbstractTGraph {
             return false;
         }
     }
-    
 
-    private boolean maybeAdd(TGEdge e) {
+
+   private boolean maybeAdd(TGEdge e) {
         return containsEdge(e) || addWithConsequences(e);
     }
 

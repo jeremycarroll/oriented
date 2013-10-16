@@ -100,7 +100,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //    junit.framework.AssertionFailedError: 6193 != 5605; 5957 != 5431; 10975 != 10807; 
 
     
-    @Ignore
     @Test
     public void testTsukamotoMinusA() {
         count("tsukamoto13.-1","A", 308  , 6039  , 300  , 5791,17357); // 266666
@@ -108,13 +107,11 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
 //    junit.framework.AssertionFailedError: 6039 != 5465; 5791 != 5277; 17357 != 17260; 
 
-    @Ignore
     @Test
     public void testTsukamotoPlusB() {
         count("tsukamoto13.+1","B",312,6193,304,5957,10975); // > 15471548
     }
 
-    @Ignore
     @Test
     public void testTsukamotoMinusB() {
         count("tsukamoto13.-1","B", 308  , 6039  , 300  , 5791,17357);

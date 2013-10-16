@@ -18,6 +18,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
+import net.sf.oriented.pseudoline2.WAM.Undoable;
 
 public class TGVertex implements Comparable<TGVertex> {
     private final SetOfSignedSet extent;
@@ -238,6 +239,39 @@ public class TGVertex implements Comparable<TGVertex> {
 
     public boolean requires(Label lbl) {
         return required.contains(lbl);
+    }
+
+    public boolean unnecessary(TGEdge t) {
+        return (!required.contains(t.label())) || doubledUp.contains(t.label());
+    }
+
+    public boolean choose(final TGEdge t, GrowingGraph gg, ShrinkingGraph sg) {
+        if (requires(t.label())) {
+            if (doubledUp.contains(t.label())) {
+                return true; // no change
+            }
+            if (chosen.contains(t.label())) {
+                doubledUp = doubledUp.union(t.label());
+                sg.wam.trail.push(new Undoable(){
+                    @Override
+                    public void undo() {
+                        doubledUp = doubledUp.minus(t.label());
+                    }});
+                for (TGEdge e:gg.getIncidentEdges(this)) {
+                    if (e != t && e.label().equals(t.label()) && e.unnecessary() ) {
+                        return false;
+                    }
+                }
+            } else {
+                chosen = chosen.union(t.label());
+                sg.wam.trail.push(new Undoable(){
+                    @Override
+                    public void undo() {
+                        chosen = chosen.minus(t.label());
+                    }});
+            }
+        }
+        return true;
     }
 
 
