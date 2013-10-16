@@ -17,6 +17,7 @@ public class TGEdge implements Comparable<TGEdge> {
     EdgeChoices outChoice;
     int bit;
     boolean saveInDifficulty;
+//    final boolean unnecessary;
     public TGEdge(Label l, int ordinal, TGVertex s, TGVertex d) {
         Preconditions.checkArgument(s.getId().sign(l) != -1);
         Preconditions.checkArgument(d.getId().sign(l) != 1);
@@ -24,6 +25,7 @@ public class TGEdge implements Comparable<TGEdge> {
         this.ordinal = ordinal;
         this.source = s;
         this.dest = d;
+//        unnecessary = !(s.requires(l)||d.requires(l) );
     }
 
     public Label label() {
@@ -53,7 +55,6 @@ public class TGEdge implements Comparable<TGEdge> {
 
     boolean afterRemove(WAM wam) {
         return afterRemove(wam, inChoice) || afterRemove(wam,outChoice);
-        
     }
 
     private boolean afterRemove(WAM wam, EdgeChoices choice) {

@@ -15,10 +15,15 @@ public class Difficulty {
     
     final BitSet bits = new BitSet();
     final BitSet missingBits;
+//    public final TGEdge unnecessary;
     private Graph<Faces, DEdge> rslt;
     private List<TGEdge> saveEdges;
     Difficulty(GrowingGraph gg, int sz) {
+//        TGEdge unnecessary = null;
         for (TGEdge e:gg.getEdges()) {
+//            if (e.unnecessary) {
+//                unnecessary = e;
+//            }
             bits.set(e.bit);
             if (e.saveInDifficulty) {
                 if (saveEdges==null) {
@@ -29,6 +34,8 @@ public class Difficulty {
         }
         missingBits = (BitSet) bits.clone();
         missingBits.flip(1,sz+1);
+//        this.unnecessary = unnecessary;
+        
     }
     Graph<Faces, DEdge> getRslt(TensionGraph tg) {
         if (rslt != null) {

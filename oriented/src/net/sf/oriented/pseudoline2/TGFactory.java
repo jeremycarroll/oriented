@@ -66,14 +66,16 @@ public class TGFactory {
                     TGEdge edge;
                     Label lbl = unsignedLine.iterator().next();
                     int ix = euclideanPseudoLines.getEquivalentOM().asInt(lbl);
-                    if (line.minus().isEmpty()) {
-                        edge = new TGEdge(lbl, ix, all[i], all[j]);
-                    } else {
-                        edge = new TGEdge(lbl, ix, all[j], all[i]);
+                    if (all[i].requires(lbl) || all[j].requires(lbl)) {
+                        if (line.minus().isEmpty()) {
+                            edge = new TGEdge(lbl, ix, all[i], all[j]);
+                        } else {
+                            edge = new TGEdge(lbl, ix, all[j], all[i]);
+                        }
+                        result.saveEdgeAsBit(edge);
+                        //                    System.err.println(edge);
+                        result.addEdge(edge, edge.source, edge.dest);
                     }
-                    result.saveEdgeAsBit(edge);
-//                    System.err.println(edge);
-                    result.addEdge(edge, edge.source, edge.dest);
                 }
                 
             }

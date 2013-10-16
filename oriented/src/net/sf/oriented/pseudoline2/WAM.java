@@ -6,6 +6,7 @@ package net.sf.oriented.pseudoline2;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
@@ -369,6 +370,7 @@ public class WAM {
 
     private Difficulty[][] minimalResults() {
         Difficulty r[] = new Difficulty[results.size()];
+//        int unnecessary = 0;
         results.toArray(r);
         
         int i = 0;
@@ -399,28 +401,29 @@ public class WAM {
                     continue;
                 }
             }
+//            if ( (!di.bits.get(0)) && di.unnecessary != null) {
+//                unnecessary++;
+//            }
         }
         
-        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], new Difficulty[bad]};
+        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], 
+//                                               new Difficulty[unnecessary],
+                                               new Difficulty[bad]};
         
         int j=0;
         int k=0;
-        int g=0;
-        int b=0;
+//        int l=0;
         for (i=0;i<r.length;i++) {
             if (!r[i].bits.get(0)) {
-                rr[0][j++] = r[i];
-                if (r[i].bits.cardinality()==6) {
-                    g++;
-                }
+//                if (r[i].unnecessary != null) {
+//                    rr[1][l++] = r[i];
+//                } else {
+                   rr[0][j++] = r[i];
+//                }
             } else {
                 rr[1][k++] = r[i];
-                if (r[i].bits.cardinality()==7) {
-                    b++;
-                }
             }
         }
-        System.err.println("Sixes: "+g+"/"+b);
         return rr;
         
     }

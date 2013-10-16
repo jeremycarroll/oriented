@@ -19,12 +19,6 @@ import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
 
-/**
- * This class is destined to be the class of vertices in a rejigged TensionGraph
- * class
- * @author jeremycarroll
- *
- */
 public class TGVertex implements Comparable<TGVertex> {
     private final SetOfSignedSet extent;
     private final SignedSet  identity;
@@ -32,6 +26,10 @@ public class TGVertex implements Comparable<TGVertex> {
     private final String desc;
     private final Face source;
     private final UnsignedSet required;
+    
+    UnsignedSet chosen;
+    UnsignedSet doubledUp;
+    
     
     // no longer using faces parameter ???
     TGVertex(SignedSet id, EuclideanPseudoLines epl, Face source, String desc ) {
@@ -47,6 +45,8 @@ public class TGVertex implements Comparable<TGVertex> {
         this.source = source;
         this.desc = desc;
         required = findRequired(id, epl);
+        chosen = epl.ffactory().unsignedSets().empty();
+        doubledUp = epl.ffactory().unsignedSets().empty();
     }
 
     private UnsignedSet findRequired(SignedSet id, EuclideanPseudoLines epl) {
@@ -234,6 +234,10 @@ public class TGVertex implements Comparable<TGVertex> {
                 return epl.getEquivalentOM().asInt(o1) - epl.getEquivalentOM().asInt(o2);
             }});
         return labels;
+    }
+
+    public boolean requires(Label lbl) {
+        return required.contains(lbl);
     }
 
 
