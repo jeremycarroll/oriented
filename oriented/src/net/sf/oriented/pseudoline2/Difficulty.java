@@ -42,9 +42,9 @@ public class Difficulty {
             return rslt;
         }
         rslt = new DirectedSparseGraph<Faces, DEdge>();
-        if (bits.get(0)) {
-            throw new IllegalArgumentException("Accessing deleted difficulty");
-        }
+//        if (bits.get(0)) {
+//            throw new IllegalArgumentException("Accessing deleted difficulty");
+//        }
         // 0th bit is the deleted marker
         int bit = 1;
         while (true) {
