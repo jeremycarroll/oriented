@@ -3,14 +3,14 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
+import com.google.common.base.Preconditions;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
@@ -21,8 +21,6 @@ import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
-import net.sf.oriented.pseudoline.PseudoLineDrawing;
-import net.sf.oriented.util.combinatorics.Permutation;
 
 /**
  * Find all angle constraining pseudoline diagrams fo six lines
@@ -31,14 +29,73 @@ import net.sf.oriented.util.combinatorics.Permutation;
  */
 public class Sixes {
     
-    private static Sixes theInstance = new Sixes();
+    private static final class SixC {
+
+        public Six toSix(int[] index6) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+    }
+    private static class SixB {
+
+        private final OMasChirotope om;
+        private final long bits;
+        private final String name;
+
+        public SixB(SixA six) {
+            EuclideanPseudoLines epl = new EuclideanPseudoLines(six.om,"0");
+            om = epl.getEquivalentOM().getChirotope();
+            bits = toLong(om,1,2,3,4,5,6);
+            name = six.name;
+        }
+
+    }
     public static Sixes get() {
         return theInstance;
     }
-    private class Six {
+    
+    private interface FoundMatch {
+        void found(int matchId, int ...index6);
+    };
+    public int matches(EuclideanPseudoLines epl) {
+        OMasChirotope om = epl.getEquivalentOM().getChirotope();
+        final int count[] = new int[0];
+        matches(om, new FoundMatch() {
+            @Override
+            public void found(int matchId, int ... index6) {
+                count[0] ++;
+            }
+        });
+        return count[0];
+    }
+
+    private void matches(OMasChirotope om, FoundMatch act) {
+        int n = om.elements().length;
+        int ix[] = new int[6];
+        matches(om,0,n,ix, act);
+    }
+    
+    private void matches(OMasChirotope om, int i, int n, int[] ix, FoundMatch act) {
+        if (i==6) {
+            long key = toLong(om,ix);
+            int ixx = Arrays.binarySearch(all, key);
+            if (ixx>=0) {
+                act.found(ixx, ix);
+            }
+        } else {
+            int start = i==0  ? 1:( ix[i-1] + 1);
+            for (ix[i]=start;ix[i]<n;ix[i]++) {
+                matches(om,i+1,n,ix, act);
+            }
+        }
+    }
+
+    private static class SixA {
         final OMasChirotope om;
         final Label triangles[][];
-        Six(OMasChirotope om, String ... tri) {
+        final String name;
+        SixA(String name, OMasChirotope om, String ... tri) {
             this.om = om;
             LabelFactory f = om.ffactory().labels();
             triangles = new Label[4][];
@@ -47,23 +104,26 @@ public class Sixes {
                                             f.parse(tri[i].substring(1, 2)), 
                                             f.parse(tri[i].substring(2, 3)) };
             }
+            this.name = name;
         }
-        public Six(Six seed, int i) {
+        public SixA(String name, SixA seed, int i) {
             om = seed.om.reorient(seed.om.elements()[i]).getChirotope();
             triangles = seed.triangles;
+            this.name = name;
         }
-        public Six(OMasChirotope om, Six six) {
+        public SixA(String name, OMasChirotope om, SixA six) {
             this.om = om;
             this.triangles = six.triangles;
+            this.name = name;
         }
-        public Six zero(int m) {
+        public SixA zero(int m) {
             OMasChirotope om = this.om;
            for (int i=0;i<4;i++) {
                if (((1<<i)&m)!=0) {
                    om = om.mutate(0, triangles[i]);
                }
            }
-           return new Six(om, this);
+           return new SixA(name+".z"+m, om, this);
         }
     }
     private final OMasChirotope seed2 = FactoryFactory.fromCrossings("0:ABCDEF",
@@ -73,51 +133,167 @@ public class Sixes {
             "D:0BEAFC",
             "E:0BDCAF",
             "F:0ABDCE").getChirotope();
-    private final Six seeds[] = new Six[]{
-      new Six(seed2.ffactory().chirotope().remake(Examples.circularsaw3().getChirotope()),
+    private final SixA seeds[] = new SixA[]{
+      new SixA("j",seed2.ffactory().chirotope().remake(Examples.circularsaw3().getChirotope()),
             "AEF", "BDF", "CDE", "ABC" ),
-      new Six(seed2, "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.flip(0,2,3), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.mutate(0,0,2,3), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.flip(0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.flip(0,2,3).mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-      new Six(seed2.mutate(0,0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+      new SixA("a", seed2, "ACE", "BDE", "ABF", "CDF" ),
+      new SixA("b", seed2.flip(0,2,3), "ACE", "BDE", "ABF", "CDF" ),
+//      new Six("c", seed2.mutate(0,0,2,3), "ACE", "BDE", "ABF", "CDF" ),
+      new SixA("d", seed2.flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+//      new Six("e", seed2.mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+      new SixA("f", seed2.flip(0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+//      new Six("g", seed2.flip(0,2,3).mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+//      new Six("h", seed2.mutate(0,0,2,3).mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+//      new Six("i", seed2.mutate(0,0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
     };
-    private List<Six> all = new ArrayList<Six>();
+    private List<SixB> allB = new ArrayList<SixB>();
+    private Map<Long,Integer> lg = new HashMap<Long,Integer>();
+    private long all[];
+    protected SixC[] allSixC;
     private Sixes() {
-        for (Six seed:seeds) {
+        List<SixA> allA = new ArrayList<SixA>();
+        for (SixA seed:seeds) {
             for (int i=0; i<12; i++ ) {
-                seed = new Six(seed,i%6);
-                all.add(seed);
+                seed = new SixA(seed.name+i,seed,i%6);
+                allA.add(seed);
             }
         }
         // add each of the 16 possibilities of zeros 
-        for (int i=all.size()-1;i>=0;i--) {
-            Six seed = all.get(i);
+        for (int i=allA.size()-1;i>=0;i--) {
+            SixA seed = allA.get(i);
             for (int m=1;m<16;m++) {
-                all.add(seed.zero(m));
+                allA.add(seed.zero(m));
+            }
+        }
+        long chi[] = new long[allA.size()];
+        int i=0;
+        for (SixA six:allA) {
+            SixB sb = new SixB(six);
+            chi[i++] = sb.bits;
+            allB.add(sb);
+        }
+        Arrays.sort(chi);
+        int counts[] = new int[64];
+        int run = 0;
+        long last = 0;
+        for (long x:chi) {
+            if (x != last) {
+                lg.put(last,run);
+                counts[run]++;
+                run=0;
+            }
+            last = x;
+            run++;
+        }
+        lg.put(last,run);
+        counts[run]++;
+        int total = 0;
+        for (int j=1;j<counts.length;j++) {
+           if (counts[j]!=0) {
+               System.err.println(j+"\t"+counts[j]);
+               total += counts[j];
+           }
+        }
+        System.err.println("=\t"+total);
+        all = new long[total];
+        i = 0;
+        last = 0;
+        for (long x:chi) {
+            if (x != last) {
+                all[i++] = x;
+            }
+            last = x;
+        }
+    }
+    
+    public static long toLong(OMasChirotope om, Label ...labels ) {
+        Preconditions.checkArgument(labels.length==6);
+        return toLong(om,om.asInt(labels));
+    }
+    
+    private static int sixCthree[] = new int[20];
+    static {
+        int j = 0;
+        for (int i=0;i<(1<<6);i++) {
+            if (Integer.bitCount(i)==3) {
+                sixCthree[j++] = i;
             }
         }
     }
-    
+    private static int[] to3bits(int m) {
+        for (int i=0;i<32;i++) {
+            if ((m & (1<<i))!=0) {
+                for (int j=i+1;j<32;j++) {
+                    if ((m & (1<<j))!=0) {
+                        for (int k=j+1;k<32;k++) {
+                            if ((m & (1<<k))!=0) {
+                                return new int[]{i,j,k};
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new IllegalArgumentException(m+" does not have 3 bits");
+    }
+    public static long toLong(OMasChirotope om, int ... ix) {
+        Preconditions.checkArgument(ix.length==6);
+        int i=0;
+        long rslt = 0;
+        int sign = om.chi(0,1,6);
+        switch (sign) {
+        case 1:
+            break;
+        case 0:
+            throw new Error();
+        case -1:
+            System.err.println(-1);
+            break;
+        }
+        for (int m:sixCthree) {
+            /**
+             * Semantics - two bits per item in chirotope:
+             * 
+             * 00 - 0 01 - 1 10 - undefined 11 - -1
+             */
+            int[] b0t5 = to3bits(m);
+            long bits = (sign*om.chi(ix[b0t5[0]],ix[b0t5[1]],ix[b0t5[2]]))&3;
+            rslt |= bits << i;
+            i += 2;
+        }
+        return rslt;
+    }
+
     public static void main(String a[]) throws IOException, AxiomViolation, CoLoopCannotBeDrawnException {
         int i=0;
-        for (Six s:Sixes.get().all) {
-        EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(s.om,"0");
-        PseudoLineDrawing euclid = pseudoLines.asDrawing();
-        ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-        ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File("/users/jeremycarroll/tmp/six-" + i++ + ".jpeg"));
-        iw.setOutput(imageOutput);
-        iw.write(euclid.image());
-        euclid.verify();
-        imageOutput.close();
-        iw.dispose();
-        }
+        Sixes sixes = Sixes.get();
+//        for (SixB s:sixes.all) {
+//           // if (sixes.lg.get(s.bits) == 1) {
+//                EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(s.om,"0");
+//                PseudoLineDrawing euclid = pseudoLines.asDrawing();
+//                ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
+//
+//                String fName = "/users/jeremycarroll/tmp/six-" +Long.toHexString(s.bits)+"=" + sixes.lg.get(s.bits) + "=" + i++ + "="+ s.name +".jpeg";
+//                ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(fName));
+//                iw.setOutput(imageOutput);
+//                iw.write(euclid.image());
+//                euclid.verify();
+//                imageOutput.close();
+//                iw.dispose();
+//          //  }
+//        }
     }
-    
 
+    private static Sixes theInstance = new Sixes();
+    public Iterable<Six> analyze(OM om) {
+        final List<Six> sixes = new ArrayList<Six>();
+        matches(om.getChirotope(), new FoundMatch(){
+            @Override
+            public void found(int matchId, int ... index6) {
+                sixes.add(allSixC[matchId].toSix(index6));
+            }});
+        return sixes;
+    }
 }
 
 

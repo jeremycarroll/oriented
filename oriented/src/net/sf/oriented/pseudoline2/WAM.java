@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline2;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
@@ -23,6 +22,7 @@ import edu.uci.ics.jung.graph.Graph;
 
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
@@ -261,6 +261,12 @@ public class WAM {
         base = b;
         shrinking = new ShrinkingGraph(this, base);
         growing = shrinking.growing;
+        OM om = b.pseudolines.getEquivalentOM();
+        for (Six sx: Sixes.get().analyze(om) ) {
+            Difficulty d = sx.alignAndRegister(base, om);
+            results.add(d);
+        }
+        sixDifficultyCount = results.size();
         if (DEBUG) {
             String findMe[][] = {
                     {"4","6","7"},
@@ -461,7 +467,6 @@ public class WAM {
         if (success) {
             results.add(new Difficulty(growing, base.totalBits()));
             this.foundDifficultyCount++;
-            // growing.dumpEdges();
         }
         return success;
     }
@@ -471,40 +476,7 @@ public class WAM {
             pushChoiceFromEdge(selectNextEdgeChoice());
             return true;
         } else {
-//            throw new IllegalStateException("Not possible");
             return false;
-            // final TGEdge t = findPossibleEdge();
-            // if (t==null) {
-            // stack.push(new Failure());
-            // } else {
-            // stack.push(new Frame(){
-            // @Override
-            // boolean call(int ix) {
-            // switch(ix) {
-            // case 0:
-            // return add(t);
-            // case 1:
-            // fail();
-            // return remove(t);
-            // default:
-            // throw new IllegalArgumentException("WAM call logic error");
-            // }
-            // }
-            // @Override
-            // public String toString() {
-            // switch (this.retryCount) {
-            // case 0:
-            // return "add "+t.toString();
-            // case 1:
-            // return "[-add] "+t.toString();
-            // case 2:
-            // return "fail [add] "+t.toString();
-            // default:
-            // throw new IllegalArgumentException("WAM call logic error");
-            // }
-            // }
-            // });
-            // }
         }
     }
 
@@ -576,6 +548,7 @@ public class WAM {
 
     boolean edgeRemovalFailed;
     public int foundDifficultyCount = 0;
+    public int sixDifficultyCount = 0;
 
     /**
      * Remove an edge from the current solution space.
@@ -637,23 +610,6 @@ public class WAM {
             trail.pop().undo();
         }
     }
-
-    // private TGEdge findPossibleEdge() {
-    // Iterator<TGEdge> it =
-    // Arrays.asList(shrinking.sortedEdges()).
-    // // shrinking.getEdges().
-    // iterator();
-    // TGEdge t;
-    // while (true) {
-    // if (!it.hasNext()) {
-    // return null;
-    // }
-    // t = it.next();
-    // if (!growing.containsEdge(t)) {
-    // return t;
-    // }
-    // }
-    // }
 
     public void pushRemoveUndoingAdd(final GrowingGraph gg, final TGEdge t) {
         trail.push(new Undoable() {

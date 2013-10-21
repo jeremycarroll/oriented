@@ -220,7 +220,6 @@ public class ImageOptions {
                 return System.identityHashCode(o1) - System.identityHashCode(o2);
             }};
         Arrays.sort(someColors,comp);
-        System.err.println(ix+" "+jx);
         Arrays.sort(lightColors,comp);
     }
     private static float someStrokes[][] = new float[][]{

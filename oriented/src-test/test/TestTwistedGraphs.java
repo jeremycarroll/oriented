@@ -23,9 +23,9 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 import net.sf.oriented.pseudoline.ImageOptions;
 import net.sf.oriented.pseudoline2.DEdge;
 import net.sf.oriented.pseudoline2.DPath;
-import net.sf.oriented.pseudoline2.DPaths;
 import net.sf.oriented.pseudoline2.Difficulty;
 import net.sf.oriented.pseudoline2.DifficultyDrawing;
+import net.sf.oriented.pseudoline2.Sixes;
 import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
@@ -49,12 +49,12 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     @Test
     public void testCircSaw5() {
-        count("circularsaw5","0",96,880,76,640,287);
+        count("circularsaw5","0",96,855,76,620,287);
     }
 
     @Test
     public void testCircSaw5A() {
-        count("_saw5A","0",116,1500,106,1340,262);
+        count("_saw5A","0",116,1445,106,1290,262);
     }
 
     @Test
@@ -72,37 +72,32 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
 
-    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
     }
     
-    @Ignore
     @Test
     public void testDeformedCeva() {
         count("_deformedCeva","0",42,28,0,0);
     }
 
-    @Ignore
     @Test
     public void testDeformedSaw() {
         count("_deformedCircularSaw","0",26,29,0,0);
     }
 
 
-    @Ignore
     @Test
     public void testTsukamotoPlusA() {
-        count("tsukamoto13.+1","A",312,6193,304,5957,10975);  // 84791
+        count("tsukamoto13.+1","A",312,5605,304,5431,10292);  // 84791
     }
 //    junit.framework.AssertionFailedError: 6193 != 5605; 5957 != 5431; 10975 != 10807; 
 
 
-    @Ignore
     @Test
     public void testTsukamotoMinusA() {
-        count("tsukamoto13.-1","A", 308  , 6039  , 300  , 5791,17357); // 266666
+        count("tsukamoto13.-1","A", 308  , 5465  , 300  , 5277, 15917); // 266666
     }
 
 //    junit.framework.AssertionFailedError: 6039 != 5465; 5791 != 5277; 17357 != 17260; 
@@ -120,6 +115,17 @@ public class TestTwistedGraphs extends TestWithTempDir {
     }
 
 
+    @Ignore
+    @Test
+    public void testTsukamotoPlusC() {
+        count("tsukamoto13.+1","C",312,6193,304,5957,10975); // > 15471548
+    }
+
+    @Ignore
+    @Test
+    public void testTsukamotoMinusC() {
+        count("tsukamoto13.-1","C", 308  , 6039  , 300  , 5791,17357);
+    }
     @Ignore
     @Test
     public void testSuvorov14() {
@@ -141,7 +147,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     @Test
     public void testRingel() {
-        count("ringel","0",63,348,25,99,16);
+        count("ringel","0",63,343,25,99,16);
     }
 
     @Ignore
@@ -169,6 +175,9 @@ public class TestTwistedGraphs extends TestWithTempDir {
             System.err.println("\n"+omName+" ===== "+inf+" ==");
             OM om = Examples.all().get(omName);
             EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
+            int m = Sixes.get().matches(pseudoLines);
+            System.err.println("Matches: "+m);
+            if (true) {
             TensionGraph ten = new TGFactory(pseudoLines).create();
 //        for (TGVertex v:ten.getVertices()) {
 //            System.err.println(v);
@@ -194,6 +203,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
             if (bad != null) {
                 Assert.fail(bad);
             }
+            }
         }
         catch (CoLoopCannotBeDrawnException e) {
             throw new RuntimeException(e);
@@ -209,6 +219,9 @@ public class TestTwistedGraphs extends TestWithTempDir {
     protected void dumpDrawings(Difficulty[] difficulties,
             EuclideanPseudoLines pseudoLines, TensionGraph ten, String namename)
                     throws CoLoopCannotBeDrawnException, IOException, AxiomViolation {
+        if (true) {
+            return;
+        }
         ImageOptions options = ImageOptions.defaultBlackAndWhite();
         for (int i=0;i<difficulties.length;i++) {
             Graph<Face, DEdge> rslt = difficulties[i].getSimplifiedRslt(ten);
@@ -293,7 +306,84 @@ public class TestTwistedGraphs extends TestWithTempDir {
     }
 
 }
+/*
+ 
+ceva ===== 0 ==
+1   80
+2   107
+3   47
+4   32
+5   31
+7   32
+9   2
+=   331
+Matches: 1
+17 wam transitions
+2 original difficulty count
+2 difficulties
 
+circularsaw5 ===== 0 ==
+Matches: 0
+7225 wam transitions
+406 original difficulty count
+287 difficulties
+
+_saw5A ===== 0 ==
+Matches: 8
+7345 wam transitions
+334 original difficulty count
+262 difficulties
+
+_deformSaw5 ===== 0 ==
+Matches: 0
+5998 wam transitions
+358 original difficulty count
+263 difficulties
+
+_disconnected ===== 0 ==
+Matches: 0
+111 wam transitions
+1 original difficulty count
+1 difficulties
+
+pappus ===== 0 ==
+Matches: 3
+117 wam transitions
+9 original difficulty count
+7 difficulties
+
+circularsaw3 ===== 0 ==
+Matches: 1
+9 wam transitions
+1 original difficulty count
+1 difficulties
+
+_deformedCeva ===== 0 ==
+Matches: 0
+
+_deformedCircularSaw ===== 0 ==
+Matches: 0
+
+tsukamoto13.+1 ===== A ==
+Matches: 19
+656898 wam transitions
+19077 original difficulty count
+10292 difficulties
+
+tsukamoto13.-1 ===== A ==
+Matches: 19
+Redo[17/5312:3$27484]+   2/3 J:D'GIJ⇒C'J'M
+1205275 wam transitions
+33699 original difficulty count
+15917 difficulties
+
+ringel ===== 0 ==
+Matches: 3
+243 wam transitions
+20 original difficulty count
+16 difficulties
+
+ */
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.  
