@@ -5,6 +5,10 @@ package net.sf.oriented.pseudoline2;
 
 class DifficultSix extends Difficulty {
 
+    DifficultSix(GrowingGraph gg, int sz) {
+        super(gg, sz);
+    }
+
 }
 
 

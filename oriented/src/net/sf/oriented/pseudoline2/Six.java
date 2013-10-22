@@ -8,8 +8,7 @@ import net.sf.oriented.omi.OM;
 class Six {
 
     Difficulty alignAndRegister(TensionGraph base, OM om) {
-        // TODO Auto-generated method stub
-        return new DifficultSix();
+        return new DifficultSix(null, 0);
     }
 
 }

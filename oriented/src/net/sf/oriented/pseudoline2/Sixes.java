@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
@@ -31,9 +32,33 @@ public class Sixes {
     
     private static final class SixC {
 
+        private final int triangles[][];
+        
+        private int signs[];
+        
+        SixC(SixB sx) {
+            triangles = sx.triangles;
+            signs = sx.signBits();
+        }
+
         public Six toSix(int[] index6) {
             // TODO Auto-generated method stub
             return null;
+        }
+        
+        @Override
+        public int hashCode() {
+            return (Arrays.hashCode(signs) << 1 ) ^ (Arrays.deepHashCode(triangles));
+        }
+        
+        @Override
+        public boolean equals(Object o) {
+            if (! (o instanceof SixC)) {
+                return false;
+            }
+            SixC other = (SixC)o;
+            return Arrays.deepEquals(triangles, other.triangles)
+                    && Arrays.equals(signs, other.signs);
         }
 
     }
@@ -42,14 +67,67 @@ public class Sixes {
         private final OMasChirotope om;
         private final long bits;
         private final String name;
+        private final int triangles[][];
 
         public SixB(SixA six) {
             EuclideanPseudoLines epl = new EuclideanPseudoLines(six.om,"0");
             om = epl.getEquivalentOM().getChirotope();
             bits = toLong(om,1,2,3,4,5,6);
             name = six.name;
+            triangles = new int[six.triangles.length][];
+            for (int i=0;i<triangles.length;i++) {
+                triangles[i] = om.asInt(six.triangles[i]);
+                Arrays.sort(triangles[i]);
+            }
+            Arrays.sort(triangles,Ints.lexicographicalComparator());
         }
 
+        int[] signBits() {
+            int firstSign = 1 | (firstSign(1)<<1) | (firstSign(2)<<2) | (firstSign(3)<<3);
+            int secondSign = 15 & ~firstSign;
+            boolean firstOK = checkSign(firstSign);
+            boolean secondOK = checkSign(secondSign);
+            if (firstOK) {
+                if (secondOK) {
+                    return new int[]{firstSign, secondSign};
+                }
+                return new int[]{firstSign};
+            } else {
+                if (!secondOK) {
+                    throw new IllegalStateException("Logic Error");
+                }
+                return new int[]{secondSign};
+            }
+        }
+
+        private boolean checkSign(int firstSign) {
+            for (int i=0;i<4;i++) {
+                int chi = om.chi(triangles[i]);
+                if (chi == 0) {
+                    continue;
+                }
+                if ((chi == 1) == ((firstSign & (1<<i))!=0) ) {
+                    continue;
+                }
+                return false;
+            }
+            return true;
+        }
+
+        private int firstSign(int i) {
+            for (int k=0;k<triangles[i].length; k++) {
+                int x = triangles[i][k];
+                for (int j = 0; j< triangles[0].length; j++) {
+                    int y = triangles[0][j];
+                    if (x == y) {
+                        boolean yIsPlus = j%2 == 0;
+                        boolean xWouldBePlus = k%2 == 0;
+                        return yIsPlus == xWouldBePlus ? 0 : 1;
+                    }
+                }
+            }
+            throw new IllegalArgumentException();
+        }
     }
     public static Sixes get() {
         return theInstance;
@@ -60,7 +138,7 @@ public class Sixes {
     };
     public int matches(EuclideanPseudoLines epl) {
         OMasChirotope om = epl.getEquivalentOM().getChirotope();
-        final int count[] = new int[0];
+        final int count[] = new int[1];
         matches(om, new FoundMatch() {
             @Override
             public void found(int matchId, int ... index6) {
@@ -135,21 +213,16 @@ public class Sixes {
             "F:0ABDCE").getChirotope();
     private final SixA seeds[] = new SixA[]{
       new SixA("j",seed2.ffactory().chirotope().remake(Examples.circularsaw3().getChirotope()),
-            "AEF", "BDF", "CDE", "ABC" ),
-      new SixA("a", seed2, "ACE", "BDE", "ABF", "CDF" ),
-      new SixA("b", seed2.flip(0,2,3), "ACE", "BDE", "ABF", "CDF" ),
-//      new Six("c", seed2.mutate(0,0,2,3), "ACE", "BDE", "ABF", "CDF" ),
-      new SixA("d", seed2.flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-//      new Six("e", seed2.mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-      new SixA("f", seed2.flip(0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-//      new Six("g", seed2.flip(0,2,3).mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-//      new Six("h", seed2.mutate(0,0,2,3).mutate(0,0,5,6), "ACE", "BDE", "ABF", "CDF" ),
-//      new Six("i", seed2.mutate(0,0,2,3).flip(0,5,6), "ACE", "BDE", "ABF", "CDF" ),
+            "AEF", "CDE", "BDF",  "ABC" ),
+      new SixA("a", seed2, "ACE", "CDF", "BDE", "ABF" ),
+      new SixA("b", seed2.flip(0,2,3), "ACE", "CDF", "BDE", "ABF" ),
+      new SixA("d", seed2.flip(0,5,6), "ACE", "CDF", "BDE", "ABF" ),
+      new SixA("f", seed2.flip(0,2,3).flip(0,5,6), "ACE", "CDF", "BDE", "ABF" ),
     };
     private List<SixB> allB = new ArrayList<SixB>();
     private Map<Long,Integer> lg = new HashMap<Long,Integer>();
     private long all[];
-    protected SixC[] allSixC;
+    private SixC[] allSixC;
     private Sixes() {
         List<SixA> allA = new ArrayList<SixA>();
         for (SixA seed:seeds) {
@@ -204,6 +277,20 @@ public class Sixes {
             }
             last = x;
         }
+        allSixC = new SixC[total];
+        for (SixB sb:allB) {
+            int ix = Arrays.binarySearch(all, sb.bits);
+            if (allSixC[ix]==null) {
+                allSixC[ix] = new SixC(sb);
+            } else {
+                if (!allSixC[ix].equals(new SixC(sb))) {
+                    throw new IllegalArgumentException("SixC issue");
+                }
+            }
+            
+            
+        }
+        
     }
     
     public static long toLong(OMasChirotope om, Label ...labels ) {
