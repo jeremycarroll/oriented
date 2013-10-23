@@ -7,6 +7,7 @@ import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.SignedSetFactory;
 import net.sf.oriented.omi.UnsignedSet;
@@ -23,8 +24,11 @@ class Six {
         this.nTriangles = nTriangles;
     }
 
-    Difficulty alignAndRegister(TensionGraph base, OM om) {
+    Difficulty alignAndRegister(TensionGraph base, OMasChirotope om) {
         AbstractTGraph tg = new AbstractTGraph();
+        if (hasParallelSides(pTriangles,om) || hasParallelSides(nTriangles,om)) {
+            return null;
+        }
 
         for (SignedSet k:base.id2vertex.keySet()) {
             System.err.println("+ " + k);
@@ -33,6 +37,17 @@ class Six {
         collectVertices(tg,base,-1,nTriangles);
         copyEdges(tg, base);
         return new DifficultSix(tg, base.totalBits());
+    }
+
+    private boolean hasParallelSides(int[][] triangles, OMasChirotope om) {
+        for (int tri[] : triangles) {
+            if (om.chi(0,tri[0],tri[1]) == 0 
+                    ||om.chi(0,tri[0],tri[2]) == 0 
+                    ||om.chi(0,tri[1],tri[2]) == 0 ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void copyEdges(AbstractTGraph tg, TensionGraph base) {

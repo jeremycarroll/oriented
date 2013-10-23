@@ -23,6 +23,7 @@ import edu.uci.ics.jung.graph.Graph;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
@@ -261,10 +262,12 @@ public class WAM {
         base = b;
         shrinking = new ShrinkingGraph(this, base);
         growing = shrinking.growing;
-        OM om = b.pseudolines.getEquivalentOM();
+        OMasChirotope om = b.pseudolines.getEquivalentOM().getChirotope();
         for (Six sx: Sixes.get().analyze(om) ) {
             Difficulty d = sx.alignAndRegister(base, om);
-            results.add(d);
+            if (d != null) {
+                results.add(d);
+            }
         }
         sixDifficultyCount = results.size();
         if (DEBUG) {

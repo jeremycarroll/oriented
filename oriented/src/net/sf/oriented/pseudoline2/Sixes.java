@@ -405,7 +405,8 @@ public class Sixes {
     private static Sixes theInstance = new Sixes();
     public Iterable<Six> analyze(OM om) {
         final List<Six> sixes = new ArrayList<Six>();
-        matches(om.getChirotope(), new FoundMatch(){
+        final OMasChirotope chirotope = om.getChirotope();
+        matches(chirotope, new FoundMatch(){
             @Override
             public void found(int matchId, int ... index6) {
                 for (Six six: allSixC[matchId].toSix(index6)) {
