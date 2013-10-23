@@ -18,7 +18,7 @@ public class Difficulty {
 //    public final TGEdge unnecessary;
     private Graph<Faces, DEdge> rslt;
     private List<TGEdge> saveEdges;
-    Difficulty(GrowingGraph gg, int sz) {
+    Difficulty(AbstractTGraph gg, int sz) {
 //        TGEdge unnecessary = null;
         for (TGEdge e:gg.getEdges()) {
 //            if (e.unnecessary) {

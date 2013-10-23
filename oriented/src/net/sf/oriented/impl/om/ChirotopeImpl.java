@@ -342,8 +342,8 @@ public class ChirotopeImpl extends AbsOM<Object> implements OMasChirotope {
             }
             for (UnsignedSet BB:bb) {
                 if (AA.intersection(BB).isEmpty()) {
-                    @SuppressWarnings("unchecked")
-                    JavaSet<UnsignedSet> done = (JavaSet<UnsignedSet>) ffactory().unsignedSets().emptyCollectionOf();
+                    @SuppressWarnings({ "unchecked", "cast", "rawtypes" })
+                    JavaSet<UnsignedSet> done = (JavaSet<UnsignedSet>) (JavaSet) ffactory().unsignedSets().emptyCollectionOf();
                     // check condition splitting BB three times
                     for (UnsignedSet X1X2:BB.subsetsOfSize(2) ) {
                         if (done.contains(X1X2)) continue;

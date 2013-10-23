@@ -127,7 +127,7 @@ public class TGVertexFactory {
                             fact.unsignedSets().copyBackingCollection(plus),
                             fact.unsignedSets().copyBackingCollection(minus)),
                             epl, cocircuit, "Point: " + someLines);
-                    tg.addVertex(vertex);
+                    tg.maybeAddVertex(vertex);
 //                    System.err.println(vertex);
                 }
             }
@@ -170,7 +170,7 @@ public class TGVertexFactory {
         NonUniformHelper nonUniform = new NonUniformHelper(tope);
         if (lines.size() == 3) {
             // easy case
-            tg.addVertex(new TGVertex(createIdentity(epl.ffactory(),
+            tg.maybeAddVertex(new TGVertex(createIdentity(epl.ffactory(),
                     tope.covector(), lines), epl, tope, "Triangle"));
         } else {
             // find any parallel sides first

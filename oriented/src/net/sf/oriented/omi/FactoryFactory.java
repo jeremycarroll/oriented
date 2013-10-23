@@ -453,7 +453,7 @@ outer:
 	 * 
 	 * @return A factory for unsigned sets.
 	 */
-	public SetFactory<Label, UnsignedSet> unsignedSets() {
+	public UnsignedSetFactory unsignedSets() {
 		return unsignedSets;
 	}
 

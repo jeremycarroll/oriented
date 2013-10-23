@@ -3,12 +3,67 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import net.sf.oriented.impl.set.UnsignedSetFactory;
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.SignedSetFactory;
+import net.sf.oriented.omi.UnsignedSet;
 
 class Six {
+    final private int pTriangles[][];
+    final private int nTriangles[][];
+
+    public Six(int[][] pTriangles, int[][] nTriangles) {
+        if (pTriangles.length != 2) {
+            System.err.println(pTriangles.length+" + "+nTriangles.length);
+        }
+        this.pTriangles = pTriangles;
+        this.nTriangles = nTriangles;
+    }
 
     Difficulty alignAndRegister(TensionGraph base, OM om) {
-        return new DifficultSix(null, 0);
+        AbstractTGraph tg = new AbstractTGraph();
+
+        for (SignedSet k:base.id2vertex.keySet()) {
+            System.err.println("+ " + k);
+        }
+        collectVertices(tg,base,1,pTriangles);
+        collectVertices(tg,base,-1,nTriangles);
+        copyEdges(tg, base);
+        return new DifficultSix(tg, base.totalBits());
+    }
+
+    private void copyEdges(AbstractTGraph tg, TensionGraph base) {
+        for (TGVertex v: tg.getVertices()) {
+            for (TGEdge e : base.getOutEdges(v) ) {
+                if (tg.containsVertex(e.dest)) {
+                    tg.addEdge(e, e.source, e.dest);
+                }
+            }
+        }
+    }
+
+    private void collectVertices(AbstractTGraph tg, TensionGraph base, int sign, 
+            int[] ... triangles) {
+        Label[] elements = base.pseudolines.getEquivalentOM().elements();
+        FactoryFactory ffactory = base.pseudolines.ffactory();
+        UnsignedSetFactory unsigned = ffactory.unsignedSets();
+        SignedSetFactory signed = ffactory.signedSets();
+        for (int[] tri:triangles) {
+            UnsignedSet middle = unsigned.empty().union(elements[tri[1]]);
+            UnsignedSet outer = unsigned.empty().union(elements[tri[0]]).union(elements[tri[2]]);
+            SignedSet id;
+            if (sign == 1) {
+                id = signed.construct(outer, middle);
+            } else {
+                id = signed.construct(middle, outer);
+            }
+            System.err.println("* "+id);
+            tg.addVertex(base.id2vertex.get(id));
+        }
+        
     }
 
 }

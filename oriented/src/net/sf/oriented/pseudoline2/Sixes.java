@@ -41,11 +41,42 @@ public class Sixes {
             signs = sx.signBits();
         }
 
-        public Six toSix(int[] index6) {
-            // TODO Auto-generated method stub
-            return null;
+        public Six[] toSix(int[] index6) {
+            switch (signs.length) {
+            case 1:
+                return new Six[]{ toSix(signs[0], index6) };
+            case 2:
+                return new Six[]{ toSix(signs[0], index6),toSix(signs[1], index6) };
+                default:
+                    throw new IllegalStateException("not possible");
+            }
         }
         
+        private Six toSix(int signs, int[] index6) {
+            int p = Integer.bitCount(signs);
+            int pTriangles[][] = new int[p][];
+            int nTriangles[][] = new int[4-p][];
+            int pIx = 0;
+            int nIx = 0;
+            for (int i=0;i<4;i++) {
+                int tri[] = map(triangles[i],index6);
+                if ((signs&(1<<i))==0) {
+                    nTriangles[nIx++] = tri;
+                } else {
+                    pTriangles[pIx++] = tri;
+                }
+            }
+            return new Six(pTriangles, nTriangles);
+        }
+
+        private int[] map(int[] tri, int[] index6) {
+            int rslt[] = new int[tri.length];
+            for (int i=0;i<tri.length;i++) {
+                rslt[i] = index6[tri[i]-1];
+            }
+            return rslt;
+        }
+
         @Override
         public int hashCode() {
             return (Arrays.hashCode(signs) << 1 ) ^ (Arrays.deepHashCode(triangles));
@@ -377,7 +408,9 @@ public class Sixes {
         matches(om.getChirotope(), new FoundMatch(){
             @Override
             public void found(int matchId, int ... index6) {
-                sixes.add(allSixC[matchId].toSix(index6));
+                for (Six six: allSixC[matchId].toSix(index6)) {
+                    sixes.add(six);
+                }
             }});
         return sixes;
     }
