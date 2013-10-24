@@ -4,6 +4,7 @@
 package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class TensionGraph extends PrunableGraph {
     }
     List<DEdge> allEdges = new ArrayList<DEdge>();
     Map<DEdge,Integer> edgeLookup = new HashMap<DEdge,Integer>();
+    TGEdge tgEdges[][];
 
     void saveEdgeAsBit(TGEdge edge) {
         DEdge d = new DEdge(edge, pseudolines.getFaceLattice());
@@ -62,8 +64,21 @@ public class TensionGraph extends PrunableGraph {
     DEdge getDEdge(int bit) {
         return allEdges.get(bit-1);
     }
-    
 
+    void storeEdgesByBit() {
+        int counts[] =  new int[totalBits()+2];
+        for (TGEdge e:getEdges()) {
+            counts[e.bit]++;
+        }
+        tgEdges = new TGEdge[counts.length][];
+        for (int i=0;i<counts.length;i++) {
+            tgEdges[i] = new TGEdge[counts[i]];
+        }
+        Arrays.fill(counts, 0);
+        for (TGEdge e:getEdges()) {
+            tgEdges[e.bit][counts[e.bit]++] = e;
+        }
+    }
 }
 
 

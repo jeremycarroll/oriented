@@ -27,6 +27,7 @@ public class TGFactory {
         initVertices();
         checkVertices();
         initEdges();
+        result.storeEdgesByBit();
         return result;
         
     }
