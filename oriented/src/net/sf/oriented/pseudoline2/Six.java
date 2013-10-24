@@ -29,14 +29,13 @@ class Six {
         if (hasParallelSides(pTriangles,om) || hasParallelSides(nTriangles,om)) {
             return null;
         }
-
-        for (SignedSet k:base.id2vertex.keySet()) {
-            System.err.println("+ " + k);
+        if (collectVertices(tg,base,1,pTriangles)
+                && collectVertices(tg,base,-1,nTriangles) ) {
+            copyEdges(tg, base);
+            return new DifficultSix(tg, base.totalBits());
+        } else {
+            return null;
         }
-        collectVertices(tg,base,1,pTriangles);
-        collectVertices(tg,base,-1,nTriangles);
-        copyEdges(tg, base);
-        return new DifficultSix(tg, base.totalBits());
     }
 
     private boolean hasParallelSides(int[][] triangles, OMasChirotope om) {
@@ -60,7 +59,7 @@ class Six {
         }
     }
 
-    private void collectVertices(AbstractTGraph tg, TensionGraph base, int sign, 
+    private boolean collectVertices(AbstractTGraph tg, TensionGraph base, int sign, 
             int[] ... triangles) {
         Label[] elements = base.pseudolines.getEquivalentOM().elements();
         FactoryFactory ffactory = base.pseudolines.ffactory();
@@ -75,9 +74,13 @@ class Six {
             } else {
                 id = signed.construct(middle, outer);
             }
-            System.err.println("* "+id);
-            tg.addVertex(base.id2vertex.get(id));
+            final TGVertex v = base.id2vertex.get(id);
+            if (v == null) {
+                return false;
+            }
+            tg.addVertex(v);
         }
+        return true;
         
     }
 
