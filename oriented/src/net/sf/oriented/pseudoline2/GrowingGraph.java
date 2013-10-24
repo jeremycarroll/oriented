@@ -55,6 +55,7 @@ public class GrowingGraph extends AbstractTGraph {
                     return false;
                 }
             }
+            parent.verifyOnlyEdge(t);
             return true;
         }
         else {

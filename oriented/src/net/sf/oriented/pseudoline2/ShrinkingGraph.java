@@ -49,6 +49,14 @@ public class ShrinkingGraph extends PrunableGraph {
         
         return rslt.toArray(new TGEdge[0]);
     }
+
+    public void verifyOnlyEdge(TGEdge t) {
+        for (TGEdge e: wam.base.equivalentEdges(t)) {
+            if (e != t && this.containsEdge(e) ) {
+                throw new IllegalStateException("Edge should not be present");
+            }
+        }
+    }
     
 }
 

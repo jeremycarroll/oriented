@@ -79,6 +79,10 @@ public class TensionGraph extends PrunableGraph {
             tgEdges[e.bit][counts[e.bit]++] = e;
         }
     }
+
+    public TGEdge[] equivalentEdges(TGEdge t) {
+        return tgEdges[t.bit];
+    }
 }
 
 

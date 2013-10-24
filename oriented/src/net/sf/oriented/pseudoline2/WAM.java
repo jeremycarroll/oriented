@@ -239,7 +239,7 @@ public class WAM {
         public abstract void undo();
     }
 
-    private final TensionGraph base;
+    final TensionGraph base;
     /**
      * The current solution space is the set of graphs between growing and
      * shrinking. As the algorithm progresses these get closer together until we
