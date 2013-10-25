@@ -32,7 +32,7 @@ class Six {
         if (collectVertices(tg,base,1,pTriangles)
                 && collectVertices(tg,base,-1,nTriangles) ) {
             copyEdges(tg, base);
-            return new DifficultSix(tg, base.totalBits());
+            return new DifficultSix(tg, base);
         } else {
             return null;
         }

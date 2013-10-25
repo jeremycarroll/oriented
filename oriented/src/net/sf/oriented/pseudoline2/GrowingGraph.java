@@ -4,6 +4,7 @@
 package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 
@@ -20,6 +21,7 @@ public class GrowingGraph extends AbstractTGraph {
     
     private final ShrinkingGraph parent;
     private final WAM wam;
+    final BitSet bits = new BitSet();
     public GrowingGraph(WAM wam, ShrinkingGraph parent) {
        this.parent = parent; 
        this.wam = wam;
@@ -42,6 +44,9 @@ public class GrowingGraph extends AbstractTGraph {
             }
             rawAdd(t);
             
+            if (!t.dEdge.increaseCount(wam)) {
+                return false;
+            }
             if ( ! ( t.source.choose(t, this, parent) && t.dest.choose(t, this, parent) ) ) {
                 return false;
             }
@@ -107,9 +112,10 @@ public class GrowingGraph extends AbstractTGraph {
 
 
     private void rawAdd(TGEdge t) {
-        if (!addEdge(t, t.source, t.dest)) {
+        if (bits.get(t.bit) ||  !addEdge(t, t.source, t.dest)) {
             throw new IllegalArgumentException("addEdge failed!");
         }
+        bits.set(t.bit);
         wam.pushRemoveUndoingAdd(this,t);
         t.afterAdd(wam);
     }

@@ -39,7 +39,6 @@ public class TensionGraph extends PrunableGraph {
     }
     List<DEdge> allEdges = new ArrayList<DEdge>();
     Map<DEdge,Integer> edgeLookup = new HashMap<DEdge,Integer>();
-    TGEdge tgEdges[][];
 
     void saveEdgeAsBit(TGEdge edge) {
         DEdge d = new DEdge(edge, pseudolines.getFaceLattice());
@@ -70,7 +69,7 @@ public class TensionGraph extends PrunableGraph {
         for (TGEdge e:getEdges()) {
             counts[e.bit]++;
         }
-        tgEdges = new TGEdge[counts.length][];
+        TGEdge[][] tgEdges = new TGEdge[counts.length][];
         for (int i=0;i<counts.length;i++) {
             tgEdges[i] = new TGEdge[counts[i]];
         }
@@ -78,10 +77,20 @@ public class TensionGraph extends PrunableGraph {
         for (TGEdge e:getEdges()) {
             tgEdges[e.bit][counts[e.bit]++] = e;
         }
+        for (int i=0;i<tgEdges.length;i++) {
+            TGEdge edges[] = tgEdges[i];
+            if (edges.length != 0) {
+                DEdge dEdge = getDEdge(i);
+                for (TGEdge e:edges) {
+                    e.dEdge = dEdge;
+                    dEdge.tgEdges = edges;
+                }
+            }
+        }
     }
 
     public TGEdge[] equivalentEdges(TGEdge t) {
-        return tgEdges[t.bit];
+        return t.dEdge.tgEdges;
     }
 }
 

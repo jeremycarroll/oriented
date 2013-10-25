@@ -468,6 +468,9 @@ public class WAM {
     private boolean success() {
         boolean success = growing.isTwistedGraph();
         if (success) {
+            if (growing.getEdgeCount()==6) {
+                System.err.println("!@#@");
+            }
             results.add(new Difficulty(growing, base.totalBits()));
             this.foundDifficultyCount++;
         }
@@ -624,6 +627,7 @@ public class WAM {
                 if (!gg.removeEdge(t)) {
                     throw new IllegalStateException("Failed to remove edge");
                 }
+                gg.bits.clear(t.bit);
                 if (gg.getNeighborCount(v1) == 0) {
                     gg.removeVertex(v1);
                 }

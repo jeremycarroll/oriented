@@ -3,6 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
 import net.sf.oriented.omi.Label;
@@ -12,6 +15,9 @@ public class DEdge {
     final Face source;
     final Face dest;
     final Label label;
+    TGEdge tgEdges[];
+    final List<DifficultSix> sixes = new ArrayList<DifficultSix>();
+    
     DEdge(TGEdge e, FaceLattice fl) {
         label = e.label();
         source = e.source.findFaceOrPoint(label, fl, 1);
@@ -31,6 +37,19 @@ public class DEdge {
         }
         DEdge b = (DEdge)o;
         return source.equals(b.source) && dest.equals(b.dest) && label.equals(b.label);
+    }
+
+    public void addDifficultSix(DifficultSix ds) {
+        sixes.add(ds);
+    }
+    
+    boolean increaseCount(WAM wam) {
+        for (DifficultSix ds:sixes) {
+            if (!ds.increaseCount(wam)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

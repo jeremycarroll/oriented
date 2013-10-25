@@ -15,6 +15,7 @@ public class TGEdge implements Comparable<TGEdge> {
     public final int ordinal;
     EdgeChoices inChoice;
     EdgeChoices outChoice;
+    DEdge dEdge;
     int bit;
     boolean saveInDifficulty;
 //    final boolean unnecessary;

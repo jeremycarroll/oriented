@@ -382,25 +382,25 @@ public class Sixes {
         return rslt;
     }
 
-    public static void main(String a[]) throws IOException, AxiomViolation, CoLoopCannotBeDrawnException {
-        int i=0;
-        Sixes sixes = Sixes.get();
-//        for (SixB s:sixes.all) {
-//           // if (sixes.lg.get(s.bits) == 1) {
-//                EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(s.om,"0");
-//                PseudoLineDrawing euclid = pseudoLines.asDrawing();
-//                ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-//
-//                String fName = "/users/jeremycarroll/tmp/six-" +Long.toHexString(s.bits)+"=" + sixes.lg.get(s.bits) + "=" + i++ + "="+ s.name +".jpeg";
-//                ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(fName));
-//                iw.setOutput(imageOutput);
-//                iw.write(euclid.image());
-//                euclid.verify();
-//                imageOutput.close();
-//                iw.dispose();
-//          //  }
-//        }
-    }
+//    public static void main(String a[]) throws IOException, AxiomViolation, CoLoopCannotBeDrawnException {
+//        int i=0;
+//        Sixes sixes = Sixes.get();
+////        for (SixB s:sixes.all) {
+////           // if (sixes.lg.get(s.bits) == 1) {
+////                EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(s.om,"0");
+////                PseudoLineDrawing euclid = pseudoLines.asDrawing();
+////                ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
+////
+////                String fName = "/users/jeremycarroll/tmp/six-" +Long.toHexString(s.bits)+"=" + sixes.lg.get(s.bits) + "=" + i++ + "="+ s.name +".jpeg";
+////                ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(fName));
+////                iw.setOutput(imageOutput);
+////                iw.write(euclid.image());
+////                euclid.verify();
+////                imageOutput.close();
+////                iw.dispose();
+////          //  }
+////        }
+//    }
 
     private static Sixes theInstance = new Sixes();
     public Iterable<Six> analyze(OM om) {
