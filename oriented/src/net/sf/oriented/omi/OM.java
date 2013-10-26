@@ -239,6 +239,13 @@ public interface OM extends Verify {
      */
     boolean isUniform();
 
+    /**
+     * This result reflects the orientation and the element order as well as the underlying oriented matroid.
+     * The labels are not reflected in this result.
+     * @return A hex representation of the chirotope of this oriented matroid.
+     */
+    String toHexString();
+
 
 
 }

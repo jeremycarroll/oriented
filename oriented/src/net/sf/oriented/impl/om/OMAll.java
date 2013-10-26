@@ -467,6 +467,11 @@ public class OMAll extends AbsOMAxioms<Object>  {
         return getChirotope().isUniform();
     }
 
+    @Override
+    public String toHexString() {
+        return getChirotope().toHexString();
+    }
+
 
 }
 /************************************************************************

@@ -7,8 +7,10 @@ package net.sf.oriented.impl.om;
 import static net.sf.oriented.impl.om.Cryptomorphisms.CHIROTOPE;
 
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
@@ -436,6 +438,21 @@ public class ChirotopeImpl extends AbsOM<Object> implements OMasChirotope {
 	@Override
 	public int rank() {
 		return rank;
+	}
+
+    @Override
+	public String toHexString() {
+	   // (IntMath.binomial(all.ground.length, rank) + 15) / 16
+	    StringBuilder sb = new StringBuilder();
+	    Formatter formatter = new Formatter(sb);
+	    int i = 0;
+	    for ( ; i+1 < bits.length; i++) {
+	        formatter.format("%08x",bits[i]);
+	    }
+	    // variable width
+	    formatter.format("%0" + ((IntMath.binomial(all.ground.length, rank) + 1 ) / 2 ) % 8 + "x",  bits[i]);
+	    formatter.close();
+	    return sb.toString();
 	}
 
 	public SetOfUnsignedSetInternal getBases() {

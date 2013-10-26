@@ -143,6 +143,11 @@ public abstract class AbsOM<T> extends AbsOMAxioms<T> {
         return all.getFaceLattice();
     }
 
+    @Override
+    public String toHexString() {
+        return all.toHexString();
+    }
+
 }
 /************************************************************************
  * This file is part of the Java Oriented Matroid Library.
