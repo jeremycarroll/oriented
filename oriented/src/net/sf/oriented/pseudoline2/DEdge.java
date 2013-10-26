@@ -52,6 +52,10 @@ public class DEdge {
         return true;
     }
 
+    public Label getLabel() {
+        return label;
+    }
+
 }
 
 
