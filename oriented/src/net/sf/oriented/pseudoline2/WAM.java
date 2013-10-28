@@ -272,11 +272,11 @@ public class WAM {
         sixDifficultyCount = results.size();
         if (DEBUG) {
             String findMe[][] = {
-                    {"4","6","7"},
-                    {"3","5","7"},
-                    {"3","6","8"},
-                    {"1","5","8"},
-                    {"1","3","4"},
+                    {"4","6","7"}, // a
+                    {"3","5","7"}, // b
+                    {"5","6","8"},
+                    {"1","7","8"},
+                    {"1","3","4"}, // c
                     
             };
             SetOfUnsignedSet findMe2 = ffactory().setsOfUnsignedSet().copyBackingCollection(
@@ -468,9 +468,12 @@ public class WAM {
     private boolean success() {
         boolean success = growing.isTwistedGraph();
         if (success) {
-            if (growing.getEdgeCount()==6) {
-                System.err.println("!@#@");
-            }
+//            if (growing.getEdgeCount()==6) {
+//                System.err.println("!@#@");
+//            }
+//            if (this.isTheOne(growing)) {
+//                System.err.println("FOUND!");
+//            }
             results.add(new Difficulty(growing, base.totalBits()));
             this.foundDifficultyCount++;
         }
@@ -658,7 +661,7 @@ public class WAM {
         this.debug = true;
     }
 
-    private boolean debugLookingGood() {
+    boolean debugLookingGood() {
         return expected == null || subGraph(this.growing, expected)
                 && subGraph(expected, shrinking);
     }

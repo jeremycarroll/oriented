@@ -28,6 +28,7 @@ public class GrowingGraph extends AbstractTGraph {
     }
 
     
+    int dbgCounter = 0;
     /**
      * 
      * @param t
@@ -44,9 +45,26 @@ public class GrowingGraph extends AbstractTGraph {
             }
             rawAdd(t);
             
+//            boolean okBefore = wam.debugLookingGood();
+//            if (okBefore) {
+//                System.err.print("Counts ");
+//                t.dEdge.printCounts();
+//                System.err.println("?");
+//                if ( dbgCounter++ == 4  && t.dEdge.dsCount() == 4 ) {
+//                    System.err.println("XXX");
+//                    
+//                }
+//            }
+            
             if (!t.dEdge.increaseCount(wam)) {
+//                if (okBefore) {
+//                    System.err.println("AGGH!");
+//                }
                 return false;
             }
+//            if (okBefore && !wam.debugLookingGood()) {
+//                System.err.println("BGGH!");
+//            }
             if ( ! ( t.source.choose(t, this, parent) && t.dest.choose(t, this, parent) ) ) {
                 return false;
             }

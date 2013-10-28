@@ -56,6 +56,23 @@ public class DEdge {
         return label;
     }
 
+    void printCounts() {
+        for (DifficultSix ds:sixes) {
+            ds.printCount();
+        }
+    }
+
+    public int dsCount() {
+        int result = 0;
+        for (DifficultSix ds:sixes) {
+            int c = ds.count();
+            if (c > result) {
+                result = c;
+            }
+        }
+        return result;
+    }
+
 }
 
 
