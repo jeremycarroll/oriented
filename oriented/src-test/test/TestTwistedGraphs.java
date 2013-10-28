@@ -45,25 +45,21 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     private String bad;
 
-    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",50,48,8,12,2);
     }
 
-    @Ignore
     @Test
     public void testCircSaw5() {
         count("circularsaw5","0",96,855,76,620,287);
     }
 
-    @Ignore
     @Test
     public void testCircSaw5A() {
         count("_saw5A","0",116,1445,106,1290,262);
     }
 
-    @Ignore
     @Test
     public void testDeformCircSaw5() {
         count("_deformSaw5","0",-1,-1,-1,-1,263);
@@ -75,32 +71,27 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_disconnected","0",-1,-1,-1,-1,-1);
     }
 
-    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
 
-    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
     }
 
-    @Ignore
     @Test
     public void testDeformedCeva() {
         count("_deformedCeva","0",42,28,0,0);
     }
 
-    @Ignore
     @Test
     public void testDeformedSaw() {
         count("_deformedCircularSaw","0",26,29,0,0);
     }
 
 
-    @Ignore
     @Test
     public void testTsukamotoPlusA() {
         count("tsukamoto13.+1","A",312,5605,304,5431,10292);  // 84791
@@ -108,7 +99,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //    junit.framework.AssertionFailedError: 6193 != 5605; 5957 != 5431; 10975 != 10807; 
 
 
-    @Ignore
     @Test
     public void testTsukamotoMinusA() {
         count("tsukamoto13.-1","A", 308  , 5465  , 300  , 5277, 15917); // 266666
@@ -164,6 +154,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("ringel","0",63,343,25,99,16);
     }
 
+    @Ignore
     @Test
     public void testMany() {
         for (int i=0;i<10;i++) {
@@ -210,12 +201,12 @@ public class TestTwistedGraphs extends TestWithTempDir {
                 System.err.println(diff[0].length+" difficulties");
                 usuallyAssertEquals(dCount,diff[0].length);
                 String namename = omName + "-" + inf+"-"+ (soln<10?"0":"")+soln;
-                if (true)
+                if (false)
                     dumpDrawings(diff[0], pseudoLines, ten, namename);
             }
             if (bad != null) {
-                System.err.println(bad);
-          //      Assert.fail(bad);
+//                System.err.println(bad);
+                Assert.fail(bad);
             }
             }
         }
