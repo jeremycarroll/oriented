@@ -41,8 +41,8 @@ class DifficultSix extends Difficulty {
         BitSet left = (BitSet) bits.clone();
         left.andNot(wam.shrinking.growing.bits);
         int bit = 1;
-        bit = bits.nextSetBit(bit);
-        if (bit == -1) {
+        bit = left.nextSetBit(bit);
+        if (bit == -1 || left.nextSetBit(bit+1) != -1) {
             throw new IllegalStateException();
         }
         for (TGEdge e: wam.base.getDEdge(bit).tgEdges) {
@@ -51,6 +51,12 @@ class DifficultSix extends Difficulty {
             }
         }
         return true;
+    }
+    void printCount() {
+       System.err.print(count+", ");
+    }
+    int count() {
+        return count;
     }
 
 }
