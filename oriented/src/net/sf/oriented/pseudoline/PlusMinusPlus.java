@@ -3,13 +3,24 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+
+import net.sf.oriented.impl.set.UnsignedSetFactory;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
 
 import com.google.common.base.Preconditions;
 
 public class PlusMinusPlus implements Iterable<boolean[]>{
     private static PlusMinusPlus[] instances = new PlusMinusPlus[32];
     private final int patterns[];
+    private final int splitIntoThrees[][][];
     private final int size;
     private final int n;
     
@@ -17,6 +28,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     private PlusMinusPlus(int n) {
         this.n = n;
         patterns = new int[computeSize(n)]; // a little less than 2^^n
+        splitIntoThrees = new int[patterns.length][][];
         int ix = initialize();
         for (int i=0;i<ix;i++) {
             int next = rotate(patterns[i]);
@@ -73,6 +85,124 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         return ix;
     }
 
+    public static SignedSet[][] splitIntoThrees(OM om, SignedSet splitMe) {
+        int plus[] = om.asInt(splitMe.plus());
+        int minus[] = om.asInt(splitMe.minus());
+        if (minus[0] == 0) {
+            throw new IllegalArgumentException("Not supported - first element of om must be infinity");
+        }
+        Integer all[] = new Integer[plus.length+minus.length];
+        PlusMinusPlus pmp = get(all.length);
+        for (int i=0;i<minus.length;i++) {
+            all[i] = -minus[i];
+        }
+        for (int i=0;i<plus.length;i++) {
+            all[i+minus.length] = plus[i];
+        }
+        Arrays.sort(all,new Comparator<Integer>(){
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Math.abs(o1) - Math.abs(o2);
+            }});
+        int pattern = 0;
+        for (int i=0;i<all.length;i++) {
+            if (all[i]>0) {
+                pattern |= (1<<i);
+            }
+        }
+        int split[][] = pmp.splitIntoThrees(pattern);
+        SignedSet rslt[][] = new SignedSet[split.length][];
+        for (int i=0;i<rslt.length;i++) {
+            rslt[i] = new SignedSet[split[i].length];
+            for (int j=0;j<rslt[i].length;j++) {
+                rslt[i][j] = pmp.toSignedSet(split[i][j],pattern, all,om);
+            }
+        }
+        return rslt;
+    }
+    private SignedSet toSignedSet(int mask, int pattern, Integer[] all, OM om) {
+//        if (Integer.bitCount(mask) != 3) {
+//            throw new IllegalArgumentException("Only signed sets of size 3 supported");
+//        }
+//        if (Integer.bitCount(mask & pattern) == 2) {
+//            return toSignedSet(mask, (1<<n)-pattern, all, om).opposite();
+//        }
+//        if (Integer.bitCount(mask & pattern) != 1) {
+//            throw new IllegalArgumentException("Only PMP or MPM signed sets supported");
+//        }
+        Label e[] = om.elements();
+        UnsignedSetFactory unsigned = om.ffactory().unsignedSets();
+        UnsignedSet p = unsigned.empty();
+        UnsignedSet m = unsigned.empty();
+        for (int i=0;i<n;i++) {
+            int bit = 1<<i;
+            if ((bit&mask)!=0) {
+                int ix = all[i];
+                Label l = e[Math.abs(ix)];
+                if (ix<0) {
+                    m = m.union(l);
+                } else {
+                    p = p.union(l);
+                }
+            }
+        }
+        return om.ffactory().signedSets().construct(p, m);
+    }
+
+
+    /**
+     * The n-bits of pattern can be split into several
+     * 3 bits segements, each being a PMP
+     * @param pattern
+     * @return An array of arrays, where each memeber of each memeber is three bits
+     * that is a PMP in pattern, and where the bitwise OR of the members of each member
+     * is (1<<n)-1, and where no member of a member is redundant
+     */
+    private int[][] splitIntoThrees(int pattern) {
+        if (splitIntoThrees[pattern]!=null) {
+            return splitIntoThrees[pattern];
+        }
+        List<int[]> results = new ArrayList<int[]>();
+        splitIntoThrees( pattern, 0, results, new int[n], 0 );
+        final int[][] r = results.toArray(new int[0][]);
+        splitIntoThrees[pattern] = r;
+        return r;
+    }
+
+
+    private void splitIntoThrees(int pattern, int done, List<int[]> results,
+            int[] threes, int tIx) {
+        int max = 1<<n;
+        if (done == max - 1) {
+            int r[] = new int[tIx];
+            System.arraycopy(threes, 0, r, 0, tIx);
+            results.add(r);
+            return;
+        }
+        int coverMe = Integer.lowestOneBit(pattern & ~done);
+        if (coverMe == 0) {
+            return;
+        }
+        for (int three=7;three<max;three ++) {
+            if ((three & coverMe) != 0 && Integer.bitCount(three) == 3) {
+                if (isPMP(pattern, three)) {
+                    threes[tIx] = three;
+                    splitIntoThrees(pattern, done | three, results, threes, tIx+1);
+                }
+            }
+        }
+    }
+
+
+    private boolean isPMP(int pattern, int three) {
+        int firstBit = Integer.lowestOneBit(three);
+        int secondBit = Integer.lowestOneBit(three & ~(1<<firstBit));
+        if (((pattern>>firstBit) & 1) == ((pattern>>secondBit) & 1)) {
+            return false;
+        }
+        int thirdBit = Integer.lowestOneBit(three & ~(1<<firstBit) & ~(1<<secondBit));
+        return ((pattern>>firstBit) & 1) == ((pattern>>thirdBit) & 1);
+    }
 
 
     @Override
