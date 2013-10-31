@@ -5,9 +5,18 @@ package net.sf.oriented.pseudoline2;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+
 import net.sf.oriented.omi.Face;
+import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.UnsignedSet;
+import net.sf.oriented.sines.Sines;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 
@@ -37,6 +46,25 @@ public class Difficulty {
 //        this.unnecessary = unnecessary;
         
     }
+    public Sines getSines(TensionGraph tg) {
+        Graph<Face, DEdge> g = getSimplifiedRslt(tg);
+        SignedSet ss[] = new SignedSet[g.getVertexCount()];
+        int i=0;
+        FactoryFactory ff = tg.getEuclideanPseudoLines().ffactory();
+        for (Face v:g.getVertices()) {
+            ss[i++] = ff.signedSets().construct(labels(ff,g.getOutEdges(v)), labels(ff,g.getInEdges(v)));
+        }
+        return new Sines(tg.getEuclideanPseudoLines().getEquivalentOM(), ss);
+    }
+    private UnsignedSet labels(FactoryFactory ff, Collection<DEdge> edges) {
+        Function<DEdge, Label> function = new Function<DEdge, Label>(){
+            @Override
+            public Label apply(DEdge e) {
+                return e.label;
+            }
+        };
+        return ff.unsignedSets().copyBackingCollection(Iterables.transform(edges, function));
+    }
     Graph<Faces, DEdge> getRslt(TensionGraph tg) {
         if (rslt != null) {
             return rslt;
@@ -63,6 +91,7 @@ public class Difficulty {
             bit++;
         }
     }
+    
     public Graph<Face, DEdge> getSimplifiedRslt(TensionGraph tg) {
         Graph<Face, DEdge> resultGraph = new DirectedSparseGraph<Face, DEdge>();
 //        if (bits.get(0)) {

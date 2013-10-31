@@ -31,6 +31,7 @@ import net.sf.oriented.pseudoline2.Sixes;
 import net.sf.oriented.pseudoline2.TGFactory;
 import net.sf.oriented.pseudoline2.TensionGraph;
 import net.sf.oriented.pseudoline2.WAM;
+import net.sf.oriented.sines.Sines;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,6 +61,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_saw5A","0",116,1445,106,1290,262);
     }
 
+    @Ignore
     @Test
     public void testDeformCircSaw5() {
         count("_deformSaw5","0",-1,-1,-1,-1,263);
@@ -71,6 +73,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_disconnected","0",-1,-1,-1,-1,-1);
     }
 
+    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
@@ -81,17 +84,20 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("circularsaw3","0",22,36,4,6,1);
     }
 
+    @Ignore
     @Test
     public void testDeformedCeva() {
         count("_deformedCeva","0",42,28,0,0);
     }
 
+    @Ignore
     @Test
     public void testDeformedSaw() {
         count("_deformedCircularSaw","0",26,29,0,0);
     }
 
 
+    @Ignore
     @Test
     public void testTsukamotoPlusA() {
         count("tsukamoto13.+1","A",312,5605,304,5431,10292);  // 84791
@@ -99,6 +105,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //    junit.framework.AssertionFailedError: 6193 != 5605; 5957 != 5431; 10975 != 10807; 
 
 
+    @Ignore
     @Test
     public void testTsukamotoMinusA() {
         count("tsukamoto13.-1","A", 308  , 5465  , 300  , 5277, 15917); // 266666
@@ -201,7 +208,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
                 System.err.println(diff[0].length+" difficulties");
                 usuallyAssertEquals(dCount,diff[0].length);
                 String namename = omName + "-" + inf+"-"+ (soln<10?"0":"")+soln;
-                if (false)
+                if (true)
                     dumpDrawings(diff[0], pseudoLines, ten, namename);
             }
             if (bad != null) {
@@ -229,11 +236,23 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //        }
         ImageOptions options = ImageOptions.defaultBlackAndWhite();
         for (int i=0;i<difficulties.length;i++) {
-            Graph<Face, DEdge> rslt = difficulties[i].getSimplifiedRslt(ten);
 //            if (rslt.getEdgeCount() != 6) continue;
-            if (i > 40) {
-                break;
+//            if (i > 40) {
+//                break;
+//            }
+            Sines sines = difficulties[i].getSines(ten);
+            if (sines.isOK()) {
+//                System.err.println("OK");
+                continue;
             }
+//            System.err.println("drawing");
+//            if (i > 20) {
+//                break;
+//            }
+//            if (true)
+//            continue;
+            sines.dump();
+            Graph<Face, DEdge> rslt = difficulties[i].getSimplifiedRslt(ten);
             UnsignedSet labels = pseudoLines.ffactory().unsignedSets().empty();
             for (DEdge d: rslt.getEdges()) {
                 Label l = d.getLabel();
