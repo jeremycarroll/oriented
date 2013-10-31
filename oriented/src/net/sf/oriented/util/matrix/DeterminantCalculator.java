@@ -70,8 +70,7 @@ class DeterminantCalculator {
 	 * @param columns  This is a list of rank indices and we select the submatrix on these columns
 	 * @return The determinant of the selected submatrix.
 	 */
-	PerisicFieldElement computeFromColumns(
-			FieldMatrix<PerisicFieldElement> delegate, int[] columns) {
+	PerisicFieldElement computeFromColumns(FieldMatrix<PerisicFieldElement> delegate, int[] columns) {
 		final String vars[] = new String[rank * rank];
 		final RingElt values[] = new RingElt[rank * rank];
 		for (int i = 0; i < rank; i++) {
