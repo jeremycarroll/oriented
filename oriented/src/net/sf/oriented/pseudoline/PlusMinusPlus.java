@@ -41,6 +41,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         if (size != patterns.length) {
             throw new IllegalStateException("Maths was wrong");
         }
+        Arrays.sort(patterns);
     }
 
 
@@ -162,9 +163,8 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
      * that is a PMP in pattern, and where the bitwise OR of the members of each member
      * is (1<<n)-1, and where no member of a member is redundant
      * 
-     * Only public for testing
      */
-    public int[][] splitIntoThrees(int pattern) {
+    private int[][] splitIntoThrees(int pattern) {
         int ix = Arrays.binarySearch(patterns, pattern);
         if (ix < 0) {
             // not a PMP
@@ -244,6 +244,9 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     }
 
 
+    public static int[][] testSplitIntoThrees(int n, int pattern) {
+       return  get(n).splitIntoThrees(pattern);
+    }
     private boolean containsAll(int[] bigger, int[] smaller) {
         nextX:
             for (int x:smaller) {

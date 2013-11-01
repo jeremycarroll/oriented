@@ -71,7 +71,34 @@ public class TestPlusMinusPlus {
     }
     
     @Test
+    public void test_nA_B_nC_D() {
+        int split[][] = PlusMinusPlus.testSplitIntoThrees(4, 5);
+        Assert.assertEquals(1,split.length);
+        Assert.assertEquals(2,split[0].length);
+        Assert.assertEquals(7,split[0][0]);
+        Assert.assertEquals(14,split[0][1]);
+    }
+
+    @Test
+    public void test_nA_B_C_nD_E_F() {
+        int split[][] = PlusMinusPlus.testSplitIntoThrees(6, 54);
+        Assert.assertEquals(2,split.length);
+        Assert.assertEquals(3,split[0].length);
+        Assert.assertEquals(3,split[1].length);
+        Assert.assertEquals(9,split[0][0] & ~ 6);
+        Assert.assertEquals(9,split[1][0] & ~ 6);
+    }
+    @Test
+    public void test_A_nB_C_nD() {
+        int split[][] = PlusMinusPlus.testSplitIntoThrees(4, 10);
+        Assert.assertEquals(1,split.length);
+        Assert.assertEquals(2,split[0].length);
+        Assert.assertEquals(7,split[0][0]);
+        Assert.assertEquals(14,split[0][1]);
+    }
+    @Test
     public void testSplitIntoThrees() {
+        int total = 0;
         OM ceva = Examples.ceva();
         Label infinity = ceva.elements()[0];
         SetOfSignedSet sSets = ceva.getVectors();
@@ -82,14 +109,16 @@ public class TestPlusMinusPlus {
             }
             ss = factory.construct(ss.plus().minus(infinity), ss.minus().minus(infinity));
             SignedSet aXs[][] = PlusMinusPlus.splitIntoThrees(ceva, ss);
-            System.err.println(ss);
-            for (int i=0;i<aXs.length;i++) {
-                System.err.println("    "+i+":");
-                for (SignedSet t:aXs[i]) {
-                    System.err.println("       "+t);
-                }
-            }
+            total += aXs.length;
+//            System.err.println(ss);
+//            for (int i=0;i<aXs.length;i++) {
+//                System.err.println("    "+i+":");
+//                for (SignedSet t:aXs[i]) {
+//                    System.err.println("       "+t);
+//                }
+//            }
         }
+        Assert.assertEquals(657, total); // the exact number is not very useful: I don't really know if it is correct
     }
 
 }
