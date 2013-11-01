@@ -4,6 +4,12 @@
 package test;
 
 import junit.framework.Assert;
+import net.sf.oriented.omi.Examples;
+import net.sf.oriented.omi.Label;
+import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.SetOfSignedSet;
+import net.sf.oriented.omi.SignedSet;
+import net.sf.oriented.omi.SignedSetFactory;
 import net.sf.oriented.pseudoline.PlusMinusPlus;
 
 import org.junit.Test;
@@ -62,6 +68,28 @@ public class TestPlusMinusPlus {
             exp = 2 * exp + (2*(i-1));
         }
         return exp;
+    }
+    
+    @Test
+    public void testSplitIntoThrees() {
+        OM ceva = Examples.ceva();
+        Label infinity = ceva.elements()[0];
+        SetOfSignedSet sSets = ceva.getVectors();
+        SignedSetFactory factory = ceva.ffactory().signedSets();
+        for (SignedSet ss:sSets) {
+            if (ss.sign(infinity) == -1) {
+                continue;
+            }
+            ss = factory.construct(ss.plus().minus(infinity), ss.minus().minus(infinity));
+            SignedSet aXs[][] = PlusMinusPlus.splitIntoThrees(ceva, ss);
+            System.err.println(ss);
+            for (int i=0;i<aXs.length;i++) {
+                System.err.println("    "+i+":");
+                for (SignedSet t:aXs[i]) {
+                    System.err.println("       "+t);
+                }
+            }
+        }
     }
 
 }

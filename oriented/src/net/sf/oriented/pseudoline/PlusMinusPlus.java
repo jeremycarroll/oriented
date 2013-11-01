@@ -16,6 +16,7 @@ import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
 
 public class PlusMinusPlus implements Iterable<boolean[]>{
     private static PlusMinusPlus[] instances = new PlusMinusPlus[32];
@@ -88,6 +89,9 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     public static SignedSet[][] splitIntoThrees(OM om, SignedSet splitMe) {
         int plus[] = om.asInt(splitMe.plus());
         int minus[] = om.asInt(splitMe.minus());
+        if (minus.length == 0) {
+            return new SignedSet[0][];
+        }
         if (minus[0] == 0) {
             throw new IllegalArgumentException("Not supported - first element of om must be infinity");
         }
@@ -153,37 +157,123 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     /**
      * The n-bits of pattern can be split into several
      * 3 bits segements, each being a PMP
-     * @param pattern
+     * @param pattern n-bits, 0 for - 1 for +
      * @return An array of arrays, where each memeber of each memeber is three bits
      * that is a PMP in pattern, and where the bitwise OR of the members of each member
      * is (1<<n)-1, and where no member of a member is redundant
+     * 
+     * Only public for testing
      */
-    private int[][] splitIntoThrees(int pattern) {
-        if (splitIntoThrees[pattern]!=null) {
-            return splitIntoThrees[pattern];
+    public int[][] splitIntoThrees(int pattern) {
+        int ix = Arrays.binarySearch(patterns, pattern);
+        if (ix < 0) {
+            // not a PMP
+            return new int[0][];
+        }
+        if (splitIntoThrees[ix]!=null) {
+            return splitIntoThrees[ix];
         }
         List<int[]> results = new ArrayList<int[]>();
         splitIntoThrees( pattern, 0, results, new int[n], 0 );
         final int[][] r = results.toArray(new int[0][]);
-        splitIntoThrees[pattern] = r;
-        return r;
+        Arrays.sort(r, Ints.lexicographicalComparator());
+        int from = 1;
+        int i = 0;
+        while (from < r.length) {
+            if (!Arrays.equals(r[from], r[i])) {
+                i++;
+                r[i] = r[from];
+            }
+            from++;
+        }
+        i++;
+        int sz = i;
+        i = 0;
+        for (int j=0;j<sz;j++) {
+            for (int k=j+1;k<sz;k++) {
+                if (r[j].length < r[k].length) {
+                    if (containsAll(r[k],r[j])) {
+                        if (k!= sz-1) {
+                           r[k] = r[sz-1];
+                           k--;
+                        }
+                        sz--;
+                    }
+                } else if ( r[j].length == r[k].length) {
+                    // nothing
+                } else {
+                    if (containsAll(r[j],r[k])) {
+                        if ( j != sz-1 ) {
+                            r[j] = r[sz-1];
+                            j--;
+                        }
+                        sz--;
+                        break;
+                    }
+                }
+            }
+        }
+        int counts[][] = new int[sz][];
+        for (i=0;i<sz;i++) {
+            counts[i] = new int[n];
+            for (int j:r[i]) {
+                for (int k=0;k<n;k++) {
+                    if (((1<<k)&j)!=0) {
+                        counts[i][k]++;
+                    }
+                }
+            }
+        }
+        for (i=0;i<sz;i++) {
+            for (int j=i+1;j<sz;j++) {
+                if (Arrays.equals(counts[i],counts[j])) {
+                    if ( j != sz - 1) {
+                        counts[j] = counts[sz-1];
+                        r[j] = r[sz-1];
+                        j--;
+                    }
+                    sz--;
+                }
+            }
+        }
+        
+        int rr[][] = new int[sz][];
+        System.arraycopy(r, 0, rr, 0, rr.length);
+        splitIntoThrees[ix] = rr;
+        return rr;
+    }
+
+
+    private boolean containsAll(int[] bigger, int[] smaller) {
+        nextX:
+            for (int x:smaller) {
+                for (int y:bigger) {
+                    if (x==y) {
+                        continue nextX;
+                    }
+                }
+                return false;
+            }
+    return true;
+
     }
 
 
     private void splitIntoThrees(int pattern, int done, List<int[]> results,
             int[] threes, int tIx) {
-        int max = 1<<n;
-        if (done == max - 1) {
+        int max = (1<<n) -1;
+        if (done == max ) {
             int r[] = new int[tIx];
             System.arraycopy(threes, 0, r, 0, tIx);
+            Arrays.sort(r);
             results.add(r);
             return;
         }
-        int coverMe = Integer.lowestOneBit(pattern & ~done);
+        int coverMe = Integer.lowestOneBit(max & ~done);
         if (coverMe == 0) {
             return;
         }
-        for (int three=7;three<max;three ++) {
+        for (int three=7;three<= max;three ++) {
             if ((three & coverMe) != 0 && Integer.bitCount(three) == 3) {
                 if (isPMP(pattern, three)) {
                     threes[tIx] = three;
@@ -196,12 +286,12 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
 
     private boolean isPMP(int pattern, int three) {
         int firstBit = Integer.lowestOneBit(three);
-        int secondBit = Integer.lowestOneBit(three & ~(1<<firstBit));
-        if (((pattern>>firstBit) & 1) == ((pattern>>secondBit) & 1)) {
+        int secondBit = Integer.lowestOneBit(three & ~firstBit);
+        if ( ((pattern & firstBit)==0) == ((pattern & secondBit)==0 ) ) {
             return false;
         }
-        int thirdBit = Integer.lowestOneBit(three & ~(1<<firstBit) & ~(1<<secondBit));
-        return ((pattern>>firstBit) & 1) == ((pattern>>thirdBit) & 1);
+        int thirdBit = Integer.lowestOneBit(three & ~firstBit & ~secondBit);
+        return ((pattern & firstBit)==0) == ((pattern & thirdBit)==0 ) ;
     }
 
 
