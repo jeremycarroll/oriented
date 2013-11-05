@@ -77,11 +77,21 @@ public class TGFactory {
                         //                    System.err.println(edge);
                         result.addEdge(edge, edge.source, edge.dest);
                     }
+                } else if (line.size()>1) {
+                    mutuallyExclude(all[i],all[j]);
+                } else {
+                    if (!all[i].extent.intersection(all[j].extent).isEmpty()) {
+                        mutuallyExclude(all[i],all[j]);
+                    }
                 }
-                
             }
         }
         
+    }
+
+    private void mutuallyExclude(TGVertex a, TGVertex b) {
+        a.exclude.add(b);
+        b.exclude.add(a);
     }
 
     private void initVertices() {

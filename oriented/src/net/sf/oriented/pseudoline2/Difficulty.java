@@ -127,7 +127,24 @@ public class Difficulty {
     }
 
 }
-
+/*
+ * It is unclear to me what assumptions we can make.
+ * 
+ * We really only need 'minimal' difficulties, i.e. we don't want duplicates.
+ * 
+ * At the moment I am inclined to make some assumptions.
+ * 
+ * e.g. take a difficult A it is possible to modify it to make B by duplicating
+ * some of the entries and making parallel lines.
+ * This is pretty unclear.
+ * 
+ * Anyway: given A there is such a B - it doesn't quite mean that we can work with B
+ * instead of A, but we will anyway.
+ * 
+ * 
+ * 
+ * 
+ */
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.  

@@ -7,7 +7,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -87,6 +89,10 @@ public class WAM {
             fail();
             return true;
         }
+        @Override
+        int optionCount() {
+            return 1;
+        }
     }
 
     private abstract class Choice<T> extends Frame {
@@ -109,6 +115,10 @@ public class WAM {
             return "";
         }
 
+        @Override
+        int optionCount() {
+            return choices.length;
+        }
         @Override
         boolean call(int ix) {
             if (!removeChoice(ix - 1)) {
@@ -202,6 +212,11 @@ public class WAM {
         public String toString() {
             return "fail";
         }
+
+        @Override
+        int optionCount() {
+            return 1;
+        }
     }
 
     private enum Port {
@@ -229,6 +244,10 @@ public class WAM {
         protected void fail() {
             port = Port.Fail;
         }
+        
+        abstract int optionCount();
+        
+        
     }
 
     private static <T extends Comparable<T>> T[] maybeSort(T[] array) {
@@ -378,43 +397,42 @@ public class WAM {
     }
 
     private Difficulty[][] minimalResults() {
+        System.err.println("Original difficulty count: "+results.size());
         Difficulty r[] = new Difficulty[results.size()];
 //        int unnecessary = 0;
         results.toArray(r);
         
-        int i = 0;
         int sz = r.length;
         int bad = 0;
-        
-        while (i<sz-1) {
-            Difficulty di = r[i++];
+        int done = 0;
+        Arrays.sort(r, new Comparator<Difficulty>(){
+
+            @Override
+            public int compare(Difficulty o1, Difficulty o2) {
+                return o1.bits.cardinality() - o2.bits.cardinality();
+            }});
+        for (int i = 0;i<sz-1; i++ ) {
+            Difficulty di = r[i];
             if (di.bits.get(0)) {
                 continue;
             }
-            int isz = di.bits.cardinality();
-            int j = i;
-            while (j<sz) {
-                Difficulty dj = r[j++];
+            for (int j=i+1;j<sz;j++) {
+                done++;
+                if ((done % 10000000) == 0) {
+                    System.err.println("Sorting: "+(done / 10000000)+ " " + i + ", "+ j + " / " + sz);
+                }
+                Difficulty dj = r[j];
                 if (dj.bits.get(0)) {
                     continue;
                 }
-                int jsz = dj.bits.cardinality();
-                if (jsz <= isz && !dj.bits.intersects(di.missingBits)) {
-                    di.bits.set(0);
-                    bad++;
-                    break;
-                }
-                if (isz <= jsz && !di.bits.intersects(dj.missingBits)) {
+                if (!di.bits.intersects(dj.missingBits)) {
                     dj.bits.set(0);
                     bad++;
-                    continue;
                 }
             }
-//            if ( (!di.bits.get(0)) && di.unnecessary != null) {
-//                unnecessary++;
-//            }
+            
         }
-        
+                    
         Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], 
 //                                               new Difficulty[unnecessary],
                                                new Difficulty[bad]};
@@ -422,7 +440,7 @@ public class WAM {
         int j=0;
         int k=0;
 //        int l=0;
-        for (i=0;i<r.length;i++) {
+        for (int i=0;i<r.length;i++) {
             if (!r[i].bits.get(0)) {
 //                if (r[i].unnecessary != null) {
 //                    rr[1][l++] = r[i];
@@ -541,10 +559,22 @@ public class WAM {
         if (transitions%DEBUG_FREQUENCY != 0) {
             return;
         }
-        if (debug)
-            System.err.println(port + "[" + stack.size() + "/" + trail.size()
-                    + ":" + choices.size() + "$" + results.size()+"]" + (debugLookingGood()?"+":"?")+ pad(stack) + pad(trail) + pad(results) 
-                    + pad(choices) + stack.peek().toString());
+        if (debug) {
+            int i=0;
+            StringBuilder sb = new StringBuilder();
+            Formatter fmt = new Formatter(sb);
+            Iterator<Frame> it = stack.descendingIterator();
+            while (i<4 && it.hasNext()) {
+                Frame f = it.next();
+                fmt.format("%3s/%-3s ", f.retryCount, f.optionCount());
+                i++;
+            }
+            fmt.format("%s [S%-3dT%-5dC%-3dR%-7d] %s", 
+                           port ,stack.size(), trail.size(), choices.size() , 
+                           results.size(), stack.peek().toString());
+            fmt.close();
+            System.err.println(sb.toString());
+        }
         if (stack.size()==6 && trail.size()==74) {
 //            System.err.println("!!!");
         }

@@ -25,6 +25,15 @@ public class Sines {
             }
         }
     }
+    /* The counting of pairs is based on the idea that replacing osme line with
+     * a pair of parallel lines is OK.
+     * 
+     * There is a deliberate confusion of necessary and sufficient here
+     * with a conjecture that some implication which is trivial in one direction
+     * does in fact hold in the other. See comment in Difficulty.java.
+     * 
+     */
+    
     private class Analysis {
         final SignedSet threes[];
         Analysis(SignedSet[] threes) {
@@ -121,7 +130,7 @@ public class Sines {
     }
 
     public void dump() {
-        if (isOK()) {
+        if (ok != null) {
             ok.dump();
         } else {
             dump(ids);
@@ -171,7 +180,17 @@ public class Sines {
     }
     
     public boolean isOK() {
-        return ok != null;
+        if (ok != null)
+            return true;
+        for (SignedSet s:ids) {
+            for (SignedSet t:ids) {
+                if (s!=t && s.intersection(t).size()>1) {
+                    // silly case - should not happen needs debugging
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
 //    private int toBits(UnsignedSet ss, int i) {

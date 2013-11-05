@@ -21,7 +21,7 @@ import net.sf.oriented.pseudoline.PlusMinusPlus;
 import net.sf.oriented.pseudoline2.WAM.Undoable;
 
 public class TGVertex implements Comparable<TGVertex> {
-    private final SetOfSignedSet extent;
+    final SetOfSignedSet extent;
     private final SignedSet  identity;
     
     private final String desc;
@@ -30,6 +30,11 @@ public class TGVertex implements Comparable<TGVertex> {
     
     UnsignedSet chosen;
     UnsignedSet doubledUp;
+    /**
+     * other vertices which have two or more lines in common but on opposite sides.
+     * These cannot appear in the same difficulty as this vertex. (conjectured).
+     */
+    final Set<TGVertex> exclude = new HashSet<TGVertex>();
     
     
     // no longer using faces parameter ???
@@ -108,13 +113,12 @@ public class TGVertex implements Comparable<TGVertex> {
         return !(checkEdgeCount(g) && checkEdgeLabels(g));
     }
 
-    public Iterable<TGVertex> overlapping(AbstractTGraph g) {
+    Iterable<TGVertex> overlapping(AbstractTGraph g) {
+        
         List<TGVertex> rslt = new ArrayList<TGVertex>();
-        for (TGVertex v:g.getVertices()) {
-            if (!v.equals(this)) {
-                if (!v.extent.intersection(extent).isEmpty()) {
-                    rslt.add(v);
-                }
+        for (TGVertex v:exclude) {
+            if (g.containsVertex(v)) {
+                rslt.add(v);
             }
         }
         return rslt;

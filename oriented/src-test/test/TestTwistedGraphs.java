@@ -61,7 +61,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_saw5A","0",116,1445,106,1290,262);
     }
 
-    @Ignore
     @Test
     public void testDeformCircSaw5() {
         count("_deformSaw5","0",-1,-1,-1,-1,263);
@@ -73,7 +72,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_disconnected","0",-1,-1,-1,-1,-1);
     }
 
-    @Ignore
     @Test
     public void testPappus() {
         count("pappus","0",-1,-1,-1,-1,-1);
@@ -90,14 +88,11 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_deformedCeva","0",42,28,0,0);
     }
 
-    @Ignore
     @Test
     public void testDeformedSaw() {
         count("_deformedCircularSaw","0",26,29,0,0);
     }
 
-
-    @Ignore
     @Test
     public void testTsukamotoPlusA() {
         count("tsukamoto13.+1","A",312,5605,304,5431,10292);  // 84791
@@ -105,7 +100,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //    junit.framework.AssertionFailedError: 6193 != 5605; 5957 != 5431; 10975 != 10807; 
 
 
-    @Ignore
     @Test
     public void testTsukamotoMinusA() {
         count("tsukamoto13.-1","A", 308  , 5465  , 300  , 5277, 15917); // 266666
@@ -113,7 +107,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
 //    junit.framework.AssertionFailedError: 6039 != 5465; 5791 != 5277; 17357 != 17260; 
 
-    @Ignore
     @Test
     public void testTsukamotoPlusB() {
         count("tsukamoto13.+1","B",312,6193,304,5957,10975); // > 15471548
@@ -170,8 +163,6 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //            testCircSaw5A();
         }
     }
-
-    @Ignore
     @Test
     public void testChap1() {
         count("chapter1","1",6,2,0,0);
@@ -208,7 +199,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
                 System.err.println(diff[0].length+" difficulties");
                 usuallyAssertEquals(dCount,diff[0].length);
                 String namename = omName + "-" + inf+"-"+ (soln<10?"0":"")+soln;
-                if (true)
+                if (false)
                     dumpDrawings(diff[0], pseudoLines, ten, namename);
             }
             if (bad != null) {
@@ -235,31 +226,35 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //            return;
 //        }
         ImageOptions options = ImageOptions.defaultBlackAndWhite();
-        for (int i=0;i<difficulties.length;i++) {
+        int i=0;
+        for (Difficulty diff:difficulties) {
 //            if (rslt.getEdgeCount() != 6) continue;
 //            if (i > 40) {
 //                break;
 //            }
-            Sines sines = difficulties[i].getSines(ten);
+            Sines sines = diff.getSines(ten);
             if (sines.isOK()) {
-//                System.err.println("OK");
                 continue;
             }
-//            System.err.println("drawing");
+            i++;
 //            if (i > 20) {
 //                break;
 //            }
 //            if (true)
 //            continue;
-            sines.dump();
-            Graph<Face, DEdge> rslt = difficulties[i].getSimplifiedRslt(ten);
+            Graph<Face, DEdge> rslt = diff.getSimplifiedRslt(ten);
             UnsignedSet labels = pseudoLines.ffactory().unsignedSets().empty();
             for (DEdge d: rslt.getEdges()) {
                 Label l = d.getLabel();
                 labels = labels.union(l);
             }
             //                    Graph<Face, DEdge> rslt = difficulties[i].getSimplifiedRslt(ten);
-            String fileNmae = namename + "-" + labels.toString() + "-" + (i<10?"0":"") + i;
+            String fileName = namename + "-" + labels.toString() + "-" + (i<10?"0":"") + i;
+            System.err.println(fileName);
+            sines.dump();
+            if (i > 40) {
+                continue;
+            }
             //                    Collection<DPath> cycles = new DPaths(rslt,pseudoLines).cycles();
 
             //                    if (!searchForCyclePair(rslt, cycles)) {
@@ -274,9 +269,9 @@ public class TestTwistedGraphs extends TestWithTempDir {
             //                        }
             //                    }
 
-            DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, difficulties[i]);
+            DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff);
             ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-            ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp + "/" + fileNmae + ".jpeg"));
+            ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp + "/" + fileName + ".jpeg"));
             // System.err.println(fileNmae+" "+diff[0][i].unnecessary+ " "+ rslt.getEdgeCount());
             iw.setOutput(imageOutput);
             iw.write(euclid.image(options));
