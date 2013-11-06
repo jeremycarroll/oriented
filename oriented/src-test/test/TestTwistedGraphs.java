@@ -46,6 +46,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     private String bad;
 
+    @Ignore
     @Test
     public void testCeva() {
         count("ceva","0",50,48,8,12,2);
@@ -58,6 +59,10 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
     @Test
     public void testCircSaw5A() {
+        count("circularsaw5","A",96,855,76,620,287);
+    }
+    @Test
+    public void testCirc_Saw5A() {
         count("_saw5A","0",116,1445,106,1290,262);
     }
 
@@ -66,6 +71,14 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("_deformSaw5","0",-1,-1,-1,-1,263);
     }
 
+    @Test
+    public void testDeformCircSaw5A() {
+        count("_deformSaw5","A",-1,-1,-1,-1,263);
+    }
+    @Test
+    public void testDeformCircSaw5B() {
+        count("_deformSaw5","B",-1,-1,-1,-1,263);
+    }
     @Ignore
     @Test
     public void testDisconnected() {
@@ -77,6 +90,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
         count("pappus","0",-1,-1,-1,-1,-1);
     }
 
+    @Ignore
     @Test
     public void testSaw() {
         count("circularsaw3","0",22,36,4,6,1);
@@ -107,6 +121,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
 //    junit.framework.AssertionFailedError: 6039 != 5465; 5791 != 5277; 17357 != 17260; 
 
+    @Ignore
     @Test
     public void testTsukamotoPlusB() {
         count("tsukamoto13.+1","B",312,6193,304,5957,10975); // > 15471548
@@ -163,6 +178,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
 //            testCircSaw5A();
         }
     }
+    @Ignore
     @Test
     public void testChap1() {
         count("chapter1","1",6,2,0,0);

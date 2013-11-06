@@ -3,6 +3,12 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,6 +76,16 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
  * 
  */
 public class WAM {
+    
+    private static ObjectOutputStream TEST_SETS_FILE;
+    static {
+        try {
+            TEST_SETS_FILE = new ObjectOutputStream(new FileOutputStream("/tmp/TestData.java"));
+        }
+        catch (IOException e) {
+            throw new Error(e);
+        }
+    }
     
     private final static boolean DETERMINISTIC = false;
     /**
@@ -451,6 +467,21 @@ public class WAM {
                 rr[1][k++] = r[i];
             }
         }
+        if (rr[1].length > 0) {
+            try {
+                TEST_SETS_FILE.writeInt(r.length);
+                for (int i=0;i<r.length;i++) {
+                  TEST_SETS_FILE.writeObject(r[i].bits);
+                }
+                TEST_SETS_FILE.flush();
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            
+        }
         return rr;
         
     }
@@ -580,10 +611,6 @@ public class WAM {
         }
     }
 
-    private String pad(Collection<?> c) {
-        int size = c.size();
-        return size < 10 ? "  " : (size < 100 ? " " : "");
-    }
 
     boolean edgeRemovalFailed;
     public int foundDifficultyCount = 0;
