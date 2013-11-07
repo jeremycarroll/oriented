@@ -76,8 +76,8 @@ public class SpeedTestSubsets {
         }
         long start = System.currentTimeMillis();
         List<BitSet> rslt = algorithm.minimal(Arrays.asList(copyClearedBit));
-        long test = System.currentTimeMillis() - start;
-        System.err.println(name+" "+test);
+        long test = System.currentTimeMillis() ;
+        System.err.println(name+" "+(test-start));
         long expected[][] = new long[rslt.size()][];
         int i = 0;
         for (BitSet b:data) {
@@ -97,17 +97,17 @@ public class SpeedTestSubsets {
             actual[i++] = b.toLongArray();
         }
 
-        long reformat = System.currentTimeMillis() - test;
+        long reformat = System.currentTimeMillis();
         Arrays.sort(expected, Longs.lexicographicalComparator());
         Arrays.sort(actual, Longs.lexicographicalComparator());
-        long sort = System.currentTimeMillis() - reformat;
+        long sort = System.currentTimeMillis() ;
         for (i=0;i<actual.length;i++) {
-            Assert.assertArrayEquals(expected, actual);
+            Assert.assertArrayEquals(expected[i], actual[i]);
         }
-        long comp = System.currentTimeMillis() - sort;
-        if (test>100) {
-            System.err.println("t "+Long.toString(test)+" r "+Long.toString(reformat)+" s "+Long.toString(sort)+" c "+ Long.toString(comp));
-        }
+        long comp = System.currentTimeMillis() ;
+//        if (test-start>100) {
+//            System.err.println("t "+(test-start)+" r "+(reformat-test)+" s "+(sort-reformat)+" c "+ (comp-sort));
+//        }
     }
 
 }
