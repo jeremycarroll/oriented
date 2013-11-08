@@ -45,7 +45,7 @@ public class SpeedTestSubsets {
             for (int i=0;i<sz;i++) {
                 sets[i] = (BitSet) in.readObject();
             }
-            for (String method: new String[]{"naive"}) {
+            for (String method: new String[]{"naive", "mcdaid"}) {
                 Method m = MinimalSubsetFactory.class.getMethod(method);
                 rslt.add(new Object[]{m,cnt,sets});
             }
