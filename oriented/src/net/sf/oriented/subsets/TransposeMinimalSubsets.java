@@ -21,17 +21,53 @@ import java.util.TreeSet;
  *
  */
 final class TransposeMinimalSubsets implements MinimalSubsets {
-    private static final class TSEntry implements Comparable<TransposeMinimalSubsets.TSEntry> {
-        private static int ID_COUNTER = 0;
-        private final int id = ID_COUNTER++;
+    final class SortedOccursLists extends TreeSet<OccursList> {
+
+        SortedOccursLists() {
+        }
+            
+        boolean initialize(int[][] occurs,  BitSet bs, int ix) {
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                final OccursList entry = new OccursList(occurs[i]);
+                if (!entry.advance(ix)) {
+                   return false;
+                }
+                add(entry);
+            }
+            return true;
+        }
+
+
+        boolean isAllEqual() {
+            return last().peek() == first().peek();
+        }
+
+        int peek() {
+            return first().peek();
+        }
+
+        public boolean advance(boolean allMatched) {
+            final OccursList first = first();
+            remove(first);
+            if (!first.advance(last().peek() + (allMatched?1:0))) {
+                return false;
+            }
+            add(first);
+            return true;
+        }
+        
+    }
+    private int ID_COUNTER = 0;
+    final class OccursList implements Comparable<OccursList> {
         final int bitsets[];
-        int ix;
-        TSEntry(int bs[]) {
+        private int ix;
+        final int id = ID_COUNTER++;
+        OccursList(int bs[]) {
             bitsets = bs;
             ix = 0;
         }
         @Override
-        public int compareTo(TransposeMinimalSubsets.TSEntry o) {
+        public int compareTo(OccursList o) {
             int r = peek() - o.peek();
             return r!=0?r:(id - o.id);
         }
@@ -45,6 +81,9 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             } else {
                 ix = pos;
             }
+            while (ix < bitsets.length && sorted[bitsets[ix]]==null) {
+                ix++;
+            }
             return ix < bitsets.length;
         }
         
@@ -55,9 +94,10 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
         public int compare(BitSet o1, BitSet o2) {
             return o1.cardinality() - o2.cardinality();
         }};
+    private BitSet[] sorted;
     @Override
     public List<BitSet> minimal(Collection<BitSet> full) {
-        BitSet[] sorted = toSortedArray(full);
+        sorted = toSortedArray(full);
         int bad = 0;
         final int maxCardinality = sorted[sorted.length-1].cardinality();
         int firstMax = findFirstWithCardinality(sorted, maxCardinality);
@@ -68,39 +108,21 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             if (bs == null) {
                 continue;
             }
-            TreeSet<TransposeMinimalSubsets.TSEntry> ts = new TreeSet<TransposeMinimalSubsets.TSEntry>();
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                final TransposeMinimalSubsets.TSEntry entry = new TSEntry(occurs[i]);
-                if (!entry.advance(ix+1)) {
-                    continue outer;
-                }
-                ts.add(entry);
-            }
-            int lastBS = ts.last().peek();
+            SortedOccursLists ts = new SortedOccursLists();
+            if (!ts.initialize(occurs, bs, ix+1)) {
+                continue;
+            }   
+            
             while (true) {
-                final TransposeMinimalSubsets.TSEntry first = ts.first();
-                int firstBS = first.peek();
-                int next;
-                if (firstBS == lastBS) {
-                    // subset
-                    bad++;
-                    sorted[firstBS] = null;
-                    next = firstBS + 1;
-                } else {
-                    next = lastBS;
-                }
-                ts.remove(first);
-                int nextBS;
-                do {
-                    if (!first.advance(next)) {
+                while (!ts.isAllEqual()) {
+                    if (!ts.advance(false)) {
                         continue outer;
                     }
-                    nextBS = first.peek();
-                    next = nextBS + 1;
-                } while (sorted[nextBS]==null);
-                ts.add(first);
-                if (nextBS > lastBS) {
-                    lastBS = nextBS;
+                }
+                sorted[ts.peek()] = null;
+                bad++;
+                if (!ts.advance(true)) {
+                    continue outer;
                 }
             }
         }
