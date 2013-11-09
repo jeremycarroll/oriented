@@ -6,6 +6,7 @@ package net.sf.oriented.subsets;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.List;
 
 
 public class MinimalSubsetFactory {
@@ -23,6 +24,24 @@ public class MinimalSubsetFactory {
     public static MinimalSubsets mcdaid() {
         
         return new TransposeMinimalSubsets();
+    }
+    
+    public static MinimalSubsets amsCard() {
+        return new AMSCard();
+//        return   new MinimalSubsets() {
+//            
+//
+//            @Override
+//            public List<BitSet> minimal(Collection<BitSet> full) {
+//                MinimalSubsets sat = new SateLite();
+//                MinimalSubsets mcd = mcdaid();
+//                
+//                final List<BitSet> v1 = sat.minimal(full);
+//                System.err.println(v1.size());
+//                return mcd.minimal(v1);
+//            }
+//            
+//        };
     }
 
     static int max(Collection<BitSet> full) {

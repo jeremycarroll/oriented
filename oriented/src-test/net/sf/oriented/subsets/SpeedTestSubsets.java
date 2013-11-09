@@ -49,7 +49,7 @@ public class SpeedTestSubsets {
             for (int i=0;i<sz;i++) {
                 sets[i] = (BitSet) in.readObject();
             }
-            for (String method: new String[]{"naive", "mcdaid"}) {
+            for (String method: new String[]{"naive", "mcdaid", "amsCard"}) {
                 Method m = MinimalSubsetFactory.class.getMethod(method);
                 rslt.add(new Object[]{m,name,bits,cnt,sets,numberOfAnswers});
             }
@@ -75,7 +75,9 @@ public class SpeedTestSubsets {
 
     @Test
     public void go() {
-        if (name.contains("naive-tsu")) {
+        if (name.contains("naive-tsu"
+                //"deformSaw5*B"
+                )) {
             return;
         }
         BitSet copyClearedBit[] = new BitSet[data.length];
