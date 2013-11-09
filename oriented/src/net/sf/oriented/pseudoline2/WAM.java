@@ -371,7 +371,7 @@ public class WAM {
         }
         return true;
     }
-    public Difficulty[][] search() {
+    public Difficulty[][] search(String name) {
         addChoiceOfInitialTGVertex();
         while (true) {
             Frame top = stack.peek();
@@ -405,84 +405,100 @@ public class WAM {
                 break;
             case Fail:
                 stack.pop();
-                if (stack.isEmpty()) return minimalResults();
+                if (stack.isEmpty()) return minimalResults(name);
                 backTrack();
                 break;
             }
         }
     }
 
-    private Difficulty[][] minimalResults() {
+    private Difficulty[][] minimalResults(String name) {
+        
+        
         System.err.println("Original difficulty count: "+results.size());
         Difficulty r[] = new Difficulty[results.size()];
 //        int unnecessary = 0;
         results.toArray(r);
-        
-        int sz = r.length;
-        int bad = 0;
-        int done = 0;
-        Arrays.sort(r, new Comparator<Difficulty>(){
 
-            @Override
-            public int compare(Difficulty o1, Difficulty o2) {
-                return o1.bits.cardinality() - o2.bits.cardinality();
-            }});
-        for (int i = 0;i<sz-1; i++ ) {
-            Difficulty di = r[i];
-            if (di.bits.get(0)) {
-                continue;
+        try {
+            TEST_SETS_FILE.writeUTF(name);
+            TEST_SETS_FILE.writeInt(this.base.totalBits());
+            TEST_SETS_FILE.writeInt(r.length);
+            for (int i=0;i<r.length;i++) {
+              TEST_SETS_FILE.writeObject(r[i].bits);
             }
-            for (int j=i+1;j<sz;j++) {
-                done++;
-                if ((done % 10000000) == 0) {
-                    System.err.println("Sorting: "+(done / 10000000)+ " " + i + ", "+ j + " / " + sz);
-                }
-                Difficulty dj = r[j];
-                if (dj.bits.get(0)) {
-                    continue;
-                }
-                if (!di.bits.intersects(dj.missingBits)) {
-                    dj.bits.set(0);
-                    bad++;
-                }
-            }
-            
+            TEST_SETS_FILE.flush();
         }
-                    
-        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], 
-//                                               new Difficulty[unnecessary],
-                                               new Difficulty[bad]};
+        catch (IOException e1) {
+            throw new RuntimeException(e1);
+        }
+        return null;
         
-        int j=0;
-        int k=0;
-//        int l=0;
-        for (int i=0;i<r.length;i++) {
-            if (!r[i].bits.get(0)) {
-//                if (r[i].unnecessary != null) {
-//                    rr[1][l++] = r[i];
-//                } else {
-                   rr[0][j++] = r[i];
+//        int sz = r.length;
+//        int bad = 0;
+//        int done = 0;
+//        Arrays.sort(r, new Comparator<Difficulty>(){
+//
+//            @Override
+//            public int compare(Difficulty o1, Difficulty o2) {
+//                return o1.bits.cardinality() - o2.bits.cardinality();
+//            }});
+//        for (int i = 0;i<sz-1; i++ ) {
+//            Difficulty di = r[i];
+//            if (di.bits.get(0)) {
+//                continue;
+//            }
+//            for (int j=i+1;j<sz;j++) {
+//                done++;
+//                if ((done % 10000000) == 0) {
+//                    System.err.println("Sorting: "+(done / 10000000)+ " " + i + ", "+ j + " / " + sz);
 //                }
-            } else {
-                rr[1][k++] = r[i];
-            }
-        }
-        if (rr[1].length > 0) {
-            try {
-                TEST_SETS_FILE.writeInt(r.length);
-                for (int i=0;i<r.length;i++) {
-                  TEST_SETS_FILE.writeObject(r[i].bits);
-                }
-                TEST_SETS_FILE.flush();
-            }
-            catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
-            
-        }
-        return rr;
+//                Difficulty dj = r[j];
+//                if (dj.bits.get(0)) {
+//                    continue;
+//                }
+//                if (!di.bits.intersects(dj.missingBits)) {
+//                    dj.bits.set(0);
+//                    bad++;
+//                }
+//            }
+//            
+//        }
+//                    
+//        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], 
+////                                               new Difficulty[unnecessary],
+//                                               new Difficulty[bad]};
+//        
+//        int j=0;
+//        int k=0;
+////        int l=0;
+//        for (int i=0;i<r.length;i++) {
+//            if (!r[i].bits.get(0)) {
+////                if (r[i].unnecessary != null) {
+////                    rr[1][l++] = r[i];
+////                } else {
+//                   rr[0][j++] = r[i];
+////                }
+//            } else {
+//                rr[1][k++] = r[i];
+//            }
+//        }
+//        if (rr[1].length > 0) {
+//            try {
+//                TEST_SETS_FILE.writeInt(r.length);
+//                for (int i=0;i<r.length;i++) {
+//                  TEST_SETS_FILE.writeObject(r[i].bits);
+//                }
+//                TEST_SETS_FILE.flush();
+//            }
+//            catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//            
+//            
+//        }
+//        return rr;
         
     }
 

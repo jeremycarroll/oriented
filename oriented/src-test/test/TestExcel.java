@@ -32,7 +32,7 @@ public class TestExcel extends TestWithTempDir {
             TensionGraph ten = new TGFactory(pseudoLines).create();
             ten.prune();
                 WAM wam = new WAM(ten);
-                Difficulty[][] diff = wam.search();
+                Difficulty[][] diff = wam.search(null);
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");

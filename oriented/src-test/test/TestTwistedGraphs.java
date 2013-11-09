@@ -121,13 +121,11 @@ public class TestTwistedGraphs extends TestWithTempDir {
 
 //    junit.framework.AssertionFailedError: 6039 != 5465; 5791 != 5277; 17357 != 17260; 
 
-    @Ignore
     @Test
     public void testTsukamotoPlusB() {
         count("tsukamoto13.+1","B",312,6193,304,5957,10975); // > 15471548
     }
 
-    @Ignore
     @Test
     public void testTsukamotoMinusB() {
         count("tsukamoto13.-1","B", 308  , 6039  , 300  , 5791,17357);
@@ -208,7 +206,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
             if (vCount2 != 0) {
                 soln ++;
                 WAM wam = new WAM(ten);
-                Difficulty[][] diff = wam.search();
+                Difficulty[][] diff = wam.search(omName+"*"+inf);
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");
