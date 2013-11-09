@@ -1,0 +1,169 @@
+/************************************************************************
+  (c) Copyright 2013 Jeremy J. Carroll
+ ************************************************************************/
+package net.sf.oriented.subsets;
+
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
+
+
+/**
+ * The basic algorithm here is from
+ * <a href="http://stackoverflow.com/a/8996897/2276263">Aaron McDaid's comment</a>,
+ * modified by first sorting the BitSets in size of cardinality, and then
+ * relying on only half of McDaid's algorithm (which covers the more general
+ * case of augmenting a minimal set of sets).
+ * @author jeremycarroll
+ *
+ */
+final class TransposeMinimalSubsets implements MinimalSubsets {
+    private static final class TSEntry implements Comparable<TransposeMinimalSubsets.TSEntry> {
+        private static int ID_COUNTER = 0;
+        private final int id = ID_COUNTER++;
+        final int bitsets[];
+        int ix;
+        TSEntry(int bs[]) {
+            bitsets = bs;
+            ix = 0;
+        }
+        @Override
+        public int compareTo(TransposeMinimalSubsets.TSEntry o) {
+            int r = peek() - o.peek();
+            return r!=0?r:(id - o.id);
+        }
+        private int peek() {
+            return bitsets[ix];
+        }
+        public boolean advance(int i) {
+            int pos = Arrays.binarySearch(bitsets, ix, bitsets.length, i);
+            if (pos < 0) {
+                ix = -1 - pos;
+            } else {
+                ix = pos;
+            }
+            return ix < bitsets.length;
+        }
+        
+    }
+
+    int cross[][];
+    @Override
+    public List<BitSet> minimal(Collection<BitSet> full) {
+        BitSet sorted[] = new BitSet[full.size()];
+        int bad = 0;
+        full.toArray(sorted);
+        Arrays.sort(sorted, new Comparator<BitSet>(){
+            @Override
+            public int compare(BitSet o1, BitSet o2) {
+                return o1.cardinality() - o2.cardinality();
+            }});
+        final int maxCardinality = sorted[sorted.length-1].cardinality();
+        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSet>(){
+
+            @Override
+            public int compare(BitSet o1, BitSet o2) {
+                if (o1 == null) {
+                    if (o2.cardinality() == maxCardinality) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else if (o2 == null) {
+                    if (o1.cardinality() == maxCardinality) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            }}));
+        int max = MinimalSubsetFactory.max(full);
+        int counts[] = new int[max];
+        for (BitSet bs:full) {
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                counts[i]++;
+            }
+        }
+        cross = new int[max][];
+        for (int i=0;i<cross.length;i++) {
+            cross[i] = new int[counts[i]];
+        }
+        Arrays.fill(counts,0);
+        for (int j=0;j<sorted.length;j++) {
+            BitSet bs = sorted[j];
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                cross[i][counts[i]++] = j;
+            }
+        }
+        outer:
+        for (int ix=0;ix<firstMax;ix++) {
+            BitSet bs = sorted[ix];
+            if (bs == null) {
+                continue;
+            }
+            TreeSet<TransposeMinimalSubsets.TSEntry> ts = new TreeSet<TransposeMinimalSubsets.TSEntry>();
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                final TransposeMinimalSubsets.TSEntry entry = new TSEntry(cross[i]);
+                if (!entry.advance(ix+1)) {
+                    continue outer;
+                }
+                ts.add(entry);
+            }
+            int lastBS = ts.last().peek();
+            while (true) {
+                final TransposeMinimalSubsets.TSEntry first = ts.first();
+                int firstBS = first.peek();
+                int next;
+                if (firstBS == lastBS) {
+                    // subset
+                    bad++;
+                    sorted[firstBS] = null;
+                    next = firstBS + 1;
+                } else {
+                    next = lastBS;
+                }
+                ts.remove(first);
+                int nextBS;
+                do {
+                    if (!first.advance(next)) {
+                        continue outer;
+                    }
+                    nextBS = first.peek();
+                    next = nextBS + 1;
+                } while (sorted[nextBS]==null);
+                ts.add(first);
+                if (nextBS > lastBS) {
+                    lastBS = nextBS;
+                }
+            }
+        }
+        BitSet rslt[] = new BitSet[sorted.length - bad];
+        int i = 0;
+        for (BitSet b:sorted) {
+            if (b!=null) {
+                rslt[i++] = b;
+            }
+        }
+        return Arrays.asList(rslt);
+    }
+    
+}
+
+/************************************************************************
+    This file is part of the Java Oriented Matroid Library.  
+
+    The Java Oriented Matroid Library is distributed in the hope that it 
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with the Java Oriented Matroid Library.  
+    If not, see <http://www.gnu.org/licenses/>.
+
+**************************************************************************/
