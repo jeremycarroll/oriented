@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-
 import net.sf.oriented.impl.items.LabelImpl;
 import net.sf.oriented.impl.set.SetOfSignedSetInternal;
 import net.sf.oriented.impl.set.SetOfUnsignedSetFactory;

@@ -4,9 +4,6 @@
 package net.sf.oriented.subsets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,11 +15,7 @@ import java.util.List;
 class AMSCard extends AbstractMinimalSubsets {
     
     @Override
-    public List<BitSet> minimal(Collection<BitSet> full) {
-        if (full.size() == 0) {
-            return Arrays.asList(new BitSet[0]);
-        }
-        prepareData(full);
+    public void markNonMinimal() {
         @SuppressWarnings("unchecked")
         List<Entry> occurs[] = new List[max];
         int currentSize = sorted[0].cardinality;
@@ -52,8 +45,6 @@ class AMSCard extends AbstractMinimalSubsets {
                 }
             }
         }
-    
-        return gatherResults();
     }
 
     private void addToOccursLists(Entry[] all, int lastSizeChange, int i,

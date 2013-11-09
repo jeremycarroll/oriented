@@ -5,9 +5,7 @@ package net.sf.oriented.subsets;
 
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.TreeSet;
 
 
@@ -97,10 +95,9 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
     }
 
     @Override
-    public List<BitSet> minimal(Collection<BitSet> full) {
-        prepareData(full);
+    void markNonMinimal() {
         int firstMax = firstIxWithCardinalityFromIx(sorted.length-1, 0);
-        int[][] occurs = createOccursIndex(full);
+        int[][] occurs = createOccursIndex();
         int nextCardinalityIx = firstIxWithCardinalityFromIx(0, 1);
         outer:
         for (int ix=0;ix<firstMax;ix++) {
@@ -128,15 +125,13 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
                 }
             }
         }
-        return gatherResults();
     }
     private int firstIxWithCardinalityFromIx(int ixx, int step) {
         int nextCardinality = sorted[ixx].cardinality+step;
         return findFirstWithCardinality(nextCardinality);
     }
-    private int[][] createOccursIndex(Collection<BitSet> full) {
-        int[] counts = countBits(full);
-        int max = counts.length;
+    private int[][] createOccursIndex() {
+        int[] counts = countBits();
         int cross[][] = new int[max][];
         for (int i=0;i<cross.length;i++) {
             cross[i] = new int[counts[i]];
@@ -150,10 +145,10 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
         }
         return cross;
     }
-    private static int[] countBits(Collection<BitSet> full) {
-        int mx = MinimalSubsetFactory.max(full);
-        int counts[] = new int[mx];
-        for (BitSet bs:full) {
+    private int[] countBits() {
+        int counts[] = new int[max];
+        for (Entry e:sorted) {
+            BitSet bs = e.bs;
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 counts[i]++;
             }

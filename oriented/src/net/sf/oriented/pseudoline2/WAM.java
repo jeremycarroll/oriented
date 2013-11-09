@@ -3,17 +3,12 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.Deque;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -30,7 +25,6 @@ import edu.uci.ics.jung.graph.Graph;
 
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;

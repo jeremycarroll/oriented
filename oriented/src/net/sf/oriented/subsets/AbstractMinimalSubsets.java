@@ -62,6 +62,21 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
         Arrays.sort(sorted);
     }
 
+    @Override
+    public final List<BitSet> minimal(Collection<BitSet> full) {
+        switch (full.size()) {
+        case 0:
+            return Arrays.asList();
+        case 1:
+            return Arrays.asList(full.iterator().next());
+        }
+        prepareData(full);
+        markNonMinimal();
+        return gatherResults();
+    }
+
+    abstract void markNonMinimal() ;
+
 }
 
 

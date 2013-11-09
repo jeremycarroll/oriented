@@ -6,7 +6,6 @@ package net.sf.oriented.pseudoline2;
 import net.sf.oriented.impl.set.UnsignedSetFactory;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
-import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.SignedSetFactory;

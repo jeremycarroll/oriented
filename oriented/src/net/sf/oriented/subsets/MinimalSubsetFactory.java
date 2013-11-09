@@ -3,10 +3,8 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-import java.io.IOException;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.List;
 
 
 public class MinimalSubsetFactory {

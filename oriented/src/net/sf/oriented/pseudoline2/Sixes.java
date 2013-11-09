@@ -3,7 +3,6 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,14 +12,12 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
 
-import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Examples;
 import net.sf.oriented.omi.FactoryFactory;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.LabelFactory;
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.OMasChirotope;
-import net.sf.oriented.pseudoline.CoLoopCannotBeDrawnException;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 
 /**

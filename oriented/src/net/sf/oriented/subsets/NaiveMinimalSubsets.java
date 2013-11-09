@@ -3,20 +3,12 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-
 final class NaiveMinimalSubsets extends AbstractMinimalSubsets {
 
     @Override
-    public List<BitSet> minimal(Collection<BitSet> full) {
-        int i;
-        prepareData(full);
-
+    void markNonMinimal() {
         int sz = sorted.length;
-        for (i = 0; i < sz - 1; i++) {
+        for (int i = 0; i < sz - 1; i++) {
             Entry di = sorted[i];
             if (di.deleted) {
                 continue;
@@ -32,7 +24,6 @@ final class NaiveMinimalSubsets extends AbstractMinimalSubsets {
             }
 
         }
-        return gatherResults();
     }
 
 }
