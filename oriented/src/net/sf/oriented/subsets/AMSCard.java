@@ -15,67 +15,29 @@ import java.util.List;
  * @author jeremycarroll
  *
  */
-class AMSCard implements MinimalSubsets {
+class AMSCard extends AbstractMinimalSubsets {
     
-    private static class Entry implements Comparable<Entry> {
-        final BitSet bs;
-        final long[] bits;
-        final int cardinality;
-        boolean deleted;
-        Entry(BitSet bs) {
-            this.bs = bs;
-            bits = bs.toLongArray();
-            cardinality = bs.cardinality();
-        }
-        @Override
-        public int compareTo(Entry o) {
-            return cardinality - o.cardinality;
-        }
-        public boolean isSubsetOf(Entry ee) {
-            if (ee.bits.length < bits.length) {
-                return false;
-            }
-            for (int i=0;i<bits.length;i++) {
-                if ((bits[i] & ~ee.bits[i])!=0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
     @Override
     public List<BitSet> minimal(Collection<BitSet> full) {
         if (full.size() == 0) {
             return Arrays.asList(new BitSet[0]);
         }
-        Entry all[] = new Entry[full.size()];
+        Entry sorted[] = new Entry[full.size()];
         int max = MinimalSubsetFactory.max(full);
         int i=0;
         for (BitSet bs:full) {
-            all[i++] = new Entry(bs);
+            sorted[i++] = new Entry(bs);
         }
-        int bad = 0;
-        Arrays.sort(all);
+        Arrays.sort(sorted);
         @SuppressWarnings("unchecked")
         List<Entry> occurs[] = new List[max];
-        int currentSize = all[0].cardinality;
+        int currentSize = sorted[0].cardinality;
         int lastSizeChange = 0;
         outer:
-        for (i=0;i<all.length;i++) {
-            Entry e = all[i];
+        for (i=0;i<sorted.length;i++) {
+            Entry e = sorted[i];
             if (e.cardinality > currentSize) {
-                for (int ii=lastSizeChange;ii<i;ii++) {
-                    Entry ee = all[ii];
-                    if (ee.deleted) {
-                        continue;
-                    }
-                    int bit = ee.bs.nextSetBit(0);
-                    if (occurs[bit]==null) {
-                        occurs[bit] = new ArrayList<Entry>();
-                    }
-                    occurs[bit].add(ee);
-                }
+                addToOccursLists(sorted, lastSizeChange, i, occurs);
                 currentSize = e.cardinality;
                 lastSizeChange = i;
             }
@@ -90,7 +52,6 @@ class AMSCard implements MinimalSubsets {
                         }
                         if ((!ee.deleted) && ee.isSubsetOf(e)) {
                             e.deleted = true;
-                            bad ++;
                             continue outer;
                         }
                     }
@@ -98,18 +59,22 @@ class AMSCard implements MinimalSubsets {
             }
         }
     
-        return gatherResults(all, bad);
+        return gatherResults(sorted);
     }
 
-    private List<BitSet> gatherResults(Entry[] all, int bad) {
-        BitSet rslt[] = new BitSet[all.length - bad];
-        int i = 0;
-        for (Entry b:all) {
-            if (!b.deleted) {
-                rslt[i++] = b.bs;
+    private void addToOccursLists(Entry[] all, int lastSizeChange, int i,
+            List<Entry>[] occurs) {
+        for (int ii=lastSizeChange;ii<i;ii++) {
+            Entry ee = all[ii];
+            if (ee.deleted) {
+                continue;
             }
+            int bit = ee.bs.nextSetBit(0);
+            if (occurs[bit]==null) {
+                occurs[bit] = new ArrayList<Entry>();
+            }
+            occurs[bit].add(ee);
         }
-        return Arrays.asList(rslt);
     }
 }
 

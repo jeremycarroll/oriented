@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -75,11 +76,10 @@ public class SpeedTestSubsets {
 
     @Test
     public void go() {
-        if (name.contains("naive-tsu"
-                //"deformSaw5*B"
-                )) {
-            return;
-        }
+        Assume.assumeTrue(!name.contains("naive-tsu"));
+        
+        Assume.assumeTrue(!(name.contains("amsCard-tsu")&&name.contains("B"))); 
+               
         BitSet copyClearedBit[] = new BitSet[data.length];
         for (int i=0; i<data.length; i++) {
             copyClearedBit[i] = (BitSet) data[i].clone();

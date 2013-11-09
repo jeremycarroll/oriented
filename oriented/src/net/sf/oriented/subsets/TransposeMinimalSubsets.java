@@ -23,6 +23,7 @@ import java.util.TreeSet;
 final class TransposeMinimalSubsets implements MinimalSubsets {
     final class SortedOccursLists extends TreeSet<OccursList> {
 
+        int lastPeek;
         SortedOccursLists() {
         }
             
@@ -34,16 +35,17 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
                 }
                 add(entry);
             }
+            lastPeek = last().peek();
             return true;
         }
 
 
         boolean isAllEqual() {
-            return last().peek() == first().peek();
+            return lastPeek == first().peek();
         }
 
         int peek() {
-            return first().peek();
+            return lastPeek;
         }
 
         public boolean advance(boolean allMatched) {
@@ -53,6 +55,10 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
                 return false;
             }
             add(first);
+            final int oldFirstPeek = first.peek();
+            if (oldFirstPeek > lastPeek) {
+                lastPeek = oldFirstPeek;
+            }
             return true;
         }
         
@@ -99,17 +105,22 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
     public List<BitSet> minimal(Collection<BitSet> full) {
         sorted = toSortedArray(full);
         int bad = 0;
-        final int maxCardinality = sorted[sorted.length-1].cardinality();
-        int firstMax = findFirstWithCardinality(sorted, maxCardinality);
+        int firstMax = firstIxWithCardinalityFromIx(sorted.length-1, 0);
         int[][] occurs = createOccursIndex(full, sorted);
+        int nextCardinalityIx = firstIxWithCardinalityFromIx(0, 1);
         outer:
         for (int ix=0;ix<firstMax;ix++) {
             BitSet bs = sorted[ix];
             if (bs == null) {
                 continue;
             }
+//            if (ix>=nextCardinalityIx ) {
+//                nextCardinalityIx = firstIxWithCardinalityFromIx(ix, 1);
+//            }
             SortedOccursLists ts = new SortedOccursLists();
-            if (!ts.initialize(occurs, bs, ix+1)) {
+            if (!ts.initialize(occurs, bs, //nextCardinalityIx
+                    ix+1
+                    )) {
                 continue;
             }   
             
@@ -127,6 +138,10 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             }
         }
         return gatherResults(sorted, bad);
+    }
+    private int firstIxWithCardinalityFromIx(int ixx, int step) {
+        int nextCardinality = sorted[ixx].cardinality()+step;
+        return findFirstWithCardinality(sorted, nextCardinality);
     }
     private List<BitSet> gatherResults(BitSet[] sorted, int bad) {
         BitSet rslt[] = new BitSet[sorted.length - bad];
@@ -177,13 +192,13 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             @Override
             public int compare(BitSet o1, BitSet o2) {
                 if (o1 == null) {
-                    if (o2.cardinality() == maxCardinality) {
+                    if (o2.cardinality() >= maxCardinality) {
                         return -1;
                     } else {
                         return 1;
                     }
                 } else if (o2 == null) {
-                    if (o1.cardinality() == maxCardinality) {
+                    if (o1.cardinality() >= maxCardinality) {
                         return 1;
                     } else {
                         return -1;
