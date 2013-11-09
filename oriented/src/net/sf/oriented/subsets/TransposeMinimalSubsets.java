@@ -50,56 +50,18 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
         
     }
 
-    int cross[][];
+    private static final Comparator<BitSet> BY_CARDINALITY = new Comparator<BitSet>(){
+        @Override
+        public int compare(BitSet o1, BitSet o2) {
+            return o1.cardinality() - o2.cardinality();
+        }};
     @Override
     public List<BitSet> minimal(Collection<BitSet> full) {
-        BitSet sorted[] = new BitSet[full.size()];
+        BitSet[] sorted = toSortedArray(full);
         int bad = 0;
-        full.toArray(sorted);
-        Arrays.sort(sorted, new Comparator<BitSet>(){
-            @Override
-            public int compare(BitSet o1, BitSet o2) {
-                return o1.cardinality() - o2.cardinality();
-            }});
         final int maxCardinality = sorted[sorted.length-1].cardinality();
-        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSet>(){
-
-            @Override
-            public int compare(BitSet o1, BitSet o2) {
-                if (o1 == null) {
-                    if (o2.cardinality() == maxCardinality) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                } else if (o2 == null) {
-                    if (o1.cardinality() == maxCardinality) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            }}));
-        int max = MinimalSubsetFactory.max(full);
-        int counts[] = new int[max];
-        for (BitSet bs:full) {
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                counts[i]++;
-            }
-        }
-        cross = new int[max][];
-        for (int i=0;i<cross.length;i++) {
-            cross[i] = new int[counts[i]];
-        }
-        Arrays.fill(counts,0);
-        for (int j=0;j<sorted.length;j++) {
-            BitSet bs = sorted[j];
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                cross[i][counts[i]++] = j;
-            }
-        }
+        int firstMax = findFirstWithCardinality(sorted, maxCardinality);
+        int[][] occurs = createOccursIndex(full, sorted);
         outer:
         for (int ix=0;ix<firstMax;ix++) {
             BitSet bs = sorted[ix];
@@ -108,7 +70,7 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             }
             TreeSet<TransposeMinimalSubsets.TSEntry> ts = new TreeSet<TransposeMinimalSubsets.TSEntry>();
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                final TransposeMinimalSubsets.TSEntry entry = new TSEntry(cross[i]);
+                final TransposeMinimalSubsets.TSEntry entry = new TSEntry(occurs[i]);
                 if (!entry.advance(ix+1)) {
                     continue outer;
                 }
@@ -142,6 +104,9 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
                 }
             }
         }
+        return gatherResults(sorted, bad);
+    }
+    private List<BitSet> gatherResults(BitSet[] sorted, int bad) {
         BitSet rslt[] = new BitSet[sorted.length - bad];
         int i = 0;
         for (BitSet b:sorted) {
@@ -150,6 +115,62 @@ final class TransposeMinimalSubsets implements MinimalSubsets {
             }
         }
         return Arrays.asList(rslt);
+    }
+    private int[][] createOccursIndex(Collection<BitSet> full, BitSet[] sorted) {
+        int[] counts = countBits(full);
+        int max = counts.length;
+        int cross[][] = new int[max][];
+        for (int i=0;i<cross.length;i++) {
+            cross[i] = new int[counts[i]];
+        }
+        Arrays.fill(counts,0);
+        for (int j=0;j<sorted.length;j++) {
+            BitSet bs = sorted[j];
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                cross[i][counts[i]++] = j;
+            }
+        }
+        return cross;
+    }
+    private static int[] countBits(Collection<BitSet> full) {
+        int mx = MinimalSubsetFactory.max(full);
+        int counts[] = new int[mx];
+        for (BitSet bs:full) {
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                counts[i]++;
+            }
+        }
+        return counts;
+    }
+    private BitSet[] toSortedArray(Collection<BitSet> full) {
+        BitSet sorted[] = new BitSet[full.size()];
+        full.toArray(sorted);
+        Arrays.sort(sorted, BY_CARDINALITY);
+        return sorted;
+    }
+    private int findFirstWithCardinality(BitSet[] sorted,
+            final int maxCardinality) {
+        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSet>(){
+
+            @Override
+            public int compare(BitSet o1, BitSet o2) {
+                if (o1 == null) {
+                    if (o2.cardinality() == maxCardinality) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else if (o2 == null) {
+                    if (o1.cardinality() == maxCardinality) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            }}));
+        return firstMax;
     }
     
 }
