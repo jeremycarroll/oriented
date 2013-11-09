@@ -13,7 +13,7 @@ final class NaiveMinimalSubsets extends AbstractMinimalSubsets {
     @Override
     public List<BitSet> minimal(Collection<BitSet> full) {
         int i;
-        Entry[] sorted = prepareData(full);
+        prepareData(full);
 
         int sz = sorted.length;
         for (i = 0; i < sz - 1; i++) {
@@ -32,7 +32,7 @@ final class NaiveMinimalSubsets extends AbstractMinimalSubsets {
             }
 
         }
-        return gatherResults(sorted);
+        return gatherResults();
     }
 
 }

@@ -39,11 +39,12 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
         }
 
     int max = 0;
+    Entry sorted[];
 
-    protected List<BitSet> gatherResults(Entry[] all) {
-        BitSet rslt[] = new BitSet[all.length];
+    protected List<BitSet> gatherResults() {
+        BitSet rslt[] = new BitSet[sorted.length];
         int i = 0;
-        for (Entry b:all) {
+        for (Entry b:sorted) {
             if (!b.deleted) {
                 rslt[i++] = b.bs;
             }
@@ -51,15 +52,14 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
         return Arrays.asList(rslt).subList(0,i);
     }
 
-    protected Entry[] prepareData(Collection<BitSet> full) {
+    void prepareData(Collection<BitSet> full) {
         max = MinimalSubsetFactory.max(full);
-        Entry r[] = new Entry[full.size()];
+        sorted = new Entry[full.size()];
         int i = 0;
         for (BitSet b : full) {
-            r[i++] = new Entry(b);
+            sorted[i++] = new Entry(b);
         }
-        Arrays.sort(r);
-        return r;
+        Arrays.sort(sorted);
     }
 
 }

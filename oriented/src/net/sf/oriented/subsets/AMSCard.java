@@ -22,19 +22,13 @@ class AMSCard extends AbstractMinimalSubsets {
         if (full.size() == 0) {
             return Arrays.asList(new BitSet[0]);
         }
-        Entry sorted[] = new Entry[full.size()];
-        int max = MinimalSubsetFactory.max(full);
-        int i=0;
-        for (BitSet bs:full) {
-            sorted[i++] = new Entry(bs);
-        }
-        Arrays.sort(sorted);
+        prepareData(full);
         @SuppressWarnings("unchecked")
         List<Entry> occurs[] = new List[max];
         int currentSize = sorted[0].cardinality;
         int lastSizeChange = 0;
         outer:
-        for (i=0;i<sorted.length;i++) {
+        for (int i=0;i<sorted.length;i++) {
             Entry e = sorted[i];
             if (e.cardinality > currentSize) {
                 addToOccursLists(sorted, lastSizeChange, i, occurs);
@@ -59,7 +53,7 @@ class AMSCard extends AbstractMinimalSubsets {
             }
         }
     
-        return gatherResults(sorted);
+        return gatherResults();
     }
 
     private void addToOccursLists(Entry[] all, int lastSizeChange, int i,
