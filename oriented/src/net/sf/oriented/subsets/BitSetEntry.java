@@ -5,12 +5,12 @@ package net.sf.oriented.subsets;
 
 import java.util.BitSet;
 
-import net.sf.oriented.subsets.AbstractMinimalSubsets.Entry;
 
-class BitSetEntry implements Comparable<BitSetEntry> {
+class BitSetEntry implements Comparable<BitSetEntry> 
+{
     final BitSet original;
     final BitSet bs;
-    long[] bits;
+    private long[] bits;
     final int cardinality;
     boolean deleted;
     BitSetEntry(BitSet bs) {
@@ -22,7 +22,7 @@ class BitSetEntry implements Comparable<BitSetEntry> {
     public int compareTo(BitSetEntry o) {
         return cardinality - o.cardinality;
     }
-    public boolean isSubsetOf(BitSetEntry ee) {
+    boolean isSubsetOf(BitSetEntry ee) {
         if (ee.bits.length < bits.length) {
             return false;
         }
@@ -33,7 +33,7 @@ class BitSetEntry implements Comparable<BitSetEntry> {
         }
         return true;
     }
-    public void compress(int[] compressMapping) {
+    void compress(int[] compressMapping) {
         for (int i = original.nextSetBit(0); i >= 0; i = original.nextSetBit(i+1)) {
             bs.set(compressMapping[i]);
         }

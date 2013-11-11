@@ -7,36 +7,34 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Comparator;
 
+import com.google.common.primitives.Ints;
 import com.google.common.primitives.UnsignedLongs;
+import net.sf.oriented.subsets.AMSLex.LexEntry;
 
-public class AMSLex extends AbstractMinimalSubsets {
+public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
+    
+    static class LexEntry extends BitSetEntry  {
 
-    private static final Comparator<BitSet> bitsetComparator = new Comparator<BitSet>(){
+        private final int bits[];
+        LexEntry(BitSet bs) {
+            super(bs);
+            bits = new int[bs.cardinality()];
+        }
+
         @Override
-        public int compare(BitSet o1, BitSet o2) {
-            int i1 = -1;
-            int i2 = -1;
-            while ( true ) {
-                i1 = o1.nextSetBit(i1+1);
-                i2 = o2.nextSetBit(i2+1);
-                if (i1 == -1) {
-                    if (i2 == -1) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (i2 == -1) {
-                        return 1;
-                    } else if ( i1 == i2) {
-                        continue;
-                    } else {
-                        return i1 - i2;
-                    }
-                }
+        void compress(int[] compressMapping) {
+            super.compress(compressMapping);
+            int j=0;
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                bits[j++] = i;
             }
-        }};
+        }
 
+        @Override
+        public int compareTo(BitSetEntry o) {
+            return Ints.lexicographicalComparator().compare(bits,((LexEntry)o).bits);
+        }
+    }
 
     @Override
     void markNonMinimal() {
@@ -45,39 +43,30 @@ public class AMSLex extends AbstractMinimalSubsets {
     }
     
 
-    @Override
-    void sort() {
-        Comparator<BitSetEntry> comparator = new Comparator<BitSetEntry>(){
-            @Override
-            public int compare(BitSetEntry o1, BitSetEntry o2) {
-                return  bitsetComparator.compare(o1.bs, o2.bs);
-            }};
-        Arrays.sort(sorted, comparator );
-    }
-
-    enum LexicographicalComparator implements Comparator<long[]> {
-        INSTANCE;
-
-        @Override
-        public int compare(long[] left, long[] right) {
-          int minLength = Math.min(left.length, right.length);
-          for (int i = 0; i < minLength; i++) {
-            if (left[i] != right[i]) {
-              return UnsignedLongs.compare(~left[i], ~right[i]);
-            }
-          }
-          return left.length - right.length;
-        }
-      }
+    
     
     public static void main(String args[]) {
+        final int compressMappings[] = new int[128];
+        for (int i=0;i<compressMappings.length;i++) {
+            compressMappings[i] = i;
+        }
         BitSet a = BitSet.valueOf(new long[]{3,3});
         BitSet b = BitSet.valueOf(new long[]{1,3});
         BitSet c = BitSet.valueOf(new long[]{3,2});
         BitSet d = BitSet.valueOf(new long[]{1});
         BitSet e = BitSet.valueOf(new long[]{2});
         BitSet all[] = new BitSet[]{a,b,c,d,e};
-        Arrays.sort(all, bitsetComparator );
+        Comparator<BitSet> bitsetComparator = new Comparator<BitSet>(){
+
+            @Override
+            public int compare(BitSet o1, BitSet o2) {
+                final LexEntry l1 = new LexEntry(o1);
+                final LexEntry l2 = new LexEntry(o2);
+                l1.compress(compressMappings);
+                l2.compress(compressMappings);
+                return l1.compareTo(l2);
+            }};
+        Arrays.sort(all, bitsetComparator  );
         for (BitSet aa:all) {
             print("*",aa);
         }
