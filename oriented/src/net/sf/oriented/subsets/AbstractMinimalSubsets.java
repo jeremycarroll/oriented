@@ -83,6 +83,10 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
         for (Entry e:sorted) {
             e.compress(compressMapping);
         }
+        sort();
+    }
+
+    void sort() {
         Arrays.sort(sorted);
     }
 

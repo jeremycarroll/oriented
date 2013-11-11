@@ -26,22 +26,11 @@ public class MinimalSubsetFactory {
     
     public static MinimalSubsets amsCard() {
         return new AMSCard();
-//        return   new MinimalSubsets() {
-//            
-//
-//            @Override
-//            public List<BitSet> minimal(Collection<BitSet> full) {
-//                MinimalSubsets sat = new SateLite();
-//                MinimalSubsets mcd = mcdaid();
-//                
-//                final List<BitSet> v1 = sat.minimal(full);
-//                System.err.println(v1.size());
-//                return mcd.minimal(v1);
-//            }
-//            
-//        };
     }
 
+    public static MinimalSubsets amsLex() {
+        return new AMSLex();
+    }
     static int max(Collection<BitSet> full) {
         int m = 0;
         for (BitSet b:full) {
