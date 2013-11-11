@@ -47,9 +47,9 @@ public class AMSLex extends AbstractMinimalSubsets {
 
     @Override
     void sort() {
-        Comparator<Entry> comparator = new Comparator<Entry>(){
+        Comparator<BitSetEntry> comparator = new Comparator<BitSetEntry>(){
             @Override
-            public int compare(Entry o1, Entry o2) {
+            public int compare(BitSetEntry o1, BitSetEntry o2) {
                 return  bitsetComparator.compare(o1.bs, o2.bs);
             }};
         Arrays.sort(sorted, comparator );

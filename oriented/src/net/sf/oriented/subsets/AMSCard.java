@@ -12,17 +12,17 @@ import java.util.List;
  * @author jeremycarroll
  *
  */
-class AMSCard extends AbstractMinimalSubsets {
+class AMSCard extends AbstractMinimalSubsets<BitSetEntry> {
     
     @Override
     public void markNonMinimal() {
         @SuppressWarnings("unchecked")
-        List<Entry> occurs[] = new List[max];
+        List<BitSetEntry> occurs[] = new List[max];
         int currentSize = sorted[0].cardinality;
         int lastSizeChange = 0;
         outer:
         for (int i=0;i<sorted.length;i++) {
-            Entry e = sorted[i];
+            BitSetEntry e = sorted[i];
             if (e.cardinality > currentSize) {
                 addToOccursLists(sorted, lastSizeChange, i, occurs);
                 currentSize = e.cardinality;
@@ -32,7 +32,7 @@ class AMSCard extends AbstractMinimalSubsets {
             for (int j = e.bs.nextSetBit(0); j >= 0; j = e.bs.nextSetBit(j+1)) {
                 bits++;
                 if (occurs[j]!=null) {
-                    for (Entry ee:occurs[j]) {
+                    for (BitSetEntry ee:occurs[j]) {
                         // the optimization from line 5 of the algorithm in the paper
                         if (ee.cardinality > e.cardinality - bits + 1) {
                             break;
@@ -47,16 +47,16 @@ class AMSCard extends AbstractMinimalSubsets {
         }
     }
 
-    private void addToOccursLists(Entry[] all, int lastSizeChange, int i,
-            List<Entry>[] occurs) {
+    private void addToOccursLists(BitSetEntry[] all, int lastSizeChange, int i,
+            List<BitSetEntry>[] occurs) {
         for (int ii=lastSizeChange;ii<i;ii++) {
-            Entry ee = all[ii];
+            BitSetEntry ee = all[ii];
             if (ee.deleted) {
                 continue;
             }
             int bit = ee.bs.nextSetBit(0);
             if (occurs[bit]==null) {
-                occurs[bit] = new ArrayList<Entry>();
+                occurs[bit] = new ArrayList<BitSetEntry>();
             }
             occurs[bit].add(ee);
         }

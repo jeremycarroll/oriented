@@ -9,49 +9,15 @@ import java.util.Collection;
 import java.util.List;
 
 
-abstract class AbstractMinimalSubsets implements MinimalSubsets {
-
-    protected static class Entry implements Comparable<Entry> {
-            final BitSet original;
-            final BitSet bs;
-            long[] bits;
-            final int cardinality;
-            boolean deleted;
-            Entry(BitSet bs) {
-                this.original = bs;
-                this.bs = new BitSet();
-                cardinality = bs.cardinality();
-            }
-            @Override
-            public int compareTo(Entry o) {
-                return cardinality - o.cardinality;
-            }
-            public boolean isSubsetOf(Entry ee) {
-                if (ee.bits.length < bits.length) {
-                    return false;
-                }
-                for (int i=0;i<bits.length;i++) {
-                    if ((bits[i] & ~ee.bits[i])!=0) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            public void compress(int[] compressMapping) {
-                for (int i = original.nextSetBit(0); i >= 0; i = original.nextSetBit(i+1)) {
-                    bs.set(compressMapping[i]);
-                }
-                bits = bs.toLongArray();
-            }
-        }
+abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalSubsets {
 
     int max = 0;
-    Entry sorted[];
+    BitSetEntry sorted[];
 
     protected List<BitSet> gatherResults() {
         BitSet rslt[] = new BitSet[sorted.length];
         int i = 0;
-        for (Entry b:sorted) {
+        for (BitSetEntry b:sorted) {
             if (!b.deleted) {
                 rslt[i++] = b.original;
             }
@@ -60,7 +26,7 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
     }
 
     void prepareData(Collection<BitSet> full) {
-        sorted = new Entry[full.size()];
+        sorted = new BitSetEntry[full.size()];
         int i = 0;
         int m = 0;
         BitSet any = new BitSet();
@@ -70,7 +36,7 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
             if (l>m) {
                 m = l;
             }
-            sorted[i++] = new Entry(b);
+            sorted[i++] = new BitSetEntry(b);
         }
         max = any.cardinality();
         int compressMapping[] = new int[m];
@@ -80,7 +46,7 @@ abstract class AbstractMinimalSubsets implements MinimalSubsets {
         for (i = any.nextSetBit(0); i >= 0; i = any.nextSetBit(i+1)) {
             compressMapping[i] = newBit ++;
         }
-        for (Entry e:sorted) {
+        for (BitSetEntry e:sorted) {
             e.compress(compressMapping);
         }
         sort();

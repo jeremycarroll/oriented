@@ -18,14 +18,14 @@ import java.util.TreeSet;
  * @author jeremycarroll
  *
  */
-final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
+final class TransposeMinimalSubsets extends AbstractMinimalSubsets<BitSetEntry> {
     final class SortedOccursLists extends TreeSet<OccursList> {
 
         int lastPeek;
         SortedOccursLists() {
         }
             
-        boolean initialize(int[][] occurs,  Entry e, int ix) {
+        boolean initialize(int[][] occurs,  BitSetEntry e, int ix) {
             BitSet bs = e.bs;
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 final OccursList entry = new OccursList(occurs[i]);
@@ -101,7 +101,7 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
         int nextCardinalityIx = firstIxWithCardinalityFromIx(0, 1);
         outer:
         for (int ix=0;ix<firstMax;ix++) {
-            Entry bs = sorted[ix];
+            BitSetEntry bs = sorted[ix];
             if (bs.deleted) {
                 continue;
             }
@@ -147,7 +147,7 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
     }
     private int[] countBits() {
         int counts[] = new int[max];
-        for (Entry e:sorted) {
+        for (BitSetEntry e:sorted) {
             BitSet bs = e.bs;
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 counts[i]++;
@@ -156,10 +156,10 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets {
         return counts;
     }
     private int findFirstWithCardinality(final int maxCardinality) {
-        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<Entry>(){
+        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSetEntry>(){
 
             @Override
-            public int compare(Entry o1, Entry o2) {
+            public int compare(BitSetEntry o1, BitSetEntry o2) {
                 if (o1 == null) {
                     if (o2.cardinality >= maxCardinality) {
                         return -1;
