@@ -3,6 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.List;
 abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalSubsets {
 
     int max = 0;
-    BitSetEntry sorted[];
+    T sorted[];
 
     protected List<BitSet> gatherResults() {
         BitSet rslt[] = new BitSet[sorted.length];
@@ -24,9 +25,14 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
         }
         return Arrays.asList(rslt).subList(0,i);
     }
+    
+    Class<T> getEntryClass() {
+        return (Class<T>) BitSetEntry.class;
+    }
 
+    @SuppressWarnings("unchecked")
     void prepareData(Collection<BitSet> full) {
-        sorted = new BitSetEntry[full.size()];
+        sorted = (T[]) Array.newInstance(getEntryClass(), full.size());
         int i = 0;
         int m = 0;
         BitSet any = new BitSet();
@@ -36,7 +42,7 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
             if (l>m) {
                 m = l;
             }
-            sorted[i++] = new BitSetEntry(b);
+            sorted[i++] = create(b);
         }
         max = any.cardinality();
         int compressMapping[] = new int[m];
@@ -50,6 +56,11 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
             e.compress(compressMapping);
         }
         sort();
+    }
+
+    @SuppressWarnings("unchecked")
+    T create(BitSet b) {
+        return (T) new BitSetEntry(b);
     }
 
     void sort() {

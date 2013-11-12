@@ -15,7 +15,7 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
     
     static class LexEntry extends BitSetEntry  {
 
-        private final int bits[];
+        final int bits[];
         LexEntry(BitSet bs) {
             super(bs);
             bits = new int[bs.cardinality()];
@@ -37,14 +37,123 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
     }
 
     @Override
+    Class<LexEntry> getEntryClass() {
+        return LexEntry.class;
+    }
+
+    @Override
+    LexEntry create(BitSet b) {
+        return new LexEntry(b);
+    }
+    @Override
     void markNonMinimal() {
-        // TODO Auto-generated method stub
+        // By Pritchard, any subsets of an entry either immediately precede it
+        // or follow it.
+        
+        // first look for the immediately preceding case
+        for (int i=1;i<sorted.length;i++) {
+            if (sorted[i-1].isSubsetOf(sorted[i])) {
+                sorted[i].deleted = true;
+            }
+        }
+        
+        // now look for following subsets
+        
+        for (int i=0;i<sorted.length;i++) {
+            if (isNonMinimal(sorted[i],i+1,sorted.length,0,0)) {
+                sorted[i].deleted = true;
+            }
+        }
 
     }
     
 
     
-    
+    /**
+     * Can we find a subset of searchItem in the range [from,to) in sorted,
+     * knowing that the first matchedLength items of searchItem.bits match all these 
+     * entries.
+     * @param searchItem
+     * @param from
+     * @param to
+     * @param matchedLength
+     */
+    private boolean isNonMinimal(LexEntry searchItem, int from, int to, int matchedLength, int matchedLength2) {
+        
+        if (from == to) {
+            return false; // no match
+        }
+        
+        if (matchedLength2 == sorted[from].bits.length) {
+            return true;
+        }
+        int remaining = searchItem.bits.length - matchedLength;
+        
+        if (remaining == 0) {
+            return false;
+        }
+        int matchNextBitStart = findIndex(sorted[from],matchedLength2,searchItem.bits[matchedLength],from,to);
+        int matchNextBitEnd = findIndex(sorted[from],matchedLength2,searchItem.bits[matchedLength]+1,matchNextBitStart,to);
+        if (isNonMinimal(searchItem,matchNextBitStart,matchNextBitEnd, matchedLength+1, matchedLength2+1 )) {
+            return true;
+        }
+        if (remaining == 1) {
+            return false;
+        }
+        int matchNextNextBitStart = findIndex(sorted[from],matchedLength2,searchItem.bits[matchedLength+1],matchNextBitEnd,to);
+        return isNonMinimal(searchItem,matchNextNextBitStart,to,matchedLength+1,  matchedLength2);
+        
+    }
+
+
+
+
+    /**
+     * Find the first index in sorted of an entry
+     * greater than or equal to the bit sequence formed
+     * from taking matching bits from the beginning of  searchItem
+     * and then next. The range to search is [from, to)
+     * @param searchItem
+     * @param matching
+     * @param next
+     * @param from
+     * @param to
+     * @return a number between from (incl) and to (excl).
+     */
+    private int findIndex(LexEntry searchItem, final int matching, final int next,
+            int from, int to) {
+        final int siBits[] = searchItem.bits;
+        Comparator<LexEntry> comp = new Comparator<LexEntry>() {
+            private boolean isSmaller(int[] entry) {
+              int minLength = Math.min(entry.length, matching);
+              for (int i = 0; i < minLength; i++) {
+                int result = Ints.compare(entry[i], siBits[i]);
+                if (result != 0) {
+                  return result < 0;
+                }
+              }
+              if (entry.length == matching) {
+                  return true;
+              }
+              return Ints.compare(entry[matching],next) < 0;
+            }
+
+            @Override
+            public int compare(LexEntry o1, LexEntry o2) {
+                if (o1 == null) {
+                    return isSmaller(o2.bits) ? 1 : -1;
+                }
+                if (o2 == null) {
+                    return isSmaller(o1.bits) ? -1 : 1;
+                }
+                throw new IllegalArgumentException("Must have a null argument");
+            }
+            
+        };
+        final int r = -1 - Arrays.binarySearch(sorted, from, to, null, comp );
+        System.err.println(r);
+        return r;
+    }
     public static void main(String args[]) {
         final int compressMappings[] = new int[128];
         for (int i=0;i<compressMappings.length;i++) {
