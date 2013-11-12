@@ -48,7 +48,10 @@ public class SpeedTestSubsets {
             for (int i=0;i<sz;i++) {
                 sets[i] = (BitSet) in.readObject();
             }
-            for (String method: new String[]{"naive", "mcdaid", "amsCard"}) {
+            for (String method: new String[]{
+                   // "naive",
+                    "mcdaid", // "amsCard", 
+                    "amsLex"}) {
                 Method m = MinimalSubsetFactory.class.getMethod(method);
                 rslt.add(new Object[]{m,name,bits,cnt,sets,numberOfAnswers});
             }
@@ -74,6 +77,8 @@ public class SpeedTestSubsets {
 
     @Test
     public void go() {
+
+//        Assume.assumeTrue(name.contains("tsukamoto13.-1*A"));
         Assume.assumeTrue(!name.contains("naive-tsu"));
         
         Assume.assumeTrue(!(name.contains("amsCard-tsu")&&name.contains("B"))); 

@@ -52,7 +52,11 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
         
         // first look for the immediately preceding case
         for (int i=1;i<sorted.length;i++) {
-            if (sorted[i-1].isSubsetOf(sorted[i])) {
+            int j=1;
+            while (sorted[i-j].deleted) {
+                j++;
+            }
+            if (sorted[i-j].isSubsetOf(sorted[i])) {
                 sorted[i].deleted = true;
             }
         }
@@ -151,7 +155,7 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
             
         };
         final int r = -1 - Arrays.binarySearch(sorted, from, to, null, comp );
-        System.err.println(r);
+//        System.err./(r);
         return r;
     }
     public static void main(String args[]) {
