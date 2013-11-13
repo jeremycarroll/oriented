@@ -9,13 +9,12 @@ import java.util.BitSet;
 class BitSetEntry implements Comparable<BitSetEntry> 
 {
     final BitSet original;
-    final BitSet bs;
+    BitSet bs;
     private long[] bits;
     final int cardinality;
     boolean deleted;
     BitSetEntry(BitSet bs) {
         this.original = bs;
-        this.bs = new BitSet();
         cardinality = bs.cardinality();
     }
     @Override
@@ -33,10 +32,15 @@ class BitSetEntry implements Comparable<BitSetEntry>
         }
         return true;
     }
-    void compress(int[] compressMapping) {
-        for (int i = original.nextSetBit(0); i >= 0; i = original.nextSetBit(i+1)) {
+    void remap(int[] compressMapping) {
+        bs = new BitSet();
+        for (int i = original.previousSetBit(Integer.MAX_VALUE); i >= 0; i = original.previousSetBit(i-1)) {
             bs.set(compressMapping[i]);
         }
+        bits = bs.toLongArray();
+    }
+    void noremap() {
+        bs = original;
         bits = bs.toLongArray();
     }
 }

@@ -8,7 +8,6 @@ import java.util.BitSet;
 import java.util.Comparator;
 
 import com.google.common.primitives.Ints;
-import com.google.common.primitives.UnsignedLongs;
 import net.sf.oriented.subsets.AMSLex.LexEntry;
 
 public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
@@ -22,8 +21,17 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
         }
 
         @Override
-        void compress(int[] compressMapping) {
-            super.compress(compressMapping);
+        void remap(int[] compressMapping) {
+            super.remap(compressMapping);
+            initBits();
+        }
+        @Override
+        void noremap() {
+            super.noremap();
+            initBits();
+        }
+
+        private void initBits() {
             int j=0;
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 bits[j++] = i;
@@ -175,8 +183,8 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
             public int compare(BitSet o1, BitSet o2) {
                 final LexEntry l1 = new LexEntry(o1);
                 final LexEntry l2 = new LexEntry(o2);
-                l1.compress(compressMappings);
-                l2.compress(compressMappings);
+                l1.remap(compressMappings);
+                l2.remap(compressMappings);
                 return l1.compareTo(l2);
             }};
         Arrays.sort(all, bitsetComparator  );

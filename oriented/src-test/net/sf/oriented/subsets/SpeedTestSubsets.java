@@ -49,11 +49,16 @@ public class SpeedTestSubsets {
                 sets[i] = (BitSet) in.readObject();
             }
             for (String method: new String[]{
-                   // "naive",
-                    "mcdaid", // "amsCard", 
-                    "amsLex"}) {
-                Method m = MinimalSubsetFactory.class.getMethod(method);
-                rslt.add(new Object[]{m,name,bits,cnt,sets,numberOfAnswers});
+//                    "naive", "mcdaid",  "amsCard", 
+                    "amsLex"})
+            for (Preparation prep: Preparation.values()) {
+                 {
+                     if (method.equals("naive") && name.contains("*B")) {
+                         continue;
+                     }
+                    Method m = MinimalSubsetFactory.class.getMethod(method);
+                    rslt.add(new Object[]{m,prep,name,bits,cnt,sets,numberOfAnswers});
+                }
             }
         }
         return rslt;
@@ -62,17 +67,19 @@ public class SpeedTestSubsets {
     private final BitSet[] data;
     private final String name;
     private final int expected;
-    public SpeedTestSubsets(Method m, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private final Preparation prep;
+    public SpeedTestSubsets(Method m, Preparation prep, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         algorithm = (MinimalSubsets) m.invoke(null);
         data = sets;
-        name = name(m,nme,bits,n,sets, expected);
+        name = name(m,prep, nme,bits,n,sets, expected);
         this.expected = expected;
+        this.prep = prep;
     }
 
     final MinimalSubsets algorithm;
     @TestName
-    static public String name(Method m, String name, int bits, int n, BitSet sets[], int expected) {
-        return m.getName()+"-"+name+"-bits-"+bits+"-sets-"+n+"-"+sets.length;
+    static public String name(Method m, Preparation prep, String name, int bits, int n, BitSet sets[], int expected) {
+        return m.getName()+"-"+prep+"-"+name+"-bits-"+bits+"-sets-"+n+"-"+sets.length;
     }
 
     @Test
@@ -89,7 +96,7 @@ public class SpeedTestSubsets {
             copyClearedBit[i].clear(0);
         }
         long start = System.currentTimeMillis();
-        List<BitSet> rslt = algorithm.minimal(Arrays.asList(copyClearedBit));
+        List<BitSet> rslt = algorithm.minimal(Arrays.asList(copyClearedBit),prep);
         System.err.println(name+" "+rslt.size()+" answers");
         long test = System.currentTimeMillis() ;
         System.err.println(name+" "+(test-start));

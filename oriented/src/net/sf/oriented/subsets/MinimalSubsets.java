@@ -16,9 +16,10 @@ public interface MinimalSubsets {
      * and no element of the result is an improper superset
      * of any other element of the result.
      * @param full
+     * @param prep 
      * @return
      */
-    List<BitSet> minimal(Collection<BitSet> full);
+    List<BitSet> minimal(Collection<BitSet> full, Preparation prep);
 
 }
 

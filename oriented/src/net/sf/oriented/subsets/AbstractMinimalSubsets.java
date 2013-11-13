@@ -3,11 +3,12 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.base.Function;
 
 
 abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalSubsets {
@@ -26,36 +27,9 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
         return Arrays.asList(rslt).subList(0,i);
     }
     
+    @SuppressWarnings("unchecked")
     Class<T> getEntryClass() {
         return (Class<T>) BitSetEntry.class;
-    }
-
-    @SuppressWarnings("unchecked")
-    void prepareData(Collection<BitSet> full) {
-        sorted = (T[]) Array.newInstance(getEntryClass(), full.size());
-        int i = 0;
-        int m = 0;
-        BitSet any = new BitSet();
-        for (BitSet b : full) {
-            any.or(b);
-            int l = b.length();
-            if (l>m) {
-                m = l;
-            }
-            sorted[i++] = create(b);
-        }
-        max = any.cardinality();
-        int compressMapping[] = new int[m];
-        //int uncompressMapping[] = new int[max];
-        int newBit = 0;
-
-        for (i = any.nextSetBit(0); i >= 0; i = any.nextSetBit(i+1)) {
-            compressMapping[i] = newBit ++;
-        }
-        for (BitSetEntry e:sorted) {
-            e.compress(compressMapping);
-        }
-        sort();
     }
 
     @SuppressWarnings("unchecked")
@@ -63,24 +37,31 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
         return (T) new BitSetEntry(b);
     }
 
-    void sort() {
-        Arrays.sort(sorted);
-    }
-
     @Override
-    public final List<BitSet> minimal(Collection<BitSet> full) {
+    public final List<BitSet> minimal(Collection<BitSet> full, Preparation prep) {
         switch (full.size()) {
         case 0:
             return Arrays.asList();
         case 1:
             return Arrays.asList(full.iterator().next());
         }
-        prepareData(full);
+        prep.prepareData(full, this);
         markNonMinimal();
         return gatherResults();
     }
 
     abstract void markNonMinimal() ;
+
+    protected int[] countBits(Function<BitSetEntry, BitSet> func, int max) {
+        int counts[] = new int[max];
+        for (BitSetEntry e:sorted) {
+            BitSet bs = func.apply(e);
+            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+                counts[i]++;
+            }
+        }
+        return counts;
+    }
 
 }
 

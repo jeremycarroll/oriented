@@ -8,6 +8,8 @@ import java.util.BitSet;
 import java.util.Comparator;
 import java.util.TreeSet;
 
+import com.google.common.base.Function;
+
 
 /**
  * The basic algorithm here is from
@@ -146,14 +148,13 @@ final class TransposeMinimalSubsets extends AbstractMinimalSubsets<BitSetEntry> 
         return cross;
     }
     private int[] countBits() {
-        int counts[] = new int[max];
-        for (BitSetEntry e:sorted) {
-            BitSet bs = e.bs;
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                counts[i]++;
+        Function<BitSetEntry, BitSet> func = new Function<BitSetEntry, BitSet>() {
+            @Override
+            public BitSet apply(BitSetEntry e) {
+                return e.bs;
             }
-        }
-        return counts;
+        };
+        return countBits(func, max);
     }
     private int findFirstWithCardinality(final int maxCardinality) {
         int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSetEntry>(){
