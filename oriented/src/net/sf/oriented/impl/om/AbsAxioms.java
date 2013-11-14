@@ -102,6 +102,7 @@ abstract class AbsAxioms<ForAll> {
 		 * An iterator used in an inner loop for checking the axiom.
 		 * @return
 		 */
+        @SuppressWarnings("unchecked")
         protected Iterator<? extends Exists> innerIterator(ForAll a, ForAll b) {
             return (Iterator<? extends Exists>) iterator();
         }

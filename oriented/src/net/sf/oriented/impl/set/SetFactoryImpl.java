@@ -128,6 +128,7 @@ abstract public class SetFactoryImpl<
 		return construct(c, this);
 	}
 
+    @SuppressWarnings("unchecked")
     @Override
 	protected <T extends SET> T fallbackRemake(SET t) {
 		return (T)copyBackingCollection(t.asCollection());

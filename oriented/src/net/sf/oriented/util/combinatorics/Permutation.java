@@ -182,7 +182,7 @@ public class Permutation {
      * @param args
      * @return the same arguments but in a permuted order
      */
-    public <T> T[] permute(T ... args) {
+    public <T> T[] permute(@SuppressWarnings("unchecked") T ... args) {
         if (args.length != n()) {
             throw new IllegalArgumentException("Wrong length");
         }

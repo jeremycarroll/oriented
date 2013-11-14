@@ -30,7 +30,8 @@ public class MatrixUtil {
 		return sideBySide(mat, unit);
 	}
 
-	public static <T extends FieldElement<T>> FieldMatrix<T> sideBySide(FieldMatrix<T>... matrices) {
+	@SafeVarargs
+    public static <T extends FieldElement<T>> FieldMatrix<T> sideBySide(FieldMatrix<T>... matrices) {
 		int n = matrices[0].getColumnDimension();
 		Field<T> f = matrices[0].getField();
 		int m = 0;

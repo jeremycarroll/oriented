@@ -160,6 +160,7 @@ abstract public class AbsSetImpl<
     	return true;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public SET_INTERNAL2 respectingEquals() {
     	return (SET_INTERNAL2) this;
@@ -179,7 +180,8 @@ abstract public class AbsSetImpl<
     public boolean equals(Object o) {
     	if (o == null || (!(o instanceof SetOf)))
     		return false;
-    	SET sx = (SET) o;
+    	@SuppressWarnings("unchecked")
+        SET sx = (SET) o;
     	return sx.equalsIsSameSetAs() && sameSetAs(sx);
     }
 

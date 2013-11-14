@@ -157,7 +157,7 @@ public interface OM extends Verify {
      * @param e  Elements in {@link #elements()}
      * @return The corresponding indexes of <code>e</code> in {@link #elements()}
      */
-	<T extends Label> int[] asInt(T ... e);
+	<T extends Label> int[] asInt(@SuppressWarnings("unchecked") T ... e);
     int[] asInt(String ... e);
 	
 

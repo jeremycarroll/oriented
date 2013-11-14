@@ -285,7 +285,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
 	@Override
-	public <T extends Label> int[] asInt(T ... l) {
+	public <T extends Label> int[] asInt(@SuppressWarnings("unchecked") T ... l) {
 		int r[] = new int[l.length];
 		for (int i = 0; i < l.length; i++) {
 			r[i] = asInt(l[i]);

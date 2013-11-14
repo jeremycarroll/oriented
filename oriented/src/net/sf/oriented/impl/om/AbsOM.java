@@ -72,7 +72,7 @@ public abstract class AbsOM<T> extends AbsOMAxioms<T> {
 	}
 
 	@Override
-	public <TT extends Label> int[] asInt(TT ... l) {
+	public <TT extends Label> int[] asInt(@SuppressWarnings("unchecked") TT ... l) {
 		return all.asInt(l);
 	}
 
