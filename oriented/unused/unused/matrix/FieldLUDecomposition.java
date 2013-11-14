@@ -406,7 +406,6 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 				if (singular)
 					throw new SingularMatrixException();
 
-				@SuppressWarnings("unchecked")
 				// field is of type T
 				final T[] bp = (T[]) Array.newInstance(field.getRuntimeClass(),
 						m);
@@ -460,7 +459,6 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 			if (singular)
 				throw new SingularMatrixException();
 
-			@SuppressWarnings("unchecked")
 			// field is of type T
 			final T[] bp = (T[]) Array.newInstance(field.getRuntimeClass(), m);
 
@@ -501,7 +499,6 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 			final int nColB = b.getColumnDimension();
 
 			// Apply permutations to b
-			@SuppressWarnings("unchecked")
 			// field is of type T
 			final T[][] bp = (T[][]) Array.newInstance(field.getRuntimeClass(),
 					new int[] { m, nColB });

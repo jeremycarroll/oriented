@@ -124,7 +124,6 @@ public class LabelFactoryImpl extends FactoryImpl<LabelImpl, Label, LabelImpl> i
         return Misc.invoke(getSmartPermutation(),permutation);
     }
 
-    @SuppressWarnings("unchecked")
     private Constructor<? extends Permutation> getSmartPermutation() {
         if (smartPermutation == null) {
             smartPermutation = (Constructor<? extends Permutation>) ((OptionsInternal)getOptions()).constructorFor("SmartPermutation");

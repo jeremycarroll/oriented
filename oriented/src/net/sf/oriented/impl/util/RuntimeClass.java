@@ -13,7 +13,6 @@ public abstract class RuntimeClass<ITEM> {
     private static Map<String,Class<?>> runtimeClass = new HashMap<>();
     abstract protected TypeToken<ITEM> getTypeToken(Class<?> c);
 
-    @SuppressWarnings("unchecked")
     public Class<? super ITEM> getRuntimeClass(Class<?> c) {
         String key = key(getClass(), c);
         if (!runtimeClass.containsKey(key)) {

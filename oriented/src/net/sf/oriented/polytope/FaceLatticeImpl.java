@@ -334,11 +334,9 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
         return Iterators.concat(transformed);
     }
 
-    @SuppressWarnings("unchecked")
     static <T, S extends T> Iterable<T> cast(Iterable<S> in) {
         return (Iterable<T>)in;
     }
-    @SuppressWarnings("unchecked")
     static <T, S extends T> Iterator<T> cast(Iterator<S> in) {
         return (Iterator<T>)in;
     }

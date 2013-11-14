@@ -161,7 +161,6 @@ abstract public class AbsSetImpl<
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public SET_INTERNAL2 respectingEquals() {
     	return (SET_INTERNAL2) this;
     }
@@ -177,7 +176,6 @@ abstract public class AbsSetImpl<
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
     	if (o == null || (!(o instanceof SetOf)))
     		return false;
@@ -224,7 +222,6 @@ abstract public class AbsSetImpl<
     	return new PowerJavaSet(sz);
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public Iterator<ITEM> iterator() {
         return (Iterator<ITEM>) this.iterator2();
@@ -232,7 +229,6 @@ abstract public class AbsSetImpl<
         
     @Override
     public ITEM[] toArray(){
-        @SuppressWarnings("unchecked")
         ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
             @Override
             protected TypeToken<ITEM> getTypeToken(Class<?> x) {

@@ -617,7 +617,6 @@ public class PseudoLineDrawing implements Verify {
         throw new IllegalStateException("Failed to find first point.");
     }
 
-    @SuppressWarnings("unchecked")
     private List<PointAtInfinity> getOuterRing() {
         return (List<PointAtInfinity>)(List<?>)getRing(0);
     }

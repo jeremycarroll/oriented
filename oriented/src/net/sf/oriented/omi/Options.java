@@ -61,7 +61,6 @@ public class Options extends OptionsInternal {
 	/**
 	 * Not part of the API
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> JavaSet<T> javaSetFor(Class<T> cl) {
 	    if (javaSet == null) {
 	        javaSet = (Constructor<? extends JavaSet<T>>) constructorFor("JavaHashSet");

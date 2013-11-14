@@ -186,7 +186,6 @@ public class Permutation {
         if (args.length != n()) {
             throw new IllegalArgumentException("Wrong length");
         }
-        @SuppressWarnings("unchecked")
         T[] result = (T[]) Array.newInstance(args.getClass().getComponentType(), args.length);
         for (int i=0;i<args.length;i++)
             result[i] = args[get(i)];

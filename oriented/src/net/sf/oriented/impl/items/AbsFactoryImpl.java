@@ -54,7 +54,6 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 		skip(pc);
 	}
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends ITEM> T remake(ITEM t) {
         if (t instanceof HasFactory) {
             if (((HasFactory<?, ?, ?>) t).factory() == this)
@@ -69,7 +68,6 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
             throw new IllegalArgumentException("Must be non-zero length");
         }
         T first = remake(t[0]);
-        @SuppressWarnings("unchecked")
         T rslt[] = (T[]) Array.newInstance(first.getClass(), t.length);
         rslt[0] = first;
         for (int i=1;i<t.length;i++) {
@@ -78,7 +76,6 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
         return rslt;
     }
 
-    @SuppressWarnings("unchecked")
     protected <T extends ITEM> T fallbackRemake(ITEM t) {
         return (T)parse(toString(t));
     }
@@ -86,7 +83,6 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 
     @Override
     public ITEM[] parse(String ... many) {
-        @SuppressWarnings("unchecked")
         ITEM rslt[] = (ITEM[]) Array.newInstance(new RuntimeClass<ITEM>(){ 
             @Override
             protected TypeToken<ITEM> getTypeToken(Class<?> x) {

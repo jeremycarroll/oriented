@@ -49,7 +49,6 @@ public enum Preparation {
         }
     }
 
-    @SuppressWarnings("unchecked") 
     <T extends BitSetEntry> void prepareData(Collection<BitSet> full, AbstractMinimalSubsets<T> algo) {
         algo.sorted = (T[]) Array.newInstance(algo.getEntryClass(), full.size());
         Data data = createEntries(full, algo);

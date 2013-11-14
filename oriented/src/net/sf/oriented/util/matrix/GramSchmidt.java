@@ -37,7 +37,6 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 	 * Initialize the GramSchmidt process over the given matrix.
 	 * @param matrix A matrix with more columns than rows.
 	 */
-	@SuppressWarnings("unchecked")
 	public GramSchmidt(FieldMatrix<T> matrix) {
 		field = matrix.getField();
 		n = matrix.getRowDimension();
@@ -53,7 +52,6 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private T[][] buildArray(int r, int c) {
 		return (T[][]) Array.newInstance(field.getRuntimeClass(), r, c);
 	}

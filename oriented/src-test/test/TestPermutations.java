@@ -150,7 +150,6 @@ public class TestPermutations {
     
     SetOfSignedSet setsWithZeroOrOneMinus(OMasSignedSet om) {
         FactoryFactory f = ((OMInternal)om).ffactory();
-        @SuppressWarnings("unchecked")
         JavaSet<SignedSet> rslt = (JavaSet<SignedSet>) f.signedSets().emptyCollectionOf();
         for (SignedSet ss:(SetOfSignedSetInternal)om) {
             if (ss.minus().size()<=1) {

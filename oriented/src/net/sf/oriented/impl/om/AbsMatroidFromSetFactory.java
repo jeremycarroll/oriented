@@ -48,7 +48,6 @@ public abstract class AbsMatroidFromSetFactory<
                 + sets.toString(g, matroidS) + " )";
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     SET_STRUCTURE parseMatroid(ParseContext pc) {
         return  (SET_STRUCTURE)sets.parse(pc);

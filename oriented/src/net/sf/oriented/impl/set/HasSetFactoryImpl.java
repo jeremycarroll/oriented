@@ -52,7 +52,6 @@ public class HasSetFactoryImpl<
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> factory() {
 		return (SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2>) super.factory();

@@ -56,7 +56,6 @@ public abstract class HasFactoryImpl<
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	final public String toString(Factory<ITEM> f) {
 		return f.toString((ITEM) this);
 	}

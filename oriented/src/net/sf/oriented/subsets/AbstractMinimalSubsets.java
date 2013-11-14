@@ -27,12 +27,10 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
         return Arrays.asList(rslt).subList(0,i);
     }
     
-    @SuppressWarnings("unchecked")
     Class<T> getEntryClass() {
         return (Class<T>) BitSetEntry.class;
     }
 
-    @SuppressWarnings("unchecked")
     T create(BitSet b) {
         return (T) new BitSetEntry(b);
     }

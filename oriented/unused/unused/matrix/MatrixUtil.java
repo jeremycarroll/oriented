@@ -23,7 +23,6 @@ public class MatrixUtil {
 		return rslt;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T extends FieldElement<T>> FieldMatrix<T> rowExtended(
 			FieldMatrix<T> mat) {
 		int n = mat.getColumnDimension();

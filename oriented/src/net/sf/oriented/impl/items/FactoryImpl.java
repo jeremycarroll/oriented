@@ -25,7 +25,6 @@ public abstract class FactoryImpl<
 
     final protected Constructor<ITEM_INTERNAL2> constructor;
 
-    @SuppressWarnings("unchecked")
     protected FactoryImpl(Options o) {
         options = o;
         constructor = (Constructor<ITEM_INTERNAL2>) ((OptionsInternal)o).constructorFor(getClass());

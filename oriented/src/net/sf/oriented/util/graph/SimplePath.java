@@ -14,7 +14,6 @@ import edu.uci.ics.jung.graph.Graph;
 public class SimplePath<V> implements Path<V> {
     protected final V path[];
     
-    @SuppressWarnings("unchecked")
     protected SimplePath(Class<V> clazzV, V from, V to) {
         path = (V[]) Array.newInstance(clazzV, 2);
         path[0] = from;
@@ -61,7 +60,6 @@ public class SimplePath<V> implements Path<V> {
         if (!it.hasNext()) {
             return null;
         }
-        @SuppressWarnings("unchecked")
         final Class<V> clazzV =(Class<V>) it.next().getClass();
         return new PathFactory<V,SimplePath<V>>(){
 

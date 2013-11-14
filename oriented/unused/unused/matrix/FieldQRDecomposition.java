@@ -195,12 +195,10 @@ public class FieldQRDecomposition<T extends FieldElement<T>> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private T[] buildArray(int length) {
 		return (T[]) Array.newInstance(field.getRuntimeClass(), length);
 	}
 
-	@SuppressWarnings("unchecked")
 	private T[][] buildArray(int w, int h) {
 		return (T[][]) Array.newInstance(field.getRuntimeClass(), w, h);
 	}

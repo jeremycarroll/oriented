@@ -133,7 +133,6 @@ public class Vectors extends AbsVectorsOM {
 		return withSupport(setOfElements());
 	}
 
-	@SuppressWarnings("unchecked")
 	public SetOfUnsignedSetInternal circuits() {
 		JavaSet<UnsignedSetInternal> dependent[] = new JavaSet[elements().length + 1];
 		for (int i = 0; i < dependent.length; i++) {

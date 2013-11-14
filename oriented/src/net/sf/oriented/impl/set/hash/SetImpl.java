@@ -58,7 +58,6 @@ abstract public class SetImpl<
 		return members;
 	}
 
-	@SuppressWarnings("unchecked")
     @Override
 	public SET_INTERNAL2 union(SET b) {
 		JavaSet<ITEM_INTERNAL2> mm = emptyCollectionOf();
@@ -139,7 +138,6 @@ abstract public class SetImpl<
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public SET_INTERNAL2 union(ITEM b) {
 		JavaSet<ITEM_INTERNAL2> r = emptyCollectionOf();
 		r.addAll(members);

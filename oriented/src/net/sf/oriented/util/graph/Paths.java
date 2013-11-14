@@ -29,11 +29,9 @@ public class Paths<V, E, P extends Path<V>> {
     private int counter = 0;
     private final PathFactory<V, P> factory;
 
-    @SuppressWarnings("unchecked")
     public Paths( Graph<V,E>  g ) {
         this(g, (PathFactory<V,P>) SimplePath.createFactory(g));
     }
-    @SuppressWarnings("unchecked")
     public Paths( Graph<V,E>  g , PathFactory<V,P> factory) {
         Collection<V> vv = g.getVertices();
         paths = (List<P>[][]) Array.newInstance(List.class, vv.size(), vv.size());

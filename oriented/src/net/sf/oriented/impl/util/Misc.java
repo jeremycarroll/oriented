@@ -22,7 +22,6 @@ public class Misc {
     public static <T> T invoke(Constructor<T> c,  Object ... args) {
         return invoke(Invokable.from(c),null,args);
     }
-    @SuppressWarnings("unchecked")
     public static <T,R> R invoke(Method m,  T receiver, Object ... args) {
         return invoke((Invokable<T,R>)Invokable.from(m),receiver,args);
     }
@@ -58,7 +57,6 @@ public class Misc {
     }
 
     public static <T> T[] resize(T[] old, int newLength) {
-        @SuppressWarnings("unchecked")
         T rslt[] = (T[]) Array.newInstance(old.getClass().getComponentType(), newLength);
         System.arraycopy(old, 0, rslt, 0, newLength<old.length?newLength:old.length);
         return rslt;

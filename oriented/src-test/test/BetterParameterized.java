@@ -155,7 +155,6 @@ public class BetterParameterized extends Suite {
 		return runners;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<Object[]> getParametersList(TestClass klass) throws Throwable {
 		return (List<Object[]>) getParametersMethod(klass).invokeExplosively(
 				null);

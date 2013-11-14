@@ -16,7 +16,6 @@ class AMSCard extends AbstractMinimalSubsets<BitSetEntry> {
     
     @Override
     public void markNonMinimal() {
-        @SuppressWarnings("unchecked")
         List<BitSetEntry> occurs[] = new List[max];
         int currentSize = sorted[0].cardinality;
         int lastSizeChange = 0;

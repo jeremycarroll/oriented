@@ -37,7 +37,6 @@ public class DualFaceLattice implements Verify{
 
     public DualFaceLattice(OM om) {
         maxDimension = om.n() - om.rank();
-        @SuppressWarnings("unchecked")
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
         for (int i=0;i<byDimension.length;i++) {
@@ -51,7 +50,6 @@ public class DualFaceLattice implements Verify{
             notCoLoops = notCoLoops.union(s.support());
         }
         circuits = new PFace[om.getCircuits().size()];
-        @SuppressWarnings("unchecked")
         List<PFace>[] suppressWarning2 = new List[notCoLoops.size()+1];
         faces = suppressWarning2;
         for (int j=0;j<faces.length;j++) {

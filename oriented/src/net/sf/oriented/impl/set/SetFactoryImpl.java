@@ -119,7 +119,6 @@ abstract public class SetFactoryImpl<
 		return fromBackingCollection(r);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void add(Collection<ITEM_INTERNAL2> r, ITEM next) {
 		r.add((ITEM_INTERNAL2) itemFactory.remake(next));
 	}
@@ -129,7 +128,6 @@ abstract public class SetFactoryImpl<
 		return construct(c, this);
 	}
 
-	@SuppressWarnings("unchecked")
     @Override
 	protected <T extends SET> T fallbackRemake(SET t) {
 		return (T)copyBackingCollection(t.asCollection());
