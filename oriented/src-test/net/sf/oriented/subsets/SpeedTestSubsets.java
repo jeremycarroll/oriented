@@ -49,9 +49,16 @@ public class SpeedTestSubsets {
                 sets[i] = (BitSet) in.readObject();
             }
             for (String method: new String[]{
-//                    "naive", "mcdaid",  "amsCard", 
-                    "amsLex"})
-            for (Preparation prep: Preparation.values()) {
+//                    "naive",
+                    //"mcdaid", 
+                    //"amsCard", 
+                    "amsLex"
+                    })
+            for (Preparation prep: //Preparation.values()
+                    new Preparation[]{Preparation.Pritchard
+//            Preparation.Minimal       
+            }
+                    ) {
                  {
                      if (method.equals("naive") && name.contains("*B")) {
                          continue;

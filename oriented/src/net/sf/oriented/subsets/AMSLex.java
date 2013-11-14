@@ -59,13 +59,12 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
         // or follow it.
         
         // first look for the immediately preceding case
-        for (int i=1;i<sorted.length;i++) {
-            int j=1;
-            while (sorted[i-j].deleted) {
+        int j;
+        for (int i=0;i<sorted.length;i+=j) {
+            j=1;
+            while (i+j<sorted.length && sorted[i].isSubsetOf(sorted[i+j])) {
+                sorted[i+j].deleted = true;
                 j++;
-            }
-            if (sorted[i-j].isSubsetOf(sorted[i])) {
-                sorted[i].deleted = true;
             }
         }
         
