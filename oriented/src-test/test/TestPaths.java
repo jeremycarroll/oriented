@@ -108,7 +108,7 @@ public class TestPaths {
     }
     private Graph<String, Number> verySimplifiedDemoGraph() {
         Graph<String, Number> g = simplifiedDemoGraph();
-        for (String v:new ArrayList<String>(g.getVertices())) {
+        for (String v:new ArrayList<>(g.getVertices())) {
             if (!v.startsWith("c"))
                 g.removeVertex(v);
         }   
