@@ -23,7 +23,7 @@ public class PrunableGraph extends AbstractTGraph {
         boolean pruned = true;
         while (pruned) {
             pruned = false;
-            for (TGVertex vertex:new ArrayList<TGVertex>(vv)) {
+            for (TGVertex vertex:new ArrayList<>(vv)) {
                 if (!this.containsVertex(vertex)) {
                     continue;
                 }
