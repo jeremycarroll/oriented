@@ -34,13 +34,13 @@ public class TGVertex implements Comparable<TGVertex> {
      * other vertices which have two or more lines in common but on opposite sides.
      * These cannot appear in the same difficulty as this vertex. (conjectured).
      */
-    final Set<TGVertex> exclude = new HashSet<TGVertex>();
+    final Set<TGVertex> exclude = new HashSet<>();
     
     
     // no longer using faces parameter ???
     TGVertex(SignedSet id, EuclideanPseudoLines epl, Face source, String desc ) {
         identity = id;
-        Set<SignedSet> ss = new HashSet<SignedSet>();
+        Set<SignedSet> ss = new HashSet<>();
         addFace(ss,source);
         for (Face e:source.lower()) {
             for (Face v:e.lower()) {
@@ -59,7 +59,7 @@ public class TGVertex implements Comparable<TGVertex> {
         Label sorted[] = sort(id.support(),epl);
         boolean pmp[] = signs(sorted,id);
         boolean requiredX[] = PlusMinusPlus.required(pmp);
-        List<Label> r = new ArrayList<Label>();
+        List<Label> r = new ArrayList<>();
         for (int i=0;i<sorted.length;i++) {
             if (requiredX[i]) {
                 r.add(sorted[i]);
@@ -115,7 +115,7 @@ public class TGVertex implements Comparable<TGVertex> {
 
     Iterable<TGVertex> overlapping(AbstractTGraph g) {
         
-        List<TGVertex> rslt = new ArrayList<TGVertex>();
+        List<TGVertex> rslt = new ArrayList<>();
         for (TGVertex v:exclude) {
             if (g.containsVertex(v)) {
                 rslt.add(v);

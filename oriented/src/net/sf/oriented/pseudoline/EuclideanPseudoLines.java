@@ -358,7 +358,7 @@ public class EuclideanPseudoLines {
     private List<Face[]> followLine(SignedSet start, Label along, Label last) {
         Face face = getFace(start);
         Face eps[] = edgesTouchingLine(along,face);
-        List<Face[]> rslt = new ArrayList<Face[]>();
+        List<Face[]> rslt = new ArrayList<>();
         Face edge;
         Face point;
         if (eps[1].covector().sign(last)==0) {
@@ -471,7 +471,7 @@ public class EuclideanPseudoLines {
     }
 
     public SignedSet lineIntersection(Label line1, Label line2) {
-        Set<Face> points = new HashSet<Face>(Arrays.asList(getPseudoLine(line1)));
+        Set<Face> points = new HashSet<>(Arrays.asList(getPseudoLine(line1)));
         points.retainAll(Arrays.asList(getPseudoLine(line2)));
         if (points.size() != 1) {
             throw new IllegalStateException("Pseudolines intersect in two points???!!!");

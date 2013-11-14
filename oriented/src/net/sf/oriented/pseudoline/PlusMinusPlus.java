@@ -173,7 +173,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         if (splitIntoThrees[ix]!=null) {
             return splitIntoThrees[ix];
         }
-        List<int[]> results = new ArrayList<int[]>();
+        List<int[]> results = new ArrayList<>();
         splitIntoThrees( pattern, 0, results, new int[n], 0 );
         final int[][] r = results.toArray(new int[0][]);
         Arrays.sort(r, Ints.lexicographicalComparator());

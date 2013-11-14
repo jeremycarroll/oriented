@@ -36,7 +36,7 @@ public class Difficulty {
             bits.set(e.bit);
             if (e.saveInDifficulty) {
                 if (saveEdges==null) {
-                    saveEdges = new ArrayList<TGEdge>(4);
+                    saveEdges = new ArrayList<>(4);
                 }
                 saveEdges.add(e);
             }
@@ -69,7 +69,7 @@ public class Difficulty {
         if (rslt != null) {
             return rslt;
         }
-        rslt = new DirectedSparseGraph<Faces, DEdge>();
+        rslt = new DirectedSparseGraph<>();
 //        if (bits.get(0)) {
 //            throw new IllegalArgumentException("Accessing deleted difficulty");
 //        }
@@ -93,7 +93,7 @@ public class Difficulty {
     }
     
     public Graph<Face, DEdge> getSimplifiedRslt(TensionGraph tg) {
-        Graph<Face, DEdge> resultGraph = new DirectedSparseGraph<Face, DEdge>();
+        Graph<Face, DEdge> resultGraph = new DirectedSparseGraph<>();
 //        if (bits.get(0)) {
 //            throw new IllegalArgumentException("Accessing deleted difficulty");
 //        }

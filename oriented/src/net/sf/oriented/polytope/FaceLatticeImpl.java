@@ -93,8 +93,8 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
                     throw new AxiomViolation(this," with respect to "+f);
                 }
             }
-            Map<SignedSet,Face> seenOnce = new HashMap<SignedSet,Face>();
-            Map<SignedSet,List<Face>> seenTwice = new HashMap<SignedSet,List<Face>>();
+            Map<SignedSet,Face> seenOnce = new HashMap<>();
+            Map<SignedSet,List<Face>> seenTwice = new HashMap<>();
             for (Face oneDown:lower()) {
                 for (Face twoDown: oneDown.lower()) {
                     SignedSet key = twoDown.covector();
@@ -232,7 +232,7 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
     
     private final AbsFaceImpl top, bottom;
     private final AbsFaceImpl grades[][];
-    private final Map<SignedSet,Face> ss2face = new HashMap<SignedSet,Face>();
+    private final Map<SignedSet,Face> ss2face = new HashMap<>();
     
     private static final Function<AbsFaceImpl[], Iterator<Face>> ARRAY2ITERATOR = new Function<AbsFaceImpl[], Iterator<Face>>(){
         @Override

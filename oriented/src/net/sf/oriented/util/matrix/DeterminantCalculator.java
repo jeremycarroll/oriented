@@ -22,11 +22,11 @@ class DeterminantCalculator {
 	private final RingElt formula;
 	private final int rank;
 
-	static private ConcurrentMap<Integer, DeterminantCalculator> all = new ConcurrentHashMap<Integer, DeterminantCalculator>();
+	static private ConcurrentMap<Integer, DeterminantCalculator> all = new ConcurrentHashMap<>();
 
 	private DeterminantCalculator(int h) {
 		rank = h;
-		FieldMatrix<PerisicFieldElement> m = new Array2DRowFieldMatrix<PerisicFieldElement>(
+		FieldMatrix<PerisicFieldElement> m = new Array2DRowFieldMatrix<>(
 				PerisicField.QPolynomials, h, h);
 		m.walkInOptimizedOrder(new FieldMatrixChangingVisitor<PerisicFieldElement>() {
 
@@ -48,7 +48,7 @@ class DeterminantCalculator {
 			}
 		});
 
-		RingElt quotient = new FieldLUDecomposition<PerisicFieldElement>(m)
+		RingElt quotient = new FieldLUDecomposition<>(m)
 				.getDeterminant().getDelegate();
 
 		assert (((QuotientField) quotient.getRing()).denominator(quotient)

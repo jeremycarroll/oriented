@@ -56,7 +56,7 @@ public class TGVertexFactory {
 
         public NonUniformHelper(Face tope) {
             super(tope.lower().size());
-            Map<Face, Face> nonUniform2oneEdge = new HashMap<Face, Face>();
+            Map<Face, Face> nonUniform2oneEdge = new HashMap<>();
             for (Face e : tope.lower()) {
                 for (Face v : e.lower()) {
                     if (v.higher().size() != 4) {
@@ -100,7 +100,7 @@ public class TGVertexFactory {
         }
     }
 
-    private List<Label> lines = new ArrayList<Label>();
+    private List<Label> lines = new ArrayList<>();
 
     TGVertexFactory(Face cocircuit, TensionGraph tg, UnsignedSet lines,
             final EuclideanPseudoLines epl) {
@@ -112,8 +112,8 @@ public class TGVertexFactory {
             Preconditions.checkArgument(lines.minus(f.covector().support())
                     .size() == 1);
         }
-        List<Label> plus = new ArrayList<Label>();
-        List<Label> minus = new ArrayList<Label>();
+        List<Label> plus = new ArrayList<>();
+        List<Label> minus = new ArrayList<>();
         for (int sz = 3; sz <= lines.size(); sz++) {
             for (UnsignedSet someLines : lines.subsetsOfSize(sz)) {
                 Label[] labels = TGVertex.sort(someLines, epl);
@@ -184,7 +184,7 @@ public class TGVertexFactory {
             }
 
             sides: for (int sides = 7; sides < (1 << lines.size()); sides++) {
-                Set<Face> extent = new HashSet<Face>();
+                Set<Face> extent = new HashSet<>();
                 int bitCount = Integer.bitCount(sides);
                 if (bitCount < 3) {
                     continue; // too few sides
@@ -289,7 +289,7 @@ public class TGVertexFactory {
 
     private SignedSet createIdentity(FactoryFactory ffactory,
             SignedSet tope, int sides) {
-        List<Label> us = new ArrayList<Label>(lines.size());
+        List<Label> us = new ArrayList<>(lines.size());
         for (int i = 0; i < lines.size(); i++) {
             if (((1 << i) & sides) != 0) {
                 us.add(lines.get(i));

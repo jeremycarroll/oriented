@@ -106,7 +106,7 @@ public class Sines {
     }
     
     private Analysis findAnalysis() {
-        List<SignedSet> threes = new ArrayList<SignedSet>();
+        List<SignedSet> threes = new ArrayList<>();
         return findAnalysis(0,threes);
     }
 

@@ -65,7 +65,7 @@ public class RealizedImpl extends AbsOM<Object> implements OMasRealized {
 	}
 
 	public RationalMatrix getDualBasis() {
-		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
+		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<>(
 				matrix.getDelegate());
 		return new RationalMatrix(gs.getDual());
 	}

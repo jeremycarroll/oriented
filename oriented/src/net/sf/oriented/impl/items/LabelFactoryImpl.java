@@ -26,8 +26,8 @@ public class LabelFactoryImpl extends FactoryImpl<LabelImpl, Label, LabelImpl> i
 		super(o);
 	}
 
-	private final Map<String, LabelImpl> all = new HashMap<String, LabelImpl>();
-	private final List<Label> ordered = new ArrayList<Label>();
+	private final Map<String, LabelImpl> all = new HashMap<>();
+	private final List<Label> ordered = new ArrayList<>();
 	int hashCodes[][] = new int[8][256];
 	int count = 0;
 

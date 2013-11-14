@@ -24,7 +24,7 @@ public class DifficultyDrawing extends PseudoLineDrawing {
     
     final Difficulty difficulty;
     final TensionGraph tg;
-    final Map<Face,IPoint> positions = new HashMap<Face,IPoint>();
+    final Map<Face,IPoint> positions = new HashMap<>();
 
     public DifficultyDrawing(EuclideanPseudoLines pseudoLines, TensionGraph ten, Difficulty d)
             throws CoLoopCannotBeDrawnException {
@@ -111,8 +111,8 @@ public class DifficultyDrawing extends PseudoLineDrawing {
 //            } else {
 //                Face f = projective.getFaceLattice().get(ss);
                 if (f.dimension()==2) {
-                    Map<Face,Face> oneWay = new HashMap<Face,Face>();
-                    Map<Face,Face> theOther = new HashMap<Face,Face>();
+                    Map<Face,Face> oneWay = new HashMap<>();
+                    Map<Face,Face> theOther = new HashMap<>();
                     Face pts[] = new Face[2];
                     for (Face e:f.lower()) {
                         int ix=0;
@@ -166,7 +166,7 @@ public class DifficultyDrawing extends PseudoLineDrawing {
      */
 
     private void curveFromTo(Path2D fillFace, Face from, Face to) {
-        Set<Face> edgeSet = new HashSet<Face>(from.higher());
+        Set<Face> edgeSet = new HashSet<>(from.higher());
         edgeSet.retainAll(to.higher());
         Face edge = edgeSet.iterator().next();
         Face prev = findOtherPoint(from,edge);

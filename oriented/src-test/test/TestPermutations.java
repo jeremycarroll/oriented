@@ -40,7 +40,7 @@ public class TestPermutations {
             { 201, 21, 210, 102, 12, 120, } };
     
     private static void permutationTest(int n, int factorial) {
-        Set<Permutation> sofar = new HashSet<Permutation>();
+        Set<Permutation> sofar = new HashSet<>();
         for (Permutation p:Permutation.all(n)) {
             Assert.assertTrue(sofar.add(p));
         }
@@ -61,8 +61,8 @@ public class TestPermutations {
     }
     
     private static class GroupS3 {
-        final Map<Integer,Permutation> members = new HashMap<Integer,Permutation>();
-        final Map<Permutation,Integer> names = new HashMap<Permutation,Integer>();
+        final Map<Integer,Permutation> members = new HashMap<>();
+        final Map<Permutation,Integer> names = new HashMap<>();
 
         public void store(int name, Permutation value) {
             members.put(name, value);
@@ -246,8 +246,8 @@ public class TestPermutations {
     }
     private int automorphisms(OM om) {
         int cnt = 0;
-        List<OM> same = new ArrayList<OM>();
-        Set<Permutation> auto1 = new HashSet<Permutation>();
+        List<OM> same = new ArrayList<>();
+        Set<Permutation> auto1 = new HashSet<>();
         for (Permutation p: Permutation.all(om.n())) {
             OM permuted = om.permute(p);
             if (permuted.equals(om)) {

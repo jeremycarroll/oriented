@@ -129,8 +129,8 @@ public class ImageOptions {
     private Color infinityColor;
     private float infinityStroke[];
     
-    private Map<Label,Color> colors = new HashMap<Label,Color>();
-    private Map<Label,float[]> strokes = new HashMap<Label,float[]>();
+    private Map<Label,Color> colors = new HashMap<>();
+    private Map<Label,float[]> strokes = new HashMap<>();
     private Label infinity;
     private int nextColor = 0;
     private int nextStroke = 0;

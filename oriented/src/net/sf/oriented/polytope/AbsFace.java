@@ -36,7 +36,7 @@ class AbsFace implements Verify{
      * during the computation we cannot be sure about dimension and so more get added 
      * and discarded later.
      */
-    private final Set<AbsFace> lower = new HashSet<AbsFace>();
+    private final Set<AbsFace> lower = new HashSet<>();
     
     AbsFace(DualFaceLattice l, int min, int max) {
         lattice = l;
@@ -76,8 +76,8 @@ class AbsFace implements Verify{
         if (dimension == UNKNOWN) {
             throw new AxiomViolation(lattice, "dimension was not defined in "+this);
         }
-        Map<AbsFace,AbsFace> seenOnce = new HashMap<AbsFace,AbsFace>();
-        Map<AbsFace,List<AbsFace>> seenTwice = new HashMap<AbsFace,List<AbsFace>>();
+        Map<AbsFace,AbsFace> seenOnce = new HashMap<>();
+        Map<AbsFace,List<AbsFace>> seenTwice = new HashMap<>();
         for (AbsFace oneDown:getLower()) {
             for (AbsFace twoDown: oneDown.getLower()) {
                 if (seenTwice.containsKey(twoDown) //&& twoUp instanceof Face && ((Face)twoUp).vector().plus().size()==2

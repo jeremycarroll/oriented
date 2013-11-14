@@ -15,7 +15,7 @@ public class MatrixUtil {
 
 	public static <T extends FieldElement<T>> FieldMatrix<T> unit(Field<T> f,
 			int dim) {
-		BlockFieldMatrix<T> rslt = new BlockFieldMatrix<T>(f, dim, dim);
+		BlockFieldMatrix<T> rslt = new BlockFieldMatrix<>(f, dim, dim);
 		T one = f.getOne();
 		for (int i = 0; i < dim; i++) {
 			rslt.setEntry(i, i, one);
@@ -43,7 +43,7 @@ public class MatrixUtil {
 			if (mat.getColumnDimension() != n)
 				throw new DimensionMismatchException(mat.getColumnDimension(), n);
 		}
-		BlockFieldMatrix<T> rslt = new BlockFieldMatrix<T>(f, m, n);
+		BlockFieldMatrix<T> rslt = new BlockFieldMatrix<>(f, m, n);
 		int r = 0;
 		for (FieldMatrix<T> mat : matrices) {
 			rslt.setSubMatrix(mat.getData(), r, 0);

@@ -112,7 +112,7 @@ public class TestLU {
 	}
 
 	private void test(String nm, RationalMatrix matrix) {
-		FieldLUDecomposition<PerisicFieldElement> lu = new FieldLUDecomposition<PerisicFieldElement>(
+		FieldLUDecomposition<PerisicFieldElement> lu = new FieldLUDecomposition<>(
 				matrix.getDelegate());
 
 		FieldMatrix<PerisicFieldElement> A = matrix.getDelegate();

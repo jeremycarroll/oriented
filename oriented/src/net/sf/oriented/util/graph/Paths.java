@@ -19,7 +19,7 @@ public class Paths<V, E, P extends Path<V>> {
 
 
     private final List<V> vertex;
-    private final Map<V,Integer> vertexIndex = new HashMap<V,Integer>();
+    private final Map<V,Integer> vertexIndex = new HashMap<>();
     /**
      * if the k-th bit is set in path[i][j]
      * then 
@@ -37,7 +37,7 @@ public class Paths<V, E, P extends Path<V>> {
     public Paths( Graph<V,E>  g , PathFactory<V,P> factory) {
         Collection<V> vv = g.getVertices();
         paths = (List<P>[][]) Array.newInstance(List.class, vv.size(), vv.size());
-        vertex = new ArrayList<V>(vv);
+        vertex = new ArrayList<>(vv);
         this.factory = factory;
         initializeVertexIndex();
         initializePathsOfLengthOne(g);
@@ -57,7 +57,7 @@ public class Paths<V, E, P extends Path<V>> {
                 int j = vertexIndex.get(to);
                 P v = factory.create(from,to);
                 if (v!=null) {
-                    paths[i][j] = new ArrayList<P>();
+                    paths[i][j] = new ArrayList<>();
                     counter++;
                     paths[i][j].add(v);
                 }
@@ -78,7 +78,7 @@ public class Paths<V, E, P extends Path<V>> {
                         continue;
                     }
                     if (paths[i][j] == null) {
-                        paths[i][j] = new ArrayList<P>();
+                        paths[i][j] = new ArrayList<>();
                     }
                     for (P p:paths[i][k]) {
                         for (P q:paths[k][j]) {
@@ -103,7 +103,7 @@ public class Paths<V, E, P extends Path<V>> {
         return paths[source][dest];
     }
     public Collection<P> cycles() {
-        List<P> rslt = new ArrayList<P>();
+        List<P> rslt = new ArrayList<>();
         for (int i=0;i<paths.length;i++) {
             List<P> list = paths[i][i];
             if (list == null) {

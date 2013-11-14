@@ -128,7 +128,7 @@ public class WebPage {
         MutuallyExclusiveGroup omGroup = parser
                 .addMutuallyExclusiveGroup("Oriented Matroid");
         omGroup.required(true);
-        Set<String> done = new HashSet<String>();
+        Set<String> done = new HashSet<>();
         for (String name : Examples.all().keySet()) {
             if (name.contains(".")) {
                 name = name.substring(0,name.indexOf('.'));

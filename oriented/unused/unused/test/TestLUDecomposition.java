@@ -31,7 +31,7 @@ public class TestLUDecomposition {
 	public void testLUt() {
 		RationalMatrix matrix = new RationalMatrix(new RationalMatrix(chap1)
 				.getDelegate().transpose());
-		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
+		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<>(
 				matrix.getDelegate());
 		Assert.assertEquals("L","[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]",new RationalMatrix(a.getL()).toString());
 		Assert.assertEquals("P","[ [ 1  0  0  0  0  0 ] [ 0  1  0  0  0  0 ] [ 0  0  1  0  0  0 ] [ 0  0  0  1  0  0 ] [ 0  0  0  0  1  0 ] [ 0  0  0  0  0  1 ] ]",new RationalMatrix(a.getP()).toString());
@@ -42,7 +42,7 @@ public class TestLUDecomposition {
 	public void testLU() {
 		RationalMatrix matrix = new RationalMatrix(
 				new RationalMatrix(chap1).getDelegate());
-		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
+		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<>(
 				matrix.getDelegate());
         assertLPU(a, 
                 "[ [ 1  0  0 ] [ 0  1  0 ] [ 0  0  1 ] ]", 
@@ -64,7 +64,7 @@ public class TestLUDecomposition {
 		FieldMatrix<PerisicFieldElement> matrix = new RationalMatrix(chap1)
 				.getDelegate().transpose();
 		Assert.assertEquals("W","[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] ]",new RationalMatrix(matrix).toString());
-		FieldMatrix<PerisicFieldElement> bigger = new BlockFieldMatrix<PerisicFieldElement>(
+		FieldMatrix<PerisicFieldElement> bigger = new BlockFieldMatrix<>(
 				matrix.getField(), matrix.getRowDimension(),
 				matrix.getColumnDimension() + matrix.getRowDimension());
 		PerisicFieldElement m[][] = matrix.getData();
@@ -81,7 +81,7 @@ public class TestLUDecomposition {
                 "[ [ 1  1  1  0  0  0 ] [ 0  1  1  1  1  0 ] [ 0  0  1  0  1  1 ] [ 1  0  0  0  0  0 ] [ 0  1  0  0  0  0 ] [ 0  0  1  0  0  0 ] [ 0  0  0  1  0  0 ] [ 0  0  0  0  1  0 ] [ 0  0  0  0  0  1 ] ]", 
                  new RationalMatrix(bigger).toString());
 		RationalMatrix matrix2 = new RationalMatrix(bigger.transpose());
-		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<PerisicFieldElement>(
+		FieldLUDecomposition<PerisicFieldElement> a = new FieldLUDecomposition<>(
 				matrix2.getDelegate());
         assertLPU(a, 
                 "[ [ 1  0  0  1  0  0  0  0  0 ] [ 0  1  0  -1  1  0  0  0  0 ] [ 0  0  1  0  -1  0  1  0  0 ] [ 0  0  0  1  -1  1  0  0  0 ] [ 0  0  0  0  1  -1  -1  1  0 ] [ 0  0  0  0  0  1  0  -1  1 ] ]", 

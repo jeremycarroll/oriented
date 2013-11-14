@@ -107,7 +107,7 @@ public class SetOfSignedSetImpl
 
 	@Override
 	public SetOfUnsignedSetInternal unsignedSets() {
-		indexes = new HashMap<UnsignedSet, SignedSetInternal>();
+		indexes = new HashMap<>();
 		SetOfUnsignedSetFactory setOfUnsignedSetFactory = factory()
 				.setOfUnsignedSetFactory();
 		JavaSet<UnsignedSetInternal> s = setOfUnsignedSetFactory.itemFactory()

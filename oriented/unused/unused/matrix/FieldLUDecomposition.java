@@ -237,7 +237,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	 */
 	public FieldMatrix<T> getL() {
 		if ((cachedL == null)) {
-			cachedL = new Array2DRowFieldMatrix<T>(field, m, min);
+			cachedL = new Array2DRowFieldMatrix<>(field, m, min);
 			for (int i = 0; i < m; ++i) {
 				final T[] luI = lu[i];
 				for (int j = 0; j < min; j++) {
@@ -267,7 +267,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	 */
 	public FieldMatrix<T> getU() {
 		if ((cachedU == null)) {
-			cachedU = new Array2DRowFieldMatrix<T>(field, min, n);
+			cachedU = new Array2DRowFieldMatrix<>(field, min, n);
 			for (int i = 0; i < min; ++i) {
 				final T[] luI = lu[i];
 				for (int j = i; j < n; ++j) {
@@ -296,7 +296,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	public FieldMatrix<T> getP() {
 		if ((cachedP == null)) {
 			final int m = pivot.length;
-			cachedP = new Array2DRowFieldMatrix<T>(field, m, m);
+			cachedP = new Array2DRowFieldMatrix<>(field, m, m);
 			for (int i = 0; i < m; ++i) {
 				cachedP.setEntry(i, pivot[i], field.getOne());
 			}
@@ -340,7 +340,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 	 * @return a solver
 	 */
 	public FieldDecompositionSolver<T> getSolver() {
-		return new Solver<T>(field, lu, pivot, isSingular());
+		return new Solver<>(field, lu, pivot, isSingular());
 	}
 
 	private boolean isSingular() {
@@ -433,7 +433,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 					}
 				}
 
-				return new ArrayFieldVector<T>(field, bp, false);
+				return new ArrayFieldVector<>(field, bp, false);
 
 			}
 		}
@@ -486,7 +486,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 				}
 			}
 
-			return new ArrayFieldVector<T>(bp, false);
+			return new ArrayFieldVector<>(bp, false);
 		}
 
 		/** {@inheritDoc} */
@@ -541,7 +541,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 				}
 			}
 
-			return new Array2DRowFieldMatrix<T>(field, bp, false);
+			return new Array2DRowFieldMatrix<>(field, bp, false);
 
 		}
 
@@ -550,7 +550,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 		public FieldMatrix<T> getInverse() {
 			final int m = pivot.length;
 			final T one = field.getOne();
-			FieldMatrix<T> identity = new Array2DRowFieldMatrix<T>(field, m, m);
+			FieldMatrix<T> identity = new Array2DRowFieldMatrix<>(field, m, m);
 			for (int i = 0; i < m; ++i) {
 				identity.setEntry(i, i, one);
 			}

@@ -58,7 +58,7 @@ abstract public class SetImpl<
 
 	// public SetImpl(Collection<E> a, SF f) {
 	// super(f);
-	// members = new HashSet<E>(a);
+	// members = new HashSet<>(a);
 	// }
 
 	public SetImpl(SetFactoryInternal<ITEM_INTERNAL, SET_INTERNAL, ITEM, SET, ITEM_INTERNAL2, SET_INTERNAL2> f) {
@@ -95,12 +95,12 @@ abstract public class SetImpl<
 		// System.err.println(x + "/"+ sz + "/" + size());
 
 		if (sz == 0) {
-			Set<JavaSet<ITEM_INTERNAL2>> r = new HashSet<JavaSet<ITEM_INTERNAL2>>();
+			Set<JavaSet<ITEM_INTERNAL2>> r = new HashSet<>();
 			r.add(emptyCollectionOf());
 			return r;
 		}
 		if (x == size())
-			return new HashSet<JavaSet<ITEM_INTERNAL2>>();
+			return new HashSet<>();
 		ITEM_INTERNAL2 xth = ith(x);
 		Set<JavaSet<ITEM_INTERNAL2>> rslt = subsetsOfSize(x + 1, sz);
 		Iterator<JavaSet<ITEM_INTERNAL2>> it = subsetsOfSize(x + 1, sz - 1).iterator();

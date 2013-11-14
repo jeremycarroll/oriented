@@ -56,7 +56,7 @@ class AMSCard extends AbstractMinimalSubsets<BitSetEntry> {
             }
             int bit = ee.bs.nextSetBit(0);
             if (occurs[bit]==null) {
-                occurs[bit] = new ArrayList<BitSetEntry>();
+                occurs[bit] = new ArrayList<>();
             }
             occurs[bit].add(ee);
         }

@@ -16,7 +16,7 @@ abstract class EdgeChoices {
 
     static final int NOT_FORCED = -1;
 
-    final List<TGEdge> choices = new ArrayList<TGEdge>();
+    final List<TGEdge> choices = new ArrayList<>();
     
     private boolean alreadyDone = false;
     

@@ -112,7 +112,7 @@ public class MatroidAll implements MatroidInternal {
 
 	private void initIndependentSets() {
 	    if (independent == null) {
-	        Set<UnsignedSet> independentSets = new HashSet<UnsignedSet>();
+	        Set<UnsignedSet> independentSets = new HashSet<>();
 	        for ( UnsignedSet basis: getBases() ) {
 	            independentSets.addAll(basis.powerSet());
 	        }

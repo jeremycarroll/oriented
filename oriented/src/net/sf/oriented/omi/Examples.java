@@ -345,7 +345,7 @@ public class Examples {
     }
 
     public static Map<String,OM> all() {
-        Map<String,OM> rslt = new HashMap<String,OM>();
+        Map<String,OM> rslt = new HashMap<>();
 
         Class<?> ex = Examples.class;
         for (Method m:ex.getMethods()) {

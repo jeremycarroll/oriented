@@ -73,7 +73,7 @@ public class TestGramSchmidt {
 	// }
 
 	private void test(String nm, RationalMatrix matrix) throws AxiomViolation {
-		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<PerisicFieldElement>(
+		GramSchmidt<PerisicFieldElement> gs = new GramSchmidt<>(
 				matrix.getDelegate());
 
 

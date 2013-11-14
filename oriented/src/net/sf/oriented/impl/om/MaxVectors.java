@@ -73,7 +73,7 @@ public class MaxVectors extends AbsVectorsOM {
 
 	private Map<SignedSetInternal, SetOfSignedSetInternal> allTopesConformingToCovector(
 			UnsignedSetInternal support) {
-		Map<SignedSetInternal, SetOfSignedSetInternal> Tx = new HashMap<SignedSetInternal, SetOfSignedSetInternal>();
+		Map<SignedSetInternal, SetOfSignedSetInternal> Tx = new HashMap<>();
 		Iterator<UnsignedSetInternal> it = support.powerSet().iterator();
 		while (it.hasNext()) {
 			UnsignedSetInternal x0 = it.next();
@@ -92,7 +92,7 @@ public class MaxVectors extends AbsVectorsOM {
 
 	private Map<UnsignedSet, SetOfSignedSetInternal> signedProjection(
 			UnsignedSetInternal support) {
-		Map<UnsignedSet, SetOfSignedSetInternal> Tx = new HashMap<UnsignedSet, SetOfSignedSetInternal>();
+		Map<UnsignedSet, SetOfSignedSetInternal> Tx = new HashMap<>();
 		Iterator<UnsignedSetInternal> it = support.powerSet().iterator();
 		while (it.hasNext()) {
 			UnsignedSet x0 = it.next();

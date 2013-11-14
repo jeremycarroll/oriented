@@ -28,7 +28,7 @@ public class RationalMatrix {
 	 * Initialize a matrix from integers.
 	 */
 	public RationalMatrix(final int[][] data) {
-		delegate = new BlockFieldMatrix<PerisicFieldElement>(PerisicField.Q,
+		delegate = new BlockFieldMatrix<>(PerisicField.Q,
 				data.length, data[0].length);
 		delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<PerisicFieldElement>() {
 
@@ -61,7 +61,7 @@ public class RationalMatrix {
 	 * Initialize a matrix from lists of lists of {@link PerisicFieldElement}.
 	 */
 	public RationalMatrix(final List<List<PerisicFieldElement>> data) {
-		delegate = new BlockFieldMatrix<PerisicFieldElement>(PerisicField.Q,
+		delegate = new BlockFieldMatrix<>(PerisicField.Q,
 				data.get(0).size(), data.size());
 		delegate.walkInOptimizedOrder(new FieldMatrixChangingVisitor<PerisicFieldElement>() {
 

@@ -28,7 +28,7 @@ public class DualFaceLattice implements Verify{
     final Bottom bottom;
     final Top top;
     final PFace circuits[];
-    final Map<SignedSet,PFace> ss2faces = new HashMap<SignedSet,PFace>();
+    final Map<SignedSet,PFace> ss2faces = new HashMap<>();
     final List<PFace> faces[]; 
 
     final long start = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public class DualFaceLattice implements Verify{
         List<AbsFace>[] suppressWarning = new List[maxDimension+2];
         byDimension = suppressWarning;
         for (int i=0;i<byDimension.length;i++) {
-            byDimension[i] = new ArrayList<AbsFace>();
+            byDimension[i] = new ArrayList<>();
         }
         bottom = new Bottom(this);
         top = new Top(this);
@@ -55,7 +55,7 @@ public class DualFaceLattice implements Verify{
         List<PFace>[] suppressWarning2 = new List[notCoLoops.size()+1];
         faces = suppressWarning2;
         for (int j=0;j<faces.length;j++) {
-            faces[j] = new ArrayList<PFace>();
+            faces[j] = new ArrayList<>();
         }
         int i = 0;
          for (SignedSet s:cc) {
@@ -150,7 +150,7 @@ public class DualFaceLattice implements Verify{
 
     static public OMInternal asFaceLattice(Circuits c,OMInternal omAll) {
         DualFaceLattice lattice = new DualFaceLattice(c);
-//        WeakReference<DualFaceLattice> ref = new WeakReference<DualFaceLattice>(lattice);
+//        WeakReference<DualFaceLattice> ref = new WeakReference<>(lattice);
         FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,lattice);
         lattice = null;
 //        for (int i=0;i<100 && ref.get() != null;i++ )

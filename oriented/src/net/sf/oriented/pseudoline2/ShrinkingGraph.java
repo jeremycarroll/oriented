@@ -40,7 +40,7 @@ public class ShrinkingGraph extends PrunableGraph {
 //        return array;
         // following code makes no difference to runtime, but does make the number of transitions more
         // indicative of actual work-load.
-        List<TGEdge> rslt = new ArrayList<TGEdge>(array.length);
+        List<TGEdge> rslt = new ArrayList<>(array.length);
         for (TGEdge e:array) {
             if (containsEdge(e)) {
                 rslt.add(e);

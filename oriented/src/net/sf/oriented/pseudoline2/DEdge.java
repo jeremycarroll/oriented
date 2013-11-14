@@ -16,7 +16,7 @@ public class DEdge {
     final Face dest;
     final Label label;
     TGEdge tgEdges[];
-    final List<DifficultSix> sixes = new ArrayList<DifficultSix>();
+    final List<DifficultSix> sixes = new ArrayList<>();
     
     DEdge(TGEdge e, FaceLattice fl) {
         label = e.label();

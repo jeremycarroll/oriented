@@ -33,7 +33,7 @@ public class TGFactory {
     }
 
     private void checkVertices() {
-       id2vertex = new HashMap<SignedSet,TGVertex>();
+       id2vertex = new HashMap<>();
        for (TGVertex v:result.getVertices()) {
            TGVertex old = id2vertex.put(v.getId(), v);
            if (old != null) {
@@ -110,7 +110,7 @@ public class TGFactory {
     
 
 //    public List<TGVertex> getTGVertices() {
-//        List<TGVertex> rslt = new ArrayList<TGVertex>();
+//        List<TGVertex> rslt = new ArrayList<>();
 //        switchFaceLattice();
 //        for (Face f:getFaceLattice().withDimension(0)) {
 //            if (f.covector().sign(getInfinity())==1 && f.higher().size()>4)

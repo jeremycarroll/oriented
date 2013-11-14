@@ -82,7 +82,7 @@ public class TestConversions {
 		}
 		special = factories[3];
 
-		List<Object[]> r = new ArrayList<Object[]>();
+		List<Object[]> r = new ArrayList<>();
 		for (int source = 0; source < 2; source++) {
 			int ff = 0;
 			for (FactoryFactory f : factories) {

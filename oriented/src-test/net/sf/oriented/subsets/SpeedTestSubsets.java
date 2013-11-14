@@ -28,7 +28,7 @@ import test.BetterParameterized.TestName;
 public class SpeedTestSubsets {
     @Parameters
     public static Collection<Object[]> data() throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException {
-        List<Object[]> rslt = new ArrayList<Object[]>();
+        List<Object[]> rslt = new ArrayList<>();
         ObjectInputStream in = new ObjectInputStream(SpeedTestSubsets.class.getResourceAsStream("tests.ser"));
         int nAnswers[] = {287, 49, 262, 263, 51, 51, 7, 9037, 11420, 396095, 505652, 16 };
         int cnt = 0;

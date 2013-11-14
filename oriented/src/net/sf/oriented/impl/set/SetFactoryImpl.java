@@ -77,7 +77,7 @@ abstract public class SetFactoryImpl<
 
 	@Override
 	final public List<ITEM_INTERNAL2> orderedParse(ParseContext pc) {
-		List<ITEM_INTERNAL2> ll = new ArrayList<ITEM_INTERNAL2>();
+		List<ITEM_INTERNAL2> ll = new ArrayList<>();
 		parseItems(pc, ll);
 		return ll;
 	}

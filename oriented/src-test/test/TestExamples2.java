@@ -30,7 +30,7 @@ public class TestExamples2 {
     
     @Parameters
     public static Collection<Object[]> data() {
-        List<Object[]> rslt = new ArrayList<Object[]>();
+        List<Object[]> rslt = new ArrayList<>();
         for (Map.Entry<String,OM> entry:Examples.all().entrySet() ) {
 //            if (entry.getKey().startsWith("wheel"))
             rslt.add(new Object[]{entry.getKey(),entry.getValue()});

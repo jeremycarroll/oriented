@@ -66,7 +66,7 @@ public class PseudoLineDrawing implements Verify {
             this.points = followLine(first, second);
         }
         private IPoint[] followLine(PointAtInfinity first, Point second) {
-            List<IPoint> points = new ArrayList<IPoint>();
+            List<IPoint> points = new ArrayList<>();
             if (options.showLabels) {
                 points.add(first.getLabelPosition(label));
             }
@@ -320,7 +320,7 @@ public class PseudoLineDrawing implements Verify {
             setPosition(pos);
         }
         public List<XLine> getLines() {
-            List<XLine> rslt = new ArrayList<XLine>();
+            List<XLine> rslt = new ArrayList<>();
             for (Point p:this.getInnerRing()) {
                 rslt.add(new XLine(this, p));
             }
@@ -410,7 +410,7 @@ public class PseudoLineDrawing implements Verify {
 
         private void computeLabelOrder(Point last) {
             lineLabels = new Label[getInnerRing().length];
-            Set<Point> remaining = new HashSet<Point>(Arrays.asList(getInnerRing()));
+            Set<Point> remaining = new HashSet<>(Arrays.asList(getInnerRing()));
             int ix = 0;
             while (!remaining.isEmpty()) {
                 for (Point p:remaining) {
@@ -478,10 +478,10 @@ public class PseudoLineDrawing implements Verify {
 
     }
     protected final EuclideanPseudoLines projective;
-    final Set<Point> points = new HashSet<Point>();
-    final Set<Point> unclassified = new HashSet<Point>();
-    final Map<SignedSet,Point> ss2point = new HashMap<SignedSet,Point>();
-    private final List<List<Point>> rings = new ArrayList<List<Point>>();
+    final Set<Point> points = new HashSet<>();
+    final Set<Point> unclassified = new HashSet<>();
+    final Map<SignedSet,Point> ss2point = new HashMap<>();
+    private final List<List<Point>> rings = new ArrayList<>();
     protected ImageOptions options;
     
     protected PseudoLineDrawing(EuclideanPseudoLines pseudoLines) throws CoLoopCannotBeDrawnException {
@@ -525,7 +525,7 @@ public class PseudoLineDrawing implements Verify {
                     maxCountToOuterRing = p.countToOuter;
                 }
             }
-            List<Point> toSet = new ArrayList<Point>();
+            List<Point> toSet = new ArrayList<>();
             for (Point p:unclassified) {
                 if (p.countToOuter == maxCountToOuterRing) {
                     toSet.add(p);
@@ -626,7 +626,7 @@ public class PseudoLineDrawing implements Verify {
     
     @Override
     public void verify() throws AxiomViolation {
-        Set<SubLine> allLines = new HashSet<SubLine>();
+        Set<SubLine> allLines = new HashSet<>();
         for (Point p:points) {
             List<XLine> ee = p.getLines();
             for (SubLine ll:ee) {
@@ -648,14 +648,14 @@ public class PseudoLineDrawing implements Verify {
         approximatelyArrange();
         Dimension dim = new Dimension();
         dim.setSize( 2*getRadius(), 2*getRadius());
-        Graph<IPoint, SignedSet> graph = new SparseGraph<IPoint, SignedSet>();
+        Graph<IPoint, SignedSet> graph = new SparseGraph<>();
         // load up all points
         for (Point p:points) {
             p.addToJung(graph);
         }
         
         // set initial locations ...
-        SpringLayout<IPoint, SignedSet> spring = new SpringLayout<IPoint, SignedSet>(graph);
+        SpringLayout<IPoint, SignedSet> spring = new SpringLayout<>(graph);
         spring.setSize(dim);
         spring.initialize();
         for (Point p:points) {
@@ -706,7 +706,7 @@ public class PseudoLineDrawing implements Verify {
        setLineColorAndStroke(graphics, projective.getInfinity());
        graphics.draw(circ);
        
-       Set<SignedSet> done = new HashSet<SignedSet>();
+       Set<SignedSet> done = new HashSet<>();
        for (PointAtInfinity p:getOuterRing()) {
            if (!done.contains(p.covector().opposite())) {
                done.add(p.covector());

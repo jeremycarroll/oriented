@@ -27,8 +27,8 @@ public class OMRealizedFactory extends
 
 	private static final class ParseResult {
 		final ParseContext pc;
-		List<PerisicFieldElement> nextColumn = new ArrayList<PerisicFieldElement>();
-		final List<List<PerisicFieldElement>> data = new ArrayList<List<PerisicFieldElement>>();
+		List<PerisicFieldElement> nextColumn = new ArrayList<>();
+		final List<List<PerisicFieldElement>> data = new ArrayList<>();
 
 		ParseResult(ParseContext pc) {
 			this.pc = pc;
@@ -39,7 +39,7 @@ public class OMRealizedFactory extends
 			if (nextColumn.size() != data.get(0).size())
 				throw new IllegalArgumentException("Array sizing problem in: "
 						+ pc.string + " at position " + pc.index);
-			nextColumn = new ArrayList<PerisicFieldElement>();
+			nextColumn = new ArrayList<>();
 		}
 
 		public RationalMatrix matrix() {

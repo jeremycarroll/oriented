@@ -16,7 +16,7 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
 public class TensionGraph extends PrunableGraph {
     
     final EuclideanPseudoLines pseudolines;
-    final Map<SignedSet, TGVertex> id2vertex = new HashMap<SignedSet, TGVertex>();
+    final Map<SignedSet, TGVertex> id2vertex = new HashMap<>();
 
     public TensionGraph(EuclideanPseudoLines euclideanPseudoLines) {
         this.pseudolines = euclideanPseudoLines;
@@ -37,8 +37,8 @@ public class TensionGraph extends PrunableGraph {
         addVertex(tgVertex);
         
     }
-    List<DEdge> allEdges = new ArrayList<DEdge>();
-    Map<DEdge,Integer> edgeLookup = new HashMap<DEdge,Integer>();
+    List<DEdge> allEdges = new ArrayList<>();
+    Map<DEdge,Integer> edgeLookup = new HashMap<>();
 
     void saveEdgeAsBit(TGEdge edge) {
         DEdge d = new DEdge(edge, pseudolines.getFaceLattice());

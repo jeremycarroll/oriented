@@ -47,7 +47,7 @@ public abstract class TypeChecker<T,T2> {
     
 
     
-    private static Set<String> done = new HashSet<String>();
+    private static Set<String> done = new HashSet<>();
 
     public void check(Class<?> clazz) {
         if (clazz == null) {

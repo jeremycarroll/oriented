@@ -276,16 +276,16 @@ public class WAM {
      */
     private final GrowingGraph growing;
     final ShrinkingGraph shrinking;
-    private final Deque<Frame> stack = new ArrayDeque<Frame>();
-    final Deque<Undoable> trail = new ArrayDeque<Undoable>();
-    private final List<Difficulty> results = new ArrayList<Difficulty>();
-    final Deque<EdgeChoices> choices = new ArrayDeque<EdgeChoices>();
+    private final Deque<Frame> stack = new ArrayDeque<>();
+    final Deque<Undoable> trail = new ArrayDeque<>();
+    private final List<Difficulty> results = new ArrayList<>();
+    final Deque<EdgeChoices> choices = new ArrayDeque<>();
 
     // tracing and debug fields
     public long transitions = 0;
     private AbstractTGraph expected;
     public boolean debug = true;
-    private Map<TGVertex,EdgeChoices> v2choice = new HashMap<TGVertex,EdgeChoices>();
+    private Map<TGVertex,EdgeChoices> v2choice = new HashMap<>();
 
     public WAM(TensionGraph b) {
         base = b;
@@ -642,7 +642,7 @@ public class WAM {
 //            if (!t.afterRemove(this)) {
 //                return false;
 //            }
-            Set<TGVertex> vv = new HashSet<TGVertex>();
+            Set<TGVertex> vv = new HashSet<>();
             vv.add(t.source);
             vv.add(t.dest);
             shrinking.prune(vv, true);
@@ -756,7 +756,7 @@ public class WAM {
     }
 
     private boolean remove(TGVertex a) {
-        List<TGEdge> es = new ArrayList<TGEdge>(shrinking.getIncidentEdges(a));
+        List<TGEdge> es = new ArrayList<>(shrinking.getIncidentEdges(a));
         for (TGEdge e : es) {
             if (!maybeRemove(e)) {
                 return false;

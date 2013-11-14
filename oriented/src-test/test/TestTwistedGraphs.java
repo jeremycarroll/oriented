@@ -303,7 +303,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
     protected boolean searchForCyclePair(Graph<Face, DEdge> rslt,
             Collection<DPath> cycles) {
         int sz = rslt.getVertexCount();
-        List<DPath> smallerCycles = new ArrayList<DPath>();
+        List<DPath> smallerCycles = new ArrayList<>();
         for (DPath dp:cycles) {
             if (dp.getPath().size()<sz-1) {
                 smallerCycles.add(dp);

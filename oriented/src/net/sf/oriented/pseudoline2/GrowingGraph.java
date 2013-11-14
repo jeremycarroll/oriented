@@ -35,7 +35,7 @@ public class GrowingGraph extends AbstractTGraph {
      * @return true if added, false if it cannot be added.
      */
     public boolean addWithConsequences(TGEdge t) {
-        List<TGEdge> moreToAdd = new ArrayList<TGEdge>();
+        List<TGEdge> moreToAdd = new ArrayList<>();
         if (containsEdge(t)) {
             throw new IllegalStateException("addEdge failure");
         }
@@ -111,7 +111,7 @@ public class GrowingGraph extends AbstractTGraph {
     }
     
     public boolean addWithConsequences(TGVertex vertex) {
-        List<TGEdge> moreToAdd = new ArrayList<TGEdge>();
+        List<TGEdge> moreToAdd = new ArrayList<>();
         if (canAdd(vertex, moreToAdd)) {
             addVertex(vertex);
             wam.pushRemoveUndoingAdd(this, vertex);

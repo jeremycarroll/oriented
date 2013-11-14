@@ -97,7 +97,7 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 			subData = buildArray(n, m);
 			System.arraycopy(data, 0, subData, 0, n);
 		}
-		FieldMatrix<T> r = new BlockFieldMatrix<T>(field, n, m);
+		FieldMatrix<T> r = new BlockFieldMatrix<>(field, n, m);
 		r.setSubMatrix(subData, 0, 0);
 		return r;
 	}
@@ -112,7 +112,7 @@ public class GramSchmidt<T extends FieldElement<T>> implements Verify {
 		lazyDual();
 		T[][] subData = buildArray(m - n, m);
 		System.arraycopy(data, n, subData, 0, m - n);
-		FieldMatrix<T> r = new BlockFieldMatrix<T>(field, m - n, m);
+		FieldMatrix<T> r = new BlockFieldMatrix<>(field, m - n, m);
 		r.setSubMatrix(subData, 0, 0);
 		return r;
 

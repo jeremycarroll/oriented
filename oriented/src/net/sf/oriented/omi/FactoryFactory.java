@@ -45,7 +45,7 @@ import com.google.common.math.IntMath;
 final public class FactoryFactory {
 	private static final class Crossings {
         private final FactoryFactory factory;
-        private final Map<String,Integer> s2i = new HashMap<String,Integer>();
+        private final Map<String,Integer> s2i = new HashMap<>();
         private final int positions[][];
         private final String ground[];
     

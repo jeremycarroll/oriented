@@ -67,14 +67,14 @@ public class SimplePath<V> implements Path<V> {
 
             @Override
             public SimplePath<V> create(V from, V to) {
-                return new SimplePath<V>(clazzV,from,to);
+                return new SimplePath<>(clazzV,from,to);
             }
 
 
             @Override
             public SimplePath<V> combine(SimplePath<V> first,SimplePath<V> andThen) {
                 if (first.canBeFollowedBy(andThen)) {
-                    return new SimplePath<V>(first,andThen);
+                    return new SimplePath<>(first,andThen);
                 }
                 return null;
             }};

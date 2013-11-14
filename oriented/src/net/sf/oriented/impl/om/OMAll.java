@@ -65,7 +65,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	public OMAll(LabelImpl[] g, FactoryFactory f) {
 		factory = f;
 		ground = g;
-		indexes = new HashMap<Label, Integer>();
+		indexes = new HashMap<>();
 		for (int i = 0; i < g.length; i++) {
 			indexes.put(g[i], Integer.valueOf(i));
 		}

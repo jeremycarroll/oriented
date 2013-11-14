@@ -92,7 +92,7 @@ public abstract class MatroidFactoryImpl extends
 
 	@Override
 	MatroidAsSet construct(SetOfUnsignedSet signedSets) {
-		Collection<Label> ground = new TreeSet<Label>(signedSets.union().asCollection());
+		Collection<Label> ground = new TreeSet<>(signedSets.union().asCollection());
 		return construct(ground, signedSets);
 	}
 

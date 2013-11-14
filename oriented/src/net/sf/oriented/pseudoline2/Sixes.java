@@ -247,12 +247,12 @@ public class Sixes {
       new SixA("d", seed2.flip(0,5,6), "ACE", "CDF", "BDE", "ABF" ),
       new SixA("f", seed2.flip(0,2,3).flip(0,5,6), "ACE", "CDF", "BDE", "ABF" ),
     };
-    private List<SixB> allB = new ArrayList<SixB>();
-    private Map<Long,Integer> lg = new HashMap<Long,Integer>();
+    private List<SixB> allB = new ArrayList<>();
+    private Map<Long,Integer> lg = new HashMap<>();
     private long all[];
     private SixC[] allSixC;
     private Sixes() {
-        List<SixA> allA = new ArrayList<SixA>();
+        List<SixA> allA = new ArrayList<>();
         for (SixA seed:seeds) {
             for (int i=0; i<12; i++ ) {
                 seed = new SixA(seed.name+i,seed,i%6);
@@ -401,7 +401,7 @@ public class Sixes {
 
     private static Sixes theInstance = new Sixes();
     public Iterable<Six> analyze(OM om) {
-        final List<Six> sixes = new ArrayList<Six>();
+        final List<Six> sixes = new ArrayList<>();
         final OMasChirotope chirotope = om.getChirotope();
         matches(chirotope, new FoundMatch(){
             @Override

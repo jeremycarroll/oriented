@@ -13,7 +13,7 @@ class SubGroup extends Group {
     private final Set<Permutation> elements;
     public SubGroup(Collection<Permutation> elements) {
         super(elements.iterator().next().n());
-        this.elements = new HashSet<Permutation>(elements);
+        this.elements = new HashSet<>(elements);
     }
 
     @Override

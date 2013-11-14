@@ -67,7 +67,7 @@ public abstract class Group implements Iterable<Permutation> {
      * @param pred This predicate must define a subgroup - no checking is provided.
      */
     public Group filter(Predicate<Permutation> pred) {
-        List<Permutation> contents = new ArrayList<Permutation>();
+        List<Permutation> contents = new ArrayList<>();
         for (Permutation p:this) {
             if (pred.apply(p)) {
                 contents.add(p);
