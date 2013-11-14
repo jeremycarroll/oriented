@@ -51,8 +51,8 @@ public class SpeedTestSubsets {
             for (String method: new String[]{
 //                    "naive",
                     //"mcdaid", 
-                    //"amsCard", 
-                    "amsLex"
+                    "amsCard", 
+                    "parallel"
                     })
             for (Preparation prep: //Preparation.values()
                     new Preparation[]{Preparation.Pritchard

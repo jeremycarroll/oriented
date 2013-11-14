@@ -55,12 +55,16 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
     }
     @Override
     void markNonMinimal() {
+        markNonMinimal(0, sorted.length);
+    }
+
+    void markNonMinimal(int from, int to) {
         // By Pritchard, any subsets of an entry either immediately precede it
         // or follow it.
         
         // first look for the immediately preceding case
         int j;
-        for (int i=0;i<sorted.length;i+=j) {
+        for (int i=from;i<to;i+=j) {
             j=1;
             while (i+j<sorted.length && sorted[i].isSubsetOf(sorted[i+j])) {
                 sorted[i+j].deleted = true;
@@ -70,12 +74,11 @@ public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
         
         // now look for following subsets
         
-        for (int i=0;i<sorted.length;i++) {
+        for (int i=from;i<to;i++) {
             if (isNonMinimal(sorted[i],i+1,sorted.length,0,0)) {
                 sorted[i].deleted = true;
             }
         }
-
     }
     
 

@@ -46,6 +46,12 @@ public class MinimalSubsetFactory {
 
         return new AMSLex();
     }
+
+    public static MinimalSubsets parallel() {
+      
+
+        return new ParallelLex();
+    }
     static int max(Collection<BitSet> full) {
         int m = 0;
         for (BitSet b:full) {
