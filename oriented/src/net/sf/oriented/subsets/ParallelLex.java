@@ -7,7 +7,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 
-public class ParallelLex extends AMSLex {
+class ParallelLex extends Lexicographic {
     private static ForkJoinPool forkJoinPool = new ForkJoinPool();
     private static class LexTask extends RecursiveAction {
         final ParallelLex lex;

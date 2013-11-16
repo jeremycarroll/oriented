@@ -20,7 +20,7 @@ import com.google.common.base.Function;
  * @author jeremycarroll
  *
  */
-final class TransposeMinimalSubsets extends AbstractMinimalSubsets<BitSetEntry> {
+final class MultipleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
     final class SortedOccursLists extends TreeSet<OccursList> {
 
         int lastPeek;

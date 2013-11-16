@@ -12,7 +12,7 @@ import java.util.List;
  * @author jeremycarroll
  *
  */
-class AMSCard extends AbstractMinimalSubsets<BitSetEntry> {
+class SingleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
     
     @Override
     public void markNonMinimal() {

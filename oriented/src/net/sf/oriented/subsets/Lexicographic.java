@@ -8,9 +8,9 @@ import java.util.BitSet;
 import java.util.Comparator;
 
 import com.google.common.primitives.Ints;
-import net.sf.oriented.subsets.AMSLex.LexEntry;
+import net.sf.oriented.subsets.Lexicographic.LexEntry;
 
-public class AMSLex extends AbstractMinimalSubsets<LexEntry> {
+class Lexicographic extends AbstractMinimalSubsets<LexEntry> {
     
     static class LexEntry extends BitSetEntry  {
 

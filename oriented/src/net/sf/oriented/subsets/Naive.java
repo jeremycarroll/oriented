@@ -3,7 +3,7 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-final class NaiveMinimalSubsets extends AbstractMinimalSubsets<BitSetEntry> {
+final class Naive extends AbstractMinimalSubsets<BitSetEntry> {
 
     @Override
     void markNonMinimal() {

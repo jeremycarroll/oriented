@@ -3,15 +3,12 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-import java.util.BitSet;
-import java.util.Collection;
 
 
 public class MinimalSubsetFactory {
 
     public static MinimalSubsets naive() {
-        
-        return new NaiveMinimalSubsets();
+        return new Naive();
     }
     
     /**
@@ -19,48 +16,21 @@ public class MinimalSubsetFactory {
      * <a href="http://stackoverflow.com/a/8996897/2276263">Aaron McDaid's comment</a>:
      * @return
      */
-    public static MinimalSubsets mcdaid() {
+    public static MinimalSubsets multipleOccursList() {
         
-        return new TransposeMinimalSubsets();
+        return new MultipleOccursList();
     }
     
-    public static MinimalSubsets amsCard() {
-        return new AMSCard();
+    public static MinimalSubsets singleOccursList() {
+        return new SingleOccursList();
     }
 
-    public static MinimalSubsets amsLex() {
-//      return   new MinimalSubsets() {
-//      
-//
-//      @Override
-//      public List<BitSet> minimal(Collection<BitSet> full) {
-//          MinimalSubsets sat =  new AMSLex();
-//          MinimalSubsets mcd = mcdaid();
-//          
-//          final List<BitSet> v1 = sat.minimal(full);
-//          System.err.println(v1.size());
-//          return mcd.minimal(v1);
-//      }
-//      };
-      
-
-        return new AMSLex();
+    public static MinimalSubsets lexicographic() {
+        return new Lexicographic();
     }
 
     public static MinimalSubsets parallel() {
-      
-
         return new ParallelLex();
-    }
-    static int max(Collection<BitSet> full) {
-        int m = 0;
-        for (BitSet b:full) {
-            int l =  b.length();
-            if (l>m) {
-                m = l;
-            }
-        }
-        return m;
     }
 
 }
