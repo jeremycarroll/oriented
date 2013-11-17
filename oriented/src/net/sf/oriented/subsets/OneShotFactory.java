@@ -5,10 +5,18 @@ package net.sf.oriented.subsets;
 
 
 
-public class MinimalSubsetFactory {
+/**
+ * The implementations of {@link MinimalSubsets} returned by this
+ * factory are stateful, and hence designed to be used for only 
+ * one computation. They can be wrapped in {@link NotJustOnce}.
+ * 
+ * @author jeremycarroll
+ *
+ */
+class OneShotFactory {
 
     public static MinimalSubsets naive() {
-        return new NotJustOnce("naive");
+        return new Naive();
     }
     
     /**
@@ -17,19 +25,19 @@ public class MinimalSubsetFactory {
      * @return
      */
     public static MinimalSubsets multipleOccursList() {
-        return  new NotJustOnce("multipleOccursList");
+        return new MultipleOccursList();
     }
     
     public static MinimalSubsets singleOccursList() {
-        return new NotJustOnce("singleOccursList");
+        return new SingleOccursList();
     }
 
     public static MinimalSubsets lexicographic() {
-        return new NotJustOnce("lexicographic");
+        return new Lexicographic();
     }
 
     public static MinimalSubsets parallel() {
-        return new NotJustOnce("parallel");
+        return new ParallelLex();
     }
 
 }

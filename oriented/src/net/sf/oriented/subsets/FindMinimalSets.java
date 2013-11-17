@@ -28,7 +28,16 @@ public class FindMinimalSets {
      * @return A list of minimal sets
      */
     public static List<BitSet> minimal(Collection<BitSet> in) {
-        return null;
+        if (in.size() < 500) {
+            return OneShotFactory.naive().minimal(in, Preparation.Minimal);
+        }
+        if (in.size() < 35000) {
+            return OneShotFactory.singleOccursList().minimal(in, Preparation.ReversePritchard);
+        }
+        if (in.size() < 300000) {
+            return OneShotFactory.lexicographic().minimal(in, Preparation.Pritchard);
+        }
+        return OneShotFactory.parallel().minimal(in, Preparation.Pritchard);
     }
 
 }

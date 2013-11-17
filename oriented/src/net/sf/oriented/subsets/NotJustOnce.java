@@ -16,6 +16,19 @@ class NotJustOnce implements MinimalSubsets {
         method = m;
     }
 
+    NotJustOnce(String name) {
+        this(oneShotMethod(name));
+    }
+
+    private static Method oneShotMethod(String name) {
+        try {
+            return OneShotFactory.class.getDeclaredMethod(name);
+        }
+        catch (NoSuchMethodException | SecurityException e) {
+            throw new IllegalArgumentException(name+" not configured",e);
+        }
+    }
+
     @Override
     public List<BitSet> minimal(Collection<BitSet> full, Preparation prep) {
         try {
