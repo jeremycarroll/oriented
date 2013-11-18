@@ -7,6 +7,7 @@ package test;
 
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Verify;
+import net.sf.oriented.subsets.CorrectnessTestSubsets;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -38,6 +39,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestPlusMinusPlus.class,
     TestTwistedGraphs.class,
     TestPaths.class,
+    CorrectnessTestSubsets.class
 })
 @RunWith(Suite.class)
 public class TestAll {
