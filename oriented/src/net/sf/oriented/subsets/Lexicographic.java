@@ -8,50 +8,20 @@ import java.util.BitSet;
 import java.util.Comparator;
 
 import com.google.common.primitives.Ints;
-import net.sf.oriented.subsets.Lexicographic.LexEntry;
 
-class Lexicographic extends AbstractMinimalSubsets<LexEntry> {
+class Lexicographic <U extends BitSet, T extends LexEntry<U>> 
+extends AbstractMinimalSubsets<U ,T>  {
     
-    static class LexEntry extends BitSetEntry  {
-
-        final int bits[];
-        LexEntry(BitSet bs) {
-            super(bs);
-            bits = new int[bs.cardinality()];
-        }
-
-        @Override
-        void remap(int[] compressMapping) {
-            super.remap(compressMapping);
-            initBits();
-        }
-        @Override
-        void noremap() {
-            super.noremap();
-            initBits();
-        }
-
-        private void initBits() {
-            int j=0;
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                bits[j++] = i;
-            }
-        }
-
-        @Override
-        public int compareTo(BitSetEntry o) {
-            return Ints.lexicographicalComparator().compare(bits,((LexEntry)o).bits);
-        }
+    @SuppressWarnings("unchecked")
+    @Override
+    Class<T> getEntryClass() {
+        return (Class<T>) LexEntry.class;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    Class<LexEntry> getEntryClass() {
-        return LexEntry.class;
-    }
-
-    @Override
-    LexEntry create(BitSet b) {
-        return new LexEntry(b);
+    T create(BitSet b) {
+        return (T) new LexEntry(b);
     }
     @Override
     void markNonMinimal() {

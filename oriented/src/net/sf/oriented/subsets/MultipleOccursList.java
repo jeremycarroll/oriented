@@ -20,14 +20,15 @@ import com.google.common.base.Function;
  * @author jeremycarroll
  *
  */
-final class MultipleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
+final class MultipleOccursList<U extends BitSet, T extends BitSetEntry<U>> 
+      extends AbstractMinimalSubsets<U ,T> {
     final class SortedOccursLists extends TreeSet<OccursList> {
 
         int lastPeek;
         SortedOccursLists() {
         }
             
-        boolean initialize(int[][] occurs,  BitSetEntry e, int ix) {
+        boolean initialize(int[][] occurs,  T e, int ix) {
             BitSet bs = e.bs;
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 final OccursList entry = new OccursList(occurs[i]);
@@ -103,7 +104,7 @@ final class MultipleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
         int nextCardinalityIx = firstIxWithCardinalityFromIx(0, 1);
         outer:
         for (int ix=0;ix<firstMax;ix++) {
-            BitSetEntry bs = sorted[ix];
+            T bs = sorted[ix];
             if (bs.deleted) {
                 continue;
             }
@@ -148,9 +149,9 @@ final class MultipleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
         return cross;
     }
     private int[] countBits() {
-        Function<BitSetEntry, BitSet> func = new Function<BitSetEntry, BitSet>() {
+        Function<T, BitSet> func = new Function<T, BitSet>() {
             @Override
-            public BitSet apply(BitSetEntry e) {
+            public BitSet apply(T e) {
                 return e.bs;
             }
         };

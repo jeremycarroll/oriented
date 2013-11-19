@@ -11,15 +11,16 @@ import java.util.List;
 import com.google.common.base.Function;
 
 
-abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalSubsets {
+abstract class AbstractMinimalSubsets<U extends BitSet, T extends BitSetEntry<U>> implements MinimalSubsets<U> {
 
     int max = 0;
     T sorted[];
 
-    protected List<BitSet> gatherResults() {
-        BitSet rslt[] = new BitSet[sorted.length];
+    protected List<U> gatherResults() {
+        @SuppressWarnings("unchecked")
+        U rslt[] = (U[])new BitSet[sorted.length];
         int i = 0;
-        for (BitSetEntry b:sorted) {
+        for (T b:sorted) {
             if (!b.deleted) {
                 rslt[i++] = b.original;
             }
@@ -32,13 +33,13 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
         return (Class<T>) BitSetEntry.class;
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     T create(BitSet b) {
         return (T) new BitSetEntry(b);
     }
 
     @Override
-    public final List<BitSet> minimal(Collection<BitSet> full, Preparation prep) {
+    public final List<U> minimal(Collection<U> full, Preparation prep) {
         switch (full.size()) {
         case 0:
             return Arrays.asList();
@@ -52,9 +53,9 @@ abstract class AbstractMinimalSubsets<T extends BitSetEntry> implements MinimalS
 
     abstract void markNonMinimal() ;
 
-    protected int[] countBits(Function<BitSetEntry, BitSet> func, int max) {
+    protected int[] countBits(Function<T, BitSet> func, int max) {
         int counts[] = new int[max];
-        for (BitSetEntry e:sorted) {
+        for (T e:sorted) {
             BitSet bs = func.apply(e);
             for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
                 counts[i]++;

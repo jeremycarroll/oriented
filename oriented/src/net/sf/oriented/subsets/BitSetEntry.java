@@ -6,22 +6,22 @@ package net.sf.oriented.subsets;
 import java.util.BitSet;
 
 
-class BitSetEntry implements Comparable<BitSetEntry> 
+class BitSetEntry<U extends BitSet> implements Comparable<BitSetEntry<U>> 
 {
-    final BitSet original;
+    final U original;
     BitSet bs;
     private long[] bits;
     final int cardinality;
     boolean deleted;
-    BitSetEntry(BitSet bs) {
+    BitSetEntry(U bs) {
         this.original = bs;
         cardinality = bs.cardinality();
     }
     @Override
-    public int compareTo(BitSetEntry o) {
+    public int compareTo(BitSetEntry<U> o) {
         return cardinality - o.cardinality;
     }
-    boolean isSubsetOf(BitSetEntry ee) {
+    boolean isSubsetOf(BitSetEntry<U> ee) {
         if (ee.bits.length < bits.length) {
             return false;
         }

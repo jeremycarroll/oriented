@@ -3,44 +3,42 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.BitSet;
-import java.util.Collection;
-import java.util.List;
 
-class NotJustOnce<U extends BitSet, T extends BitSetEntry<U>> implements MinimalSubsets<U> {
-    private final Method method;
-    
-    NotJustOnce(Method m) {
-        method = m;
+
+import com.google.common.primitives.Ints;
+
+class LexEntry<U extends BitSet> extends BitSetEntry<U>  {
+
+    final int bits[];
+    LexEntry(U bs) {
+        super(bs);
+        bits = new int[bs.cardinality()];
     }
 
-    NotJustOnce(String name) {
-        this(oneShotMethod(name));
+    @Override
+    void remap(int[] compressMapping) {
+        super.remap(compressMapping);
+        initBits();
+    }
+    @Override
+    void noremap() {
+        super.noremap();
+        initBits();
     }
 
-    private static Method oneShotMethod(String name) {
-        try {
-            return OneShotFactory.class.getDeclaredMethod(name);
-        }
-        catch (NoSuchMethodException | SecurityException e) {
-            throw new IllegalArgumentException(name+" not configured",e);
+    private void initBits() {
+        int j=0;
+        for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+            bits[j++] = i;
         }
     }
 
     @Override
-    public List<U> minimal(Collection<U> full, Preparation prep) {
-        try {
-            return ((MinimalSubsets<U>)method.invoke(null)).minimal(full, prep);
-        }
-        catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+    public int compareTo(BitSetEntry<U> o) {
+        return Ints.lexicographicalComparator().compare(bits,((LexEntry<U>)o).bits);
     }
-
 }
-
 
 /************************************************************************
     This file is part of the Java Oriented Matroid Library.  

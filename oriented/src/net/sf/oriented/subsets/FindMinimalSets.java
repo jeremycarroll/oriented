@@ -27,7 +27,7 @@ public class FindMinimalSets {
      * @param in
      * @return A list of minimal sets
      */
-    public static List<BitSet> minimal(Collection<BitSet> in) {
+    public static <T extends BitSet>  List<T> minimal(Collection<T> in) {
         if (in.size() < 500) {
             return OneShotFactory.naive().minimal(in, Preparation.Minimal);
         }

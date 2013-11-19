@@ -17,13 +17,13 @@ public enum Preparation {
     ReversePritchard(1),
     Minimal(0) {
         @Override
-        <T extends BitSetEntry> T create(AbstractMinimalSubsets<T> algo, BitSet b) {
+        <U extends BitSet, T extends BitSetEntry<U>> T create(AbstractMinimalSubsets<U,T> algo, BitSet b) {
             final T rslt = algo.create(b);
             rslt.noremap();
             return rslt;
         }
         @Override
-        <T extends BitSetEntry> void remap(AbstractMinimalSubsets<T> algo,Data data) {
+        <U extends BitSet, T extends BitSetEntry<U>> void remap(AbstractMinimalSubsets<U,T> algo,Data data) {
            // do nothing much
             algo.max = data.longest;
         }
@@ -49,7 +49,7 @@ public enum Preparation {
         }
     }
 
-    <T extends BitSetEntry> void prepareData(Collection<BitSet> full, AbstractMinimalSubsets<T> algo) {
+    <U extends BitSet, T extends BitSetEntry<U>> void prepareData(Collection<U> full, AbstractMinimalSubsets<U,T> algo) {
         algo.sorted = (T[]) Array.newInstance(algo.getEntryClass(), full.size());
         Data data = createEntries(full, algo);
         algo.max = data.any.cardinality();
@@ -57,23 +57,23 @@ public enum Preparation {
         Arrays.sort(algo.sorted);
     }
 
-    <T extends BitSetEntry> Data createEntries(Collection<BitSet> full, AbstractMinimalSubsets<T> algo) {
+    <U extends BitSet, T extends BitSetEntry<U>>  Data createEntries(Collection<U> full, AbstractMinimalSubsets<U,T> algo) {
         return sign == 0 ?
                 createEntriesNoCounts(full, algo):
                 createEntriesWithCounts(full, algo);
     }
-    <T extends BitSetEntry> Data createEntriesWithCounts(Collection<BitSet> full, AbstractMinimalSubsets<T> algo) {
+    <U extends BitSet, T extends BitSetEntry<U>> Data createEntriesWithCounts(Collection<U> full, AbstractMinimalSubsets<U,T> algo) {
         Data data = createEntriesNoCounts(full, algo);
-        Function<BitSetEntry, BitSet> func = new Function<BitSetEntry, BitSet>() {
+        Function<T, BitSet> func = new Function<T, BitSet>() {
             @Override
-            public BitSet apply(BitSetEntry e) {
+            public BitSet apply(T e) {
                 return e.original;
             }
         };
         data.counts = algo.countBits(func, data.longest);
         return data;
     }
-    <T extends BitSetEntry> Data createEntriesNoCounts(Collection<BitSet> full, AbstractMinimalSubsets<T> algo) {
+    <U extends BitSet, T extends BitSetEntry<U>> Data createEntriesNoCounts(Collection<U> full, AbstractMinimalSubsets<U,T> algo) {
         int i = 0;
         Data data = new Data();
         for (BitSet b : full) {
@@ -87,9 +87,9 @@ public enum Preparation {
         return data;
     }
 
-    <T extends BitSetEntry> void remap(AbstractMinimalSubsets<T> algo,Data data) {
+    <U extends BitSet, T extends BitSetEntry<U>> void remap(AbstractMinimalSubsets<U,T> algo,Data data) {
         int[] compressMapping = createBitMapping(data);
-        for (BitSetEntry e:algo.sorted) {
+        for (T e:algo.sorted) {
             e.remap(compressMapping);
         }
     }
@@ -120,7 +120,7 @@ public enum Preparation {
         }
         return mapping;
     }
-    <T extends BitSetEntry> T create(AbstractMinimalSubsets<T> algo, BitSet b) {
+    <U extends BitSet, T extends BitSetEntry<U>> T create(AbstractMinimalSubsets<U,T> algo, BitSet b) {
         return algo.create(b);
     }
 

@@ -29,10 +29,10 @@ public class FindMinimalSubsetsTest extends AbsSubsetTest {
         super(m,prep,nme,bits,n,sets,expected);
     }
     
-    public static MinimalSubsets dummy() {
-        return new MinimalSubsets () {
+    public static <U extends BitSet, T extends BitSetEntry<U>> MinimalSubsets<U> dummy() {
+        return new MinimalSubsets<U> () {
             @Override
-            public List<BitSet> minimal(Collection<BitSet> full,
+            public List<U> minimal(Collection<U> full,
                     Preparation prep) {
                 return FindMinimalSets.minimal(full);
             }

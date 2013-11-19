@@ -4,6 +4,7 @@
 package net.sf.oriented.subsets;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -12,7 +13,8 @@ import java.util.List;
  * @author jeremycarroll
  *
  */
-class SingleOccursList extends AbstractMinimalSubsets<BitSetEntry> {
+class SingleOccursList<U extends BitSet, T extends BitSetEntry<U>> 
+extends AbstractMinimalSubsets<U ,T>  {
     
     @Override
     public void markNonMinimal() {
