@@ -22,8 +22,13 @@ import edu.uci.ics.jung.graph.Graph;
 
 public class Difficulty {
     
-    final BitSet bits = new BitSet();
-    final BitSet missingBits;
+    final class DBitSet extends BitSet {
+        Difficulty getDifficulty() {
+            return Difficulty.this;
+        }
+    }
+    final DBitSet bits = new DBitSet();
+//    final BitSet missingBits;
 //    public final TGEdge unnecessary;
     private Graph<Faces, DEdge> rslt;
     private List<TGEdge> saveEdges;
@@ -41,8 +46,8 @@ public class Difficulty {
                 saveEdges.add(e);
             }
         }
-        missingBits = (BitSet) bits.clone();
-        missingBits.flip(1,sz+1);
+//        missingBits = (BitSet) bits.clone();
+//        missingBits.flip(1,sz+1);
 //        this.unnecessary = unnecessary;
         
     }

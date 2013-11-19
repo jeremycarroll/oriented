@@ -32,14 +32,14 @@ public class TestExcel extends TestWithTempDir {
             TensionGraph ten = new TGFactory(pseudoLines).create();
             ten.prune();
                 WAM wam = new WAM(ten);
-                Difficulty[][] diff = wam.search(null);
+                Difficulty[] diff = wam.search(null);
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");
-                System.err.println(diff[0].length+" difficulties");
+                System.err.println(diff.length+" difficulties");
                 ExcelExport excel = new ExcelExport(pseudoLines);
                 excel.make();
-                for (int i=0;i<diff[0].length;i++) {
+                for (int i=0;i<diff.length;i++) {
 //                    Graph<Face, DEdge> rslt = diff[0][i].getSimplifiedRslt(ten);
 //                    Collection<DPath> cycles = new DPaths(rslt,pseudoLines).cycles();
 ////                    

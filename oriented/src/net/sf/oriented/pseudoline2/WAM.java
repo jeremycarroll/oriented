@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Deque;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ import net.sf.oriented.omi.OMasChirotope;
 import net.sf.oriented.omi.SetOfUnsignedSet;
 import net.sf.oriented.omi.UnsignedSet;
 import net.sf.oriented.pseudoline.EuclideanPseudoLines;
+import net.sf.oriented.pseudoline2.Difficulty.DBitSet;
+import net.sf.oriented.subsets.FindMinimalSets;
 
 /**
  * General back tracking design notes:
@@ -70,16 +73,6 @@ import net.sf.oriented.pseudoline.EuclideanPseudoLines;
  * 
  */
 public class WAM {
-    
-    private static ObjectOutputStream TEST_SETS_FILE;
-    static {
-        try {
-            TEST_SETS_FILE = new ObjectOutputStream(new FileOutputStream("/tmp/TestData.java"));
-        }
-        catch (IOException e) {
-            throw new Error(e);
-        }
-    }
     
     private final static boolean DETERMINISTIC = false;
     /**
@@ -365,7 +358,7 @@ public class WAM {
         }
         return true;
     }
-    public Difficulty[][] search(String name) {
+    public Difficulty[] search(String name) {
         addChoiceOfInitialTGVertex();
         while (true) {
             Frame top = stack.peek();
@@ -406,94 +399,25 @@ public class WAM {
         }
     }
 
-    private Difficulty[][] minimalResults(String name) {
+    private Difficulty[] minimalResults(String name) {
         
         
-        System.err.println("Original difficulty count: "+results.size());
-        Difficulty r[] = new Difficulty[results.size()];
-//        int unnecessary = 0;
-        results.toArray(r);
+        final int size = results.size();
+        System.err.println("Original difficulty count: "+size);
+        Difficulty.DBitSet r[] = new  Difficulty.DBitSet [size];
+        
+        for (int i=0;i<size;i++) {
+            final Difficulty d = results.get(i);
+            r[i] = d.bits;
+        }
 
-        try {
-            TEST_SETS_FILE.writeUTF(name);
-            TEST_SETS_FILE.writeInt(this.base.totalBits());
-            TEST_SETS_FILE.writeInt(r.length);
-            for (int i=0;i<r.length;i++) {
-              TEST_SETS_FILE.writeObject(r[i].bits);
-            }
-            TEST_SETS_FILE.flush();
-        }
-        catch (IOException e1) {
-            throw new RuntimeException(e1);
-        }
-        return null;
         
-//        int sz = r.length;
-//        int bad = 0;
-//        int done = 0;
-//        Arrays.sort(r, new Comparator<Difficulty>(){
-//
-//            @Override
-//            public int compare(Difficulty o1, Difficulty o2) {
-//                return o1.bits.cardinality() - o2.bits.cardinality();
-//            }});
-//        for (int i = 0;i<sz-1; i++ ) {
-//            Difficulty di = r[i];
-//            if (di.bits.get(0)) {
-//                continue;
-//            }
-//            for (int j=i+1;j<sz;j++) {
-//                done++;
-//                if ((done % 10000000) == 0) {
-//                    System.err.println("Sorting: "+(done / 10000000)+ " " + i + ", "+ j + " / " + sz);
-//                }
-//                Difficulty dj = r[j];
-//                if (dj.bits.get(0)) {
-//                    continue;
-//                }
-//                if (!di.bits.intersects(dj.missingBits)) {
-//                    dj.bits.set(0);
-//                    bad++;
-//                }
-//            }
-//            
-//        }
-//                    
-//        Difficulty rr[][] = new Difficulty[][]{new Difficulty[sz-bad], 
-////                                               new Difficulty[unnecessary],
-//                                               new Difficulty[bad]};
-//        
-//        int j=0;
-//        int k=0;
-////        int l=0;
-//        for (int i=0;i<r.length;i++) {
-//            if (!r[i].bits.get(0)) {
-////                if (r[i].unnecessary != null) {
-////                    rr[1][l++] = r[i];
-////                } else {
-//                   rr[0][j++] = r[i];
-////                }
-//            } else {
-//                rr[1][k++] = r[i];
-//            }
-//        }
-//        if (rr[1].length > 0) {
-//            try {
-//                TEST_SETS_FILE.writeInt(r.length);
-//                for (int i=0;i<r.length;i++) {
-//                  TEST_SETS_FILE.writeObject(r[i].bits);
-//                }
-//                TEST_SETS_FILE.flush();
-//            }
-//            catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//            
-//            
-//        }
-//        return rr;
-        
+        final List<DBitSet> drslts = FindMinimalSets.minimal(Arrays.asList(r));
+        Difficulty rslts[] = new Difficulty[drslts.size()];
+        for (int i=0;i<rslts.length;i++) {
+            rslts[i] = drslts.get(i).getDifficulty();
+        }
+        return rslts;
     }
 
     /**

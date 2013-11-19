@@ -210,15 +210,15 @@ public class TestTwistedGraphs extends TestWithTempDir {
             if (false && vCount2 != 0) {
                 soln ++;
                 WAM wam = new WAM(ten);
-                Difficulty[][] diff = wam.search(omName+"*"+inf);
+                Difficulty[] diff = wam.search(omName+"*"+inf);
                 
                 System.err.println(wam.transitions+" wam transitions");
                 System.err.println(wam.foundDifficultyCount+" original difficulty count");
-                System.err.println(diff[0].length+" difficulties");
-                usuallyAssertEquals(dCount,diff[0].length);
+                System.err.println(diff.length+" difficulties");
+                usuallyAssertEquals(dCount,diff.length);
                 String namename = omName + "-" + inf+"-"+ (soln<10?"0":"")+soln;
                 if (false)
-                    dumpDrawings(diff[0], pseudoLines, ten, namename);
+                    dumpDrawings(diff, pseudoLines, ten, namename);
             }
             if (bad != null) {
 //                System.err.println(bad);
