@@ -158,10 +158,10 @@ final class MultipleOccursList<U extends BitSet, T extends BitSetEntry<U>>
         return countBits(func, max);
     }
     private int findFirstWithCardinality(final int maxCardinality) {
-        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<BitSetEntry>(){
+        int firstMax = -(1 + Arrays.binarySearch(sorted, null, new Comparator<T>(){
 
             @Override
-            public int compare(BitSetEntry o1, BitSetEntry o2) {
+            public int compare(T o1, T o2) {
                 if (o1 == null) {
                     if (o2.cardinality >= maxCardinality) {
                         return -1;

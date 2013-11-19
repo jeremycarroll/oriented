@@ -35,7 +35,7 @@ public class FindMinimalSets {
             return OneShotFactory.singleOccursList().minimal(in, Preparation.ReversePritchard);
         }
         if (in.size() < 300000) {
-            return OneShotFactory.lexicographic().minimal(in, Preparation.Pritchard);
+            return  OneShotFactory.lexicographic().minimal(in, Preparation.Pritchard);
         }
         return OneShotFactory.parallel().minimal(in, Preparation.Pritchard);
     }

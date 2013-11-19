@@ -19,12 +19,12 @@ extends AbstractMinimalSubsets<U ,T>  {
     @Override
     public void markNonMinimal() {
         @SuppressWarnings("unchecked")
-        List<BitSetEntry> occurs[] = new List[max];
+        List<T> occurs[] = new List[max];
         int currentSize = sorted[0].cardinality;
         int lastSizeChange = 0;
         outer:
         for (int i=0;i<sorted.length;i++) {
-            BitSetEntry e = sorted[i];
+            T e = sorted[i];
             if (e.cardinality > currentSize) {
                 addToOccursLists(sorted, lastSizeChange, i, occurs);
                 currentSize = e.cardinality;
@@ -34,7 +34,7 @@ extends AbstractMinimalSubsets<U ,T>  {
             for (int j = e.bs.nextSetBit(0); j >= 0; j = e.bs.nextSetBit(j+1)) {
                 bits++;
                 if (occurs[j]!=null) {
-                    for (BitSetEntry ee:occurs[j]) {
+                    for (T ee:occurs[j]) {
                         // the optimization from line 5 of the algorithm in the paper
                         if (ee.cardinality > e.cardinality - bits + 1) {
                             break;
@@ -49,10 +49,10 @@ extends AbstractMinimalSubsets<U ,T>  {
         }
     }
 
-    private void addToOccursLists(BitSetEntry[] all, int lastSizeChange, int i,
-            List<BitSetEntry>[] occurs) {
+    private void addToOccursLists(T[] all, int lastSizeChange, int i,
+            List<T>[] occurs) {
         for (int ii=lastSizeChange;ii<i;ii++) {
-            BitSetEntry ee = all[ii];
+            T ee = all[ii];
             if (ee.deleted) {
                 continue;
             }

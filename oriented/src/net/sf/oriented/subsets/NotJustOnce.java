@@ -9,7 +9,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 
-class NotJustOnce<U extends BitSet, T extends BitSetEntry<U>> implements MinimalSubsets<U> {
+class NotJustOnce implements MinimalSubsets {
     private final Method method;
     
     NotJustOnce(Method m) {
@@ -30,9 +30,9 @@ class NotJustOnce<U extends BitSet, T extends BitSetEntry<U>> implements Minimal
     }
 
     @Override
-    public List<U> minimal(Collection<U> full, Preparation prep) {
+    public <U extends BitSet> List<U> minimal(Collection<U> full, Preparation prep) {
         try {
-            return ((MinimalSubsets<U>)method.invoke(null)).minimal(full, prep);
+            return ((MinimalSubsets)method.invoke(null)).minimal(full, prep);
         }
         catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);

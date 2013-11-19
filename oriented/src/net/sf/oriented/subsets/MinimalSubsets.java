@@ -7,7 +7,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 
-public interface MinimalSubsets<U extends BitSet> {
+public interface MinimalSubsets {
     
     /**
      * Returns a list of minimal elements of full.
@@ -19,7 +19,7 @@ public interface MinimalSubsets<U extends BitSet> {
      * @param prep 
      * @return
      */
-     List<U> minimal(Collection<U> full, Preparation prep);
+    <U extends BitSet> List<U> minimal(Collection<U> full, Preparation prep);
 
 }
 

@@ -15,6 +15,7 @@ package net.sf.oriented.subsets;
  */
 class OneShotFactory {
 
+    @SuppressWarnings("rawtypes")
     public static MinimalSubsets naive() {
         return new Naive();
     }
@@ -24,18 +25,22 @@ class OneShotFactory {
      * <a href="http://stackoverflow.com/a/8996897/2276263">Aaron McDaid's comment</a>:
      * @return
      */
+    @SuppressWarnings("rawtypes")
     public static MinimalSubsets multipleOccursList() {
         return new MultipleOccursList();
     }
-    
-    public static MinimalSubsets singleOccursList() {
+
+    @SuppressWarnings("rawtypes")
+    public static  MinimalSubsets singleOccursList() {
         return new SingleOccursList();
     }
 
+    @SuppressWarnings("rawtypes")
     public static MinimalSubsets lexicographic() {
         return new Lexicographic();
     }
 
+    @SuppressWarnings("rawtypes")
     public static MinimalSubsets parallel() {
         return new ParallelLex();
     }

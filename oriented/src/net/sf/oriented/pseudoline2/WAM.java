@@ -3,13 +3,9 @@
  ************************************************************************/
 package net.sf.oriented.pseudoline2;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Deque;
 import java.util.Formatter;
 import java.util.HashMap;

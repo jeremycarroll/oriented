@@ -10,10 +10,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
-
-import test.BetterParameterized;
 
 
 public class FindMinimalSubsetsTest extends AbsSubsetTest {
@@ -29,11 +26,10 @@ public class FindMinimalSubsetsTest extends AbsSubsetTest {
         super(m,prep,nme,bits,n,sets,expected);
     }
     
-    public static <U extends BitSet, T extends BitSetEntry<U>> MinimalSubsets<U> dummy() {
-        return new MinimalSubsets<U> () {
+    public static  MinimalSubsets dummy() {
+        return new MinimalSubsets () {
             @Override
-            public List<U> minimal(Collection<U> full,
-                    Preparation prep) {
+            public <U extends BitSet> List<U> minimal(Collection<U> full, Preparation prep) {
                 return FindMinimalSets.minimal(full);
             }
             

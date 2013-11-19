@@ -3,17 +3,18 @@
  ************************************************************************/
 package net.sf.oriented.subsets;
 
+import java.util.BitSet;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 
-class ParallelLex extends Lexicographic {
+class ParallelLex<U extends BitSet, T extends LexEntry<U>>  extends Lexicographic<U,T> {
     private static ForkJoinPool forkJoinPool = new ForkJoinPool();
-    private static class LexTask extends RecursiveAction {
-        final ParallelLex lex;
+    private static class LexTask<U extends BitSet, T extends LexEntry<U>> extends RecursiveAction {
+        final ParallelLex<U,T> lex;
         final int from;
         final int to;
-        LexTask(ParallelLex lex, int from, int to) {
+        LexTask(ParallelLex<U,T> lex, int from, int to) {
             this.lex = lex;
             this.from = from;
             this.to = to;
@@ -25,7 +26,7 @@ class ParallelLex extends Lexicographic {
                 lex.markNonMinimal(from, to);
             } else {
                 int mid = from + (to - from)/2;
-                invokeAll(new LexTask(lex,from,mid), new LexTask(lex,mid,to));
+                invokeAll(new LexTask<>(lex,from,mid), new LexTask<>(lex,mid,to));
             }
         }
         
@@ -43,7 +44,7 @@ class ParallelLex extends Lexicographic {
             if (threshold<THRESHOLD) {
                 threshold = THRESHOLD;
             }
-            forkJoinPool.invoke(new LexTask(this, 0, sorted.length));
+            forkJoinPool.invoke(new LexTask<>(this, 0, sorted.length));
         }
     }
 

@@ -18,7 +18,7 @@ extends AbstractMinimalSubsets<U ,T>  {
         return (Class<T>) LexEntry.class;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     T create(BitSet b) {
         return (T) new LexEntry(b);
@@ -62,7 +62,7 @@ extends AbstractMinimalSubsets<U ,T>  {
      * @param to
      * @param matchedLength
      */
-    private boolean isNonMinimal(LexEntry searchItem, int from, int to, int matchedLength, int matchedLength2) {
+    private boolean isNonMinimal(T searchItem, int from, int to, int matchedLength, int matchedLength2) {
         
         if (from == to) {
             return false; // no match
@@ -104,10 +104,10 @@ extends AbstractMinimalSubsets<U ,T>  {
      * @param to
      * @return a number between from (incl) and to (excl).
      */
-    private int findIndex(LexEntry searchItem, final int matching, final int next,
+    private int findIndex(T searchItem, final int matching, final int next,
             int from, int to) {
         final int siBits[] = searchItem.bits;
-        Comparator<LexEntry> comp = new Comparator<LexEntry>() {
+        Comparator<T> comp = new Comparator<T>() {
             private boolean isSmaller(int[] entry) {
               int minLength = Math.min(entry.length, matching);
               for (int i = 0; i < minLength; i++) {
@@ -123,7 +123,7 @@ extends AbstractMinimalSubsets<U ,T>  {
             }
 
             @Override
-            public int compare(LexEntry o1, LexEntry o2) {
+            public int compare(T o1, T o2) {
                 if (o1 == null) {
                     return isSmaller(o2.bits) ? 1 : -1;
                 }
@@ -138,43 +138,6 @@ extends AbstractMinimalSubsets<U ,T>  {
 //        System.err./(r);
         return r;
     }
-    public static void main(String args[]) {
-        final int compressMappings[] = new int[128];
-        for (int i=0;i<compressMappings.length;i++) {
-            compressMappings[i] = i;
-        }
-        BitSet a = BitSet.valueOf(new long[]{3,3});
-        BitSet b = BitSet.valueOf(new long[]{1,3});
-        BitSet c = BitSet.valueOf(new long[]{3,2});
-        BitSet d = BitSet.valueOf(new long[]{1});
-        BitSet e = BitSet.valueOf(new long[]{2});
-        BitSet all[] = new BitSet[]{a,b,c,d,e};
-        Comparator<BitSet> bitsetComparator = new Comparator<BitSet>(){
-
-            @Override
-            public int compare(BitSet o1, BitSet o2) {
-                final LexEntry l1 = new LexEntry(o1);
-                final LexEntry l2 = new LexEntry(o2);
-                l1.remap(compressMappings);
-                l2.remap(compressMappings);
-                return l1.compareTo(l2);
-            }};
-        Arrays.sort(all, bitsetComparator  );
-        for (BitSet aa:all) {
-            print("*",aa);
-        }
-        
-    }
-
-
-    private static void print(String name, BitSet original) {
-        System.err.print(name+": { ");
-        for (int i = original.nextSetBit(0); i >= 0; i = original.nextSetBit(i+1)) {
-            System.err.print(i+", ");
-        }
-        System.err.println("}");
-    }
-
 }
 
 

@@ -11,7 +11,7 @@ import java.util.List;
 import com.google.common.base.Function;
 
 
-abstract class AbstractMinimalSubsets<U extends BitSet, T extends BitSetEntry<U>> implements MinimalSubsets<U> {
+abstract class AbstractMinimalSubsets<U extends BitSet, T extends BitSetEntry<U>> implements MinimalSubsets {
 
     int max = 0;
     T sorted[];
@@ -38,17 +38,18 @@ abstract class AbstractMinimalSubsets<U extends BitSet, T extends BitSetEntry<U>
         return (T) new BitSetEntry(b);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public final List<U> minimal(Collection<U> full, Preparation prep) {
+    public final <V extends BitSet> List<V> minimal(Collection<V> full, Preparation prep) {
         switch (full.size()) {
         case 0:
             return Arrays.asList();
         case 1:
             return Arrays.asList(full.iterator().next());
         }
-        prep.prepareData(full, this);
+        prep.prepareData((Collection<U>)full, this);
         markNonMinimal();
-        return gatherResults();
+        return (List<V>)gatherResults();
     }
 
     abstract void markNonMinimal() ;

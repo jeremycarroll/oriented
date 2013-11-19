@@ -12,12 +12,12 @@ extends AbstractMinimalSubsets<U ,T>  {
     void markNonMinimal() {
         int sz = sorted.length;
         for (int i = 0; i < sz - 1; i++) {
-            BitSetEntry di = sorted[i];
+            BitSetEntry<U> di = sorted[i];
             if (di.deleted) {
                 continue;
             }
             for (int j = i + 1; j < sz; j++) {
-                BitSetEntry dj = sorted[j];
+                BitSetEntry<U> dj = sorted[j];
                 if (dj.deleted) {
                     continue;
                 }
