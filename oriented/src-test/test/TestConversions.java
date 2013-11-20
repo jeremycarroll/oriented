@@ -41,11 +41,6 @@ import test.BetterParameterized.TestName;
 @RunWith(value = BetterParameterized.class)
 public class TestConversions {
     
-    static  final int skipPerCent;
-    static {
-        String percent = System.getenv("SKIP_TEST_PERCENT");
-        skipPerCent = percent==null?0:Integer.parseInt(percent);
-    }
 
 	static FactoryFactory special;
 
@@ -108,7 +103,7 @@ public class TestConversions {
 
     private static boolean includeTest(Random rand, int source, int ff,
             Cryptomorphisms from, Cryptomorphisms to) {
-        return onlyThisTest == null?rand.nextInt(100)>=skipPerCent:onlyThisTest.equals(name(source,ff,from,to));
+        return onlyThisTest == null?rand.nextInt(100)>=TestAll.skipPerCent:onlyThisTest.equals(name(source,ff,from,to));
     }
 
 	public static String name(int source, int ff, Cryptomorphisms from,

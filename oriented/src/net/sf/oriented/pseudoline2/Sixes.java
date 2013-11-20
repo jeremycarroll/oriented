@@ -291,11 +291,11 @@ public class Sixes {
         int total = 0;
         for (int j=1;j<counts.length;j++) {
            if (counts[j]!=0) {
-               System.err.println(j+"\t"+counts[j]);
+//               System.err.println(j+"\t"+counts[j]);
                total += counts[j];
            }
         }
-        System.err.println("=\t"+total);
+//        System.err.println("=\t"+total);
         all = new long[total];
         i = 0;
         last = 0;

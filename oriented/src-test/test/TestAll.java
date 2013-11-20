@@ -8,6 +8,7 @@ package test;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Verify;
 import net.sf.oriented.subsets.CorrectnessTestSubsets;
+import net.sf.oriented.subsets.FindMinimalSubsetsTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -39,10 +40,18 @@ import org.junit.runners.Suite.SuiteClasses;
     TestPlusMinusPlus.class,
     TestTwistedGraphs.class,
     TestPaths.class,
-    CorrectnessTestSubsets.class
+    CorrectnessTestSubsets.class,
+    FindMinimalSubsetsTest.class,
 })
 @RunWith(Suite.class)
 public class TestAll {
+
+    static public final int skipPerCent;
+    static {
+        String percent = System.getenv("SKIP_TEST_PERCENT");
+        skipPerCent = percent==null?0:Integer.parseInt(percent);
+    }
+    
     public static boolean verify(Verify v) {
         try {
             v.verify();

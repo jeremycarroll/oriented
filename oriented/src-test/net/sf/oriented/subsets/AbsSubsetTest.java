@@ -22,13 +22,14 @@ import org.junit.runner.RunWith;
 
 import test.BetterParameterized;
 import test.BetterParameterized.TestName;
+import test.TestAll;
 
 @RunWith(value = BetterParameterized.class)
 public class AbsSubsetTest {
-    public  AbsSubsetTest(Method m, Preparation prep, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public  AbsSubsetTest(Method m, Preparation prep, String nme, int bits, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         algorithm = (MinimalSubsets) m.invoke(null);
         data = sets;
-        name = name(m,prep, nme,bits,n,sets, expected);
+        name = name(m,prep, nme,bits,sets, expected);
         this.expected = expected;
         this.prep = prep;
     }
@@ -50,6 +51,10 @@ public class AbsSubsetTest {
                 ObjectInputStream in = new ObjectInputStream(SpeedTestSubsets.class.getResourceAsStream(testData));
                 int cnt = 0;
                 while (true) {
+                    if (TestAll.skipPerCent > 50 && cnt > 9 ) {
+                        break;
+                    }
+                    cnt++;
                     int sz;
                     String name;
                     try {
@@ -77,7 +82,7 @@ public class AbsSubsetTest {
                     for (Method m: methods)
                     for (Preparation prep: preps ) {
                          {
-                            rslt.add(new Object[]{m,prep,name,bits,cnt,sets,numberOfAnswers});
+                            rslt.add(new Object[]{m,prep,name,bits,sets,numberOfAnswers});
                         }
                     }
                 }
@@ -95,8 +100,8 @@ public class AbsSubsetTest {
 
     @TestName
     public static String name(Method m, Preparation prep, String name,
-            int bits, int n, BitSet sets[], int expected) {
-                return m.getName()+"-"+prep+"-"+name+"-bits-"+bits+"-sets-"+n+"-"+sets.length;
+            int bits, BitSet sets[], int expected) {
+                return m.getName()+"-"+prep+"-"+name+"-bits-"+bits+"-sets-"+sets.length;
             }
 
     @Test

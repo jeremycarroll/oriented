@@ -22,8 +22,8 @@ public class FindMinimalSubsetsTest extends AbsSubsetTest {
                 new Preparation[]{Preparation.Pritchard});
     }
 
-    public FindMinimalSubsetsTest(Method m, Preparation prep, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        super(m,prep,nme,bits,n,sets,expected);
+    public FindMinimalSubsetsTest(Method m, Preparation prep, String nme, int bits, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        super(m,prep,nme,bits,sets,expected);
     }
     
     public static  MinimalSubsets dummy() {

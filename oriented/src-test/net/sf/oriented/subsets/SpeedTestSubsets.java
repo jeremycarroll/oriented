@@ -21,8 +21,8 @@ public class SpeedTestSubsets extends AbsSubsetTest {
                 Preparation.values());
     }
 
-    public SpeedTestSubsets(Method m, Preparation prep, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        super(m,prep,nme,bits,n,sets,expected);
+    public SpeedTestSubsets(Method m, Preparation prep, String nme, int bits, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        super(m,prep,nme,bits,sets,expected);
     }
 
 }

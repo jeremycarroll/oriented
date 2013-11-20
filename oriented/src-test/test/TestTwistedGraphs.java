@@ -196,7 +196,7 @@ public class TestTwistedGraphs extends TestWithTempDir {
             OM om = Examples.all().get(omName);
             EuclideanPseudoLines pseudoLines = new EuclideanPseudoLines(om,inf);
             int m = Sixes.get().matches(pseudoLines);
-            System.err.println("Matches: "+m);
+//            System.err.println("Matches: "+m);
             if (true) {
             TensionGraph ten = new TGFactory(pseudoLines).create();
 //        for (TGVertex v:ten.getVertices()) {

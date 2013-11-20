@@ -22,8 +22,8 @@ public class CorrectnessTestSubsets extends AbsSubsetTest {
                 Preparation.values());
     }
 
-    public CorrectnessTestSubsets(Method m, Preparation prep, String nme, int bits, int n, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        super(m,prep,nme,bits,n,sets,expected);
+    public CorrectnessTestSubsets(Method m, Preparation prep, String nme, int bits, BitSet sets[], int expected) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        super(m,prep,nme,bits,sets,expected);
     }
 
 }
