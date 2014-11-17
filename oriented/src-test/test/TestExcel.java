@@ -40,35 +40,10 @@ public class TestExcel extends TestWithTempDir {
                 ExcelExport excel = new ExcelExport(pseudoLines);
                 excel.make();
                 for (int i=0;i<diff.length;i++) {
-//                    Graph<Face, DEdge> rslt = diff[0][i].getSimplifiedRslt(ten);
-//                    Collection<DPath> cycles = new DPaths(rslt,pseudoLines).cycles();
-////                    
-////                    if (!searchForCyclePair(rslt, cycles)) {
-////                        continue;
-////                    }
-//                    
-//                    
-//                    System.err.println("Candidate found: "+i+": "+cycles.size()+" "+rslt.getEdgeCount());
-//                    for (Face f:rslt.getVertices()) {
-//                        if ( rslt.getNeighborCount(f) == 3 && f.dimension() == 0) {
-//                            System.err.println("!!!!");
-//                        }
-//                    }
-//                    
-//                    DifficultyDrawing euclid = new DifficultyDrawing(pseudoLines, ten, diff[0][i]);
-//                    ImageWriter iw = ImageIO.getImageWritersByMIMEType("image/jpeg").next();
-//                    ImageOutputStream imageOutput = ImageIO.createImageOutputStream(new File(tmp+"/" + omName + "-" + inf+"-"+ 
-//                            soln + "-" + (i<10?"0":"")+i +".jpeg"));
-//                    iw.setOutput(imageOutput);
-//                    iw.write(euclid.image(options));
-//                    euclid.verify();
-//                    imageOutput.close();
-//                    iw.dispose();
-//                    
             }
-                String fname = tmp+"/"+omName+"-"+inf+".xlsx";
-                System.err.println("Saving to "+fname);
-                excel.save(fname);
+            String fname = tmp+"/"+omName+"-"+inf+".xlsx";
+            System.err.println("Saving to "+fname);
+            excel.save(fname);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

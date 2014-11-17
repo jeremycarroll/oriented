@@ -159,7 +159,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
      * The n-bits of pattern can be split into several
      * 3 bits segements, each being a PMP
      * @param pattern n-bits, 0 for - 1 for +
-     * @return An array of arrays, where each memeber of each memeber is three bits
+     * @return An array of arrays, where each member of each member is three bits
      * that is a PMP in pattern, and where the bitwise OR of the members of each member
      * is (1<<n)-1, and where no member of a member is redundant
      * 
@@ -167,7 +167,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
     private int[][] splitIntoThrees(int pattern) {
         int ix = Arrays.binarySearch(patterns, pattern);
         if (ix < 0) {
-            // not a PMP
+            // not a PMP of length n
             return new int[0][];
         }
         if (splitIntoThrees[ix]!=null) {
@@ -176,6 +176,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         List<int[]> results = new ArrayList<>();
         splitIntoThrees( pattern, 0, results, new int[n], 0 );
         final int[][] r = results.toArray(new int[0][]);
+        // remove duplicates
         Arrays.sort(r, Ints.lexicographicalComparator());
         int from = 1;
         int i = 0;
@@ -188,6 +189,7 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
         }
         i++;
         int sz = i;
+        // remove non-minimal
         i = 0;
         for (int j=0;j<sz;j++) {
             for (int k=j+1;k<sz;k++) {
@@ -213,30 +215,32 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
                 }
             }
         }
-        int counts[][] = new int[sz][];
-        for (i=0;i<sz;i++) {
-            counts[i] = new int[n];
-            for (int j:r[i]) {
-                for (int k=0;k<n;k++) {
-                    if (((1<<k)&j)!=0) {
-                        counts[i][k]++;
-                    }
-                }
-            }
-        }
-        for (i=0;i<sz;i++) {
-            for (int j=i+1;j<sz;j++) {
-                if (Arrays.equals(counts[i],counts[j])) {
-                    if ( j != sz - 1) {
-                        counts[j] = counts[sz-1];
-                        r[j] = r[sz-1];
-                        j--;
-                    }
-                    sz--;
-                }
-            }
-        }
-        
+        // remove any where while a different set of threes
+        // is in some sense a duplicate from the nature of the counts
+//        int counts[][] = new int[sz][];
+//        for (i=0;i<sz;i++) {
+//            counts[i] = new int[n];
+//            for (int j:r[i]) {
+//                for (int k=0;k<n;k++) {
+//                    if (((1<<k)&j)!=0) {
+//                        counts[i][k]++;
+//                    }
+//                }
+//            }
+//        }
+//        for (i=0;i<sz;i++) {
+//            for (int j=i+1;j<sz;j++) {
+//                if (Arrays.equals(counts[i],counts[j])) {
+//                    if ( j != sz - 1) {
+//                        counts[j] = counts[sz-1];
+//                        r[j] = r[sz-1];
+//                        j--;
+//                    }
+//                    sz--;
+//                }
+//            }
+//        }
+//        
         int rr[][] = new int[sz][];
         System.arraycopy(r, 0, rr, 0, rr.length);
         splitIntoThrees[ix] = rr;
@@ -272,12 +276,17 @@ public class PlusMinusPlus implements Iterable<boolean[]>{
             results.add(r);
             return;
         }
-        int coverMe = Integer.lowestOneBit(max & ~done);
-        if (coverMe == 0) {
-            return;
-        }
+//        int coverMe = Integer.lowestOneBit(max & ~done);
+//        if (coverMe == 0) {
+//            return;
+//        }
+        // massively duplicate with this recursive algorithm,
+        // fortunately not called too much
         for (int three=7;three<= max;three ++) {
-            if ((three & coverMe) != 0 && Integer.bitCount(three) == 3) {
+            if (Integer.bitCount(three) == 3) {
+                if (done != 0 && Integer.bitCount(done&three)!=2) {
+                    continue;
+                }
                 if (isPMP(pattern, three)) {
                     threes[tIx] = three;
                     splitIntoThrees(pattern, done | three, results, threes, tIx+1);

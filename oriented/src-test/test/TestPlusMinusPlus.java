@@ -82,9 +82,9 @@ public class TestPlusMinusPlus {
     @Test
     public void test_nA_B_C_nD_E_F() {
         int split[][] = PlusMinusPlus.testSplitIntoThrees(6, 54);
-        Assert.assertEquals(2,split.length);
-        Assert.assertEquals(3,split[0].length);
-        Assert.assertEquals(3,split[1].length);
+        Assert.assertEquals(12,split.length);
+        Assert.assertEquals(4,split[0].length);
+        Assert.assertEquals(4,split[1].length);
         Assert.assertEquals(9,split[0][0] & ~ 6);
         Assert.assertEquals(9,split[1][0] & ~ 6);
     }
@@ -101,7 +101,7 @@ public class TestPlusMinusPlus {
         int total = 0;
         OM ceva = Examples.ceva();
         Label infinity = ceva.elements()[0];
-        SetOfSignedSet sSets = ceva.getVectors();
+        SetOfSignedSet sSets = ceva.getMaxVectors();
         SignedSetFactory factory = ceva.ffactory().signedSets();
         for (SignedSet ss:sSets) {
             if (ss.sign(infinity) == -1) {
@@ -110,15 +110,22 @@ public class TestPlusMinusPlus {
             ss = factory.construct(ss.plus().minus(infinity), ss.minus().minus(infinity));
             SignedSet aXs[][] = PlusMinusPlus.splitIntoThrees(ceva, ss);
             total += aXs.length;
-//            System.err.println(ss);
-//            for (int i=0;i<aXs.length;i++) {
-//                System.err.println("    "+i+":");
-//                for (SignedSet t:aXs[i]) {
-//                    System.err.println("       "+t);
-//                }
-//            }
+          //  printThrees(ss, aXs);
         }
-        Assert.assertEquals(657, total); // the exact number is not very useful: I don't really know if it is correct
+        // This  number is allowing a minimal cover of each SS,
+        // the code currently requires a cover with  two elements
+        // common, and exactly n-1 parts of the cover
+        Assert.assertEquals(1018, total); // the exact number is not very useful: I don't really know if it is correct
+    }
+
+    private void printThrees(SignedSet ss, SignedSet[][] aXs) {
+        System.err.println(ss);
+        for (int i=0;i<aXs.length;i++) {
+            System.err.println("    "+i+":");
+            for (SignedSet t:aXs[i]) {
+                System.err.println("       "+t);
+            }
+        }
     }
 
 }
