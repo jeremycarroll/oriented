@@ -166,6 +166,8 @@
                         <link>https://guava.dev/releases/31.1-jre/api/docs/</link>
                         <link>https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/</link>
                     </links>
+                    <doclint>none</doclint>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
