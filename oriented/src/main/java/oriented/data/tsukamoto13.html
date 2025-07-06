@@ -1,0 +1,40 @@
+
+<p>
+<a class="cite" href="../javadoc/net/sf/oriented/omi/Bibliography.html#tsukamoto2013">
+Tsukamoto, [2013]</a> shows that <a href="suvorov14.html">Suvorov</a>'s oriented matroid is not 
+the smallest possible one with disconnected realization space.
+His examples use 13 elements instead of <a href="suvorov14.html">Suvorov</a>'s and
+<a href="omega14-plus.html">Richter-Gerbert</a>'s 14.
+</p>
+<p>
+The basic approach is the same as Richter-Gerbert,
+take a 3 by <em>n</em> matrix, define a chirotope function using the 3 by 3 determinants,
+carefully select one triple for which that chirotope is zero, where the oriented matroid can be
+locally perturbed, and define two new oriented matroids by perturbing in either direction.
+</p>
+<p>Here is Tsukamoto's matrix, which is evaluated with 
+s=&frac12;, t=&frac12; and u=&#x2153;.
+</p>
+
+<table cellpadding='3'>
+<tr>
+<th align="right" width="5%">A</th>
+<th align="right" width="5%">B</th>
+<th align="right" width="5%">C</th>
+<th align="right" width="5%">D</th>
+<th align="right" width="5%">E</th>
+<th align="right" width="5%">F</th>
+<th align="right" width="5%">G</th>
+<th align="right" width="5%">H</th>
+<th align="right" width="5%">I</th>
+<th align="right" width="7%">J</th>
+<th align="right" width="10%">K</th>
+<th align="right" width="10%">L</th>
+<th align="right" width="10%">M</th>
+</tr>
+
+         <tr><td align="right"> 1</td><td align="right"> 0</td><td align="right"> 0</td><td align="right"> 1</td><td align="right"> s</td><td align="right"> s</td><td align="right"> 0</td><td align="right"> 1</td><td align="right"> 1</td><td align="right">  st</td><td align="right">   s+t-u-st+su</td><td align="right"> s+t-st-s<sup>2</sup>u</td><td align="right"> s(t-u+su) </td></tr>
+         <tr><td align="right"> 0</td><td align="right"> 1</td><td align="right"> 0</td><td align="right"> 1</td><td align="right"> 0</td><td align="right"> 1</td><td align="right"> t</td><td align="right"> t</td><td align="right"> u</td><td align="right">    t</td><td align="right">   t-u + su</td><td align="right">     t</td><td align="right">             t-u+su </td></tr>
+         <tr><td align="right"> 0</td><td align="right"> 0</td><td align="right"> 1</td><td align="right"> 1</td><td align="right"> 1</td><td align="right"> 1</td><td align="right"> 1</td><td align="right"> 1</td><td align="right"> 0</td><td align="right">  1-su</td><td align="right"> 1-u+su</td><td align="right">       1-su</td><td align="right">         1-u+su </td></tr>
+
+</table>
