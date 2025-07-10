@@ -45,7 +45,7 @@ The WebPage tool generates HTML pages with detailed information about oriented m
 ### Usage
 
 ```bash
-java -jar target/oriented-0.3.0-SNAPSHOT.jar --<example-name> [options]
+java -jar target/oriented-0.6.0-jar-with-dependencies.jar --<example-name> [options]
 ```
 
 ### Command Line Options
@@ -71,7 +71,7 @@ java -jar target/oriented-0.3.0-SNAPSHOT.jar --<example-name> [options]
 ### Example
 
 ```bash
-java -jar target/oriented-0.3.0-SNAPSHOT.jar --pappus
+java -jar target/oriented-0.6.0-jar-with-dependencies.jar  --pappus
 ```
 
 This will generate HTML files in the `doc/examples/` directory that contain:
