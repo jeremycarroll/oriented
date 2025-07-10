@@ -123,8 +123,8 @@ public class WebPage {
 
     public static void main(String args[]) throws IOException,
             CoLoopCannotBeDrawnException {
-        ArgumentParser parser = ArgumentParsers.newArgumentParser("Image")
-                .description("Create web pages about oriented matrorid.");
+        ArgumentParser parser = ArgumentParsers.newArgumentParser("WebPage")
+                .description("Create web pages about oriented matroid.");
         MutuallyExclusiveGroup omGroup = parser
                 .addMutuallyExclusiveGroup("Oriented Matroid");
         omGroup.required(true);
