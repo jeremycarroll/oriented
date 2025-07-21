@@ -18,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
     TestAlternating.class, 
     TestCircuits.class,    
-    TestConversions.class, 
+    TestConversions.class,
+        TestConvertCLI.class,
     TestCoLexicographic.class, 
     TestGetRuntimeClass.class,
     TestLexicographic.class, 
