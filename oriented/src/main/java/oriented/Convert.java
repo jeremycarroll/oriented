@@ -5,6 +5,7 @@
 package oriented;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -94,21 +95,47 @@ public class Convert {
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     * Runs the convert operation with the provided arguments.
+     * This method is used internally and by tests to avoid System.exit() calls.
+     *
+     * @param args Command line arguments
+     * @return 0 if successful, non-zero on error
+     */
+    public static int runConvert(String[] args) {
         ArgumentParser parser = setupArgumentParser();
         
         try {
             Namespace settings = parser.parseArgs(args);
+            
             OM om = loadOrientedMatroid(settings);
+            if (om == null) {
+                System.err.println("ERROR: loadOrientedMatroid returned null");
+                return 3;
+            }
+
             String output = convertToOutputFormat(om, settings);
             writeOutput(output, settings);
+            return 0;
         } catch (ArgumentParserException e) {
+            System.err.println("Argument parsing error: " + e.getMessage());
             parser.handleError(e);
-            System.exit(1);
+            return 1;
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
-            System.exit(2);
+            return 2;
+        }
+    }
+
+    /**
+     * Main entry point for the Convert CLI tool.
+     * @param args Command line arguments
+     */
+    public static void main(String[] args) {
+        int exitCode = runConvert(args);
+        if (exitCode != 0) {
+            System.exit(exitCode);
         }
     }
 
@@ -189,6 +216,7 @@ public class Convert {
     private static OM loadOrientedMatroid(Namespace settings) throws Exception {
         String inputSource = settings.getString("inputSource");
         String inputFormat = settings.getString("inputFormat");
+
         
         // If input format is specified but no source, read from stdin
         if (inputSource == null && inputFormat != null) {
@@ -197,17 +225,35 @@ public class Convert {
             throw new IllegalArgumentException("Either an input source or an input format must be specified");
         }
         
-        // Check if input is from Examples
+        // Check if file exists first to prevent confusing files with examples
+        File inputFile = new File(inputSource);
+        if (inputFile.exists() && inputFile.isFile()) {
+            
+            // Read from file
+            String content = readFromFile(inputSource);
+            
+            // Parse based on input format
+            if (inputFormat == null) {
+                throw new IllegalArgumentException("Input format must be specified for file input");
+            }
+            
+            return parseFromContent(content, inputFormat);
+        }
+        
+        // If not a file, check if it's from Examples
         if (Examples.all().containsKey(inputSource)) {
             return Examples.all().get(inputSource);
-        } else if (inputSource.contains(".")) {
-            // Already has a suffix
-            return Examples.all().get(inputSource);
+        } else if (inputSource.contains(".") && !inputSource.contains("/") && !inputSource.contains("\\")) {
+            // Only treat as an Examples name if it doesn't look like a file path
+            if (Examples.all().containsKey(inputSource)) {
+                return Examples.all().get(inputSource);
+            }
         } else if (settings.getInt("sign") != null) {
             // Need to add sign suffix based on parameter
             int sign = settings.getInt("sign");
             String suffix = sign == -1 ? ".-1" : sign == 0 ? ".0" : ".+1";
             String fullName = inputSource + suffix;
+
             
             if (Examples.all().containsKey(fullName)) {
                 return Examples.all().get(fullName);
@@ -216,27 +262,29 @@ public class Convert {
                 if (Examples.all().containsKey(inputSource)) {
                     return Examples.all().get(inputSource);
                 }
-                throw new IllegalArgumentException("Example not found: " + inputSource);
             }
         } else if (Examples.all().containsKey(inputSource)) {
             return Examples.all().get(inputSource);
         }
         
-        // Input from file or stdin
-        String content;
+        // Input from stdin
         if ("-".equals(inputSource)) {
             // Read from stdin
-            content = readFromStdin();
-        } else {
-            // Read from file
-            content = readFromFile(inputSource);
+            String content = readFromStdin();
+            
+            // Parse based on input format
+            if (inputFormat == null) {
+                throw new IllegalArgumentException("Input format must be specified for stdin input");
+            }
+            
+            return parseFromContent(content, inputFormat);
         }
         
-        // Parse based on input format
-        if (inputFormat == null) {
-            throw new IllegalArgumentException("Input format must be specified for file input");
-        }
-        
+        // If we get here, the input source is not valid
+        throw new IllegalArgumentException("Invalid input source: " + inputSource + ". File does not exist and not a known example.");
+    }
+    
+    private static OM parseFromContent(String content, String inputFormat) throws Exception {
         Options options = new Options();
         FactoryFactory factory = new FactoryFactory(options);
         
@@ -248,16 +296,20 @@ public class Convert {
                 // Standard representation formats
                 Representation rep = Representation.fromString(inputFormat);
                 Factory<?> parser = rep.getFactory(factory);
-                
-                System.err.println("Parsing input as " + inputFormat + "...");
-                System.err.println("Input content: " + content);
+
                 
                 // Parse the content to create the oriented matroid
                 OM om = (OM) parser.parse(content);
                 
+                if (om == null) {
+                    throw new IllegalArgumentException("Parser returned null for " + inputFormat);
+                }
+
+                
                 // If this is a dual representation, we need to take the dual of the parsed OM
                 return rep.isDual() ? om.dual() : om;
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new IllegalArgumentException("Error parsing " + inputFormat + " input: " + e.getMessage(), e);
             }
         }
