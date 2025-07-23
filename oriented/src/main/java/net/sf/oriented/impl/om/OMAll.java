@@ -91,7 +91,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		factory = d.factory;
 	}
 
-	public synchronized void set(Cryptomorphisms which, OMInternal definedOM) {
+	public void set(Cryptomorphisms which, OMInternal definedOM) {
 		int ix = which.ordinal();
 		if (ix >= forms.length) {
 			dual.set(which, ix - forms.length, definedOM);
@@ -100,17 +100,9 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		}
 	}
 
-	private synchronized void set(Cryptomorphisms which, int ix, OMInternal definedOM) {
-		// If the form is already set with the same instance, just return silently
-		if (forms[ix] == definedOM) {
-			return;
-		}
-		// If it's set with a different instance, but both are valid representations,
-		// just keep the existing one to avoid conflicts
+	private void set(Cryptomorphisms which, int ix, OMInternal definedOM) {
 		if (forms[ix] != null) {
-			// Instead of throwing an exception, just return and keep the existing form
-			// This prevents errors in concurrent or recursive cryptomorphism construction
-			return;
+			throw new IllegalStateException("Cannot set same form twice");
 		}
 		forms[ix] = definedOM;
 	}
@@ -159,8 +151,6 @@ public class OMAll extends AbsOMAxioms<Object>  {
 						result = new Circuits(getChirotope());
 					} else if (has(MAXVECTORS)) {
 						result = new Circuits(getVectors());
-					} else if (has(DUALFACELATTICE)) {
-						result = new Circuits(dual().getFaceLattice(),this);
 					} else {
 						result = new Circuits(getChirotope());
 					}
@@ -324,7 +314,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 
 	@Override
 	public int asInt(Label l) {
-		return indexes.get(l).intValue();
+		return indexes.get(l);
 	}
 
 	@Override

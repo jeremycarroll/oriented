@@ -140,14 +140,7 @@ public class Convert {
         }
     }
 
-    // Cache to avoid repeatedly calling Examples.all() which can cause threading issues
-    private static ArgumentParser cachedParser;
-    
     private static ArgumentParser setupArgumentParser() {
-        // Return the cached parser if it's available
-        if (cachedParser != null) {
-            return cachedParser;
-        }
         ArgumentParser parser = ArgumentParsers.newArgumentParser("Convert")
                 .description("Convert oriented matroids between representations");
         
