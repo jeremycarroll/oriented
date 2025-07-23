@@ -98,7 +98,7 @@ public class TestConvertCLI extends TestWithTempDir {
         // Skip matrix format for large OM if it's not realizable
         Assume.assumeFalse("Skipping matrix test for non-realizable OM", 
             format.equals("matrix") && isLarge && !isRealizable(om));
-        
+
         testFormatRoundTrip(om, prefix, format);
     }
     
@@ -113,62 +113,30 @@ public class TestConvertCLI extends TestWithTempDir {
         String inputPath = tmp + "/" + prefix + "_" + format + "_in.txt";
         String outputPath = tmp + "/" + prefix + "_" + format + "_out.txt";
         
-        // Write the input file manually rather than using Convert class to write
-        // This avoids issues with CHIROTOPE being set twice
-        String content = "";
+        // Use Convert to write the oriented matroid to a file in specified format
+        String omArg = isLarge ? "--tsukamoto13.+1" : "--chapter1";
         
-        // Get the appropriate representation based on format
-        switch(format) {
-            case "chirotope":
-                content = om.getChirotope().toString();
-                break;
-            case "circuits":
-                content = om.getCircuits().toString();
-                break;
-            case "cocircuits":
-                content = om.dual().getCircuits().toString();
-                break;
-            case "vectors":
-                content = om.getVectors().toString();
-                break;
-            case "covectors":
-                content = om.dual().getVectors().toString();
-                break;
-            case "maxvectors":
-                content = om.getMaxVectors().toString();
-                break;
-            case "topes":
-                content = om.dual().getMaxVectors().toString();
-                break;
-            case "matrix":
-                if (isRealizable(om)) {
-                    content = om.getRealized().toString();
-                } else {
-                    // Skip this test for non-realizable OMs
-                    return;
-                }
-                break;
-            default:
-                Assert.fail("Unknown format: " + format);
-        }
-        
-        // Create the file with the proper format
-        try (PrintWriter writer = new PrintWriter(inputPath)) {
-            writer.println(content);
-        }
+        // Step 1: Use Convert to generate the input file in specified format
+        String[] writeArgs = {omArg, "--to-" + format, "-o", inputPath};
+        int writeResult = Convert.runConvert(writeArgs);
+        Assert.assertEquals("Failed to write " + format + " file", 0, writeResult);
         
         // Verify the input file was created
         File inputFile = new File(inputPath);
         Assert.assertTrue("Input file was not created", inputFile.exists());
         
-        // Use runConvert directly to convert from the source format to chirotope format
-        String[] args = {"-i", inputPath, "--from-" + format, "--to-chirotope", "-o", outputPath};
+        // Special handling for matrix format with non-realizable OMs
+        if (format.equals("matrix") && !isRealizable(om)) {
+            // Skip this test for non-realizable OMs
+            return;
+        }
         
-        // Run convert to perform the conversion
-        int result = Convert.runConvert(args);
+        // Step 2: Use Convert to convert from the source format to chirotope format
+        String[] convertArgs = {"-i", inputPath, "--from-" + format, "--to-chirotope", "-o", outputPath};
+        int convertResult = Convert.runConvert(convertArgs);
         
         // Check for errors during conversion
-        Assert.assertEquals("Convert operation failed with code " + result, 0, result);
+        Assert.assertEquals("Convert operation failed with code " + convertResult, 0, convertResult);
         
         // Verify the output file was created
         File outputFile = new File(outputPath);
