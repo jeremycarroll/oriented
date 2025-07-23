@@ -99,10 +99,6 @@ public class TestConvertCLI extends TestWithTempDir {
         Assume.assumeFalse("Skipping matrix test for non-realizable OM", 
             format.equals("matrix") && isLarge && !isRealizable(om));
         
-        // Skip vectors and maxvectors formats for now as they have issues
-        Assume.assumeFalse("Skipping problematic format: " + format,
-            format.equals("vectors") || format.equals("maxvectors"));
-        
         testFormatRoundTrip(om, prefix, format);
     }
     
