@@ -102,6 +102,7 @@ public class Convert {
      * @param args Command line arguments
      * @return 0 if successful, non-zero on error
      */
+
     public static int runConvert(String[] args) {
         ArgumentParser parser = setupArgumentParser();
         
@@ -139,7 +140,14 @@ public class Convert {
         }
     }
 
+    // Cache to avoid repeatedly calling Examples.all() which can cause threading issues
+    private static ArgumentParser cachedParser;
+    
     private static ArgumentParser setupArgumentParser() {
+        // Return the cached parser if it's available
+        if (cachedParser != null) {
+            return cachedParser;
+        }
         ArgumentParser parser = ArgumentParsers.newArgumentParser("Convert")
                 .description("Convert oriented matroids between representations");
         

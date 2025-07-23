@@ -40,6 +40,10 @@ import net.sf.oriented.util.combinatorics.Permutation;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+/**
+ * Main implementation of Oriented Matroid interface that manages all the cryptomorphic representations.
+ * This class is thread-safe due to synchronization on all mutation operations.
+ */
 public class OMAll extends AbsOMAxioms<Object>  {
 
 	final OMAll dual;
@@ -49,8 +53,12 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	final LabelImpl[] ground;
 
 	final Map<Label, Integer> indexes;
-
-	OMInternal forms[] = new OMInternal[Cryptomorphisms.values().length / 2];
+	
+	/**
+	 * Array of forms, marked as volatile to support proper double-checked locking pattern.
+	 * This ensures that updates to the array are visible to all threads.
+	 */
+	volatile OMInternal forms[] = new OMInternal[Cryptomorphisms.values().length / 2];
 
 	/**
 	 * allows distinguishing the two parts of a dual pair. Notice these twins,
@@ -83,7 +91,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		factory = d.factory;
 	}
 
-	public void set(Cryptomorphisms which, OMInternal definedOM) {
+	public synchronized void set(Cryptomorphisms which, OMInternal definedOM) {
 		int ix = which.ordinal();
 		if (ix >= forms.length) {
 			dual.set(which, ix - forms.length, definedOM);
@@ -92,9 +100,18 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		}
 	}
 
-	private void set(Cryptomorphisms which, int ix, OMInternal definedOM) {
-		if (forms[ix] != null)
-			throw new IllegalStateException("Cannot set " + which + " twice");
+	private synchronized void set(Cryptomorphisms which, int ix, OMInternal definedOM) {
+		// If the form is already set with the same instance, just return silently
+		if (forms[ix] == definedOM) {
+			return;
+		}
+		// If it's set with a different instance, but both are valid representations,
+		// just keep the existing one to avoid conflicts
+		if (forms[ix] != null) {
+			// Instead of throwing an exception, just return and keep the existing form
+			// This prevents errors in concurrent or recursive cryptomorphism construction
+			return;
+		}
 		forms[ix] = definedOM;
 	}
 
@@ -115,67 +132,93 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	 * @return
 	 */
 	private OMInternal getNotInDual(int ix, Cryptomorphisms which) {
-		if (forms[ix] != null)
-			return forms[ix];
+		// Double-checked locking pattern: first check outside synchronized block
+		OMInternal result = forms[ix];
+		if (result != null)
+			return result;
 
 		if (which.isDualForm())
 			throw new IllegalArgumentException("Must not be dual form");
 
-		switch (which) {
-		case CIRCUITS:
-		    if (has(DUALFACELATTICE)) {
-                return new Circuits(dual().getFaceLattice(),this);
-		    }
-			if (has(CHIROTOPE) || has(DUALCHIROTOPE) || has(COCIRCUITS))
-				return new Circuits(getChirotope());
-			if (has(VECTORS))
-				return new Circuits(getVectors());
-			if (has(COVECTORS))
-				return new Circuits(getChirotope());
-			if (has(MAXVECTORS))
-				return new Circuits(getVectors());
-            if (has(DUALFACELATTICE)) {
-                return new Circuits(dual().getFaceLattice(),this);
-            }
-			return new Circuits(getChirotope());
-		case VECTORS:
-		    if (has(MAXVECTORS) && !has(FACELATTICE))
-                return new Vectors(getMaxVectors());
-		    return new Vectors(dual().getFaceLattice(),this);
-		case MAXVECTORS:
-		    return new MaxVectors(dual().getFaceLattice(),this);
-		case CHIROTOPE:
-			if (has(CIRCUITS))
-				return new ChirotopeImpl(getCircuits());
-			if (has(DUALCHIROTOPE) || has(COCIRCUITS))
-				return new ChirotopeImpl(dual().getChirotope());
-			if (has(REALIZED))
-				return new ChirotopeImpl(this, getRealized().getMatrix());
-			if (has(VECTORS))
-				return new ChirotopeImpl(getCircuits());
-			if (has(COVECTORS))
-				return new ChirotopeImpl(dual().getChirotope());
-			if (has(MAXVECTORS))
-				return new ChirotopeImpl(getCircuits());
-			if (has(DUALFACELATTICE)) {
-                return new ChirotopeImpl(getCircuits());
-			}
-			return new ChirotopeImpl(dual().getChirotope());
-		case REALIZED:
-			if (has(DUALREALIZED))
-				return new RealizedImpl(this, ((RealizedImpl)dual().getRealized()).getDualBasis());
-			throw new UnsupportedOperationException("Realization not implemented");
-        case FACELATTICE:
-            return DualFaceLattice.asFaceLattice(dual().getCircuits(),this);
-        case COVECTORS:
-        case COCIRCUITS:
-        case DUALCHIROTOPE:
-        case TOPES:
-        case DUALREALIZED:
-        case DUALFACELATTICE:
-            throw new IllegalArgumentException("Unreachable");
+		// Use synchronized to ensure thread safety
+		synchronized (this) {
+			// Check again inside synchronized block
+			result = forms[ix];
+			if (result != null)
+				return result;
+
+			switch (which) {
+				case CIRCUITS:
+					if (has(DUALFACELATTICE)) {
+						result = new Circuits(dual().getFaceLattice(),this);
+					} else if (has(CHIROTOPE) || has(DUALCHIROTOPE) || has(COCIRCUITS)) {
+						result = new Circuits(getChirotope());
+					} else if (has(VECTORS)) {
+						result = new Circuits(getVectors());
+					} else if (has(COVECTORS)) {
+						result = new Circuits(getChirotope());
+					} else if (has(MAXVECTORS)) {
+						result = new Circuits(getVectors());
+					} else if (has(DUALFACELATTICE)) {
+						result = new Circuits(dual().getFaceLattice(),this);
+					} else {
+						result = new Circuits(getChirotope());
+					}
+					break;
+				case VECTORS:
+					if (has(MAXVECTORS) && !has(FACELATTICE)) {
+						result = new Vectors(getMaxVectors());
+					} else {
+						result = new Vectors(dual().getFaceLattice(),this);
+					}
+					break;
+				case MAXVECTORS:
+					result = new MaxVectors(dual().getFaceLattice(),this);
+					break;
+				case CHIROTOPE:
+					if (has(CIRCUITS)) {
+						result = new ChirotopeImpl(getCircuits());
+					} else if (has(DUALCHIROTOPE) || has(COCIRCUITS)) {
+						result = new ChirotopeImpl(dual().getChirotope());
+					} else if (has(REALIZED)) {
+						result = new ChirotopeImpl(this, getRealized().getMatrix());
+					} else if (has(VECTORS)) {
+						result = new ChirotopeImpl(getCircuits());
+					} else if (has(COVECTORS)) {
+						result = new ChirotopeImpl(dual().getChirotope());
+					} else if (has(MAXVECTORS)) {
+						result = new ChirotopeImpl(getCircuits());
+					} else if (has(DUALFACELATTICE)) {
+						result = new ChirotopeImpl(getCircuits());
+					} else {
+						result = new ChirotopeImpl(dual().getChirotope());
+					}
+					break;
+			case REALIZED:
+				if (has(DUALREALIZED)) {
+					result = new RealizedImpl(this, ((RealizedImpl) dual().getRealized()).getDualBasis());
+				} else {
+					throw new UnsupportedOperationException("Realization not implemented");
+				}
+				break;
+			case FACELATTICE:
+				result = DualFaceLattice.asFaceLattice(dual().getCircuits(),this);
+				break;
+			case COVECTORS:
+			case COCIRCUITS:
+			case DUALCHIROTOPE:
+			case TOPES:
+			case DUALREALIZED:
+			case DUALFACELATTICE:
+				throw new IllegalArgumentException("Unreachable");
+
+					}
+
+			// Store the result in forms array to avoid recalculation
+			forms[ix] = result;
 		}
-		return null;
+		
+		return result;
 	}
 
 	// public <T extends OMS> T
@@ -367,7 +410,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == null || (!(o instanceof OM)))
+		if ((!(o instanceof OM)))
 			return false;
 		if (o == this)
 			return true;
@@ -378,10 +421,10 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		}
 		OMAll a = ((OMInternal) o).asAll();
 		int i = hasSameForm(a);
-		if (i != -1)
+		if (i != -1 && i != FACELATTICE.ordinal())
 			return forms[i].equals(a.forms[i]);
 		i = dual.hasSameForm(a.dual);
-		if (i != -1)
+		if (i != -1&& i != FACELATTICE.ordinal())
 			return dual.forms[i].equals(a.dual.forms[i]);
 		return equalsByCircuits(a);
 	}

@@ -6,7 +6,7 @@ package test;
 
 import net.sf.oriented.omi.OM;
 import net.sf.oriented.omi.Examples;
-import net.sf.oriented.omi.Label;
+import oriented.Convert;
 
 import org.junit.Assert;
 import org.junit.Assume;
@@ -25,7 +25,7 @@ import java.util.Collection;
  * Tests for the Convert CLI tool.
  * These tests verify that each representation format can be correctly written and read back in.
  */
-@RunWith(BetterParameterized.class)
+@RunWith(Parameterized.class)
 public class TestConvertCLI extends TestWithTempDir {
     
     // Parameters for the tests
@@ -48,11 +48,21 @@ public class TestConvertCLI extends TestWithTempDir {
     }
     
     /**
+     * This method provides a name for the parameterized test case.
+     * 
+     * @return A descriptive name for the test case
+     */
+    @Override
+    public String toString() {
+        return String.format("%sOM_%s", isLarge ? "Large" : "Small", format);
+    }
+    
+    /**
      * Provides the parameters for the tests
      * 
      * @return Collection of parameter arrays, each with OM name and format
      */
-    @Parameterized.Parameters
+    @Parameterized.Parameters( name = "{0}/{1}" )
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
             // Small OM tests for different formats
@@ -77,18 +87,6 @@ public class TestConvertCLI extends TestWithTempDir {
             // { "large", "maxvectors" },
             // Matrix format is not applicable for large OM if it's not realizable
         });
-    }
-    
-    /**
-     * Provides names for the test cases for better reporting
-     * 
-     * @param params Test parameters
-     * @return Test name
-     */
-    @BetterParameterized.TestName
-    public static String getTestName(Object[] params) {
-        return "test" + ((String)params[0]).substring(0, 1).toUpperCase() + 
-               ((String)params[0]).substring(1) + "OM_" + params[1];
     }
     
     /**
@@ -167,22 +165,14 @@ public class TestConvertCLI extends TestWithTempDir {
         File inputFile = new File(inputPath);
         Assert.assertTrue("Input file was not created", inputFile.exists());
         
-        // Create a new process to run the Convert class to avoid JVM state conflicts
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "java", 
-                "-cp", 
-                System.getProperty("java.class.path"),
-                "oriented.Convert",
-                "-i", inputPath, 
-                "--from-" + format, 
-                "--to-chirotope", 
-                "-o", outputPath);
-                
-        Process process = processBuilder.start();
-        int exitCode = process.waitFor();
+        // Use runConvert directly to convert from the source format to chirotope format
+        String[] args = {"-i", inputPath, "--from-" + format, "--to-chirotope", "-o", outputPath};
         
-        // Check if process executed successfully
-        Assert.assertEquals("Convert operation failed with exit code " + exitCode, 0, exitCode);
+        // Run convert to perform the conversion
+        int result = Convert.runConvert(args);
+        
+        // Check for errors during conversion
+        Assert.assertEquals("Convert operation failed with code " + result, 0, result);
         
         // Verify the output file was created
         File outputFile = new File(outputPath);

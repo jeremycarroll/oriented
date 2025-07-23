@@ -34,11 +34,12 @@ import net.sf.oriented.omi.SetOfSignedSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import test.BetterParameterized.TestName;
 
-@RunWith(value = BetterParameterized.class)
+@RunWith(value = Parameterized.class)
 public class TestConversions {
     
 
@@ -47,7 +48,7 @@ public class TestConversions {
 	static String onlyThisTest = null; //"{loop,special,MAXVECTORS,TOPES}";
 	static String names[] = { "chapter1", "loop" };
 
-	@Parameters
+	@Parameters(name = "{0}")
 	public static Collection<Object[]> data() {
 	    
 	    Random rand = new Random();
@@ -112,27 +113,15 @@ public class TestConversions {
 				+ "}";
 	}
 
-	@TestName
-	public static String name(String name, int s, FactoryFactory f,
-			Cryptomorphisms from, Cryptomorphisms to, int n) {
-		return name;
-	}
-
 	private static String fName(int ff) {
-		switch (ff) {
-		case 0:
-			return "long";
-		case 1:
-			return "short";
-		case 2:
-			return "+/-";
-		case 3:
-			return "special";
-        case 4:
-            return "hash";
-		default:
-			return "!";
-		}
+        return switch (ff) {
+            case 0 -> "long";
+            case 1 -> "short";
+            case 2 -> "+/-";
+            case 3 -> "special";
+            case 4 -> "hash";
+            default -> "!";
+        };
 	}
 
 	private static String sName(int s) {
@@ -144,7 +133,7 @@ public class TestConversions {
 	private final Cryptomorphisms from;
 	private final Cryptomorphisms to;
 
-	static public int TEST_NUMBER;
+	public static int TEST_NUMBER;
 
 	public TestConversions(String name, int s, FactoryFactory f,
 			Cryptomorphisms from, Cryptomorphisms to, int n) {
