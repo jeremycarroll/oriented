@@ -42,7 +42,7 @@ public class TestConvertCLI extends TestWithTempDir {
      */
     public TestConvertCLI(String omName, String format) {
         this.isLarge = omName.equals("large");
-        this.om = isLarge ? Examples.tsukamoto13(1) : Examples.chapter1();
+        this.om = isLarge ? Examples.wheel12() : Examples.circularsaw3();
         this.prefix = isLarge ? "LargeOM" : "SmallOM";
         this.format = format;
     }
@@ -72,8 +72,8 @@ public class TestConvertCLI extends TestWithTempDir {
             { "small", "covectors" },
             { "small", "topes" },
             // Temporarily commenting out the formats with issues
-            // { "small", "vectors" },
-            // { "small", "maxvectors" },
+             { "small", "vectors" },
+             { "small", "maxvectors" },
             { "small", "matrix" },
             
             // Large OM tests for different formats
@@ -82,10 +82,9 @@ public class TestConvertCLI extends TestWithTempDir {
             { "large", "cocircuits" },
             { "large", "covectors" },
             { "large", "topes" },
-            // Temporarily commenting out the formats with issues
-            // { "large", "vectors" },
-            // { "large", "maxvectors" },
-            // Matrix format is not applicable for large OM if it's not realizable
+                { "large", "matrix" },
+             { "large", "vectors" },
+             { "large", "maxvectors" }
         });
     }
     
@@ -97,7 +96,7 @@ public class TestConvertCLI extends TestWithTempDir {
     public void testFormatConversion() throws Exception {
         // Skip matrix format for large OM if it's not realizable
         Assume.assumeFalse("Skipping matrix test for non-realizable OM", 
-            format.equals("matrix") && isLarge && !isRealizable(om));
+            format.equals("matrix") && !isRealizable(om));
 
         testFormatRoundTrip(om, prefix, format);
     }
@@ -114,7 +113,7 @@ public class TestConvertCLI extends TestWithTempDir {
         String outputPath = tmp + "/" + prefix + "_" + format + "_out.txt";
         
         // Use Convert to write the oriented matroid to a file in specified format
-        String omArg = isLarge ? "--tsukamoto13.+1" : "--chapter1";
+        String omArg = isLarge ? "--wheel12" : "--circularsaw3";
         
         // Step 1: Use Convert to generate the input file in specified format
         String[] writeArgs = {omArg, "--to-" + format, "-o", inputPath};

@@ -156,14 +156,22 @@ public class OMAll extends AbsOMAxioms<Object>  {
 					}
 					break;
 				case VECTORS:
-					if (has(MAXVECTORS) && !has(FACELATTICE)) {
+					if (has(MAXVECTORS)) {
 						result = new Vectors(getMaxVectors());
+					} else if (has(FACELATTICE) && !has(CIRCUITS)) {
+						result = new Vectors(getFaceLattice(), this);
 					} else {
-						result = new Vectors(dual().getFaceLattice(),this);
+						// Use circuits derived from any available representation
+						result = new Vectors(getCircuits());
 					}
 					break;
 				case MAXVECTORS:
-					result = new MaxVectors(dual().getFaceLattice(),this);
+					if (has(FACELATTICE) && !has(VECTORS) && !has(CIRCUITS)) {
+						result = new MaxVectors(getFaceLattice(), this);
+					} else {
+						// Get vectors first using our optimized path, then create max vectors from them
+						result = new MaxVectors(getVectors());
+					}
 					break;
 				case CHIROTOPE:
 					if (has(CIRCUITS)) {
