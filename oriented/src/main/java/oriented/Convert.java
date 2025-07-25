@@ -156,16 +156,16 @@ public class Convert {
                     continue;
                 }
                 exampleBaseNames.add(baseName);
-                inputGroup.addArgument("--" + baseName).dest("inputSource").setConst(baseName)
-                        .action(storeConst()).help("Use oriented matroid from Examples");
+                inputGroup.addArgument("--" + baseName).dest("inputSourceSignedExample").setConst(baseName)
+                        .action(storeConst()).help("Use oriented matroid from Examples (with plus/minus/zero)");
             } else {
-                inputGroup.addArgument("--" + name).dest("inputSource").setConst(name)
+                inputGroup.addArgument("--" + name).dest("inputSourceExample").setConst(name)
                         .action(storeConst()).help("Use oriented matroid from Examples");
             }
         }
         
         // Add input file option
-        inputGroup.addArgument("-i", "--input").dest("inputSource")
+        inputGroup.addArgument("-i", "--input").dest("inputSourceFile")
                 .help("Input file path (use - for stdin)");
         
         // Input format (required for file input)
@@ -214,78 +214,43 @@ public class Convert {
         return parser;
     }
 
-    private static OM loadOrientedMatroid(Namespace settings) throws Exception {
-        String inputSource = settings.getString("inputSource");
+    private static OM loadOrientedMatroid(Namespace settings) throws IOException {
+        String inputSourceFile = settings.getString("inputSourceFile");
+        String inputSourceExample = settings.getString("inputSourceExample");
+        String inputSourceSignedExample = settings.getString("inputSourceSignedExample");
         String inputFormat = settings.getString("inputFormat");
 
-        
-        // If input format is specified but no source, read from stdin
-        if (inputSource == null && inputFormat != null) {
-            inputSource = "-";
-        } else if (inputSource == null && inputFormat == null) {
-            throw new IllegalArgumentException("Either an input source or an input format must be specified");
+        if (inputSourceExample != null) {
+            return Examples.all().get(inputSourceExample);
         }
-        
-        // Check if file exists first to prevent confusing files with examples
-        File inputFile = new File(inputSource);
-        if (inputFile.exists() && inputFile.isFile()) {
-            
-            // Read from file
-            String content = readFromFile(inputSource);
-            
-            // Parse based on input format
-            if (inputFormat == null) {
-                throw new IllegalArgumentException("Input format must be specified for file input");
-            }
-            
-            return parseFromContent(content, inputFormat);
-        }
-        
-        // If not a file, check if it's from Examples
-        if (Examples.all().containsKey(inputSource)) {
-            return Examples.all().get(inputSource);
-        } else if (inputSource.contains(".") && !inputSource.contains("/") && !inputSource.contains("\\")) {
-            // Only treat as an Examples name if it doesn't look like a file path
-            if (Examples.all().containsKey(inputSource)) {
-                return Examples.all().get(inputSource);
-            }
-        } else if (settings.getInt("sign") != null) {
-            // Need to add sign suffix based on parameter
-            int sign = settings.getInt("sign");
-            String suffix = sign == -1 ? ".-1" : sign == 0 ? ".0" : ".+1";
-            String fullName = inputSource + suffix;
 
-            
-            if (Examples.all().containsKey(fullName)) {
-                return Examples.all().get(fullName);
-            } else {
-                // Not a parameterized example, try without suffix
-                if (Examples.all().containsKey(inputSource)) {
-                    return Examples.all().get(inputSource);
-                }
+        if (inputSourceSignedExample != null) {
+            // Need to add sign suffix based on parameter
+            Integer sign = settings.getInt("sign");
+            if (sign == null) {
+                throw new IllegalArgumentException("Sign is required for " + inputSourceSignedExample);
             }
-        } else if (Examples.all().containsKey(inputSource)) {
-            return Examples.all().get(inputSource);
+            String suffix = sign == -1 ? ".-1" : sign == 0 ? ".0" : ".+1";
+            String fullName = inputSourceSignedExample + suffix;
+            return Examples.all().get(fullName);
         }
-        
-        // Input from stdin
-        if ("-".equals(inputSource)) {
-            // Read from stdin
-            String content = readFromStdin();
-            
-            // Parse based on input format
-            if (inputFormat == null) {
-                throw new IllegalArgumentException("Input format must be specified for stdin input");
-            }
-            
-            return parseFromContent(content, inputFormat);
+
+
+        if (inputFormat == null) {
+            throw new IllegalArgumentException("Input format must be specified for file input");
         }
-        
-        // If we get here, the input source is not valid
-        throw new IllegalArgumentException("Invalid input source: " + inputSource + ". File does not exist and not a known example.");
+
+        String content;
+        if (inputSourceFile == null || "-".equals(inputSourceFile)) {
+            content = readFromStdin();
+        } else {
+            content = readFromFile(inputSourceFile);
+        }
+        return parseFromContent(content, inputFormat);
+
     }
     
-    private static OM parseFromContent(String content, String inputFormat) throws Exception {
+    private static OM parseFromContent(String content, String inputFormat) {
         Options options = new Options();
         FactoryFactory factory = new FactoryFactory(options);
         
