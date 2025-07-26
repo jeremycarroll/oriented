@@ -148,7 +148,7 @@ public class DualFaceLattice implements Verify{
         return rslt.toString();
     }
 
-    static public OMInternal asFaceLattice(Circuits c,OMInternal omAll) {
+    static public FaceLatticeImpl asFaceLattice(Circuits c, OMInternal omAll) {
         DualFaceLattice lattice = new DualFaceLattice(c);
 //        WeakReference<DualFaceLattice> ref = new WeakReference<>(lattice);
         FaceLatticeImpl rslt = new FaceLatticeImpl(omAll,lattice);

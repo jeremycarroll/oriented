@@ -6,11 +6,11 @@ package net.sf.oriented.impl.om;
 
 // TODO: maybe refactor some functionality into this enum
 public enum Cryptomorphisms {
-	CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED, FACELATTICE, 
+	CIRCUITS, VECTORS, MAXVECTORS, CHIROTOPE, REALIZED, 
 	// MUST be half way, those below are duals of those above. Must be even
 	// number. 
 	COCIRCUITS(CIRCUITS), COVECTORS(VECTORS), TOPES(MAXVECTORS), 
-	DUALCHIROTOPE(CHIROTOPE), DUALREALIZED(REALIZED), DUALFACELATTICE(FACELATTICE);
+	DUALCHIROTOPE(CHIROTOPE), DUALREALIZED(REALIZED);
 
 	private Cryptomorphisms dual;
 	private final boolean isDualForm;

@@ -45,7 +45,7 @@ public class TestConversions {
 
 	static FactoryFactory special;
 
-	static String onlyThisTest = null; //"{loop,special,MAXVECTORS,TOPES}";
+	static String onlyThisTest =  "{chapter1,long,FACELATTICE,VECTORS}";
 	static String names[] = { "chapter1", "loop" };
 
 	@Parameters(name = "{0}")
@@ -182,10 +182,10 @@ public class TestConversions {
 		case DUALREALIZED:
 			RealizedFactory rf = factory.realized();
 			return rf.parse(rf.toString((OMasRealized) first));
-		case FACELATTICE:
-		case DUALFACELATTICE:
-		    return new DelegatingFaceLattice(new OMAll(first.elements(),factory),(FaceLattice)first);
 		default:
+		    if (first instanceof FaceLattice) {
+		        return new DelegatingFaceLattice(new OMAll(first.elements(),factory),(FaceLattice)first);
+		    }
 			OMSFactory f = omsFactory();
 			if (factory == special)
 				return f.fromSignedSets(first.elements(), (SetOfSignedSet) first);

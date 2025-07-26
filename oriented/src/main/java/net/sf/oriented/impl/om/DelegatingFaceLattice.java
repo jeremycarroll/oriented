@@ -9,18 +9,18 @@ import java.util.Iterator;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FaceLattice;
+import net.sf.oriented.omi.FaceLatticeProvider;
 import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 
 public class DelegatingFaceLattice extends AbsOM<Face> implements
-        OMasFaceLattice {
+        OMasFaceLattice, FaceLatticeProvider {
     
     private final FaceLattice delegate;
 
     public DelegatingFaceLattice(OMInternal a, FaceLattice d) {
         super(a);
         delegate = d;
-        all.set(Cryptomorphisms.FACELATTICE,this);
     }
 
     @Override
@@ -66,6 +66,21 @@ public class DelegatingFaceLattice extends AbsOM<Face> implements
     @Override
     public Face get(SignedSet covector) {
         return delegate.get(covector);
+    }
+
+    @Override
+    public boolean hasFaceLattice() {
+        return true;
+    }
+    
+    @Override
+    public boolean hasDualFaceLattice() {
+        return dual().hasFaceLattice();
+    }
+    
+    @Override
+    public OMasFaceLattice getDualFaceLattice() {
+        return dual().getFaceLattice();
     }
 
 }

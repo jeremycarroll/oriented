@@ -9,9 +9,7 @@ import static net.sf.oriented.impl.om.Cryptomorphisms.CIRCUITS;
 import static net.sf.oriented.impl.om.Cryptomorphisms.COCIRCUITS;
 import static net.sf.oriented.impl.om.Cryptomorphisms.COVECTORS;
 import static net.sf.oriented.impl.om.Cryptomorphisms.DUALCHIROTOPE;
-import static net.sf.oriented.impl.om.Cryptomorphisms.DUALFACELATTICE;
 import static net.sf.oriented.impl.om.Cryptomorphisms.DUALREALIZED;
-import static net.sf.oriented.impl.om.Cryptomorphisms.FACELATTICE;
 import static net.sf.oriented.impl.om.Cryptomorphisms.MAXVECTORS;
 import static net.sf.oriented.impl.om.Cryptomorphisms.REALIZED;
 import static net.sf.oriented.impl.om.Cryptomorphisms.TOPES;
@@ -44,7 +42,7 @@ import com.google.common.collect.Lists;
  * Main implementation of Oriented Matroid interface that manages all the cryptomorphic representations.
  * This class is thread-safe due to synchronization on all mutation operations.
  */
-public class OMAll extends AbsOMAxioms<Object>  {
+public class OMAll extends AbsOMAxioms<Object> implements net.sf.oriented.omi.FaceLatticeProvider {
 
 	final OMAll dual;
 
@@ -59,6 +57,12 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	 * This ensures that updates to the array are visible to all threads.
 	 */
 	volatile OMInternal forms[] = new OMInternal[Cryptomorphisms.values().length / 2];
+	
+	/**
+	 * Face lattice storage - moved outside of cryptomorphism array
+	 */
+	private volatile OMasFaceLattice faceLattice;
+	private volatile OMasFaceLattice dualFaceLattice;
 
 	/**
 	 * allows distinguishing the two parts of a dual pair. Notice these twins,
@@ -141,7 +145,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 
 			switch (which) {
 				case CIRCUITS:
-					if (has(DUALFACELATTICE)) {
+					if (hasDualFaceLattice()) {
 						result = new Circuits(dual().getFaceLattice(),this);
 					} else if (has(CHIROTOPE) || has(DUALCHIROTOPE) || has(COCIRCUITS)) {
 						result = new Circuits(getChirotope());
@@ -158,7 +162,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 				case VECTORS:
 					if (has(MAXVECTORS)) {
 						result = new Vectors(getMaxVectors());
-					} else if (has(FACELATTICE) && !has(CIRCUITS)) {
+					} else if (hasFaceLattice() && !has(CIRCUITS)) {
 						result = new Vectors(getFaceLattice(), this);
 					} else {
 						// Use circuits derived from any available representation
@@ -166,7 +170,7 @@ public class OMAll extends AbsOMAxioms<Object>  {
 					}
 					break;
 				case MAXVECTORS:
-					if (has(FACELATTICE) && !has(VECTORS) && !has(CIRCUITS)) {
+					if (hasFaceLattice() && !has(VECTORS) && !has(CIRCUITS)) {
 						result = new MaxVectors(getFaceLattice(), this);
 					} else {
 						// Get vectors first using our optimized path, then create max vectors from them
@@ -186,31 +190,26 @@ public class OMAll extends AbsOMAxioms<Object>  {
 						result = new ChirotopeImpl(dual().getChirotope());
 					} else if (has(MAXVECTORS)) {
 						result = new ChirotopeImpl(getCircuits());
-					} else if (has(DUALFACELATTICE)) {
+					} else if (hasDualFaceLattice()) {
 						result = new ChirotopeImpl(getCircuits());
 					} else {
 						result = new ChirotopeImpl(dual().getChirotope());
 					}
 					break;
-			case REALIZED:
-				if (has(DUALREALIZED)) {
-					result = new RealizedImpl(this, ((RealizedImpl) dual().getRealized()).getDualBasis());
-				} else {
-					throw new UnsupportedOperationException("Realization not implemented");
-				}
-				break;
-			case FACELATTICE:
-				result = DualFaceLattice.asFaceLattice(dual().getCircuits(),this);
-				break;
-			case COVECTORS:
-			case COCIRCUITS:
-			case DUALCHIROTOPE:
-			case TOPES:
-			case DUALREALIZED:
-			case DUALFACELATTICE:
-				throw new IllegalArgumentException("Unreachable");
-
+				case REALIZED:
+					if (has(DUALREALIZED)) {
+						result = new RealizedImpl(this, ((RealizedImpl) dual().getRealized()).getDualBasis());
+					} else {
+						throw new UnsupportedOperationException("Realization not implemented");
 					}
+					break;
+				case COVECTORS:
+				case COCIRCUITS:
+				case DUALCHIROTOPE:
+				case TOPES:
+				case DUALREALIZED:
+					throw new IllegalArgumentException("Unreachable");
+			}
 
 			// Store the result in forms array to avoid recalculation
 			forms[ix] = result;
@@ -419,10 +418,10 @@ public class OMAll extends AbsOMAxioms<Object>  {
 		}
 		OMAll a = ((OMInternal) o).asAll();
 		int i = hasSameForm(a);
-		if (i != -1 && i != FACELATTICE.ordinal())
+		if (i != -1)
 			return forms[i].equals(a.forms[i]);
 		i = dual.hasSameForm(a.dual);
-		if (i != -1&& i != FACELATTICE.ordinal())
+		if (i != -1)
 			return dual.forms[i].equals(a.dual.forms[i]);
 		return equalsByCircuits(a);
 	}
@@ -447,8 +446,29 @@ public class OMAll extends AbsOMAxioms<Object>  {
 	}
 
     @Override
-    public OMasFaceLattice getFaceLattice() {
-        return (OMasFaceLattice) get(FACELATTICE);
+    public synchronized OMasFaceLattice getFaceLattice() {
+        if (faceLattice == null) {
+            faceLattice = new DelegatingFaceLattice(this, net.sf.oriented.polytope.DualFaceLattice.asFaceLattice(dual().getCircuits(),this));
+        }
+        return faceLattice;
+    }
+    
+    @Override
+    public synchronized OMasFaceLattice getDualFaceLattice() {
+        if (dualFaceLattice == null) {
+            dualFaceLattice = (OMasFaceLattice) dual().getFaceLattice();
+        }
+        return dualFaceLattice;
+    }
+    
+    @Override
+    public boolean hasFaceLattice() {
+        return faceLattice != null;
+    }
+    
+    @Override
+    public boolean hasDualFaceLattice() {
+        return dual().hasFaceLattice();
     }
     private AbsOMAxioms<?> getCircuitsOrChirotope() {
         // we generally prefer to use the circuit
