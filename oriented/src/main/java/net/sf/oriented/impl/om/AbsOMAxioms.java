@@ -10,6 +10,7 @@ import net.sf.oriented.impl.set.SignedSetFactoryImpl;
 import net.sf.oriented.impl.set.UnsignedSetInternal;
 import net.sf.oriented.omi.Label;
 import net.sf.oriented.omi.OM;
+import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.util.combinatorics.Group;
 import net.sf.oriented.util.combinatorics.Permutation;
@@ -88,7 +89,25 @@ public abstract class AbsOMAxioms<T> extends AbsAxioms<T> implements OMInternal 
         return asInt(ffactory().labels().parse(label));
     }
     
-
+    @Override
+    public OMasFaceLattice getFaceLattice() {
+        return asAll().getFaceLattice();
+    }
+    
+    @Override
+    public OMasFaceLattice getDualFaceLattice() {
+        return asAll().getDualFaceLattice();
+    }
+    
+    @Override
+    public boolean hasFaceLattice() {
+        return asAll().hasFaceLattice();
+    }
+    
+    @Override
+    public boolean hasDualFaceLattice() {
+        return asAll().hasDualFaceLattice();
+    }
 }
 
 

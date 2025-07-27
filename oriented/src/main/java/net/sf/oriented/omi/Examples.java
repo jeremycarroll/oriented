@@ -50,7 +50,7 @@ public class Examples {
 
     private static OM tsukamoto13[] = new OM[3];
    
-    private static boolean FreshEachTime = true;
+    private static boolean FreshEachTime = false;
 
     private static OM wheel12;
 

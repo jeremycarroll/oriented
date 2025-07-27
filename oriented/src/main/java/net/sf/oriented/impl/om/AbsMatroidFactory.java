@@ -107,6 +107,11 @@ public abstract class AbsMatroidFactory<MATROID, STRUCTURE> extends AbsFactoryIm
 
     protected MATROID parsePair(ParseContext pc) {
         expect(pc, '(');
+        if (peek(pc, '{')) {
+            factory.options().setLongLabels();
+        } else {
+            factory.options().setShortLabels();
+        }
         List<LabelImpl> ground = unsignedSets().orderedParse(pc);
         STRUCTURE signedSets = parseMatroid(pc);
         expect(pc, ')');

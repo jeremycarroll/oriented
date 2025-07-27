@@ -45,14 +45,18 @@ public abstract class AbsFactoryImpl<ITEM> implements Factory<ITEM> {
 		}
 	}
 
+    protected boolean peek(ParseContext pc, char expect) {
+        return pc.index < pc.string.length() && pc.string.charAt(pc.index) == expect;
+    }
+
 	protected void expect(ParseContext pc, char expect) {
-		if (pc.index >= pc.string.length()
-				|| pc.string.charAt(pc.index) != expect)
+		if (!peek(pc, expect))
 			throw new IllegalArgumentException("Syntax error in: " + pc.string
 					+ "Expected '" + expect + "' at position " + pc.index);
 		pc.index++;
 		skip(pc);
 	}
+
 	@SuppressWarnings("unchecked")
     @Override
     public <T extends ITEM> T remake(ITEM t) {

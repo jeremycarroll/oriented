@@ -5,9 +5,10 @@
 package net.sf.oriented.impl.om;
 
 import net.sf.oriented.impl.items.LabelImpl;
+import net.sf.oriented.omi.FaceLatticeProvider;
 import net.sf.oriented.omi.OM;
 
-public interface OMInternal extends OM {
+public interface OMInternal extends OM, FaceLatticeProvider {
 
 	OMAll asAll();
 

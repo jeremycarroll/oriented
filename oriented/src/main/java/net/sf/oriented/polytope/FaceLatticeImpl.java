@@ -16,6 +16,7 @@ import net.sf.oriented.impl.om.OMInternal;
 import net.sf.oriented.omi.AxiomViolation;
 import net.sf.oriented.omi.Face;
 import net.sf.oriented.omi.FactoryFactory;
+import net.sf.oriented.omi.FaceLatticeProvider;
 import net.sf.oriented.omi.OMasFaceLattice;
 import net.sf.oriented.omi.SignedSet;
 import net.sf.oriented.omi.UnsignedSet;
@@ -24,7 +25,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
-class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
+class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice, FaceLatticeProvider {
     
     static abstract class AbsFaceImpl implements Face {
         
@@ -286,8 +287,11 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
             ((AbsFaceImpl)f).saveSelfInLowerItems();
         }
         
-        for ( Face f: this.withDimensions(-1, top.dimension-1)) {
-            ss2face.put(f.covector(), f);
+        // Populate the ss2face map for all faces
+        for ( Face f: this ) {
+            if (f.covector() != null) {
+                ss2face.put(f.covector(), f);
+            }
         }
     }
 
@@ -350,6 +354,21 @@ class FaceLatticeImpl extends AbsOM<Face> implements OMasFaceLattice {
     @Override
     public Face get(SignedSet covector) {
         return ss2face.get(covector);
+    }
+    
+    @Override
+    public boolean hasFaceLattice() {
+        return true;
+    }
+    
+    @Override
+    public boolean hasDualFaceLattice() {
+        return dual().hasFaceLattice();
+    }
+    
+    @Override
+    public OMasFaceLattice getDualFaceLattice() {
+        return (OMasFaceLattice) dual().getFaceLattice();
     }
 
 }

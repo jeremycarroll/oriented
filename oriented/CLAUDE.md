@@ -94,3 +94,14 @@ mvn javadoc:javadoc
 3. Algorithm focus:
    - The main algorithm goal is implementing realizability checks for rank 3 oriented matroids
    - The algorithm follows the approach in "New Proof of Pappus (2007)" and "Drawing Straight Lines (2000)"
+
+## Known Issues and Backlog
+
+1. **Cannot set CHIROTOPE twice error**: In Convert CLI when multiple calls to setupArgumentParser() happen
+   - Root cause: Examples.all() is called on each invocation, causing problematic state in omega14
+   - Fix: Cache ArgumentParser to prevent repeated Examples.all() calls
+
+2. **Fix mutate method**: The mutate method should be functional and not modify existing state
+   - It should be renamed to better reflect its functional nature
+
+3. **BetterParameterized**: Remove custom BetterParameterized class and use standard JUnit Parameterized runner
